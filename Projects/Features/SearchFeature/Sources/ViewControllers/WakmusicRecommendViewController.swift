@@ -34,7 +34,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         super.viewDidLoad()
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
-        
+
         LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "wakmusic_recommend"))
     }
 

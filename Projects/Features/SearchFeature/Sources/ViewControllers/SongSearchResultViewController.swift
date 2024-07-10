@@ -49,7 +49,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidLoad()
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
-        
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -155,7 +154,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     owner.dataSource.apply(snapshot, animatingDifferences: false)
 
                     let warningView = WMWarningView(text: "검색결과가 없습니다.")
-                    
+
                     if dataSource.isEmpty {
                         owner.collectionView.setBackgroundView(warningView, 100)
                     } else {
@@ -231,7 +230,11 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { ( collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { (
+            collectionView: UICollectionView,
+            indexPath: IndexPath,
+            item: SongEntity
+        ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,

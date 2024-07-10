@@ -115,7 +115,7 @@ final class SongSearchResultReactor: Reactor {
 extension SongSearchResultReactor {
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
         let state = self.currentState
-        
+
         return .concat([
             .just(.updateSelectedCount(0)),
             .just(.updateSortType(type)),
@@ -125,7 +125,7 @@ extension SongSearchResultReactor {
 
     private func updateFilterType(_ type: FilterType) -> Observable<Mutation> {
         let state = self.currentState
-        
+
         return .concat([
             .just(.updateSelectedCount(0)),
             .just(.updateFilterType(type)),
@@ -148,14 +148,17 @@ extension SongSearchResultReactor {
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
                 .map { [weak self] dataSource -> Mutation in
-                    
+
                     guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
-                    
-                    if  scrollPage == 1 {
-                        LogManager.analytics(SearchAnalyticsLog.viewSearchResult(keyword: self.text, category: "song", totalCount: dataSource.count))
+
+                    if scrollPage == 1 {
+                        LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
+                            keyword: self.text,
+                            category: "song",
+                            totalCount: dataSource.count
+                        ))
                     }
-                    
-                    
+
                     return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
                 }
                 .catch { error in
