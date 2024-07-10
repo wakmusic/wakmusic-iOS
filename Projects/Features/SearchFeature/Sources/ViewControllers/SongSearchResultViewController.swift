@@ -49,6 +49,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.viewDidLoad()
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
+        
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -110,6 +111,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         headerView.rx.selectedFilterItem
             .distinctUntilChanged()
             .bind(with: self) { owner, type in
+                LogManager.analytics(SearchAnalyticsLog.selectSearchFilter(option: type.rawValue))
                 reactor.action.onNext(.changeFilterType(type))
             }
             .disposed(by: disposeBag)
@@ -153,7 +155,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     owner.dataSource.apply(snapshot, animatingDifferences: false)
 
                     let warningView = WMWarningView(text: "검색결과가 없습니다.")
-
+                    
                     if dataSource.isEmpty {
                         owner.collectionView.setBackgroundView(warningView, 100)
                     } else {
@@ -229,11 +231,7 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { (
-            collectionView: UICollectionView,
-            indexPath: IndexPath,
-            item: SongEntity
-        ) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { ( collectionView: UICollectionView, indexPath: IndexPath, item: SongEntity) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
@@ -268,6 +266,7 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
+        LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "song"))
         if reactor?.currentState.sortType != type {
             reactor?.action.onNext(.changeSortType(type))
         }

@@ -217,6 +217,7 @@ extension ListSearchResultViewController {
 
 extension ListSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
+        LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "list"))
         if reactor?.currentState.sortType != type {
             reactor?.action.onNext(.changeSortType(type))
         }
@@ -232,6 +233,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         let id = PreferenceManager.userInfo?.decryptedID ?? ""
         let isMine = model.ownerId == id
 
+        LogManager.analytics(SearchAnalyticsLog.clickPlaylistItem(location: "search"))
         navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
     }
 
