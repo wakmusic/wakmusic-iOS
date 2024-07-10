@@ -48,10 +48,11 @@ final class MyPlaylistHeaderView: UIView {
         $0.clipsToBounds = true
     }
 
-    private var titleLabel: WMLabel = WMLabel(
+    private let titleLabel: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t3(weight: .bold)
+        font: .t3(weight: .bold),
+        lineHeight: UIFont.WMFontSystem.t3(weight: .bold).lineHeight
     ).then {
         $0.numberOfLines = 0
     }
@@ -59,7 +60,8 @@ final class MyPlaylistHeaderView: UIView {
     let countLabel: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.6),
-        font: .t6_1(weight: .light)
+        font: .t6_1(weight: .light),
+        lineHeight: UIFont.WMFontSystem.t6_1(weight: .light).lineHeight
     )
 
     let editNickNameButton: UIButton = UIButton().then {
