@@ -67,7 +67,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "unkwown_playlist_detail"))
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
@@ -75,6 +74,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "unkwown_playlist_detail"))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
