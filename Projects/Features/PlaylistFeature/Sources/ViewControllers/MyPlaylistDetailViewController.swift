@@ -587,7 +587,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageButton)
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
             let vc = defaultPlaylistImageFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
 
@@ -595,7 +595,7 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
         } else {
             LogManager.analytics(
-                PlaylistAnalyticsLog.clickPlaylistCustomImageButton
+                PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
             requestPhotoLibraryPermission()
         }
