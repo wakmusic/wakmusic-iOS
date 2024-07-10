@@ -104,7 +104,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.viewDidLoad()
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
-      
     }
 
     override public func viewDidAppear(_ animated: Bool) {
