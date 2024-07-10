@@ -14,9 +14,9 @@ final class NewStorageViewController: TabmanViewController, View {
     var disposeBag = DisposeBag()
 
     private var bottomSheetView: BottomSheetView!
-    private var playlistStorageComponent: ListStorageComponent!
+    private var listStorageComponent: ListStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    private var favoriteComponent: LikeStorageComponent!
+    private var likeStorageComponent: LikeStorageComponent!
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
 
@@ -44,18 +44,18 @@ final class NewStorageViewController: TabmanViewController, View {
 
     public static func viewController(
         reactor: Reactor,
-        playlistStorageComponent: ListStorageComponent,
+        listStorageComponent: ListStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
-        favoriteComponent: LikeStorageComponent,
+        likeStorageComponent: LikeStorageComponent,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
     ) -> NewStorageViewController {
         let viewController = NewStorageViewController(reactor: reactor)
 
-        viewController.playlistStorageComponent = playlistStorageComponent
+        viewController.listStorageComponent = listStorageComponent
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.favoriteComponent = favoriteComponent
-        viewController.viewControllers = [playlistStorageComponent.makeView(), favoriteComponent.makeView()]
+        viewController.likeStorageComponent = likeStorageComponent
+        viewController.viewControllers = [listStorageComponent.makeView(), likeStorageComponent.makeView()]
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
         return viewController
@@ -78,24 +78,25 @@ extension NewStorageViewController {
         bindState(reactor: reactor)
     }
 
-    func bindState(reactor: Reactor) {}
+    func bindState(reactor: Reactor) {
+        reactor.state.map(\.isEditing)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isEditing in
+                owner.storageView.updateIsHiddenEditButton(isHidden: isEditing)
+            }
+            .disposed(by: disposeBag)
+    }
 
     func bindAction(reactor: Reactor) {
-        storageView.rx.editButtonDidTap.subscribe { _ in
-            print("🚀 편집 버튼 눌림")
-        }.disposed(by: disposeBag)
-
-        storageView.rx.saveButtonDidTap.subscribe { _ in
-            print("🚀 저장 버튼 눌림")
-        }.disposed(by: disposeBag)
-
-        storageView.rx.drawFruitButtonDidTap.subscribe { _ in
-            print("🚀 열매 뽑기 버튼 눌림")
-        }.disposed(by: disposeBag)
-
-        storageView.rx.loginButtonDidTap.subscribe { _ in
-            print("🚀 로그인 버튼 눌림")
-        }.disposed(by: disposeBag)
+        storageView.rx.editButtonDidTap
+            .map { Reactor.Action.editButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        storageView.rx.saveButtonDidTap
+            .map { Reactor.Action.saveButtonTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 

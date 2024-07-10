@@ -4,45 +4,74 @@ import ReactorKit
 import RxCocoa
 import RxSwift
 import UserDomainInterface
+import PlaylistDomainInterface
+import Utility
 
 final class ListStorageReactor: Reactor {
     enum Action {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case editButtonDidTap
-        case saveButtonDidTap
+        case createListButtonDidTap
         case playlistDidTap(Int)
         case tapAll(isSelecting: Bool)
+        case loginButtonDidTap
     }
 
     enum Mutation {
+        case clearDataSource
         case updateDataSource([MyPlayListSectionModel])
+        case updateBackupDataSource
+        case undoDateSource
         case switchEditingState(Bool)
         case updateOrder([PlayListEntity])
         case changeSelectedState(data: [PlayListEntity], selectedCount: Int)
         case changeAllState(data: [PlayListEntity], selectedCount: Int)
+        case updateIsLoggedIn(Bool)
+        case updateIsShowActivityIndicator(Bool)
+        case showLoginAlert
+        case showToast(String)
     }
 
     struct State {
+        var isLoggedIn: Bool
         var isEditing: Bool
         var dataSource: [MyPlayListSectionModel]
         var backupDataSource: [MyPlayListSectionModel]
         var selectedItemCount: Int
+        var isShowActivityIndicator: Bool
+        @Pulse var showLoginAlert: Void?
+        @Pulse var showToast: String?
     }
 
     var initialState: State
+    private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
-
-    init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
+    private let createPlaylistUseCase: any CreatePlaylistUseCase
+    private let fetchPlayListUseCase: any FetchPlayListUseCase
+    private let editPlayListOrderUseCase: any EditPlayListOrderUseCase
+    private let deletePlayListUseCase: any DeletePlayListUseCase
+    
+    init(
+        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        createPlaylistUseCase: any CreatePlaylistUseCase,
+        fetchPlayListUseCase: any FetchPlayListUseCase,
+        editPlayListOrderUseCase: any EditPlayListOrderUseCase,
+        deletePlayListUseCase: any DeletePlayListUseCase
+    ) {
         self.initialState = State(
+            isLoggedIn: false,
             isEditing: false,
             dataSource: [],
             backupDataSource: [],
-            selectedItemCount: 0
+            selectedItemCount: 0, 
+            isShowActivityIndicator: false
         )
-
         self.storageCommonService = storageCommonService
+        self.createPlaylistUseCase = createPlaylistUseCase
+        self.fetchPlayListUseCase = fetchPlayListUseCase
+        self.editPlayListOrderUseCase = editPlayListOrderUseCase
+        self.deletePlayListUseCase = deletePlayListUseCase
     }
 
     deinit {
@@ -52,23 +81,75 @@ final class ListStorageReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            updateDataSource()
+            return .concat(
+                .just(.updateIsShowActivityIndicator(true)),
+                fetchDataSource(),
+                .just(.updateIsShowActivityIndicator(false))
+            )
         case .refresh:
-            updateDataSource()
-        case .editButtonDidTap:
-            switchEditing(true)
-        case .saveButtonDidTap:
-            // TODO: USECASE 연결
-            switchEditing(false)
+            return fetchDataSource()
         case let .itemMoved((sourceIndex, destinationIndex)):
-            updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
+            return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
         case let .playlistDidTap(index):
-            changeSelectingState(index)
+            return changeSelectingState(index)
         case let .tapAll(isSelecting):
-            tapAll(isSelecting)
+            return tapAll(isSelecting)
+        case .createListButtonDidTap:
+            return .empty()
+        case .loginButtonDidTap:
+            return .just(.showLoginAlert)
         }
     }
 
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let switchEditingStateMutation = storageCommonService.isEditingState
+            .skip(1)
+            .withUnretained(self)
+            .flatMap { owner, editingState -> Observable<Mutation> in
+                // 편집이 종료될 때 처리
+                if editingState == false {
+                    let playlistOrder = owner.currentState.dataSource.flatMap { $0.items.map { $0.key } }
+                    
+                    return Observable.concat([
+                        .just(.updateIsShowActivityIndicator(true)),
+                        
+                        owner.editPlayListOrderUseCase.execute(ids: playlistOrder)
+                            .asObservable()
+                            .flatMap { _ -> Observable<Mutation> in
+                                return Observable.concat([
+                                    .just(.updateIsShowActivityIndicator(false)),
+                                    .just(.updateBackupDataSource),
+                                    .just(.switchEditingState(editingState))
+                                ])
+                            }
+                            .catch { error in
+                                let error = error.asWMError
+                                return Observable.concat([
+                                    .just(.updateIsShowActivityIndicator(false)),
+                                    .just(.undoDateSource),
+                                    .just(.showToast(error.errorDescription ?? "순서 변경에 실패했습니다.")),
+                                    .just(.switchEditingState(editingState))
+                                ])
+                            }
+                    ])
+                } else {
+                    return .just(.switchEditingState(editingState))
+                }
+            }
+        
+        let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
+            .withUnretained(self)
+            .flatMap { owner, userInfo -> Observable<Mutation> in
+                    .concat(
+                        owner.updateIsLoggedIn(userInfo),
+                        owner.fetchDataSource()
+                        //userInfo != nil ? owner.fetchDataSource() : owner.clearDataSource()
+                    )
+            }
+        
+        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+    }
+    
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
@@ -86,62 +167,43 @@ final class ListStorageReactor: Reactor {
         case let .changeAllState(data: data, selectedCount: selectedCount):
             newState.dataSource = [MyPlayListSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
+        case .clearDataSource:
+            newState.dataSource = []
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
+        case .showLoginAlert:
+            newState.showLoginAlert = ()
+        case let .updateIsShowActivityIndicator(isShow):
+            newState.isShowActivityIndicator = isShow
+        case .undoDateSource:
+            newState.dataSource = currentState.backupDataSource
+        case .updateBackupDataSource:
+            newState.backupDataSource = currentState.dataSource
+        case let .showToast(message):
+            newState.showToast = message
         }
 
         return newState
     }
-
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let editState = storageCommonService.isEditingState
-            .map { Mutation.switchEditingState($0) }
-
-        return Observable.merge(mutation, editState)
-    }
 }
 
 extension ListStorageReactor {
-    func updateDataSource() -> Observable<Mutation> {
-        return .just(
-            .updateDataSource(
-                [MyPlayListSectionModel(
-                    model: 0,
-                    items: [
-                        .init(
-                            key: "123",
-                            title: "우중충한 장마철 여름에 듣기 좋은 일본 시티팝 플레이리스트",
-                            image: "",
-                            songlist: [],
-                            image_version: 0
-                        ),
-                        .init(
-                            key: "1234",
-                            title: "비내리는 도시, 세련된 무드 감각적인 팝송☔️ 분위기 있는 노래 모음",
-                            image: "",
-                            songlist: [],
-                            image_version: 0
-                        ),
-                        .init(
-                            key: "1234",
-                            title: "[𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭] 여름 밤, 퇴근길에 꽂는 플레이리스트🚃",
-                            image: "",
-                            songlist: [],
-                            image_version: 0
-                        ),
-                        .init(
-                            key: "1234",
-                            title: "𝐏𝐥𝐚𝐲𝐥𝐢𝐬𝐭 벌써 여름이야? 내 방을 청량한 캘리포니아 해변으로 신나는 여름 팝송 𝐒𝐮𝐦𝐦𝐞𝐫 𝐢𝐬 𝐜𝐨𝐦𝐢𝐧𝐠 🌴",
-                            image: "",
-                            songlist: [],
-                            image_version: 0
-                        )
-                    ]
-                )]
-            )
-        )
+    func fetchDataSource() -> Observable<Mutation> {
+        fetchPlayListUseCase
+            .execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map { [MyPlayListSectionModel(model: 0, items: $0)] }
+            .map { Mutation.updateDataSource($0) }
     }
-
-    func switchEditing(_ flag: Bool) -> Observable<Mutation> {
-        return .just(.switchEditingState(flag))
+    
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
+    }
+    
+    func clearDataSource() -> Observable<Mutation> {
+        print("🚀 clearDataSource called Reactor")
+        return .just(.clearDataSource)
     }
 
     /// 순서 변경

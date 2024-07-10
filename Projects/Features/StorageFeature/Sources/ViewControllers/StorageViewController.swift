@@ -118,7 +118,7 @@ extension StorageViewController {
 //                    return
 //                }
 
-                reactor.action.onNext(.tabDidEditButton)
+                reactor.action.onNext(.editButtonDidTap)
             }
             .disposed(by: disposeBag)
 
@@ -154,30 +154,6 @@ extension StorageViewController {
                     owner.myPlayListFakeView.isHidden = true
                     owner.favoriteFakeView.isHidden = true
                 }
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$showLoginAlert)
-            .skip(1)
-            .withUnretained(self)
-            .bind { owner, _ in
-
-                guard let vc = owner.textPopUpFactory.makeView(
-                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
-                    cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
-                    completion: {
-                        let loginVC = owner.signInFactory.makeView()
-                        loginVC.modalPresentationStyle = .fullScreen
-                        owner.present(loginVC, animated: true)
-                    },
-                    cancelCompletion: {}
-                ) as? TextPopupViewController else {
-                    return
-                }
-
-                owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)
     }

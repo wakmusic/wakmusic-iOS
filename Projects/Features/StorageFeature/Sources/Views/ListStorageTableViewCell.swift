@@ -148,7 +148,10 @@ extension ListStorageTableViewCell {
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
         self.listSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
-        // self.playButtonTrailingConstraint.constant = isEditing ? -24 : 20
+        
+        self.playButton.snp.updateConstraints {
+            $0.right.equalToSuperview().inset(isEditing ? -24 : 20)
+        }
     }
 
     private func getAttributedString(

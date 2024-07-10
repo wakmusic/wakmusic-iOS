@@ -12,10 +12,7 @@ public protocol StorageDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var listStorageComponent: ListStorageComponent { get }
-    var likeStorageComponent: LikeStorageComponent { get }
-    var fetchPlayListUseCase: any FetchPlayListUseCase { get }
-    var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
-    var deletePlayListUseCase: any DeletePlayListUseCase { get }
+    var likeStorageComponent: LikeStorageComponent { get }    
 }
 
 public final class StorageComponent: Component<StorageDependency>, StorageFactory {
@@ -29,14 +26,10 @@ public final class StorageComponent: Component<StorageDependency>, StorageFactor
 //            signInFactory: dependency.signInFactory
 //        )
         return NewStorageViewController.viewController(
-            reactor: StorageReactor(
-                fetchPlayListUseCase: dependency.fetchPlayListUseCase,
-                editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
-                deletePlayListUseCase: dependency.deletePlayListUseCase
-            ),
-            playlistStorageComponent: dependency.listStorageComponent,
+            reactor: StorageReactor(),
+            listStorageComponent: dependency.listStorageComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            favoriteComponent: dependency.likeStorageComponent,
+            likeStorageComponent: dependency.likeStorageComponent,
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory
         )

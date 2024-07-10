@@ -8,14 +8,11 @@ import Utility
 
 private protocol StorageStateProtocol {
     func updateIsHiddenEditButton(isHidden: Bool)
-    func updateIsHiddenLoginWarningView(isHidden: Bool)
 }
 
 private protocol StorageActionProtocol {
     var editButtonDidTap: Observable<Void> { get }
     var saveButtonDidTap: Observable<Void> { get }
-    var drawFruitButtonDidTap: Observable<Void> { get }
-    var loginButtonDidTap: Observable<Void> { get }
 }
 
 private enum ButtonAttributed {
@@ -48,14 +45,6 @@ final class StorageView: UIView {
         $0.setTitle("저장", for: .normal)
     }
 
-    let drawFruitButton = UIButton().then {
-        $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
-    }
-
-    var gradientLayer = CAGradientLayer()
-
-    fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
-
     init() {
         super.init(frame: .zero)
         addView()
@@ -73,9 +62,7 @@ final class StorageView: UIView {
             tabBarView,
             lineView,
             editButton,
-            saveButton,
-            drawFruitButton,
-            loginWarningView
+            saveButton
         )
     }
 
@@ -105,19 +92,6 @@ final class StorageView: UIView {
             $0.bottom.equalTo(lineView.snp.top).offset(-8)
             $0.right.equalToSuperview().inset(20)
         }
-
-        drawFruitButton.snp.makeConstraints {
-            $0.height.equalTo(56)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-
-        loginWarningView.snp.makeConstraints {
-            $0.width.equalTo(164)
-            $0.height.equalTo(176)
-            $0.top.equalTo(lineView.snp.bottom).offset(148)
-            $0.centerX.equalToSuperview()
-        }
     }
 
     func configureUI() {
@@ -137,27 +111,6 @@ final class StorageView: UIView {
         saveButton.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         saveButton.layer.borderColor = DesignSystemAsset.PrimaryColor.point.color.cgColor
         saveButton.setAttributedTitle(ButtonAttributed.save, for: .normal)
-
-        drawFruitButton.setAttributedTitle(
-            NSAttributedString(
-                string: "음표 열매 뽑으러 가기",
-                attributes: [
-                    .kern: -0.5,
-                    .font: UIFont.WMFontSystem.t4(weight: .bold).font,
-                    .foregroundColor: UIColor.white
-                ]
-            ),
-            for: .normal
-        )
-        gradientLayer.colors = [UIColor(hex: "#0098E5").cgColor, UIColor(hex: "#968FE8").cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        drawFruitButton.layer.addSublayer(gradientLayer)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = drawFruitButton.bounds
     }
 }
 
@@ -165,10 +118,6 @@ extension StorageView: StorageStateProtocol {
     func updateIsHiddenEditButton(isHidden: Bool) {
         self.editButton.isHidden = isHidden
         self.saveButton.isHidden = !isHidden
-    }
-
-    func updateIsHiddenLoginWarningView(isHidden: Bool) {
-        self.loginWarningView.isHidden = isHidden
     }
 }
 
@@ -179,13 +128,5 @@ extension Reactive: StorageActionProtocol where Base: StorageView {
 
     var saveButtonDidTap: Observable<Void> {
         base.saveButton.rx.tap.asObservable()
-    }
-
-    var drawFruitButtonDidTap: Observable<Void> {
-        base.drawFruitButton.rx.tap.asObservable()
-    }
-
-    var loginButtonDidTap: Observable<Void> {
-        base.loginWarningView.loginButtonDidTapSubject.asObserver()
     }
 }

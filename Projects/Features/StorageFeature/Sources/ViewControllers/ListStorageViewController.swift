@@ -13,20 +13,22 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
+import FruitDrawFeatureInterface
 
 final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType {
-    let playlistStorageView = ListStorageView()
+    let listStorageView = ListStorageView()
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
     var textPopUpFactory: TextPopUpFactory!
     var playlistDetailFactory: PlaylistDetailFactory!
     var signInFactory: SignInFactory!
-
+    var fruitDrawFactory: FruitDrawFactory!
+    
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
 
     override func loadView() {
-        self.view = playlistStorageView
+        self.view = listStorageView
     }
 
     override public func viewDidLoad() {
@@ -39,13 +41,15 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         textPopUpFactory: TextPopUpFactory,
-        signInFactory: SignInFactory
+        signInFactory: SignInFactory,
+        fruitDrawFactory: FruitDrawFactory
     ) -> ListStorageViewController {
         let viewController = ListStorageViewController(reactor: reactor)
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
+        viewController.fruitDrawFactory = fruitDrawFactory
         return viewController
     }
 
@@ -54,7 +58,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     private func setTableView() {
-        playlistStorageView.tableView.delegate = self
+        listStorageView.tableView.delegate = self
     }
 
     override func bindState(reactor: ListStorageReactor) {
@@ -62,27 +66,68 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.isLoggedIn)
+            .distinctUntilChanged()
+            .bind(with: self, onNext: { owner, isLoggedIn in
+                owner.listStorageView.updateIsHiddenLoginWarningView(isHidden: isLoggedIn)
+            })
+            .disposed(by: disposeBag)
+        
+        sharedState.map(\.isShowActivityIndicator)
+            .distinctUntilChanged()
+            .bind(with: self, onNext: { owner, isShow in
+                owner.listStorageView.updateActivityIndicatorState(isPlaying: isShow)
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$showToast)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$showLoginAlert)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                guard let vc = owner.textPopUpFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                ) as? TextPopupViewController else {
+                    return
+                }
+                owner.showBottomSheet(content: vc)
+            })
+            .disposed(by: disposeBag)
+        
         sharedState.map(\.dataSource)
-            .skip(1)
+            //.skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, userInfo in
-
-                owner.playlistStorageView.updateActivityIndicatorState(isPlaying: false)
-                owner.playlistStorageView.refreshControl.endRefreshing()
-                owner.playlistStorageView.updateEmptyWarningViewState(isShow: dataSource.isEmpty)
-
+                print("🚀 dataSource changed", dataSource.count)
+                //owner.listStorageView.updateActivityIndicatorState(isPlaying: false)
+                owner.listStorageView.updateRefreshControlState(isPlaying: false)
             })
             .map { $0.1 }
-            .bind(to: playlistStorageView.tableView.rx.items(dataSource: createDatasources()))
+            .bind(to: listStorageView.tableView.rx.items(dataSource: createDatasources()))
             .disposed(by: disposeBag)
 
         sharedState.map(\.isEditing)
             .withUnretained(self)
             .bind { owner, flag in
-
-                owner.playlistStorageView.tableView.isEditing = flag
-                owner.playlistStorageView.tableView.reloadData()
+                print("🚀 isEditing changed", flag)
+                owner.listStorageView.tableView.isEditing = flag
+                owner.listStorageView.tableView.reloadData()
+                owner.listStorageView.updateIsEnabledRefreshControl(isEnabled: !flag)
             }
             .disposed(by: disposeBag)
 
@@ -111,12 +156,31 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     override func bindAction(reactor: ListStorageReactor) {
         let currentState = reactor.state
 
-        playlistStorageView.rx.refreshControlValueChanged
+        listStorageView.rx.loginButtonDidTap
+            .map { Reactor.Action.loginButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        listStorageView.rx.refreshControlValueChanged
             .map { Reactor.Action.refresh }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
-        playlistStorageView.tableView.rx.itemSelected
+        
+        listStorageView.rx.drawFruitButtonDidTap
+            .bind(onNext: { [weak self] _ in
+                guard let self else { return }
+                let vc = self.fruitDrawFactory.makeView(delegate: self)
+                vc.modalPresentationStyle = .fullScreen
+                self.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
+        listStorageView.rx.createListButtonDidTap
+            .map { Reactor.Action.createListButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        listStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
             .withLatestFrom(currentState.map(\.dataSource)) { ($0.0, $0.1, $0.2, $1) }
@@ -135,7 +199,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             }
             .disposed(by: disposeBag)
 
-        playlistStorageView.tableView.rx.itemMoved
+        listStorageView.tableView.rx.itemMoved
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -158,6 +222,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                     indexPath: indexPath
                 )
                 cell.delegate = self
+                cell.selectionStyle = .none
                 return cell
 
             },
@@ -214,8 +279,10 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
+            print("🚀 리스트부분 터치", indexPath.row)
             self.reactor?.action.onNext(.playlistDidTap(indexPath.row))
         case let .playTapped(indexPath):
+            print("🚀 버튼부분 터치", indexPath.row)
             // TODO: useCase 연결 후
             break
 //            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
@@ -244,23 +311,17 @@ extension ListStorageViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-
-    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = tableView
-            .dequeueReusableHeaderFooterView(
-                withIdentifier: CreateListTableViewHeaderView
-                    .reuseIdentifier
-            ) as? CreateListTableViewHeaderView
-        return headerView
-    }
-
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80
-    }
 }
 
 extension ListStorageViewController {
     func scrollToTop() {
-        playlistStorageView.tableView.setContentOffset(.zero, animated: true)
+        listStorageView.tableView.setContentOffset(.zero, animated: true)
+    }
+}
+
+extension ListStorageViewController: FruitDrawViewControllerDelegate {
+    func completedFruitDraw(itemCount: Int) {
+        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
+        LogManager.printDebug("itemCount: \(itemCount)")
     }
 }
