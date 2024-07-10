@@ -108,30 +108,12 @@ final class ListStorageReactor: Reactor {
             .flatMap { owner, editingState -> Observable<Mutation> in
                 // 편집이 종료될 때 처리
                 if editingState == false {
-                    let playlistOrder = owner.currentState.dataSource.flatMap { $0.items.map { $0.key } }
-
-                    return Observable.concat([
+                    return .concat(
                         .just(.updateIsShowActivityIndicator(true)),
-
-                        owner.editPlayListOrderUseCase.execute(ids: playlistOrder)
-                            .asObservable()
-                            .flatMap { _ -> Observable<Mutation> in
-                                return Observable.concat([
-                                    .just(.updateIsShowActivityIndicator(false)),
-                                    .just(.updateBackupDataSource),
-                                    .just(.switchEditingState(editingState))
-                                ])
-                            }
-                            .catch { error in
-                                let error = error.asWMError
-                                return Observable.concat([
-                                    .just(.updateIsShowActivityIndicator(false)),
-                                    .just(.undoDateSource),
-                                    .just(.showToast(error.errorDescription ?? "순서 변경에 실패했습니다.")),
-                                    .just(.switchEditingState(editingState))
-                                ])
-                            }
-                    ])
+                        owner.mutateEditPlayListOrderUseCase(),
+                        .just(.updateIsShowActivityIndicator(false)),
+                        .just(.switchEditingState(false))
+                    )
                 } else {
                     return .just(.switchEditingState(editingState))
                 }
@@ -143,7 +125,6 @@ final class ListStorageReactor: Reactor {
                 .concat(
                     owner.updateIsLoggedIn(userInfo),
                     owner.fetchDataSource()
-                    // userInfo != nil ? owner.fetchDataSource() : owner.clearDataSource()
                 )
             }
 
@@ -204,6 +185,24 @@ extension ListStorageReactor {
     func clearDataSource() -> Observable<Mutation> {
         print("🚀 clearDataSource called Reactor")
         return .just(.clearDataSource)
+    }
+    
+    func mutateEditPlayListOrderUseCase() -> Observable<Mutation> {
+        let playlistOrder = currentState.dataSource.flatMap { $0.items.map { $0.key } }
+        return editPlayListOrderUseCase.execute(ids: playlistOrder)
+                .asObservable()
+                .flatMap { _ -> Observable<Mutation> in
+                    return Observable.concat([
+                        .just(.updateBackupDataSource)
+                    ])
+                }
+                .catch { error in
+                    let error = error.asWMError
+                    return Observable.concat([
+                        .just(.undoDateSource),
+                        .just(.showToast(error.errorDescription ?? "순서 변경에 실패했습니다."))
+                    ])
+                }
     }
 
     /// 순서 변경
