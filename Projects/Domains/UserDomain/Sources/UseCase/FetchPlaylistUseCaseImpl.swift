@@ -1,16 +1,8 @@
-//
-//  FetchArtistListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import RxSwift
 import UserDomainInterface
 
-public struct FetchPlayListUseCaseImpl: FetchPlayListUseCase {
+public struct FetchPlaylistUseCaseImpl: FetchPlaylistUseCase {
     private let userRepository: any UserRepository
 
     public init(
@@ -20,6 +12,6 @@ public struct FetchPlayListUseCaseImpl: FetchPlayListUseCase {
     }
 
     public func execute() -> Single<[PlaylistEntity]> {
-        userRepository.fetchPlayList()
+        userRepository.fetchPlaylist()
     }
 }

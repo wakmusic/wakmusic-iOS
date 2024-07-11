@@ -19,9 +19,9 @@ import Utility
 
 #warning("갈아 엎기")
 public final class MyPlayListViewModel: ViewModelType {
-    var fetchPlayListUseCase: FetchPlayListUseCase!
-    var editPlayListOrderUseCase: EditPlayListOrderUseCase!
-    var deletePlayListUseCase: DeletePlayListUseCase!
+    var fetchPlayListUseCase: FetchPlaylistUseCase!
+    var editPlayListOrderUseCase: EditPlaylistOrderUseCase!
+    var deletePlayListUseCase: DeletePlaylistUseCase!
     private let logoutUseCase: any LogoutUseCase
     var disposeBag = DisposeBag()
 
@@ -46,9 +46,9 @@ public final class MyPlayListViewModel: ViewModelType {
     }
 
     init(
-        fetchPlayListUseCase: FetchPlayListUseCase,
-        editPlayListOrderUseCase: EditPlayListOrderUseCase,
-        deletePlayListUseCase: DeletePlayListUseCase,
+        fetchPlayListUseCase: FetchPlaylistUseCase,
+        editPlayListOrderUseCase: EditPlaylistOrderUseCase,
+        deletePlayListUseCase: DeletePlaylistUseCase,
         logoutUseCase: any LogoutUseCase
     ) {
         self.fetchPlayListUseCase = fetchPlayListUseCase

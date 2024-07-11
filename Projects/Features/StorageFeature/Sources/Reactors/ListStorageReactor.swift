@@ -60,16 +60,16 @@ final class ListStorageReactor: Reactor {
     private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
     private let createPlaylistUseCase: any CreatePlaylistUseCase
-    private let fetchPlayListUseCase: any FetchPlayListUseCase
-    private let editPlayListOrderUseCase: any EditPlayListOrderUseCase
-    private let deletePlayListUseCase: any DeletePlayListUseCase
+    private let fetchPlayListUseCase: any FetchPlaylistUseCase
+    private let editPlayListOrderUseCase: any EditPlaylistOrderUseCase
+    private let deletePlayListUseCase: any DeletePlaylistUseCase
 
     init(
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
         createPlaylistUseCase: any CreatePlaylistUseCase,
-        fetchPlayListUseCase: any FetchPlayListUseCase,
-        editPlayListOrderUseCase: any EditPlayListOrderUseCase,
-        deletePlayListUseCase: any DeletePlayListUseCase
+        fetchPlayListUseCase: any FetchPlaylistUseCase,
+        editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
+        deletePlayListUseCase: any DeletePlaylistUseCase
     ) {
         self.initialState = State(
             isLoggedIn: false,

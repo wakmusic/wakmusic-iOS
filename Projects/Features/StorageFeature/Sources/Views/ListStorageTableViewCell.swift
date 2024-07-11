@@ -23,6 +23,7 @@ class ListStorageTableViewCell: UITableViewCell {
 
     private let playlistImageView = UIImageView().then {
         $0.layer.cornerRadius = 4
+        $0.clipsToBounds = true
     }
 
     private let nameLabel = WMLabel(

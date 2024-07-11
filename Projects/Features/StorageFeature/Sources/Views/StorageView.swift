@@ -35,7 +35,7 @@ private enum ButtonAttributed {
 final class StorageView: UIView {
     public let tabBarView = UIView()
 
-    private let lineView = UIView()
+    public let lineView = UIView()
 
     fileprivate let editButton = UIButton().then {
         $0.setTitle("편집", for: .normal)
@@ -60,10 +60,10 @@ final class StorageView: UIView {
     func addView() {
         self.addSubviews(
             tabBarView,
-            lineView,
             editButton,
             saveButton
         )
+        tabBarView.addSubview(lineView)
     }
 
     func setLayout() {
@@ -75,7 +75,7 @@ final class StorageView: UIView {
 
         lineView.snp.makeConstraints {
             $0.height.equalTo(1)
-            $0.top.equalTo(tabBarView.snp.bottom)
+            $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
         }
 
