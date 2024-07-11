@@ -8,6 +8,7 @@ public protocol SearchDependency: Dependency {
     var beforeSearchComponent: BeforeSearchComponent { get }
     var afterSearchComponent: AfterSearchComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
 public final class SearchComponent: Component<SearchDependency>, SearchFactory {
@@ -16,7 +17,8 @@ public final class SearchComponent: Component<SearchDependency>, SearchFactory {
             reactor: SearchReactor(),
             beforeSearchComponent: self.dependency.beforeSearchComponent,
             afterSearchComponent: self.dependency.afterSearchComponent,
-            textPopUpFactory: dependency.textPopUpFactory
+            textPopUpFactory: dependency.textPopUpFactory,
+            searchGlobalScrollState: dependency.searchGlobalScrollState
         )
     }
 }

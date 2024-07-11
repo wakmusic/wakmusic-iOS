@@ -11,8 +11,7 @@ import SnapKit
 import UIKit
 import Utility
 
-#warning("비어있을 때 검색 방지")
-internal final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
+final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
     EqualHandleTappedType {
     private enum Font {
         static let headerFontSize: CGFloat = 16
@@ -30,13 +29,20 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
     @IBOutlet public weak var contentView: UIView!
     @IBOutlet weak var contentViewBottomConstraint: NSLayoutConstraint!
 
-    var beforeSearchComponent: BeforeSearchComponent!
-    var afterSearchComponent: AfterSearchComponent!
-    var textPopUpFactory: TextPopUpFactory!
+    @IBOutlet weak var searchHeaderViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var searchHeaderContentView: UIView!
+    private var beforeSearchComponent: BeforeSearchComponent!
+    private var afterSearchComponent: AfterSearchComponent!
+    private var textPopUpFactory: TextPopUpFactory!
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
     private var afterVC: AfterSearchViewController?
+
+    private var searchGlobalScrollState: SearchGlobalScrollProtocol!
+
+    private let maxHeight: CGFloat = -56
+    private var previousScrollOffset: CGFloat = 0
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +56,8 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         reactor: SearchReactor,
         beforeSearchComponent: BeforeSearchComponent,
         afterSearchComponent: AfterSearchComponent,
-        textPopUpFactory: TextPopUpFactory
+        textPopUpFactory: TextPopUpFactory,
+        searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
 
@@ -58,6 +65,7 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
         viewController.beforeSearchComponent = beforeSearchComponent
         viewController.afterSearchComponent = afterSearchComponent
         viewController.textPopUpFactory = textPopUpFactory
+        viewController.searchGlobalScrollState = searchGlobalScrollState
         return viewController
     }
 
@@ -87,6 +95,60 @@ internal final class SearchViewController: BaseStoryboardReactorViewController<S
 
     override public func bind(reactor: SearchReactor) {
         super.bind(reactor: reactor)
+
+        searchGlobalScrollState.scrollAmountObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self, onNext: { owner, source in
+
+                let offsetY: CGFloat = source.0
+                let scrollDiff = offsetY - owner.previousScrollOffset
+                let absoluteTop: CGFloat = 0
+                let absoluteBottom: CGFloat = source.1
+                let isScrollingDown = scrollDiff > 0 && offsetY > absoluteTop
+                let isScrollingUp = scrollDiff < 0 && offsetY < absoluteBottom
+
+                guard offsetY < absoluteBottom else { return }
+                var newHeight = owner.searchHeaderViewTopConstraint.constant
+
+                if isScrollingDown {
+                    newHeight = max(owner.maxHeight, owner.searchHeaderViewTopConstraint.constant - abs(scrollDiff))
+                } else if isScrollingUp {
+                    if offsetY <= abs(owner.maxHeight) {
+                        newHeight = min(0, owner.searchHeaderViewTopConstraint.constant + abs(scrollDiff))
+                    }
+                }
+
+                if newHeight != owner.searchHeaderViewTopConstraint.constant {
+                    owner.searchHeaderViewTopConstraint.constant = newHeight
+                    owner.updateHeader()
+                }
+                owner.view.layoutIfNeeded()
+                owner.previousScrollOffset = offsetY
+            })
+            .disposed(by: disposeBag)
+
+        searchGlobalScrollState.expandSearchHeaderObservable
+            .skip(1)
+            .asDriver(onErrorJustReturn: ())
+            .drive(with: self, onNext: { owner, _ in
+                let openAmount = owner.searchHeaderViewTopConstraint.constant + abs(owner.maxHeight)
+                let percentage = openAmount / abs(owner.maxHeight)
+
+                guard percentage != 1 else { return }
+                owner.searchHeaderContentView.alpha = 1
+                owner.searchHeaderViewTopConstraint.constant = 0
+                owner.searchHeaderView.backgroundColor = .white
+            })
+            .disposed(by: disposeBag)
+    }
+
+    private func updateHeader() {
+        // percentage == 1 ? 확장 : 축소
+        let openAmount = self.searchHeaderViewTopConstraint.constant + abs(self.maxHeight)
+        let percentage = openAmount / abs(self.maxHeight)
+        self.searchHeaderContentView.alpha = percentage
+        self.searchHeaderView.backgroundColor = percentage == 0 ?
+            DesignSystemAsset.BlueGrayColor.gray100.color : .white
     }
 
     override public func bindState(reactor: SearchReactor) {

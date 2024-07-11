@@ -19,6 +19,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 
     private var songSearchResultFactory: SongSearchResultFactory!
     private var listSearchResultFactory: ListSearchResultFactory!
+    private var searchGlobalScrollState: SearchGlobalScrollProtocol!
     public var disposeBag = DisposeBag()
 
     private var viewControllers: [UIViewController] = [
@@ -34,13 +35,24 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     public static func viewController(
         songSearchResultFactory: SongSearchResultFactory,
         listSearchResultFactory: ListSearchResultFactory,
+        searchGlobalScrollState: any SearchGlobalScrollProtocol,
         reactor: AfterSearchReactor
     ) -> AfterSearchViewController {
         let viewController = AfterSearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
         viewController.songSearchResultFactory = songSearchResultFactory
         viewController.listSearchResultFactory = listSearchResultFactory
+        viewController.searchGlobalScrollState = searchGlobalScrollState
         viewController.reactor = reactor
         return viewController
+    }
+
+    override public func pageboyViewController(
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        searchGlobalScrollState.expand()
     }
 
     deinit {
@@ -56,7 +68,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
 extension AfterSearchViewController {
     func bindState(reacotr: AfterSearchReactor) {
         let currentState = reacotr.state.share()
-        #warning("첫 진입 시 text가 안내려옴 바인딩이 안되서")
+
         currentState.map(\.text)
             .filter { !$0.isEmpty }
             .distinctUntilChanged()
@@ -141,10 +153,8 @@ extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataS
 
 extension AfterSearchViewController {
     func scrollToTop() {
-        #warning("구현이 끝난 후 연결")
-//        let current: Int = self.currentIndex ?? 0
-//        let searchContent = self.viewControllers.compactMap { $0 as? AfterSearchContentViewController }
-//        guard searchContent.count > current else { return }
-//        searchContent[current].scrollToTop()
+        let current: Int = self.currentIndex ?? 0
+
+        searchGlobalScrollState.scrollToTop(page: current == 0 ? .song : .list)
     }
 }

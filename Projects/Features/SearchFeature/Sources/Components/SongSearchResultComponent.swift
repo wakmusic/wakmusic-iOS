@@ -10,6 +10,7 @@ public protocol SongSearchResultDependency: Dependency {
     var fetchSearchSongsUseCase: any FetchSearchSongsUseCase { get }
     var searchSortOptionComponent: SearchSortOptionComponent { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
 public final class SongSearchResultComponent: Component<SongSearchResultDependency>, SongSearchResultFactory {
@@ -20,7 +21,8 @@ public final class SongSearchResultComponent: Component<SongSearchResultDependen
                 fetchSearchSongsUseCase: dependency.fetchSearchSongsUseCase
             ),
             searchSortOptionComponent: dependency.searchSortOptionComponent,
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            searchGlobalScrollState: dependency.searchGlobalScrollState
         )
     }
 }

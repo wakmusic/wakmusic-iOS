@@ -11,7 +11,6 @@ import Then
 import UIKit
 import Utility
 
-#warning("오버 스크롤 처리")
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
 
@@ -20,6 +19,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private let containSongsFactory: any ContainSongsFactory
 
     private let searchSortOptionComponent: SearchSortOptionComponent
+
+    private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -35,10 +36,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     init(
         _ reactor: SongSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
-        containSongsFactory: any ContainSongsFactory
+        containSongsFactory: any ContainSongsFactory,
+        searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
+        self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
 
@@ -57,6 +60,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         super.bind(reactor: reactor)
         collectionView.rx
             .setDelegate(self)
+            .disposed(by: disposeBag)
+
+        searchGlobalScrollState.songResultScrollToTopObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.collectionView.setContentOffset(.zero, animated: true)
+            }
             .disposed(by: disposeBag)
     }
 
@@ -235,12 +245,24 @@ extension SongSearchResultViewController {
         return dataSource
     }
 
-    public func scrollToTop() {}
+    public func scrollToTop() {
+        collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+    }
 }
 
 extension SongSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard collectionView.isVerticallyScrollable else { return }
+        searchGlobalScrollState.scrollTo(
+            source: (
+                scrollView.contentOffset.y,
+                scrollView.contentSize.height - scrollView.frame.size.height
+            )
+        )
     }
 }
 

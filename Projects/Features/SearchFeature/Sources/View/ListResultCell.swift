@@ -34,11 +34,11 @@ final class ListResultCell: UICollectionViewCell {
         $0.numberOfLines = 1
     }
 
-    private let dateLabel = WMLabel(
+    private let sharedCountLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
         font: .sc7(weight: .score3Light),
-        alignment: .left,
+        alignment: .right,
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
         kernValue: -0.5
     ).then {
@@ -59,7 +59,7 @@ final class ListResultCell: UICollectionViewCell {
 
 extension ListResultCell {
     private func addSubview() {
-        self.contentView.addSubviews(thumbnailView, titleLabel, creatorLabel, dateLabel)
+        self.contentView.addSubviews(thumbnailView, titleLabel, creatorLabel, sharedCountLabel)
     }
 
     private func setLayout() {
@@ -82,8 +82,8 @@ extension ListResultCell {
             $0.bottom.equalTo(thumbnailView.snp.bottom)
         }
 
-        dateLabel.snp.makeConstraints {
-            $0.width.equalTo(70)
+        sharedCountLabel.snp.makeConstraints {
+            $0.width.lessThanOrEqualTo(66)
             $0.centerY.equalTo(thumbnailView.snp.centerY)
             $0.trailing.equalToSuperview().inset(20)
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
@@ -93,7 +93,7 @@ extension ListResultCell {
     public func update(_ model: SearchPlaylistEntity) {
         titleLabel.text = model.title
         creatorLabel.text = model.userName
-        dateLabel.text = model.date
+        sharedCountLabel.text = model.date
         thumbnailView.kf.setImage(with: URL(string: model.image), placeholder: nil, options: [.transition(.fade(0.2))])
     }
 }

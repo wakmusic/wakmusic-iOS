@@ -20,6 +20,8 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     private let searchSortOptionComponent: SearchSortOptionComponent
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
+    private let searchGlobalScrollState: any SearchGlobalScrollProtocol
+
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -34,10 +36,12 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     init(
         _ reactor: ListSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
-        playlistDetailFactory: any PlaylistDetailFactory
+        playlistDetailFactory: any PlaylistDetailFactory,
+        searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.playlistDetailFactory = playlistDetailFactory
+        self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
 
@@ -48,7 +52,16 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     override func bind(reactor: ListSearchResultReactor) {
         super.bind(reactor: reactor)
-        collectionView.delegate = self
+        collectionView.rx
+            .setDelegate(self)
+            .disposed(by: disposeBag)
+
+        searchGlobalScrollState.listResultScrollToTopObservable
+            .observe(on: MainScheduler.asyncInstance)
+            .bind(with: self) { owner, _ in
+                owner.collectionView.setContentOffset(.zero, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 
     override func bindAction(reactor: ListSearchResultReactor) {
@@ -123,7 +136,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                     snapshot.appendSections([.list])
 
                     snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: true)
+                    owner.dataSource.apply(snapshot, animatingDifferences: false)
 
                     let warningView = WMWarningView(
                         text: "검색결과가 없습니다."
@@ -219,9 +232,16 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         let id = PreferenceManager.userInfo?.decryptedID ?? ""
         let isMine = model.ownerId == id
 
-        navigatePlaylistDetail(
-            key: model.key,
-            kind: isMine ? .my : .unknown
+        navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard collectionView.isVerticallyScrollable else { return }
+        searchGlobalScrollState.scrollTo(
+            source: (
+                scrollView.contentOffset.y,
+                scrollView.contentSize.height - scrollView.frame.size.height
+            )
         )
     }
 }
