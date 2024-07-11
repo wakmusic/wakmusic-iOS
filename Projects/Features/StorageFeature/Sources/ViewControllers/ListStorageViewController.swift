@@ -93,7 +93,36 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             })
             .disposed(by: disposeBag)
-
+        
+        reactor.pulse(\.$showCreateListPopup)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                let vc = owner.multiPurposePopUpFactory.makeView(type: .creation, key: "") { title in
+                    owner.reactor?.action.onNext(.confirmCreateListButtonDidTap(title))
+                }
+                owner.showBottomSheet(content: vc, size: .fixed(296))
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$showDeletePopup)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, itemCount in
+                guard let vc = owner.textPopUpFactory.makeView(
+                    text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.reactor?.action.onNext(.confirmDeleteButtonDidTap)
+                    },
+                    cancelCompletion: {}
+                ) as? TextPopupViewController else {
+                    return
+                }
+                owner.showBottomSheet(content: vc)
+            })
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -130,7 +159,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
-                print("🚀 isEditing changed", flag)
                 owner.listStorageView.tableView.isEditing = flag
                 owner.listStorageView.tableView.reloadData()
                 owner.listStorageView.updateIsEnabledRefreshControl(isEnabled: !flag)
@@ -252,31 +280,11 @@ extension ListStorageViewController: SongCartViewDelegate {
             reactor?.action.onNext(.tapAll(isSelecting: flag))
 
         case .addPlayList:
-            // input.addPlayList.onNext(())
-            self.hideSongCart()
+            reactor?.action.onNext(.addToCurrentPlaylistButtonDidTap)
 
         case .remove:
-            // TODO: useCase 연결 후
-            break
-//            let count: Int = output.indexPathOfSelectedPlayLists.value.count
-//
-//            guard let textPopupViewController = self.textPopUpFactory.makeView(
-//                text: "선택한 내 리스트 \(count)개가 삭제됩니다.",
-//                cancelButtonIsHidden: false,
-//                confirmButtonText: nil,
-//                cancelButtonText: nil,
-//                completion: { [weak self] in
-//
-//                    guard let self else { return }
-//                    self.input.deletePlayList.onNext(())
-//                    self.hideSongCart()
-//
-//                },
-//                cancelCompletion: nil
-//            ) as? TextPopupViewController else {
-//                return
-//            }
-
+            reactor?.action.onNext(.deleteButtonDidTap)
+            
         default: return
         }
     }
@@ -286,21 +294,10 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
-            print("🚀 리스트부분 터치", indexPath.row)
-            self.reactor?.action.onNext(.playlistDidTap(indexPath.row))
+            self.reactor?.action.onNext(.listDidTap(indexPath.row))
+            
         case let .playTapped(indexPath):
-            print("🚀 버튼부분 터치", indexPath.row)
-            // TODO: useCase 연결 후
-            break
-//            let songs: [SongEntity] = output.dataSource.value[indexPath.section].items[indexPath.row].songlist
-//            guard !songs.isEmpty else {
-//                self.showToast(
-//                    text: "리스트에 곡이 없습니다.",
-//                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-//                )
-//                return
-//            }
-//            self.playState.loadAndAppendSongsToPlaylist(songs)
+            self.reactor?.action.onNext(.playDidTap(indexPath.row))
         }
     }
 }

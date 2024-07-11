@@ -289,7 +289,7 @@ extension PlaylistStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
-            self.reactor?.action.onNext(.playlistDidTap(indexPath.row))
+            self.reactor?.action.onNext(.listDidTap(indexPath.row))
         case let .playTapped(indexPath):
             // TODO: useCase 연결 후
             break
