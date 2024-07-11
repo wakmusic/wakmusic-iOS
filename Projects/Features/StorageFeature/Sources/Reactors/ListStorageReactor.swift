@@ -16,6 +16,8 @@ final class ListStorageReactor: Reactor {
         case playlistDidTap(Int)
         case tapAll(isSelecting: Bool)
         case loginButtonDidTap
+        case addPlaylistButtonDidTap
+        case deleteButtonDidTap
     }
 
     enum Mutation {
@@ -31,6 +33,7 @@ final class ListStorageReactor: Reactor {
         case updateIsShowActivityIndicator(Bool)
         case showLoginAlert
         case showToast(String)
+        case hideSongCart
     }
 
     struct State {
@@ -42,6 +45,7 @@ final class ListStorageReactor: Reactor {
         var isShowActivityIndicator: Bool
         @Pulse var showLoginAlert: Void?
         @Pulse var showToast: String?
+        @Pulse var hideSongCart: Void?
     }
 
     var initialState: State
@@ -98,6 +102,10 @@ final class ListStorageReactor: Reactor {
             return .empty()
         case .loginButtonDidTap:
             return .just(.showLoginAlert)
+        case .addPlaylistButtonDidTap:
+            return .empty()
+        case .deleteButtonDidTap:
+            return .empty()
         }
     }
 
@@ -112,6 +120,7 @@ final class ListStorageReactor: Reactor {
                         .just(.updateIsShowActivityIndicator(true)),
                         owner.mutateEditPlayListOrderUseCase(),
                         .just(.updateIsShowActivityIndicator(false)),
+                        .just(.hideSongCart),
                         .just(.switchEditingState(false))
                     )
                 } else {
@@ -162,6 +171,8 @@ final class ListStorageReactor: Reactor {
             newState.backupDataSource = currentState.dataSource
         case let .showToast(message):
             newState.showToast = message
+        case .hideSongCart:
+            newState.hideSongCart = ()
         }
 
         return newState

@@ -80,6 +80,13 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$hideSongCart)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                owner.hideSongCart()
+            })
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
@@ -113,8 +120,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, userInfo in
-                print("🚀 dataSource changed", dataSource.count)
-                // owner.listStorageView.updateActivityIndicatorState(isPlaying: false)
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
             })
             .map { $0.1 }
@@ -122,6 +127,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         sharedState.map(\.isEditing)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
                 print("🚀 isEditing changed", flag)
@@ -132,6 +138,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         sharedState.map(\.selectedItemCount)
+            .distinctUntilChanged()
             .withUnretained(self)
             .bind(onNext: { owner, count in
 

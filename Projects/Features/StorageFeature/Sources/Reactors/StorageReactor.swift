@@ -12,13 +12,17 @@ final class StorageReactor: Reactor {
     }
 
     enum Mutation {
+        case updateIsLoggedIn(Bool)
         case switchTabIndex(Int)
         case switchEditingState(Bool)
+        case showLoginAlert
     }
 
     struct State {
+        var isLoggedIn: Bool
         var isEditing: Bool
         var tabIndex: Int
+        @Pulse var showLoginAlert: Void?
     }
 
     let initialState: State
@@ -29,6 +33,7 @@ final class StorageReactor: Reactor {
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared
     ) {
         initialState = State(
+            isLoggedIn: false,
             isEditing: false,
             tabIndex: 0
         )
@@ -42,8 +47,12 @@ final class StorageReactor: Reactor {
         case let .switchTab(index):
             return switchTabIndex(index)
         case .editButtonDidTap:
-            storageCommonService.isEditingState.onNext(true)
-            return switchEditingState(true)
+            if currentState.isLoggedIn {
+                storageCommonService.isEditingState.onNext(true)
+                return switchEditingState(true)
+            } else {
+                return .just(.showLoginAlert)
+            }
         case .saveButtonTap:
             storageCommonService.isEditingState.onNext(false)
             return switchEditingState(false)
@@ -51,13 +60,19 @@ final class StorageReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let editState = storageCommonService.isEditingState
+        let switchEditingStateMutation = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
 
-        let movedLikeStorageEvent = storageCommonService.movedLikeStorageEvent
+        let movedToLikeStorageMutation = storageCommonService.movedLikeStorageEvent
             .map { _ in Mutation.switchTabIndex(1) }
+        
+        let updateIsLoggedInMutation = storageCommonService.changedUserInfoEvent
+            .withUnretained(self)
+            .flatMap { owner, userInfo -> Observable<Mutation> in
+                owner.updateIsLoggedIn(userInfo)
+            }
 
-        return Observable.merge(mutation, editState, movedLikeStorageEvent)
+        return Observable.merge(mutation, switchEditingStateMutation, movedToLikeStorageMutation, updateIsLoggedInMutation)
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -68,6 +83,10 @@ final class StorageReactor: Reactor {
             newState.tabIndex = index
         case let .switchEditingState(flag):
             newState.isEditing = flag
+        case .showLoginAlert:
+            newState.showLoginAlert = ()
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
         }
 
         return newState
@@ -75,6 +94,10 @@ final class StorageReactor: Reactor {
 }
 
 private extension StorageReactor {
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
+    }
+    
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
         return .just(.switchTabIndex(index))
     }
