@@ -110,6 +110,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         headerView.rx.selectedFilterItem
             .distinctUntilChanged()
             .bind(with: self) { owner, type in
+                LogManager.analytics(SearchAnalyticsLog.selectSearchFilter(option: type.rawValue))
                 reactor.action.onNext(.changeFilterType(type))
             }
             .disposed(by: disposeBag)
@@ -268,6 +269,7 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {
     func updateSortType(_ type: SortType) {
+        LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "song"))
         if reactor?.currentState.sortType != type {
             reactor?.action.onNext(.changeSortType(type))
         }

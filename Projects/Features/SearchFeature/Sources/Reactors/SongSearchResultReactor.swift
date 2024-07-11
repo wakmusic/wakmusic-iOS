@@ -147,7 +147,18 @@ extension SongSearchResultReactor {
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
-                .map { [limit] dataSource -> Mutation in
+                .map { [weak self] dataSource -> Mutation in
+
+                    guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
+
+                    if scrollPage == 1 {
+                        LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
+                            keyword: self.text,
+                            category: "song",
+                            count: dataSource.count
+                        ))
+                    }
+
                     return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
                 }
                 .catch { error in

@@ -52,6 +52,11 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
         reactor?.action.onNext(.viewDidLoad)
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "search"))
+    }
+
     override public func addView() {
         super.addView()
         self.view.addSubviews(collectionView, tableView)
@@ -317,7 +322,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         switch model {
         case let .youtube(model: model):
             #warning("유튜브 이동")
-            LogManager.printDebug("youtube \(model)")
+            LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
 
             navigatePlaylistDetail(key: model.key, kind: .wakmu)
@@ -337,6 +342,7 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
+                LogManager.analytics(SearchAnalyticsLog.clickRecommendPlaylistMore)
                 self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
             case .popularList:
                 #warning("추후 업데이트 시 사용")
