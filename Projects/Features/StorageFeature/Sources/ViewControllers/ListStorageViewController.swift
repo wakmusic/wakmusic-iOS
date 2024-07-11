@@ -15,45 +15,60 @@ import UIKit
 import UserDomainInterface
 import Utility
 
-typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
+typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
-final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType {
+final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType, PlaylistDetailNavigator {
     let listStorageView = ListStorageView()
 
-    var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    var textPopUpFactory: TextPopUpFactory!
-    var playlistDetailFactory: PlaylistDetailFactory!
-    var signInFactory: SignInFactory!
-    var fruitDrawFactory: FruitDrawFactory!
-
-    public var songCartView: SongCartView!
-    public var bottomSheetView: BottomSheetView!
-
+    var multiPurposePopUpFactory: MultiPurposePopupFactory
+    var textPopUpFactory: TextPopUpFactory
+    var playlistDetailFactory: any PlaylistDetailFactory
+    var signInFactory: SignInFactory
+    var fruitDrawFactory: FruitDrawFactory
+    var songCartView: SongCartView!
+    var bottomSheetView: BottomSheetView!
+    
+    init(
+        reactor: Reactor,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        textPopUpFactory: TextPopUpFactory,
+        playlistDetailFactory: PlaylistDetailFactory,
+        signInFactory: SignInFactory,
+        fruitDrawFactory: FruitDrawFactory
+    ) {
+        self.multiPurposePopUpFactory = multiPurposePopUpFactory
+        self.textPopUpFactory = textPopUpFactory
+        self.playlistDetailFactory = playlistDetailFactory
+        self.signInFactory = signInFactory
+        self.fruitDrawFactory = fruitDrawFactory
+        super.init(reactor: reactor)
+    }
+    
     override func loadView() {
         self.view = listStorageView
     }
-
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
     }
 
-    static func viewController(
-        reactor: ListStorageReactor,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
-        playlistDetailFactory: PlaylistDetailFactory,
-        textPopUpFactory: TextPopUpFactory,
-        signInFactory: SignInFactory,
-        fruitDrawFactory: FruitDrawFactory
-    ) -> ListStorageViewController {
-        let viewController = ListStorageViewController(reactor: reactor)
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.playlistDetailFactory = playlistDetailFactory
-        viewController.textPopUpFactory = textPopUpFactory
-        viewController.signInFactory = signInFactory
-        viewController.fruitDrawFactory = fruitDrawFactory
-        return viewController
-    }
+//    static func viewController(
+//        reactor: ListStorageReactor,
+//        multiPurposePopUpFactory: MultiPurposePopupFactory,
+//        playlistDetailFactory: PlaylistDetailFactory,
+//        textPopUpFactory: TextPopUpFactory,
+//        signInFactory: SignInFactory,
+//        fruitDrawFactory: FruitDrawFactory
+//    ) -> ListStorageViewController {
+//        let viewController = ListStorageViewController(reactor: reactor)
+//        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+//        viewController.playlistDetailFactory = playlistDetailFactory
+//        viewController.textPopUpFactory = textPopUpFactory
+//        viewController.signInFactory = signInFactory
+//        viewController.fruitDrawFactory = fruitDrawFactory
+//        return viewController
+//    }
 
     override func configureUI() {
         reactor?.action.onNext(.viewDidLoad)
@@ -82,13 +97,22 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$showDetail)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, detailInfo in
+                let key = detailInfo.key
+                let isMine = detailInfo.isMine
+                owner.navigatePlaylistDetail(key: key, kind: isMine ? .my : .unknown)
+            })
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$hideSongCart)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 owner.hideSongCart()
             })
             .disposed(by: disposeBag)
-
+        
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
@@ -169,23 +193,20 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         sharedState.map(\.selectedItemCount)
             .distinctUntilChanged()
-            .withUnretained(self)
-            .bind(onNext: { owner, count in
-
+            .bind(with: self, onNext: { owner, count in
                 if count == 0 {
-                    owner.hideSongCart()
+                    self.hideSongCart()
                 } else {
                     owner.showSongCart(
                         in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
                             .rootViewController?.view ?? UIView(),
-                        type: .myList,
+                        type: .playlistStorage,
                         selectedSongCount: count,
                         totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
                         useBottomSpace: true
                     )
-                    owner.songCartView?.delegate = owner
+                    owner.songCartView.delegate = owner
                 }
-
             })
             .disposed(by: disposeBag)
     }
@@ -216,18 +237,17 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-
+                
         listStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
             .withLatestFrom(currentState.map(\.dataSource)) { ($0.0, $0.1, $0.2, $1) }
             .bind { owner, indexPath, isEditing, dataSource in
-
                 guard isEditing else {
                     owner.navigationController?.pushViewController(
                         owner.playlistDetailFactory.makeView(
-                            id: dataSource[indexPath.section].items[indexPath.row].key,
-                            isCustom: true
+                            key: dataSource[indexPath.section].items[indexPath.row].key,
+                            kind: .my
                         ),
                         animated: true
                     )
@@ -296,10 +316,13 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
-            self.reactor?.action.onNext(.listDidTap(indexPath.row))
+            self.reactor?.action.onNext(.listDidTap(indexPath))
 
         case let .playTapped(indexPath):
             self.reactor?.action.onNext(.playDidTap(indexPath.row))
+            
+        case let .cellTapped(indexPath):
+            self.reactor?.action.onNext(.cellDidTap(indexPath.row))
         }
     }
 }

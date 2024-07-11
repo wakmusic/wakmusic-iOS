@@ -25,16 +25,16 @@ public protocol ListStorageDependency: Dependency {
 
 public final class ListStorageComponent: Component<ListStorageDependency> {
     public func makeView() -> UIViewController {
-        return ListStorageViewController.viewController(
+        return ListStorageViewController(
             reactor: ListStorageReactor(
                 createPlaylistUseCase: dependency.createPlaylistUseCase,
-                fetchPlayListUseCase: FetchPlayListUseCaseStub(),
+                fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
                 deletePlayListUseCase: dependency.deletePlayListUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            textPopUpFactory: dependency.textPopUpFactory, 
             playlistDetailFactory: dependency.playlistDetailFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory,
             fruitDrawFactory: dependency.fruitDrawFactory
         )

@@ -12,7 +12,8 @@ final class ListStorageReactor: Reactor {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case listDidTap(Int)
+        case cellDidTap(Int)
+        case listDidTap(IndexPath)
         case playDidTap(Int)
         case tapAll(isSelecting: Bool)
         case loginButtonDidTap
@@ -35,6 +36,7 @@ final class ListStorageReactor: Reactor {
         case showToast(String)
         case showCreateListPopup
         case showDeletePopup(Int)
+        case showDetail(key: String, isMine: Bool)
         case hideSongCart
         case updateSelectedItemCount(Int)
     }
@@ -51,6 +53,7 @@ final class ListStorageReactor: Reactor {
         @Pulse var hideSongCart: Void?
         @Pulse var showCreateListPopup: Void?
         @Pulse var showDeletePopup: Int?
+        @Pulse var showDetail: (key: String, isMine: Bool)?
     }
 
     var initialState: State
@@ -97,8 +100,11 @@ final class ListStorageReactor: Reactor {
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
 
-        case let .listDidTap(index):
+        case let .cellDidTap(index):
             return changeSelectingState(index)
+            
+        case let .listDidTap(indexPath):
+            return showDetail(indexPath)
 
         case let .playDidTap(index):
             return playWithAddToCurrentPlaylist()
@@ -200,6 +206,8 @@ final class ListStorageReactor: Reactor {
             newState.showDeletePopup = itemCount
         case let .updateSelectedItemCount(count):
             newState.selectedItemCount = count
+        case let .showDetail(key, isMine):
+            newState.showDetail = (key, isMine)
         }
 
         return newState
@@ -208,11 +216,15 @@ final class ListStorageReactor: Reactor {
 
 extension ListStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        return .concat(
-            .just(.updateIsShowActivityIndicator(true)),
-            fetchDataSource(),
-            .just(.updateIsShowActivityIndicator(false))
-        )
+        if currentState.isLoggedIn {
+            return .concat(
+                .just(.updateIsShowActivityIndicator(true)),
+                fetchDataSource(),
+                .just(.updateIsShowActivityIndicator(false))
+            )
+        } else {
+            return .empty()
+        }
     }
 
     func fetchDataSource() -> Observable<Mutation> {
@@ -258,6 +270,14 @@ extension ListStorageReactor {
             .just(.hideSongCart),
             .just(.switchEditingState(false))
         )
+    }
+    
+    func showDetail(_ indexPath: IndexPath) -> Observable<Mutation> {
+        let selectedList = currentState.dataSource[indexPath.section].items[indexPath.row]
+        let key = selectedList.key
+        let isMine = PreferenceManager.userInfo?.decryptedID == selectedList.userId
+        
+        return .just(.showDetail(key: key, isMine: isMine))
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {

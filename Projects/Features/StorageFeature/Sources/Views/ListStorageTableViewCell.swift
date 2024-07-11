@@ -13,6 +13,7 @@ public protocol ListStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum ListStorageTableViewCellDelegateConstant {
+    case cellTapped(indexPath: IndexPath)
     case listTapped(indexPath: IndexPath)
     case playTapped(indexPath: IndexPath)
 }
@@ -55,8 +56,9 @@ class ListStorageTableViewCell: UITableViewCell {
         )
     }
 
+    private let cellSelectButton = UIButton()
     private let listSelectButton = UIButton()
-
+    
     weak var delegate: ListStorageTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
@@ -79,6 +81,7 @@ extension ListStorageTableViewCell {
             playlistImageView,
             verticalStackView,
             playButton,
+            cellSelectButton,
             listSelectButton
         )
         verticalStackView.addArrangedSubviews(
@@ -106,6 +109,12 @@ extension ListStorageTableViewCell {
             $0.right.equalToSuperview().inset(20)
         }
 
+        cellSelectButton.snp.makeConstraints {
+            $0.verticalEdges.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.right.equalTo(verticalStackView.snp.right)
+        }
+        
         listSelectButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.left.equalToSuperview()
@@ -122,15 +131,16 @@ extension ListStorageTableViewCell {
     }
 
     func setAction() {
+        self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
         self.listSelectButton.addTarget(self, action: #selector(listSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
     }
 
-    func update(model: PlayListEntity, isEditing: Bool, indexPath: IndexPath) {
+    func update(model: PlaylistEntity, isEditing: Bool, indexPath: IndexPath) {
         self.passToModel = (indexPath, model.key)
 
         self.playlistImageView.kf.setImage(
-            with: WMImageAPI.fetchPlayList(id: String(model.image), version: model.image_version).toURL,
+            with: URL(string: model.image),
             placeholder: DesignSystemAsset.PlayListTheme.theme3.image,
             options: [.transition(.fade(0.2))]
         )
@@ -141,12 +151,13 @@ extension ListStorageTableViewCell {
         )
 
         self.countLabel.attributedText = getAttributedString(
-            text: "\(model.songlist.count)곡",
+            text: "\(model.songCount)곡",
             font: DesignSystemFontFamily.Pretendard.light.font(size: 12)
         )
 
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
-        self.listSelectButton.isHidden = !isEditing
+        self.cellSelectButton.isHidden = !isEditing
+        self.listSelectButton.isHidden = isEditing
         self.playButton.isHidden = isEditing
 
         self.playButton.snp.updateConstraints {
@@ -171,6 +182,10 @@ extension ListStorageTableViewCell {
 }
 
 extension ListStorageTableViewCell {
+    @objc func cellSelectButtonAction() {
+        delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
+    }
+    
     @objc func listSelectButtonAction() {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }

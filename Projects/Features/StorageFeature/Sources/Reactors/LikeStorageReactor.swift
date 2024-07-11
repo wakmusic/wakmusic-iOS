@@ -25,9 +25,9 @@ final class LikeStorageReactor: Reactor {
     enum Mutation {
         case updateDataSource([FavoriteSectionModel])
         case switchEditingState(Bool)
-        case updateOrder([PlaylistEntity])
-        case changeSelectedState(data: [PlaylistEntity], selectedCount: Int)
-        case changeAllState(data: [PlaylistEntity], selectedCount: Int)
+        case updateOrder([FavoriteSongEntity])
+        case changeSelectedState(data: [FavoriteSongEntity], selectedCount: Int)
+        case changeAllState(data: [FavoriteSongEntity], selectedCount: Int)
     }
 
     struct State {
