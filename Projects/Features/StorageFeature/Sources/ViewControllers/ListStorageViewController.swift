@@ -17,7 +17,8 @@ import Utility
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
-final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType, PlaylistDetailNavigator {
+final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType,
+    PlaylistDetailNavigator {
     let listStorageView = ListStorageView()
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory
@@ -27,7 +28,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     var fruitDrawFactory: FruitDrawFactory
     var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
-    
+
     init(
         reactor: Reactor,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
@@ -43,11 +44,11 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         self.fruitDrawFactory = fruitDrawFactory
         super.init(reactor: reactor)
     }
-    
+
     override func loadView() {
         self.view = listStorageView
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -105,14 +106,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.navigatePlaylistDetail(key: key, kind: isMine ? .my : .unknown)
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$hideSongCart)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 owner.hideSongCart()
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
@@ -237,7 +238,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-                
+
         listStorageView.tableView.rx.itemSelected
             .withUnretained(self)
             .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
@@ -320,7 +321,7 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
 
         case let .playTapped(indexPath):
             self.reactor?.action.onNext(.playDidTap(indexPath.row))
-            
+
         case let .cellTapped(indexPath):
             self.reactor?.action.onNext(.cellDidTap(indexPath.row))
         }

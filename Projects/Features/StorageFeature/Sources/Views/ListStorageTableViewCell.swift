@@ -58,7 +58,7 @@ class ListStorageTableViewCell: UITableViewCell {
 
     private let cellSelectButton = UIButton()
     private let listSelectButton = UIButton()
-    
+
     weak var delegate: ListStorageTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
@@ -114,7 +114,7 @@ extension ListStorageTableViewCell {
             $0.left.equalToSuperview()
             $0.right.equalTo(verticalStackView.snp.right)
         }
-        
+
         listSelectButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.left.equalToSuperview()
@@ -185,7 +185,7 @@ extension ListStorageTableViewCell {
     @objc func cellSelectButtonAction() {
         delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
     }
-    
+
     @objc func listSelectButtonAction() {
         delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
     }

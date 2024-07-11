@@ -102,7 +102,7 @@ final class ListStorageReactor: Reactor {
 
         case let .cellDidTap(index):
             return changeSelectingState(index)
-            
+
         case let .listDidTap(indexPath):
             return showDetail(indexPath)
 
@@ -271,12 +271,12 @@ extension ListStorageReactor {
             .just(.switchEditingState(false))
         )
     }
-    
+
     func showDetail(_ indexPath: IndexPath) -> Observable<Mutation> {
         let selectedList = currentState.dataSource[indexPath.section].items[indexPath.row]
         let key = selectedList.key
         let isMine = PreferenceManager.userInfo?.decryptedID == selectedList.userId
-        
+
         return .just(.showDetail(key: key, isMine: isMine))
     }
 
