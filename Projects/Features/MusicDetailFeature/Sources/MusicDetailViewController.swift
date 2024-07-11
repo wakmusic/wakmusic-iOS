@@ -49,7 +49,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .compactMap(\.selectedSong)
             .bind(with: self) { owner, song in
                 owner.musicDetailView.updateTitle(title: song.title)
-                owner.musicDetailView.updateArtist(artist: song.artists.joined(separator: ", "))
+                owner.musicDetailView.updateArtist(artist: song.artistString)
 
                 owner.musicDetailView.updateBackgroundImage(
                     imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: song.videoID)

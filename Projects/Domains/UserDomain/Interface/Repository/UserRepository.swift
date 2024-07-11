@@ -5,7 +5,7 @@ import RxSwift
 public protocol UserRepository {
     func setProfile(image: String) -> Single<BaseEntity>
     func setUserName(name: String) -> Single<BaseEntity>
-    func fetchPlayList() -> Single<[PlayListEntity]>
+    func fetchPlayList() -> Single<[PlaylistEntity]>
     func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]>
     func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity>
     func editPlayListOrder(ids: [String]) -> Single<BaseEntity>

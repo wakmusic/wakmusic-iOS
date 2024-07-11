@@ -39,7 +39,7 @@ public class SongCartView: UIView {
     @IBOutlet weak var bottomSpaceViewHeight: NSLayoutConstraint!
 
     public weak var delegate: SongCartViewDelegate?
-    public var type: SongCartType = .playList
+    public var type: SongCartType = .playlist
 
     override public init(frame: CGRect) {
         super.init(frame: frame)
@@ -84,7 +84,7 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .play)
 
         } else if button == removeButton { // 삭제
-            if self.type == .playList {
+            if self.type == .playlist {
                 delegate?.buttonTapped(type: .remove)
 
             } else {
@@ -111,28 +111,35 @@ public extension SongCartView {
 
     private func configureType() {
         switch self.type {
-        case .playList:
+        case .playlist:
             allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = true
             playButton.isHidden = true
             removeButton.isHidden = false
 
-        case .chartSong, .artistSong, .WMPlayList:
+        case .chartSong, .artistSong, .WMPlaylist:
             allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
             playButton.isHidden = false
             removeButton.isHidden = true
 
-        case .likeSong, .myPlayList:
+        case .myPlaylist:
             allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
             playButton.isHidden = true
             removeButton.isHidden = false
 
-        case .myList:
+        case .likeSong:
+            allSelectView.isHidden = false
+            songAddButton.isHidden = false
+            playListAddButton.isHidden = false
+            playButton.isHidden = true
+            removeButton.isHidden = false
+
+        case .playlistStorage:
             allSelectView.isHidden = false
             songAddButton.isHidden = true
             playListAddButton.isHidden = false

@@ -182,10 +182,10 @@ private extension PlaylistViewController {
     }
 
     private func bindSongCart(output: PlaylistViewModel.Output) {
-        output.indexOfSelectedSongs
+        output.selectedSongIds
             .skip(1)
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { songs, dataSource -> (songs: [Int], dataSourceCount: Int) in
+            .map { songs, dataSource -> (songs: Set<String>, dataSourceCount: Int) in
                 return (songs, dataSource.first?.items.count ?? 0)
             }
             .subscribe(onNext: { [weak self] songs, dataSourceCount in
@@ -196,7 +196,7 @@ private extension PlaylistViewController {
                 case false:
                     self.showSongCart(
                         in: self.view,
-                        type: .playList,
+                        type: .playlist,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSourceCount,
                         useBottomSpace: true
@@ -241,10 +241,9 @@ extension PlaylistViewController {
 
                 let index = indexPath.row
                 let isEditing = output.editState.value
-                let isPlaying = model.isPlaying
 
                 cell.setContent(
-                    song: model.item,
+                    model: model,
                     index: index,
                     isEditing: isEditing
                 )

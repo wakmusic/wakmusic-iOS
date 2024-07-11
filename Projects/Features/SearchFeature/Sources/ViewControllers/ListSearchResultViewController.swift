@@ -1,6 +1,7 @@
 import BaseFeature
 import DesignSystem
 import LogManager
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -10,12 +11,14 @@ import Then
 import UIKit
 import Utility
 
-final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor> {
+final class ListSearchResultViewController: BaseReactorViewController<ListSearchResultReactor>,
+    PlaylistDetailNavigator {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
+    private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -28,8 +31,13 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         SearchPlaylistEntity
     > = createDataSource()
 
-    init(_ reactor: ListSearchResultReactor, _ searchSortOptionComponent: SearchSortOptionComponent) {
+    init(
+        _ reactor: ListSearchResultReactor,
+        searchSortOptionComponent: SearchSortOptionComponent,
+        playlistDetailFactory: any PlaylistDetailFactory
+    ) {
         self.searchSortOptionComponent = searchSortOptionComponent
+        self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -86,6 +94,13 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
         let sharedState = reactor.state.share()
 
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            }
+            .disposed(by: disposeBag)
+
         sharedState.map(\.sortType)
             .distinctUntilChanged()
             .bind(with: self) { owner, type in
@@ -135,11 +150,11 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         headerView.snp.makeConstraints {
             $0.height.equalTo(30)
             $0.top.equalToSuperview().offset(72) // 56 + 16
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview()
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom)
+            $0.top.equalTo(headerView.snp.bottom).offset(8)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
     }
@@ -197,10 +212,16 @@ extension ListSearchResultViewController: SearchSortOptionDelegate {
 
 extension ListSearchResultViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        #warning("플레이리스트 상세로 이동")
         guard let model = dataSource.itemIdentifier(for: indexPath) else {
             return
         }
-        LogManager.printDebug(model)
+
+        let id = PreferenceManager.userInfo?.decryptedID ?? ""
+        let isMine = model.ownerId == id
+
+        navigatePlaylistDetail(
+            key: model.key,
+            kind: isMine ? .my : .unknown
+        )
     }
 }

@@ -7,11 +7,15 @@ let project = Project.module(
     targets: [
         .interface(module: .feature(.PlaylistFeature), dependencies: [
             .feature(target: .BaseFeature, type: .interface)
+
         ]),
         .implements(
             module: .feature(.PlaylistFeature), dependencies: [
                 .feature(target: .BaseFeature),
-                .feature(target: .PlaylistFeature, type: .interface)
+                .feature(target: .PlaylistFeature, type: .interface),
+                .domain(target: .AuthDomain, type: .interface),
+                .domain(target: .PlaylistDomain, type: .interface),
+                .domain(target: .ImageDomain, type: .interface)
             ]
         ),
         .testing(module: .feature(.PlaylistFeature), dependencies: [

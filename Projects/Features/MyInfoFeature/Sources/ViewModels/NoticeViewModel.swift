@@ -34,6 +34,27 @@ public final class NoticeViewModel {
                 return fetchNoticeAllUseCase.execute()
                     .catchAndReturn([])
             }
+            .map { notices in
+                let readIDs = Set(PreferenceManager.readNoticeIDs ?? [])
+                return notices.map { notice in
+                    var notice = notice
+                    notice.isRead = readIDs.contains(notice.id)
+                    return notice
+                }
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
+
+        input.didTapList
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .map { selectedIndexPath, notices in
+                let selecterdID = notices[selectedIndexPath.row].id
+                return notices.map { notice in
+                    var updatedNotice = notice
+                    updatedNotice.isRead = (notice.id == selecterdID) ? true : notice.isRead
+                    return updatedNotice
+                }
+            }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 

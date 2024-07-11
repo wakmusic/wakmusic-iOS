@@ -13,6 +13,6 @@ public protocol RemotePlaylistDataSource {
     func addSongIntoPlaylist(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Completable
     func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity>
-    func subscribePlaylist(key: String) -> Completable
-    func unSubscribePlaylist(key: String) -> Completable
+    func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable
+    func checkSubscriptionUseCase(key: String) -> Single<Bool>
 }

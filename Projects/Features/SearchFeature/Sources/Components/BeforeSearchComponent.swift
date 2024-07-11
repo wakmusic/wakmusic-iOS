@@ -5,17 +5,18 @@ import Foundation
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import UIKit
 
 public protocol BeforeSearchDependency: Dependency {
-    var playlistDetailFactory: any PlaylistDetailFactory { get }
     var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
     var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
     var wakmusicRecommendComponent: WakmusicRecommendComponent { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
 }
 
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
-    public func makeView() -> BeforeSearchContentViewController {
+    public func makeView() -> UIViewController {
         return BeforeSearchContentViewController(
             wakmusicRecommendComponent: dependency.wakmusicRecommendComponent,
             textPopUpFactory: dependency.textPopUpFactory,

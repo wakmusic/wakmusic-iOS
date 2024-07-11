@@ -30,12 +30,14 @@ public final class BeforeSearchReactor: Reactor {
         case updateDataSource(WrapperDataSourceModel)
         case updateShowRecommend(Bool)
         case updateLoadingState(Bool)
+        case showToast(String)
     }
 
     public struct State {
         var showRecommend: Bool
         var isLoading: Bool
         var dataSource: WrapperDataSourceModel
+        @Pulse var toastMessage: String?
     }
 
     init(
@@ -75,6 +77,8 @@ public final class BeforeSearchReactor: Reactor {
             newState.showRecommend = flag
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
+        case let .showToast(message):
+            newState.toastMessage = message
         }
 
         return newState
@@ -99,8 +103,13 @@ extension BeforeSearchReactor {
                 fetchRecommendPlaylistUseCase
                     .execute()
                     .asObservable()
-            ).map { Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) },
-
+            ).map { Mutation.updateDataSource(WrapperDataSourceModel(currentVideo: $0.0, recommendPlayList: $0.1)) }
+                .catch { error in
+                    let wmErorr = error.asWMError
+                    return Observable.just(
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
+                },
             .just(.updateLoadingState(false))
         ])
     }

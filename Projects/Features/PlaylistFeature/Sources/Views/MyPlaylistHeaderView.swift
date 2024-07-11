@@ -8,7 +8,11 @@ import UIKit
 
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
-    func updateData(_ title: String, _ songCount: Int, _ thumnail: String)
+    func updateData(_ model: PlaylistDetailHeaderModel)
+    func updateThumbnailByAlbum(_ data: Data)
+    func updateThumbnailByDefault(_ url: String)
+
+    #warning("api 구현 후 함수명을 좀 더 명확하게 변경하기")
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -20,9 +24,9 @@ final class MyPlaylistHeaderView: UIView {
     fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
 
     private var thumbnailImageView: UIImageView = UIImageView().then {
-        #warning("나중에 이미지 제거")
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.PlayListTheme.theme0.image
     }
 
     private let cameraContainerView: UIView = UIView().then {
@@ -59,9 +63,7 @@ final class MyPlaylistHeaderView: UIView {
     )
 
     let editNickNameButton: UIButton = UIButton().then {
-        $0.backgroundColor = .red
-        var image = DesignSystemAsset.Storage.nicknameEdit.image
-        image.withTintColor(.red, renderingMode: .alwaysOriginal)
+        var image = DesignSystemAsset.Storage.storageEdit.image
         $0.setImage(image, for: .normal)
     }
 
@@ -130,20 +132,26 @@ extension MyPlaylistHeaderView {
         cameraContainerView.addGestureRecognizer(tapGestureRecognizer)
         cameraImageView.isUserInteractionEnabled = true
     }
-
-    #warning("모델 및 편집상태 전달하기")
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
-    func updateData(_ title: String, _ songCount: Int, _ thumnail: String) {
-        titleLabel.text = title
-        countLabel.text = "\(songCount)곡"
-        #warning("이미지 업데이트")
+    func updateData(_ model: PlaylistDetailHeaderModel) {
+        titleLabel.text = model.title
+        countLabel.text = "\(model.songCount)곡"
+        thumbnailImageView.kf.setImage(with: URL(string: model.image))
     }
 
     func updateEditState(_ isEditing: Bool) {
         editNickNameButton.isHidden = !isEditing
         cameraContainerView.isHidden = !isEditing
+    }
+
+    func updateThumbnailByAlbum(_ data: Data) {
+        thumbnailImageView.image = UIImage(data: data)
+    }
+
+    func updateThumbnailByDefault(_ url: String) {
+        thumbnailImageView.kf.setImage(with: URL(string: url))
     }
 }
 

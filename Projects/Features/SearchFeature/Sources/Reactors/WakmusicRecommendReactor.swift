@@ -17,11 +17,13 @@ final class WakmusicRecommendReactor: Reactor {
     enum Mutation {
         case updateDataSource([RecommendPlaylistEntity])
         case updateLodingState(Bool)
+        case showToast(String)
     }
 
     struct State {
         var dataSource: [RecommendPlaylistEntity]
         var isLoading: Bool
+        @Pulse var toastMessage: String?
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -39,6 +41,9 @@ final class WakmusicRecommendReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateLodingState(isLoading):
             newState.isLoading = isLoading
+
+        case let .showToast(message):
+            newState.toastMessage = message
         }
 
         return newState
@@ -65,7 +70,13 @@ extension WakmusicRecommendReactor {
             fetchRecommendPlaylistUseCase
                 .execute()
                 .asObservable()
-                .map { Mutation.updateDataSource($0) },
+                .map { Mutation.updateDataSource($0) }
+                .catch { error in
+                    let wmErorr = error.asWMError
+                    return Observable.just(
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
+                },
             .just(.updateLodingState(false))
         ])
     }

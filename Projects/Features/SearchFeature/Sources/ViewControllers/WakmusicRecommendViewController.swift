@@ -8,6 +8,8 @@ import Utility
 
 #warning("실제 데이터 및 이벤트 연결")
 final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicRecommendReactor> {
+    private let wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory
+
     private let wmNavigationbarView = WMNavigationBarView().then {
         $0.setTitle("왁뮤팀이 추천하는 리스트")
     }
@@ -24,10 +26,8 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     private lazy var dataSource: UICollectionViewDiffableDataSource<RecommendSection, RecommendPlaylistEntity> =
         createDataSource()
 
-    private let playlistDetailFactory: any PlaylistDetailFactory
-
-    init(playlistDetailFactory: any PlaylistDetailFactory, reactor: WakmusicRecommendReactor) {
-        self.playlistDetailFactory = playlistDetailFactory
+    init(wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory, reactor: WakmusicRecommendReactor) {
+        self.wakmusicPlaylistDetailFactory = wakmusicPlaylistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -72,6 +72,13 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
     override func bindState(reactor: WakmusicRecommendReactor) {
         super.bindState(reactor: reactor)
         let sharedState = reactor.state.share()
+
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            }
+            .disposed(by: disposeBag)
 
         sharedState.map(\.dataSource)
             .distinctUntilChanged()
@@ -163,7 +170,7 @@ extension WakmusicRecommendViewController: UICollectionViewDelegate {
         }
 
         self.navigationController?.pushViewController(
-            playlistDetailFactory.makeView(id: model.key, isCustom: false),
+            wakmusicPlaylistDetailFactory.makeView(key: model.key),
             animated: true
         )
     }

@@ -15,16 +15,7 @@ public extension AnalyticsLogType {
     }
 
     var params: [String: Any] {
-        let enumMirror = Mirror(reflecting: self)
-
-        guard let associated = enumMirror.children.first else { return [:] }
-
         var dict: [String: Any] = [:]
-
-        for enumParams in Mirror(reflecting: associated.value).children {
-            guard let label = enumParams.label?.toSnakeCase() else { continue }
-            dict[label] = enumParams.value
-        }
 
         let currentDate = Date()
         let timestamp = currentDate.timeIntervalSince1970
@@ -36,6 +27,15 @@ public extension AnalyticsLogType {
 
         dict["timestamp"] = timestamp
         dict["date"] = dateString
+
+        let enumMirror = Mirror(reflecting: self)
+
+        guard let associated = enumMirror.children.first else { return dict }
+
+        for enumParams in Mirror(reflecting: associated.value).children {
+            guard let label = enumParams.label?.toSnakeCase() else { continue }
+            dict[label] = enumParams.value
+        }
 
         return dict
     }

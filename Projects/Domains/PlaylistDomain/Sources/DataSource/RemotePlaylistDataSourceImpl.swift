@@ -58,13 +58,14 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map { $0.toDomain() }
     }
 
-    public func subscribePlaylist(key: String) -> Completable {
-        request(.subscribePlaylist(key: key))
+    public func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable {
+        request(.subscribePlaylist(key: key, isSubscribing: isSubscribing))
             .asCompletable()
     }
 
-    public func unSubscribePlaylist(key: String) -> Completable {
-        request(.subscribePlaylist(key: key))
-            .asCompletable()
+    public func checkSubscriptionUseCase(key: String) -> Single<Bool> {
+        request(.checkSubscription(key: key))
+            .map(CheckSubscriptionResponseDTO.self)
+            .map { $0.data }
     }
 }

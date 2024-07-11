@@ -30,13 +30,13 @@ class CurrentPlayListTableViewCell: UITableViewCell {
 }
 
 extension CurrentPlayListTableViewCell {
-    func update(model: PlayListEntity) {
+    func update(model: PlaylistEntity) {
         self.playListImageView.kf.setImage(
-            with: WMImageAPI.fetchPlayList(id: String(model.image), version: model.image_version).toURL,
+            with: URL(string: model.image),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
         self.playListNameLabel.text = model.title
-        self.playListCountLabel.text = "\(model.songlist.count)곡"
+        self.playListCountLabel.text = "\(model.songCount)곡"
     }
 }

@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
+import PlaylistFeatureInterface
 import SearchDomainInterface
 import SearchFeatureInterface
 import UIKit
@@ -9,6 +10,7 @@ import UIKit
 public protocol ListSearchResultDependency: Dependency {
     var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase { get }
     var searchSortOptionComponent: SearchSortOptionComponent { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
 }
 
 public final class ListSearchResultComponent: Component<ListSearchResultDependency>, ListSearchResultFactory {
@@ -18,7 +20,8 @@ public final class ListSearchResultComponent: Component<ListSearchResultDependen
                 text: text,
                 fetchSearchPlaylistsUseCase: dependency.fetchSearchPlaylistsUseCase
             ),
-            dependency.searchSortOptionComponent
+            searchSortOptionComponent: dependency.searchSortOptionComponent,
+            playlistDetailFactory: dependency.playlistDetailFactory
         )
     }
 }

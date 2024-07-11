@@ -18,4 +18,8 @@ public final class ImageRepositoryImpl: ImageRepository {
     public func fetchProfileList() -> Single<[ProfileListEntity]> {
         remoteImageDataSource.fetchProfileList()
     }
+
+    public func fetchDefaultPlaylistImage() -> Single<[DefaultImageEntity]> {
+        remoteImageDataSource.fetchDefaultPlaylistImage()
+    }
 }

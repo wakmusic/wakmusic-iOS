@@ -10,6 +10,7 @@ public struct SongEntity: Hashable {
         views: Int,
         last: Int,
         date: String,
+        likes: Int = 0,
         isSelected: Bool = false,
         karaokeNumber: SongEntity.KaraokeNumber = .init(TJ: nil, KY: nil)
     ) {
@@ -21,6 +22,7 @@ public struct SongEntity: Hashable {
         self.views = views
         self.last = last
         self.date = date
+        self.likes = likes
         self.isSelected = isSelected
         self.karaokeNumber = karaokeNumber
     }
@@ -29,6 +31,7 @@ public struct SongEntity: Hashable {
     public let reaction: String
     public let views, last: Int
     public let date: String
+    public let likes: Int
     public var isSelected: Bool
     public let karaokeNumber: SongEntity.KaraokeNumber
 

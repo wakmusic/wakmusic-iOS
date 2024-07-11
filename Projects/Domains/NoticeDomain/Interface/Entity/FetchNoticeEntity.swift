@@ -25,6 +25,7 @@ public struct FetchNoticeEntity {
     public let thumbnail: FetchNoticeEntity.Image
     public let origins: [FetchNoticeEntity.Image]
     public let createdAt: Double
+    public var isRead: Bool = true
 }
 
 public extension FetchNoticeEntity {

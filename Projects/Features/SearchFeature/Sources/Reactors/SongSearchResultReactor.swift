@@ -9,15 +9,19 @@ final class SongSearchResultReactor: Reactor {
         case changeSortType(SortType)
         case changeFilterType(FilterType)
         case askLoadMore
+        case deselectAll
+        case itemDidTap(Int)
     }
 
     enum Mutation {
         case updateSortType(SortType)
         case updateFilterType(FilterType)
         case updateDataSource(dataSource: [SongEntity], canLoad: Bool)
-        case updateSelectedCount(Int)
         case updateLoadingState(Bool)
         case updateScrollPage(Int)
+        case updateSelectedCount(Int)
+        case updateSelectingStateByIndex([SongEntity])
+        case showToast(String)
     }
 
     struct State {
@@ -28,6 +32,7 @@ final class SongSearchResultReactor: Reactor {
         var scrollPage: Int
         var dataSource: [SongEntity]
         var canLoad: Bool
+        @Pulse var toastMessage: String?
     }
 
     var initialState: State
@@ -66,6 +71,12 @@ final class SongSearchResultReactor: Reactor {
             return updateSortType(type)
         case let .changeFilterType(type):
             return updateFilterType(type)
+
+        case .deselectAll:
+            return deselectAll()
+
+        case let .itemDidTap(index):
+            return updateItemSelected(index)
         }
     }
 
@@ -81,14 +92,20 @@ final class SongSearchResultReactor: Reactor {
             newState.dataSource = dataSource
             newState.canLoad = canLoad
 
-        case let .updateSelectedCount(count):
-            break
-
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
 
         case let .updateScrollPage(page):
             newState.scrollPage = page
+
+        case let .showToast(message):
+            newState.toastMessage = message
+
+        case let .updateSelectedCount(count):
+            newState.selectedCount = count
+
+        case let .updateSelectingStateByIndex(dataSource):
+            newState.dataSource = dataSource
         }
 
         return newState
@@ -100,6 +117,7 @@ extension SongSearchResultReactor {
         let state = self.currentState
 
         return .concat([
+            .just(.updateSelectedCount(0)),
             .just(.updateSortType(type)),
             updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1, byOption: true)
         ])
@@ -109,6 +127,7 @@ extension SongSearchResultReactor {
         let state = self.currentState
 
         return .concat([
+            .just(.updateSelectedCount(0)),
             .just(.updateFilterType(type)),
             updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
         ])
@@ -130,9 +149,47 @@ extension SongSearchResultReactor {
                 .asObservable()
                 .map { [limit] dataSource -> Mutation in
                     return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+                }
+                .catch { error in
+                    let wmErorr = error.asWMError
+                    return Observable.just(
+                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    )
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
             .just(Mutation.updateLoadingState(false)) // 로딩 종료
+        ])
+    }
+
+    func updateItemSelected(_ index: Int) -> Observable<Mutation> {
+        let state = currentState
+        var count = state.selectedCount
+        var prev = state.dataSource
+
+        if prev[index].isSelected {
+            count -= 1
+        } else {
+            count += 1
+        }
+        prev[index].isSelected = !prev[index].isSelected
+
+        return .concat([
+            .just(Mutation.updateSelectedCount(count)),
+            .just(Mutation.updateSelectingStateByIndex(prev))
+        ])
+    }
+
+    func deselectAll() -> Observable<Mutation> {
+        let state = currentState
+        var dataSource = state.dataSource
+
+        for i in 0 ..< dataSource.count {
+            dataSource[i].isSelected = false
+        }
+
+        return .concat([
+            .just(.updateDataSource(dataSource: dataSource, canLoad: state.canLoad)),
+            .just(.updateSelectedCount(0))
         ])
     }
 }

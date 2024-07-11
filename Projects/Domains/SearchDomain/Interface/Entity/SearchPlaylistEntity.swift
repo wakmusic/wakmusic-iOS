@@ -4,6 +4,7 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
     public init(
         key: String,
         title: String,
+        ownerId: String,
         userName: String,
         image: String,
         date: String,
@@ -13,6 +14,7 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
     ) {
         self.key = key
         self.title = title
+        self.ownerId = ownerId
         self.userName = userName
         self.image = image
         self.date = date
@@ -20,7 +22,7 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
         self.isPrivate = isPrivate
     }
 
-    public let key, title, userName, image, date: String
+    public let key, title, ownerId, image, date, userName: String
     public let count: Int
     public let isPrivate: Bool
 

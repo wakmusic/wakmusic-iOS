@@ -1,11 +1,3 @@
-//
-//  ArtistRepositoryImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import RxSwift
 
@@ -24,5 +16,13 @@ public final class ArtistRepositoryImpl: ArtistRepository {
 
     public func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]> {
         remoteArtistDataSource.fetchArtistSongList(id: id, sort: sort, page: page)
+    }
+
+    public func fetchArtistSubscriptionStatus(id: String) -> Single<ArtistSubscriptionStatusEntity> {
+        remoteArtistDataSource.fetchArtistSubscriptionStatus(id: id)
+    }
+
+    public func subscriptionArtist(id: String, on: Bool) -> Completable {
+        remoteArtistDataSource.subscriptionArtist(id: id, on: on)
     }
 }

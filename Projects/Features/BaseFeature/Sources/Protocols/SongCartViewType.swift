@@ -18,14 +18,14 @@ public protocol SongCartViewType: AnyObject {
 
 /// 각 (담당자)는 넣어서 호출 하세요.
 public enum SongCartType {
-    case playList // 플레이어 > 재생목록 (케이)
+    case playlist // 플레이어 > 재생목록 (케이)
     case chartSong // 차트 (대희)
     case searchSong // 검색 (함프)
     case artistSong // 아티스트 (구구)
     case likeSong // 보관함 > 좋아요 (함프)
-    case myList // 보관함 > 내 리스트 (함프)
-    case myPlayList // 보관함 > 플레이 리스트 상세 (함프)
-    case WMPlayList // 추천 플레이 리스트 상세 (함프)
+    case playlistStorage // 보관함 > 내 리스트 (함프)
+    case myPlaylist // 보관함 > 플레이 리스트 상세 (함프)
+    case WMPlaylist // 추천 플레이 리스트 상세 (함프)
 }
 
 public extension SongCartViewType where Self: UIViewController {

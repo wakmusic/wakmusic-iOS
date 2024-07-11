@@ -25,9 +25,9 @@ final class LikeStorageReactor: Reactor {
     enum Mutation {
         case updateDataSource([FavoriteSectionModel])
         case switchEditingState(Bool)
-        case updateOrder([FavoriteSongEntity])
-        case changeSelectedState(data: [FavoriteSongEntity], selectedCount: Int)
-        case changeAllState(data: [FavoriteSongEntity], selectedCount: Int)
+        case updateOrder([PlaylistEntity])
+        case changeSelectedState(data: [PlaylistEntity], selectedCount: Int)
+        case changeAllState(data: [PlaylistEntity], selectedCount: Int)
     }
 
     struct State {
@@ -112,48 +112,6 @@ extension LikeStorageReactor {
                 [FavoriteSectionModel(
                     model: 0,
                     items: [
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "1",
-                                title: "1234",
-                                artist: "!2344",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        ),
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "2",
-                                title: "123",
-                                artist: "!23",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        ),
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "3",
-                                title: "112323",
-                                artist: "!55523",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        )
                     ]
                 )]
             )

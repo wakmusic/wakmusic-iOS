@@ -54,7 +54,7 @@ public final class FruitDrawViewController: UIViewController {
 
     private lazy var lottieAnimationView =
         LottieAnimationView(
-            name: "Splash_Logo_Main",
+            name: "Fruit_Draw",
             bundle: DesignSystemResources.bundle
         ).then {
             $0.loopMode = .playOnce
@@ -180,6 +180,11 @@ public final class FruitDrawViewController: UIViewController {
         inputBind()
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(FruitDrawAnalyticsLog.viewPage(pageName: "fruit_draw"))
+    }
+
     override public var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -265,6 +270,7 @@ private extension FruitDrawViewController {
                     owner.delegate?.completedFruitDraw(itemCount: fruit.quantity)
                     owner.dismiss(animated: true)
                 } else {
+                    LogManager.analytics(FruitDrawAnalyticsLog.clickFruitDrawButton)
                     owner.input.didTapFruitDraw.onNext(())
                     owner.startLottieAnimation()
                     UIView.animate(
@@ -459,8 +465,8 @@ private extension FruitDrawViewController {
     func startLottieAnimation() {
         view.addSubview(lottieAnimationView)
         lottieAnimationView.snp.makeConstraints {
-            $0.width.equalTo(275)
-            $0.height.equalTo(200)
+            $0.width.equalTo(APP_WIDTH())
+            $0.height.equalTo(200 * APP_WIDTH() / 275)
             $0.center.equalToSuperview()
         }
         lottieAnimationView.play { _ in
@@ -504,5 +510,6 @@ private extension FruitDrawViewController {
         descriptioniLabel.alpha = isHide ? 0 : 1
         drawMachineImageView.alpha = descriptioniLabel.alpha
         drawOrConfirmButton.alpha = descriptioniLabel.alpha
+        navigationBarView.alpha = descriptioniLabel.alpha
     }
 }

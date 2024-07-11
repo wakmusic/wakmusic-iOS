@@ -35,23 +35,14 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var copyrightLabel: UILabel!
 
-    private lazy var loadingContentView = UIView().then {
+    private let loadingContentView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
-        view.addSubview($0)
-        $0.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
         $0.isHidden = true
     }
 
-    private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
+    private let activityIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = .white
         $0.type = .circleStrokeSpin
-        loadingContentView.addSubview($0)
-        $0.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.size.equalTo(30)
-        }
     }
 
     private var viewModel: LoginViewModel!
@@ -65,6 +56,8 @@ public class LoginViewController: UIViewController, ViewControllerFromStoryBoard
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setLayout()
         configureUI()
         inputBind()
         outputBind()
@@ -101,6 +94,7 @@ private extension LoginViewController {
             .disposed(by: disposeBag)
 
         output.showLoading
+            .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, show in
                 owner.loadingContentView.isHidden = !show
                 if show {
@@ -152,6 +146,22 @@ private extension LoginViewController {
 }
 
 private extension LoginViewController {
+    func addSubviews() {
+        view.addSubview(loadingContentView)
+        loadingContentView.addSubview(activityIndicator)
+    }
+
+    func setLayout() {
+        loadingContentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
+        activityIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(30)
+        }
+    }
+
     func configureUI() {
         configureLoginButtonUI()
         configureServiceUI()

@@ -9,7 +9,7 @@ extension PlaylistViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
-            let songs: [String] = self.playState.playList.list.filter { $0.item.isSelected }.map { $0.item.id }
+            let songs: [String] = []
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
             }

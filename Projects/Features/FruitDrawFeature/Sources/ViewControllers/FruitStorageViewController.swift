@@ -77,6 +77,11 @@ public final class FruitStorageViewController: UIViewController {
         inputBind()
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(FruitDrawAnalyticsLog.viewPage(pageName: "fruit_storage"))
+    }
+
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.gradientLayer.frame = CGRect(
@@ -172,6 +177,7 @@ private extension FruitStorageViewController {
         view.backgroundColor = .white
         collectionView.register(FruitListCell.self, forCellWithReuseIdentifier: "\(FruitListCell.self)")
         collectionView.contentInset = .init(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
+        collectionView.showsVerticalScrollIndicator = false
         activityIndicator.startAnimating()
     }
 }
@@ -190,6 +196,7 @@ extension FruitStorageViewController: UICollectionViewDelegateFlowLayout {
 
 extension FruitStorageViewController: FruitListCellDelegate {
     public func itemSelected(item: FruitEntity) {
+        LogManager.analytics(FruitDrawAnalyticsLog.clickFruitItem(id: item.fruitID))
         let viewController = FruitInfoPopupViewController(item: item)
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve

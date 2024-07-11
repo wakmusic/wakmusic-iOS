@@ -1,5 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
+import ImageDomain
+import ImageDomainInterface
 import PlaylistDomain
 import PlaylistDomainInterface
 import PlaylistFeature
@@ -22,6 +24,30 @@ public extension AppComponent {
 
     var playlistFactory: any PlaylistFactory {
         PlaylistComponent(parent: self)
+    }
+
+    var myPlaylistDetailFactory: any MyPlaylistDetailFactory {
+        MyPlaylistDetailComponent(parent: self)
+    }
+
+    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory {
+        UnknownPlaylistDetailComponent(parent: self)
+    }
+
+    var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory {
+        WakmusicPlaylistDetailComponent(parent: self)
+    }
+
+    var thumbnailPopupFactory: any ThumbnailPopupFactory {
+        ThumbnailPopupComponent(parent: self)
+    }
+
+    var checkThumbnailFactory: any CheckThumbnailFactory {
+        CheckThumbnailComponent(parent: self)
+    }
+
+    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
+        DefaultPlaylistImageComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
@@ -90,9 +116,15 @@ public extension AppComponent {
         }
     }
 
-    var unSubscribePlaylistUseCase: any UnSubscribePlaylistUseCase {
+    var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
         shared {
-            UnSubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
+            CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+        shared {
+            FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
         }
     }
 }
