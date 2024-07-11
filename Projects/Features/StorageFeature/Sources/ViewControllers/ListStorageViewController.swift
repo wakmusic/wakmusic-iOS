@@ -54,23 +54,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         setTableView()
     }
 
-//    static func viewController(
-//        reactor: ListStorageReactor,
-//        multiPurposePopUpFactory: MultiPurposePopupFactory,
-//        playlistDetailFactory: PlaylistDetailFactory,
-//        textPopUpFactory: TextPopUpFactory,
-//        signInFactory: SignInFactory,
-//        fruitDrawFactory: FruitDrawFactory
-//    ) -> ListStorageViewController {
-//        let viewController = ListStorageViewController(reactor: reactor)
-//        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-//        viewController.playlistDetailFactory = playlistDetailFactory
-//        viewController.textPopUpFactory = textPopUpFactory
-//        viewController.signInFactory = signInFactory
-//        viewController.fruitDrawFactory = fruitDrawFactory
-//        return viewController
-//    }
-
     override func configureUI() {
         reactor?.action.onNext(.viewDidLoad)
     }
