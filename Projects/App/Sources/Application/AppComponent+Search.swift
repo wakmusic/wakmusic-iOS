@@ -5,7 +5,7 @@ import SearchFeature
 import SearchFeatureInterface
 
 extension AppComponent {
-    var searchGlobalScrollState: any SearchGlobalScrollPortocol {
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol {
         shared {
             SearchGlobalScrollState()
         }
