@@ -27,18 +27,18 @@ extension BeforeSearchCollectionViewLayout {
             alignment: .top
         )
 
-        let itemSize = NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
-            heightDimension: .fractionalHeight(1.0)
-        )
-
-        let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
-
         let group: NSCollectionLayoutGroup
         let section: NSCollectionLayoutSection
 
         switch layoutKind {
         case .youtube:
+
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)
+            )
+
+            let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
@@ -51,17 +51,35 @@ extension BeforeSearchCollectionViewLayout {
 
         case .recommend:
 
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.41),
+                heightDimension: .fractionalHeight(1.0)
+            )
+
+            let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.44),
+                widthDimension: .fractionalWidth(1.0),
                 heightDimension: .fractionalWidth(0.21)
             )
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
+
+            group.interItemSpacing = .fixed(8)
 
             section = NSCollectionLayoutSection(group: group)
             section.boundarySupplementaryItems = [header]
+            section.interGroupSpacing = 8.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
         case .popularList:
+
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)
+            )
+
+            let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
+
             #warning("fractional 고민하기")
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .absolute(140),
@@ -74,9 +92,8 @@ extension BeforeSearchCollectionViewLayout {
             section.boundarySupplementaryItems = [header]
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
             section.interGroupSpacing = 8
+            section.orthogonalScrollingBehavior = .continuous
         }
-
-        section.orthogonalScrollingBehavior = .continuous
 
         return section
     }

@@ -19,7 +19,8 @@ final class SearchFilterCell: UICollectionViewCell {
     private var label: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t6(weight: .light)
+        font: .t6(weight: .light),
+        lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
     )
 
     override init(frame: CGRect) {

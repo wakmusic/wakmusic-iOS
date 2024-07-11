@@ -101,8 +101,6 @@ extension SearchSortOptionViewController {
             .bind(with: self) { owner, index in
 
                 owner.dismiss(animated: true) {
-                    #warning("인기 순은 delegate 안 보냄 추후 업데이트 이후 해제 ")
-                    if index == 3 { return }
                     owner.delegate?.updateSortType(owner.options[index])
                 }
             }

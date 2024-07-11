@@ -56,11 +56,6 @@ extension SearchSortOptionCell {
             label.font = .setFont(.t4(weight: .light))
         }
 
-        #warning("인기 순은 delegate 안 보냄 추후 업데이트 이후 해제 ")
-        if model == .popular {
-            label.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
-        }
-
         checkImageView.isHidden = model != selectedModel
     }
 }

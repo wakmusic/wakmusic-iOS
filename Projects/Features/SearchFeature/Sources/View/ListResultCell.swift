@@ -71,11 +71,13 @@ extension ListResultCell {
         }
 
         titleLabel.snp.makeConstraints {
+            $0.height.equalTo(22)
             $0.top.equalTo(thumbnailView.snp.top).offset(-1)
             $0.leading.equalTo(thumbnailView.snp.trailing).offset(8)
         }
 
         creatorLabel.snp.makeConstraints {
+            $0.height.equalTo(18)
             $0.top.equalTo(titleLabel.snp.bottom).offset(2)
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalTo(titleLabel.snp.trailing)
@@ -83,6 +85,7 @@ extension ListResultCell {
         }
 
         sharedCountLabel.snp.makeConstraints {
+            $0.height.equalTo(18)
             $0.width.lessThanOrEqualTo(66)
             $0.centerY.equalTo(thumbnailView.snp.centerY)
             $0.trailing.equalToSuperview().inset(20)
