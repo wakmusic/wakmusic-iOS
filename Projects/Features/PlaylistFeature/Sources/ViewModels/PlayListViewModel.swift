@@ -19,6 +19,7 @@ internal typealias PlayListSectionModel = SectionModel<Int, PlaylistItemModel>
 final class PlaylistViewModel: ViewModelType {
     struct Input {
         let viewWillAppearEvent: Observable<Void>
+        let viewWillDisappearEvent: Observable<Void>
         let closeButtonDidTapEvent: AnyPublisher<Void, Never>
         let editButtonDidTapEvent: AnyPublisher<Void, Never>
         let playlistTableviewCellDidTapEvent: Observable<IndexPath>
@@ -32,7 +33,7 @@ final class PlaylistViewModel: ViewModelType {
     struct Output {
         var willClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<Bool, Never>(false)
-        let dataSource: BehaviorRelay<[PlayListSectionModel]> = BehaviorRelay(value: [])
+        let playlists: BehaviorRelay<[PlaylistItemModel]> = BehaviorRelay(value: [])
         let selectedSongIds: BehaviorRelay<Set<String>> = BehaviorRelay(value: [])
         let countOfSongs = CurrentValueSubject<Int, Never>(0)
     }
@@ -67,10 +68,10 @@ final class PlaylistViewModel: ViewModelType {
     }
 
     private func bindInput(input: Input, output: Output) {
-        input.viewWillAppearEvent.subscribe { [weak self] _ in
-            guard let self else { return }
-            let count = self.playState.playList.count
-            output.countOfSongs.send(count)
+        input.viewWillAppearEvent.subscribe { [playState] _ in
+            let currentPlaylist = playState.currentPlaylist
+            output.playlists.accept(currentPlaylist.toModel(selectedIds: []))
+            output.countOfSongs.send(currentPlaylist.count)
         }.disposed(by: disposeBag)
 
         input.closeButtonDidTapEvent.sink { _ in
@@ -90,10 +91,9 @@ final class PlaylistViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.playlistTableviewCellDidTapInEditModeEvent
-            .withLatestFrom(output.dataSource, resultSelector: { tappedIndex, dataSource in
-                return dataSource.first?.items[tappedIndex]
+            .withLatestFrom(output.playlists, resultSelector: { tappedIndex, dataSource in
+                return dataSource[tappedIndex]
             })
-            .compactMap { $0 }
             .withLatestFrom(output.selectedSongIds) { selectedPlaylistItem, selectedSongIds in
                 var mutableSelectedSongIds = selectedSongIds
                 mutableSelectedSongIds.insert(selectedPlaylistItem.id)
@@ -103,9 +103,9 @@ final class PlaylistViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.selectAllSongsButtonDidTapEvent
-            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .withLatestFrom(output.playlists) { ($0, $1) }
             .compactMap { flag, dataSource -> [String]? in
-                return flag ? dataSource.first?.items.map(\.id) : []
+                return flag ? dataSource.map(\.id) : []
             }
             .map { Set($0) }
             .bind(to: output.selectedSongIds)
@@ -119,16 +119,18 @@ final class PlaylistViewModel: ViewModelType {
 
         input.removeSongsButtonDidTapEvent
             .withLatestFrom(output.selectedSongIds)
-            .subscribe(onNext: { [weak self] selectedIds in
-                if selectedIds.count == self?.playState.playList.count {
-                    self?.playState.playList.removeAll()
+            .subscribe(onNext: { selectedIds in
+                if selectedIds.count == output.playlists.value.count {
+                    output.playlists.accept([])
                     output.willClosePlaylist.send()
                 } else {
-                    let removingIndex = self?.playState.playList.list
+                    let removingIndex = output.playlists.value
                         .filter { selectedIds.contains($0.id) }
                         .enumerated()
                         .map(\.offset)
-                    self?.playState.playList.remove(indexs: removingIndex ?? [])
+                    var playlists = output.playlists.value
+                    removingIndex.forEach { playlists.remove(at: $0) }
+                    output.playlists.accept(playlists)
                     output.selectedSongIds.accept([])
                 }
             }).disposed(by: disposeBag)
@@ -136,7 +138,11 @@ final class PlaylistViewModel: ViewModelType {
         input.itemMovedEvent
             .map { (sourceIndex: $0.row, destIndex: $1.row) }
             .subscribe { (sourceIndex: Int, destIndex: Int) in
-                self.playState.playList.reorderPlaylist(from: sourceIndex, to: destIndex)
+                var playlists = output.playlists.value
+                let movedData = playlists[sourceIndex]
+                playlists.remove(at: sourceIndex)
+                playlists.insert(movedData, at: destIndex)
+                output.playlists.accept(playlists)
             }.disposed(by: disposeBag)
     }
 
@@ -147,41 +153,22 @@ final class PlaylistViewModel: ViewModelType {
          */
 
         // playlist.list에 변경이 일어날 때, 변경사항 pull
-        playState.playList.listChanged.sink { [weak self] _ in
+        playState.listChangedPublisher.sink { [weak self] _ in
             self?.pullForOriginalPlaylist(output: output)
         }.store(in: &subscription)
-
-        // cell 선택 시, cell의 isSelected 속성을 변경시키고 dataSource에 전달
-        output.selectedSongIds
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .subscribe(onNext: { [weak self] selectedIds, dataSource in
-                guard let self else { return }
-                let copiedList = self.playState.playList.list
-                let newList = copiedList.map { item -> PlaylistItemModel in
-                    return PlaylistItemModel(
-                        id: item.id,
-                        title: item.title,
-                        artist: item.artist,
-                        isSelected: selectedIds.contains(item.id)
-                    )
-                }
-            }).disposed(by: disposeBag)
 
         // 편집 종료 시, 셀 선택 초기화
         output.editState
             .dropFirst()
             .filter { $0 == false }
-            .sink { [weak self] _ in
-                guard let self else { return }
+            .sink { [playState] _ in
                 output.selectedSongIds.accept([])
-                // Comment: 편집모드가 완료 된 시점에서 list를 가져와서 listReordered.send > DB 업데이트
-                let list = self.playState.playList.list
-                self.playState.playList.listReordered.send(list)
+                playState.update(contentsOf: output.playlists.value.toPlayStateItem())
             }.store(in: &subscription)
     }
 
     private func pullForOriginalPlaylist(output: Output) {
-        let originalPlaylist = playState.playList.list
+        let originalPlaylist = playState.currentPlaylist
         let playlistModelFromOriginal = originalPlaylist.map { item in
             PlaylistItemModel(
                 id: item.id,
@@ -191,10 +178,26 @@ final class PlaylistViewModel: ViewModelType {
             )
         }
 
-        let localPlaylist = output.dataSource.value.first?.items ?? []
+        let localPlaylist = output.playlists.value
 
         if playlistModelFromOriginal != localPlaylist {
-            output.dataSource.accept([PlayListSectionModel(model: 0, items: playlistModelFromOriginal)])
+            output.playlists.accept(localPlaylist)
+        }
+    }
+}
+
+private extension [BaseFeature.PlaylistItem] {
+    func toModel(selectedIds: Set<String>) -> [PlaylistItemModel] {
+        self.map { item in
+            PlaylistItemModel(id: item.id, title: item.title, artist: item.artist, isSelected: selectedIds.contains(item.id))
+        }
+    }
+}
+
+private extension [PlaylistItemModel] {
+    func toPlayStateItem() -> [PlaylistItem] {
+        self.map { item in
+            PlaylistItem(id: item.id, title: item.title, artist: item.artist)
         }
     }
 }

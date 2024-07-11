@@ -16,12 +16,6 @@ public class RealmManager: NSObject {
     private var realm: Realm!
 
     override init() {
-        super.init()
-        DEBUG_LOG("✅ \(Self.self) init")
-    }
-
-    public func register() {
-        // Realm DataBase Migration 하려면 아래의 schemaVersion을 +1 해줘야 합니다.
         let config = Realm.Configuration(
             schemaVersion: 2,
             migrationBlock: { database, oldSchemaVersion in
@@ -33,13 +27,16 @@ public class RealmManager: NSObject {
         )
         Realm.Configuration.defaultConfiguration = config
 
-        // init
         do {
             realm = try Realm()
         } catch {
             LogManager.printError(error.localizedDescription)
+            fatalError()
         }
         LogManager.printDebug(Realm.Configuration.defaultConfiguration.fileURL ?? "")
+
+        super.init()
+        DEBUG_LOG("✅ \(Self.self) init")
     }
 }
 

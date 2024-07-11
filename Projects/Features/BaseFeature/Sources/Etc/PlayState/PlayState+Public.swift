@@ -22,18 +22,18 @@ public extension PlayState {
         // 3. 리스트 뒤에 곡들 추가
         // 4. currentPlayIndex 변경
         // 5. 주어진 첫번째 곡 재생
-        let existSongIndexs = songs.uniqueElements.compactMap { self.playList.uniqueIndex(of: PlaylistItem(item: $0)) }
-        self.playList.remove(indexs: existSongIndexs)
+        let existSongIndexs = songs.uniqueElements.compactMap { self.uniqueIndex(of: PlaylistItem(item: $0)) }
+        self.remove(indexs: existSongIndexs)
         let mappedSongs = songs.uniqueElements.map { PlaylistItem(item: $0) }
-        self.playList.append(mappedSongs)
+        self.append(contentsOf: mappedSongs)
     }
 
     /// 주어진 곡들을 재생목록에 추가합니다.
     /// - Parameter duplicateAllowed: 재생목록 추가 시 중복 허용 여부 (기본값: false)
     func appendSongsToPlaylist(_ songs: [SongsDomainInterface.SongEntity], duplicateAllowed: Bool = false) {
-        let existSongIndexs = songs.uniqueElements.compactMap { self.playList.uniqueIndex(of: PlaylistItem(item: $0)) }
-        self.playList.remove(indexs: existSongIndexs)
+        let existSongIndexs = songs.uniqueElements.compactMap { self.uniqueIndex(of: PlaylistItem(item: $0)) }
+        self.remove(indexs: existSongIndexs)
         let mappedSongs = songs.uniqueElements.map { PlaylistItem(item: $0) }
-        self.playList.append(mappedSongs)
+        self.append(contentsOf: mappedSongs)
     }
 }

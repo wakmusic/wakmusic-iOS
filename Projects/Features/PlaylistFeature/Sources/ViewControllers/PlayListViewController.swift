@@ -30,6 +30,20 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
 
     private var panGestureRecognizer: UIPanGestureRecognizer!
 
+    lazy var input = PlaylistViewModel.Input(
+        viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
+        viewWillDisappearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillDisappear(_:))).map { _ in },
+        closeButtonDidTapEvent: playlistView.closeButton.tapPublisher,
+        editButtonDidTapEvent: playlistView.editButton.tapPublisher,
+        playlistTableviewCellDidTapEvent: playlistView.playlistTableView.rx.itemSelected.asObservable(),
+        playlistTableviewCellDidTapInEditModeEvent: tappedCellIndex.asObservable(),
+        selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
+        addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
+        removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
+        itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
+    )
+    lazy var output = self.viewModel.transform(from: input)
+
     init(viewModel: PlaylistViewModel, containSongsFactory: ContainSongsFactory) {
         self.viewModel = viewModel
         self.containSongsFactory = containSongsFactory
@@ -63,7 +77,6 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         super.viewWillDisappear(animated)
         // Comment: 재생목록 화면이 사라지는 시점에서 DB에 저장된 리스트로 업데이트
         // 편집 완료를 했으면 이미 DB가 업데이트 됐을거고, 아니면 이전 DB데이터로 업데이트
-        self.playState.playList.list = self.playState.fetchPlayListFromLocalDB()
         // Comment: 재생목록 화면이 사라지는 시점에서 곡 담기 팝업이 올라와 있는 상태면 제거
         guard self.songCartView != nil else { return }
         self.hideSongCart()
@@ -125,19 +138,6 @@ private extension PlaylistViewController {
     }
 
     private func bindViewModel() {
-        let input = PlaylistViewModel.Input(
-            viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
-            closeButtonDidTapEvent: playlistView.closeButton.tapPublisher,
-            editButtonDidTapEvent: playlistView.editButton.tapPublisher,
-            playlistTableviewCellDidTapEvent: playlistView.playlistTableView.rx.itemSelected.asObservable(),
-            playlistTableviewCellDidTapInEditModeEvent: tappedCellIndex.asObservable(),
-            selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
-            addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
-            removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
-            itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
-        )
-        let output = self.viewModel.transform(from: input)
-
         bindCountOfSongs(output: output)
         bindPlaylistTableView(output: output)
         bindSongCart(output: output)
@@ -161,12 +161,13 @@ private extension PlaylistViewController {
             self.playlistView.playlistTableView.reloadData()
         }.store(in: &subscription)
 
-        output.dataSource
+        output.playlists
+            .map { [PlayListSectionModel.init(model: 0, items: $0)] }
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
 
-        output.dataSource
-            .filter { $0.first?.items.isEmpty ?? true }
+        output.playlists
+            .filter { $0.isEmpty }
             .subscribe { [weak self] _ in
                 let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
                 let height = space / 3 * 2
@@ -175,8 +176,8 @@ private extension PlaylistViewController {
                 self?.playlistView.playlistTableView.tableFooterView = warningView
             }.disposed(by: disposeBag)
 
-        output.dataSource
-            .map { return $0.first?.items.isEmpty ?? true }
+        output.playlists
+            .map {  $0.isEmpty }
             .bind(to: playlistView.editButton.rx.isHidden)
             .disposed(by: disposeBag)
     }
@@ -184,12 +185,13 @@ private extension PlaylistViewController {
     private func bindSongCart(output: PlaylistViewModel.Output) {
         output.selectedSongIds
             .skip(1)
-            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .withLatestFrom(output.playlists) { ($0, $1) }
             .map { songs, dataSource -> (songs: Set<String>, dataSourceCount: Int) in
-                return (songs, dataSource.first?.items.count ?? 0)
+                return (songs, dataSource.count)
             }
             .subscribe(onNext: { [weak self] songs, dataSourceCount in
                 guard let self = self else { return }
+                self.playlistView.playlistTableView.reloadData()
                 switch songs.isEmpty {
                 case true:
                     self.hideSongCart()
@@ -245,7 +247,8 @@ extension PlaylistViewController {
                 cell.setContent(
                     model: model,
                     index: index,
-                    isEditing: isEditing
+                    isEditing: isEditing,
+                    isSelected: output.selectedSongIds.value.contains(model.id)
                 )
                 return cell
 
