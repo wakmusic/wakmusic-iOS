@@ -8,7 +8,7 @@ public protocol SearchDependency: Dependency {
     var beforeSearchComponent: BeforeSearchComponent { get }
     var afterSearchComponent: AfterSearchComponent { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    var searchGlobalScrollState: any SearchGlobalScrollPortocol { get }
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
 public final class SearchComponent: Component<SearchDependency>, SearchFactory {

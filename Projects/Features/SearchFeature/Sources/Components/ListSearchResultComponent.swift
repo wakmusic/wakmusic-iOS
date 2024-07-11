@@ -11,7 +11,7 @@ public protocol ListSearchResultDependency: Dependency {
     var fetchSearchPlaylistsUseCase: any FetchSearchPlaylistsUseCase { get }
     var searchSortOptionComponent: SearchSortOptionComponent { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
-    var searchGlobalScrollState: any SearchGlobalScrollPortocol { get }
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
 public final class ListSearchResultComponent: Component<ListSearchResultDependency>, ListSearchResultFactory {

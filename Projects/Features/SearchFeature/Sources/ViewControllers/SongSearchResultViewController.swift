@@ -20,7 +20,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     private let searchSortOptionComponent: SearchSortOptionComponent
 
-    private let searchGlobalScrollState: any SearchGlobalScrollPortocol
+    private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
@@ -37,7 +37,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         _ reactor: SongSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
         containSongsFactory: any ContainSongsFactory,
-        searchGlobalScrollState: any SearchGlobalScrollPortocol
+        searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory

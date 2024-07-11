@@ -39,7 +39,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
     private var afterVC: AfterSearchViewController?
 
-    private var searchGlobalScrollState: SearchGlobalScrollPortocol!
+    private var searchGlobalScrollState: SearchGlobalScrollProtocol!
 
     private let maxHeight: CGFloat = -56
     private var previousScrollOffset: CGFloat = 0
@@ -57,7 +57,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
         beforeSearchComponent: BeforeSearchComponent,
         afterSearchComponent: AfterSearchComponent,
         textPopUpFactory: TextPopUpFactory,
-        searchGlobalScrollState: any SearchGlobalScrollPortocol
+        searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
 
