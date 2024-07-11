@@ -6,9 +6,9 @@ import Moya
 
 public enum UserAPI {
     case fetchUserInfo
-    case fetchPlayList
-    case editPlayListOrder(ids: [String])
-    case deletePlayList(ids: [String])
+    case fetchPlaylist
+    case editPlaylistOrder(ids: [String])
+    case deletePlaylist(ids: [String])
     case fetchFavoriteSongs
     case editFavoriteSongsOrder(ids: [String])
     case deleteFavoriteList(ids: [String])
@@ -29,11 +29,11 @@ extension UserAPI: WMAPI {
         switch self {
         case .fetchUserInfo:
             return "/profile"
-        case .fetchPlayList:
+        case .fetchPlaylist:
             return "/playlists"
-        case .editPlayListOrder:
+        case .editPlaylistOrder:
             return "/playlists"
-        case .deletePlayList:
+        case .deletePlaylist:
             return "/playlists"
         case .fetchFavoriteSongs:
             return "/likes"
@@ -60,11 +60,11 @@ extension UserAPI: WMAPI {
         switch self {
         case .fetchUserInfo:
             return .get
-        case .fetchPlayList:
+        case .fetchPlaylist:
             return .get
-        case .editPlayListOrder:
+        case .editPlaylistOrder:
             return .patch
-        case .deletePlayList:
+        case .deletePlaylist:
             return .delete
         case .fetchFavoriteSongs:
             return .get
@@ -91,11 +91,11 @@ extension UserAPI: WMAPI {
         switch self {
         case .fetchUserInfo:
             return .requestPlain
-        case .fetchPlayList:
+        case .fetchPlaylist:
             return .requestPlain
-        case let .editPlayListOrder(ids):
-            return .requestJSONEncodable(EditPlayListOrderRequestDTO(playlistKeys: ids))
-        case let .deletePlayList(ids):
+        case let .editPlaylistOrder(ids):
+            return .requestJSONEncodable(EditPlaylistOrderRequestDTO(playlistKeys: ids))
+        case let .deletePlaylist(ids):
             return .requestParameters(
                 parameters: [
                     "playlistKeys": ids.joined(separator: ",")

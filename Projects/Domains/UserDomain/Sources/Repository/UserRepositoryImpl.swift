@@ -24,8 +24,8 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.setUserName(name: name)
     }
 
-    public func fetchPlayList() -> Single<[PlaylistEntity]> {
-        remoteUserDataSource.fetchPlayList()
+    public func fetchPlaylist() -> Single<[PlaylistEntity]> {
+        remoteUserDataSource.fetchPlaylist()
     }
 
     public func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]> {
@@ -36,12 +36,12 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.editFavoriteSongsOrder(ids: ids)
     }
 
-    public func editPlayListOrder(ids: [String]) -> Single<BaseEntity> {
-        remoteUserDataSource.editPlayListOrder(ids: ids)
+    public func editPlaylistOrder(ids: [String]) -> Single<BaseEntity> {
+        remoteUserDataSource.editPlaylistOrder(ids: ids)
     }
 
-    public func deletePlayList(ids: [String]) -> Single<BaseEntity> {
-        remoteUserDataSource.deletePlayList(ids: ids)
+    public func deletePlaylist(ids: [String]) -> Single<BaseEntity> {
+        remoteUserDataSource.deletePlaylist(ids: ids)
     }
 
     public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {

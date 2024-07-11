@@ -32,9 +32,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchPlayListUseCase: any FetchPlayListUseCase {
+    var fetchPlayListUseCase: any FetchPlaylistUseCase {
         shared {
-            FetchPlayListUseCaseImpl(userRepository: userRepository)
+            FetchPlaylistUseCaseImpl(userRepository: userRepository)
         }
     }
 
@@ -50,15 +50,15 @@ public extension AppComponent {
         }
     }
 
-    var editPlayListOrderUseCase: any EditPlayListOrderUseCase {
+    var editPlayListOrderUseCase: any EditPlaylistOrderUseCase {
         shared {
-            EditPlayListOrderUseCaseImpl(userRepository: userRepository)
+            EditPlaylistOrderUseCaseImpl(userRepository: userRepository)
         }
     }
 
-    var deletePlayListUseCase: any DeletePlayListUseCase {
+    var deletePlayListUseCase: any DeletePlaylistUseCase {
         shared {
-            DeletePlayListUseCaseImpl(userRepository: userRepository)
+            DeletePlaylistUseCaseImpl(userRepository: userRepository)
         }
     }
 

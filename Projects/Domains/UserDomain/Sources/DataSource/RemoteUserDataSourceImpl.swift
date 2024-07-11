@@ -23,8 +23,8 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func fetchPlayList() -> Single<[PlaylistEntity]> {
-        return request(.fetchPlayList)
+    public func fetchPlaylist() -> Single<[PlaylistEntity]> {
+        return request(.fetchPlaylist)
             .map([PlaylistResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
@@ -41,14 +41,14 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func editPlayListOrder(ids: [String]) -> Single<BaseEntity> {
-        request(.editPlayListOrder(ids: ids))
+    public func editPlaylistOrder(ids: [String]) -> Single<BaseEntity> {
+        request(.editPlaylistOrder(ids: ids))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }
 
-    public func deletePlayList(ids: [String]) -> Single<BaseEntity> {
-        request(.deletePlayList(ids: ids))
+    public func deletePlaylist(ids: [String]) -> Single<BaseEntity> {
+        request(.deletePlaylist(ids: ids))
             .map(BaseResponseDTO.self)
             .map { $0.toDomain() }
     }

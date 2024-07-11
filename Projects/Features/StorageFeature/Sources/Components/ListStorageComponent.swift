@@ -14,9 +14,9 @@ public protocol ListStorageDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var createPlaylistUseCase: any CreatePlaylistUseCase { get }
-    var editPlayListOrderUseCase: any EditPlayListOrderUseCase { get }
-    var fetchPlayListUseCase: any FetchPlayListUseCase { get }
-    var deletePlayListUseCase: any DeletePlayListUseCase { get }
+    var editPlayListOrderUseCase: any EditPlaylistOrderUseCase { get }
+    var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
+    var deletePlayListUseCase: any DeletePlaylistUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
