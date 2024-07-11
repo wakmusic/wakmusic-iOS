@@ -1,7 +1,6 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
-import KeychainModule
 import Pageboy
 import ReactorKit
 import RxSwift
@@ -10,56 +9,56 @@ import Tabman
 import UIKit
 import Utility
 
-final class StorageViewController: TabmanViewController, ViewControllerFromStoryBoard, EqualHandleTappedType,
-    StoryboardView {
-    private enum ButtonAttributed {
-        static let edit = NSMutableAttributedString(
-            string: "편집",
-            attributes: [
-                .font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray400.color
-            ]
-        )
-
-        static let save = NSMutableAttributedString(
-            string: "완료",
-            attributes: [
-                .font: DesignSystemFontFamily.Pretendard.bold.font(size: 12),
-                .foregroundColor: DesignSystemAsset.PrimaryColor.point.color
-            ]
-        )
-    }
-
+final class StorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor
+    var disposeBag = DisposeBag()
 
-    var disposeBag: DisposeBag = DisposeBag()
-
-    @IBOutlet weak var tabBarView: UIView!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var myPlayListFakeView: UIView!
-    @IBOutlet weak var favoriteFakeView: UIView!
-
-    public var bottomSheetView: BottomSheetView!
-    private var playlistStorageComponent: ListStorageComponent!
+    private var bottomSheetView: BottomSheetView!
+    private var listStorageComponent: ListStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    private var favoriteComponent: LikeStorageComponent!
+    private var likeStorageComponent: LikeStorageComponent!
     private var textPopUpFactory: TextPopUpFactory!
-
-    private lazy var viewControllers: [UIViewController] = [
-        playlistStorageComponent.makeView(),
-        favoriteComponent.makeView()
-    ]
-
     private var signInFactory: SignInFactory!
 
-    override public func viewDidLoad() {
+    private var viewControllers: [UIViewController]!
+    let storageView = StorageView()
+
+    init(reactor: Reactor) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+
+    @available(*, unavailable)
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func loadView() {
+        view = storageView
+    }
+
+    override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
 
-    override public func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    public static func viewController(
+        reactor: Reactor,
+        listStorageComponent: ListStorageComponent,
+        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        likeStorageComponent: LikeStorageComponent,
+        textPopUpFactory: TextPopUpFactory,
+        signInFactory: SignInFactory
+    ) -> StorageViewController {
+        let viewController = StorageViewController(reactor: reactor)
+
+        viewController.listStorageComponent = listStorageComponent
+        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.likeStorageComponent = likeStorageComponent
+        viewController.viewControllers = [listStorageComponent.makeView(), likeStorageComponent.makeView()]
+        viewController.textPopUpFactory = textPopUpFactory
+        viewController.signInFactory = signInFactory
+        return viewController
     }
 
     /// 탭맨 페이지 변경 감지 함수
@@ -71,113 +70,60 @@ final class StorageViewController: TabmanViewController, ViewControllerFromStory
     ) {
         self.reactor?.action.onNext(.switchTab(index))
     }
-
-    public static func viewController(
-        reactor: StorageReactor,
-        playlistStorageComponent: ListStorageComponent,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
-        favoriteComponent: LikeStorageComponent,
-        textPopUpFactory: TextPopUpFactory,
-        signInFactory: SignInFactory
-
-    ) -> StorageViewController {
-        let viewController = StorageViewController.viewController(storyBoardName: "Storage", bundle: Bundle.module)
-
-        viewController.reactor = reactor
-
-        viewController.playlistStorageComponent = playlistStorageComponent
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.favoriteComponent = favoriteComponent
-        viewController.viewControllers = [playlistStorageComponent.makeView(), favoriteComponent.makeView()]
-        viewController.textPopUpFactory = textPopUpFactory
-        viewController.signInFactory = signInFactory
-        return viewController
-    }
-
-    deinit {
-        DEBUG_LOG("❌ \(Self.self)")
-    }
-
-    func bind(reactor: StorageReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
 }
 
 extension StorageViewController {
-    func bindAction(reactor: Reactor) {
-        editButton.rx
-            .tap
-            .withUnretained(self)
-            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $1) }
-            .bind { owner, userInfo in
+    func bind(reactor: Reactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
 
-                // TODO: 나중에(USECASE 연결 후) 주석 해제
-//                guard let userInfo = userInfo else {
-//                    reactor.action.onNext(.showLoginAlert) // 로그인 화면 팝업
-//                    return
-//                }
-
-                reactor.action.onNext(.editButtonDidTap)
+    func bindState(reactor: Reactor) {
+        reactor.state.map(\.isEditing)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isEditing in
+                owner.storageView.updateIsHiddenEditButton(isHidden: isEditing)
             }
             .disposed(by: disposeBag)
 
-        saveButton.rx
-            .tap
+        reactor.pulse(\.$showLoginAlert)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                guard let vc = owner.textPopUpFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                ) as? TextPopupViewController else {
+                    return
+                }
+                owner.showBottomSheet(content: vc)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    func bindAction(reactor: Reactor) {
+        storageView.rx.editButtonDidTap
+            .map { Reactor.Action.editButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        storageView.rx.saveButtonDidTap
             .map { Reactor.Action.saveButtonTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
-
-    func bindState(reactor: Reactor) {
-        let sharedState = reactor.state.share(replay: 1)
-
-        sharedState.map(\.tabIndex)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, tabIndex in
-                owner.scrollToPage(.at(index: tabIndex), animated: true)
-            }.disposed(by: disposeBag)
-
-        sharedState.map(\.isEditing)
-            .withUnretained(self)
-            .bind { owner, flag in
-
-                owner.isScrollEnabled = !flag //  편집 시 , 옆 탭으로 swipe를 막기 위함
-                owner.editButton.isHidden = flag
-                owner.saveButton.isHidden = !flag
-
-                if flag {
-                    owner.myPlayListFakeView.isHidden = owner.currentIndex == 0
-                    owner.favoriteFakeView.isHidden = owner.currentIndex == 1
-
-                } else {
-                    owner.myPlayListFakeView.isHidden = true
-                    owner.favoriteFakeView.isHidden = true
-                }
-            }
-            .disposed(by: disposeBag)
-    }
 }
 
-extension StorageViewController {
-    private func configureUI() {
-        editButton.layer.cornerRadius = 4
-        editButton.layer.borderWidth = 1
-        editButton.backgroundColor = .clear
-
-        editButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray300.color.cgColor
-
-        editButton.setAttributedTitle(ButtonAttributed.edit, for: .normal)
-
-        saveButton.layer.cornerRadius = 4
-        saveButton.layer.borderWidth = 1
-        saveButton.backgroundColor = .clear
-        saveButton.layer.borderColor = DesignSystemAsset.PrimaryColor.point.color.cgColor
-        saveButton.setAttributedTitle(ButtonAttributed.save, for: .normal)
-        saveButton.isHidden = true
-
-        myPlayListFakeView.isHidden = true
-        favoriteFakeView.isHidden = true
+private extension StorageViewController {
+    func configureUI() {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
 
         // 탭바 설정
         self.dataSource = self
@@ -188,27 +134,24 @@ extension StorageViewController {
 
         // 간격 설정
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+
         bar.layout.contentMode = .intrinsic
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 24
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in
             button.tintColor = DesignSystemAsset.BlueGrayColor.blueGray400.color
             button.selectedTintColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-            button.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-            button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
+            button.font = .WMFontSystem.t5(weight: .medium).font
+            button.selectedFont = .WMFontSystem.t5(weight: .bold).font
         }
 
         // indicator
-        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
-        addBar(bar, dataSource: self, at: .custom(view: tabBarView, layout: nil))
-        bar.layer.addBorder(
-            [.bottom],
-            color: DesignSystemAsset.BlueGrayColor.blueGray300.color.withAlphaComponent(0.4),
-            height: 1
-        )
+        addBar(bar, dataSource: self, at: .custom(view: storageView.tabBarView, layout: nil))
     }
 }
 
@@ -242,11 +185,11 @@ extension StorageViewController: PageboyViewControllerDataSource, TMBarDataSourc
     }
 }
 
-extension StorageViewController {
+extension StorageViewController: EqualHandleTappedType {
     func scrollToTop() {
         let current: Int = self.currentIndex ?? 0
         guard self.viewControllers.count > current else { return }
-        if let myPlayList = self.viewControllers[current] as? PlaylistStorageViewController {
+        if let myPlayList = self.viewControllers[current] as? ListStorageViewController {
             myPlayList.scrollToTop()
         } else if let favorite = self.viewControllers[current] as? FavoriteViewController {
             favorite.scrollToTop()

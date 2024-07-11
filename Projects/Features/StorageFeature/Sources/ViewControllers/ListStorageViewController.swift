@@ -15,6 +15,8 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+typealias MyPlayListSectionModel = SectionModel<Int, PlayListEntity>
+
 final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType {
     let listStorageView = ListStorageView()
 
@@ -148,7 +150,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             // .skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
-            .do(onNext: { owner, dataSource, userInfo in
+            .do(onNext: { owner, _, _ in
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
             })
             .map { $0.1 }
