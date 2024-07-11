@@ -189,7 +189,12 @@ final class PlaylistViewModel: ViewModelType {
 private extension [BaseFeature.PlaylistItem] {
     func toModel(selectedIds: Set<String>) -> [PlaylistItemModel] {
         self.map { item in
-            PlaylistItemModel(id: item.id, title: item.title, artist: item.artist, isSelected: selectedIds.contains(item.id))
+            PlaylistItemModel(
+                id: item.id,
+                title: item.title,
+                artist: item.artist,
+                isSelected: selectedIds.contains(item.id)
+            )
         }
     }
 }

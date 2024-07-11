@@ -360,17 +360,17 @@ extension MyPlaylistDetailViewController {
                 tableView: tableView
             ) {
                 [weak self] tableView,
-                indexPath,
-                itemIdentifier in
-                
+                    indexPath,
+                    itemIdentifier in
+
                 guard let self,
                       let cell = tableView.dequeueReusableCell(
-                        withIdentifier: PlaylistTableViewCell.identifier,
-                        for: indexPath
+                          withIdentifier: PlaylistTableViewCell.identifier,
+                          for: indexPath
                       ) as? PlaylistTableViewCell else {
                     return UITableViewCell()
                 }
-                
+
                 cell.delegate = self
                 cell.setContent(
                     model: itemIdentifier,

@@ -177,7 +177,7 @@ private extension PlaylistViewController {
             }.disposed(by: disposeBag)
 
         output.playlists
-            .map {  $0.isEmpty }
+            .map { $0.isEmpty }
             .bind(to: playlistView.editButton.rx.isHidden)
             .disposed(by: disposeBag)
     }
