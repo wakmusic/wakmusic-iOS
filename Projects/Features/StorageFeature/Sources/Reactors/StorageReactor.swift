@@ -65,14 +65,19 @@ final class StorageReactor: Reactor {
 
         let movedToLikeStorageMutation = storageCommonService.movedLikeStorageEvent
             .map { _ in Mutation.switchTabIndex(1) }
-        
+
         let updateIsLoggedInMutation = storageCommonService.changedUserInfoEvent
             .withUnretained(self)
             .flatMap { owner, userInfo -> Observable<Mutation> in
                 owner.updateIsLoggedIn(userInfo)
             }
 
-        return Observable.merge(mutation, switchEditingStateMutation, movedToLikeStorageMutation, updateIsLoggedInMutation)
+        return Observable.merge(
+            mutation,
+            switchEditingStateMutation,
+            movedToLikeStorageMutation,
+            updateIsLoggedInMutation
+        )
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -97,7 +102,7 @@ private extension StorageReactor {
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
-    
+
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
         return .just(.switchTabIndex(index))
     }

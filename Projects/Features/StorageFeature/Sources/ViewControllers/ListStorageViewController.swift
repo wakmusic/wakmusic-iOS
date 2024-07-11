@@ -86,14 +86,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.hideSongCart()
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
                 owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -103,7 +103,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.showBottomSheet(content: vc, size: .fixed(296))
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
@@ -122,7 +122,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.showBottomSheet(content: vc)
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -284,7 +284,7 @@ extension ListStorageViewController: SongCartViewDelegate {
 
         case .remove:
             reactor?.action.onNext(.deleteButtonDidTap)
-            
+
         default: return
         }
     }
@@ -295,7 +295,7 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
         switch type {
         case let .listTapped(indexPath):
             self.reactor?.action.onNext(.listDidTap(indexPath.row))
-            
+
         case let .playTapped(indexPath):
             self.reactor?.action.onNext(.playDidTap(indexPath.row))
         }

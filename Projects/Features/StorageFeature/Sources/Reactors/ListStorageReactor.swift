@@ -93,38 +93,37 @@ final class ListStorageReactor: Reactor {
             return viewDidLoad()
         case .refresh:
             return fetchDataSource()
-            
+
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-            
+
         case let .listDidTap(index):
             return changeSelectingState(index)
-            
+
         case let .playDidTap(index):
             return playWithAddToCurrentPlaylist()
-            
+
         case let .tapAll(isSelecting):
             return tapAll(isSelecting)
-            
+
         case .loginButtonDidTap:
             return .just(.showLoginAlert)
-            
+
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
-            
+
         case .createListButtonDidTap:
             return .just(.showCreateListPopup)
-            
+
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
             return .just(.showDeletePopup(itemCount))
-            
+
         case let .confirmCreateListButtonDidTap(title):
             return createList(title)
-            
+
         case .confirmDeleteButtonDidTap:
             return deleteList()
-        
         }
     }
 
@@ -215,7 +214,7 @@ extension ListStorageReactor {
             .just(.updateIsShowActivityIndicator(false))
         )
     }
-    
+
     func fetchDataSource() -> Observable<Mutation> {
         fetchPlayListUseCase
             .execute()
@@ -223,10 +222,10 @@ extension ListStorageReactor {
             .asObservable()
             .map { [MyPlayListSectionModel(model: 0, items: $0)] }
             .flatMap { fetchedDataSource -> Observable<Mutation> in
-                    .concat(
-                        .just(.updateDataSource(fetchedDataSource)),
-                        .just(.updateBackupDataSource(fetchedDataSource))
-                    )
+                .concat(
+                    .just(.updateDataSource(fetchedDataSource)),
+                    .just(.updateBackupDataSource(fetchedDataSource))
+                )
             }
     }
 
@@ -234,11 +233,11 @@ extension ListStorageReactor {
         print("🚀 clearDataSource called Reactor")
         return .just(.clearDataSource)
     }
-    
+
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
-    
+
     func createList(_ title: String) -> Observable<Mutation> {
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -247,9 +246,10 @@ extension ListStorageReactor {
             .just(.hideSongCart)
         )
     }
-    
+
     func deleteList() -> Observable<Mutation> {
-        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }.map { $0.key }
+        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
+            .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -259,12 +259,12 @@ extension ListStorageReactor {
             .just(.switchEditingState(false))
         )
     }
-    
+
     func addToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
         return .just(.showToast("개발이 필요해요"))
     }
-    
+
     func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
         return .just(.showToast("개발이 필요해요"))
@@ -293,7 +293,7 @@ extension ListStorageReactor {
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1
         tmp[index].isSelected = !tmp[index].isSelected
-        
+
         return .concat(
             .just(.updateDataSource([MyPlayListSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(count))
@@ -312,7 +312,7 @@ extension ListStorageReactor {
         for i in 0 ..< tmp.count {
             tmp[i].isSelected = flag
         }
-        
+
         return .concat(
             .just(.updateDataSource([MyPlayListSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(count))
@@ -333,7 +333,7 @@ private extension ListStorageReactor {
                 return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
             }
     }
-    
+
     func mutateDeletePlaylistUseCase(_ ids: [String]) -> Observable<Mutation> {
         deletePlayListUseCase.execute(ids: ids)
             .asObservable()
@@ -349,7 +349,7 @@ private extension ListStorageReactor {
                 )
             }
     }
-    
+
     func mutateEditPlayListOrderUseCase() -> Observable<Mutation> {
         let currentDataSource = currentState.dataSource
         let playlistOrder = currentDataSource.flatMap { $0.items.map { $0.key } }

@@ -85,7 +85,7 @@ extension NewStorageViewController {
                 owner.storageView.updateIsHiddenEditButton(isHidden: isEditing)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
