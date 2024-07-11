@@ -8,7 +8,7 @@ import SongsDomainInterface
 public protocol AfterSearchDependency: Dependency {
     var songSearchResultFactory: any SongSearchResultFactory { get }
     var listSearchResultFactory: any ListSearchResultFactory { get }
-    var searchGlobalScrollState: any SearchGlobalScrollPortocol { get }
+    var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
 public final class AfterSearchComponent: Component<AfterSearchDependency> {

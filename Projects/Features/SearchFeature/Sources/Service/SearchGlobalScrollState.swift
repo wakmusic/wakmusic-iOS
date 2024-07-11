@@ -6,7 +6,7 @@ public enum SearchResultPage {
     case list
 }
 
-public protocol SearchGlobalScrollPortocol {
+public protocol SearchGlobalScrollProtocol {
     var scrollAmountObservable: Observable<(CGFloat, CGFloat)> { get }
     var expandSearchHeaderObservable: Observable<Void> { get }
 
@@ -18,7 +18,7 @@ public protocol SearchGlobalScrollPortocol {
     func scrollToTop(page: SearchResultPage)
 }
 
-public final class SearchGlobalScrollState: SearchGlobalScrollPortocol {
+public final class SearchGlobalScrollState: SearchGlobalScrollProtocol {
     private let scrollAmountSubject = PublishSubject<(CGFloat, CGFloat)>()
     private let expandSearchHeaderSubject = PublishSubject<Void>()
     private let songResultScrollToTopSubject = PublishSubject<Void>()
