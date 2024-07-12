@@ -18,7 +18,7 @@ typealias LikeSectionModel = SectionModel<Int, FavoriteSongEntity>
 
 final class LikeStorageViewController: BaseReactorViewController<LikeStorageReactor>, SongCartViewType {
     let likeStorageView = LikeStorageView()
-    
+
     var containSongsFactory: ContainSongsFactory!
     var textPopUpFactory: TextPopUpFactory!
     var signInFactory: SignInFactory!
@@ -32,7 +32,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         super.loadView()
         self.view = likeStorageView
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -102,7 +102,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
                 }
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
@@ -184,13 +184,11 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
                 }
             })
             .disposed(by: disposeBag)
-        
-        
     }
-    
+
     override func bindAction(reactor: LikeStorageReactor) {
         super.bindAction(reactor: reactor)
-        
+
         likeStorageView.rx.loginButtonDidTap
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
@@ -205,9 +203,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
     }
-    
 }
 
 extension LikeStorageViewController {

@@ -63,7 +63,7 @@ final class LikeStorageReactor: Reactor {
     private let fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase
     private let deleteFavoriteListUseCase: any DeleteFavoriteListUseCase
     private let editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
-    
+
     init(
         storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
         fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase,
@@ -93,38 +93,38 @@ final class LikeStorageReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
-            
+
         case .refresh:
             return fetchDataSource()
-            
+
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
-            
+
         case let .songDidTap(index):
             return changeSelectingState(index)
-            
+
         case let .playDidTap(song):
             return playWithAddToCurrentPlaylist()
-            
+
         case let .tapAll(isSelecting):
             return tapAll(isSelecting)
-            
+
         case .addToPlaylistButtonDidTap:
             return showAddToPlaylistPopup()
-            
+
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
-            
+
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
             return .just(.showDeletePopup(itemCount))
-            
+
         case .confirmDeleteButtonDidTap:
             return deleteSongs()
-        
+
         case .loginButtonDidTap:
             return .just(.showLoginAlert)
-            
+
         case .presentAddToPlaylistPopup:
             return presentAddToPlaylistPopup()
         }
@@ -170,10 +170,10 @@ final class LikeStorageReactor: Reactor {
                     owner.fetchDataSource()
                 )
             }
-        
+
         return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
@@ -238,13 +238,14 @@ extension LikeStorageReactor {
                 )
             }
     }
-    
+
     func clearDataSource() -> Observable<Mutation> {
         return .just(.clearDataSource)
     }
 
     func deleteSongs() -> Observable<Mutation> {
-        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }.map { $0.song.id }
+        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
+            .map { $0.song.id }
         storageCommonService.isEditingState.onNext(false)
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -254,26 +255,27 @@ extension LikeStorageReactor {
             .just(.switchEditingState(false))
         )
     }
-    
+
     func showAddToPlaylistPopup() -> Observable<Mutation> {
-        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }.map { $0.song.id }
+        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
+            .map { $0.song.id }
         return .just(.showAddToPlaylistPopup(selectedItemIDs))
     }
-    
+
     func presentAddToPlaylistPopup() -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("favorite datasource is empty")
             return .empty()
         }
         for index in tmp.indices { tmp[index].isSelected = false }
-        
+
         storageCommonService.isEditingState.onNext(false)
         return .concat(
             .just(.updateDataSource([LikeSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(0))
         )
     }
-    
+
     func addToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
         return .just(.showToast("개발이 필요해요"))
@@ -287,7 +289,7 @@ extension LikeStorageReactor {
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
         return .just(.updateIsLoggedIn(userInfo != nil))
     }
-    
+
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {

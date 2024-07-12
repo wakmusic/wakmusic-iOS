@@ -23,7 +23,7 @@ final class StorageViewController: TabmanViewController, View {
     private var viewControllers: [UIViewController]!
     let storageView = StorageView()
     let bar = TMBar.ButtonBar()
-    
+
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor

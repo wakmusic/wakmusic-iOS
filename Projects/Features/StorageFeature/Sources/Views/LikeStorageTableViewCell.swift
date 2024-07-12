@@ -1,11 +1,11 @@
 import BaseFeature
 import DesignSystem
+import SnapKit
 import SongsDomainInterface
+import Then
 import UIKit
 import UserDomainInterface
 import Utility
-import SnapKit
-import Then
 
 public protocol LikeStorageTableViewCellDelegate: AnyObject {
     func buttonTapped(type: LikeStorageTableViewCellDelegateConstant)
@@ -23,11 +23,12 @@ class LikeStorageTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-    
+
     private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
         $0.spacing = 2
     }
+
     private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -36,7 +37,7 @@ class LikeStorageTableViewCell: UITableViewCell {
     ).then {
         $0.lineBreakMode = .byTruncatingTail
     }
-    
+
     private let artistLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -45,7 +46,7 @@ class LikeStorageTableViewCell: UITableViewCell {
     ).then {
         $0.lineBreakMode = .byTruncatingTail
     }
-    
+
     private let playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.layer.addShadow(
@@ -57,11 +58,12 @@ class LikeStorageTableViewCell: UITableViewCell {
             spread: 0
         )
     }
+
     private let cellSelectButton = UIButton()
 
     weak var delegate: LikeStorageTableViewCellDelegate?
     var passToModel: (IndexPath, SongEntity?) = (IndexPath(row: 0, section: 0), nil)
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addView()
@@ -90,7 +92,7 @@ extension LikeStorageTableViewCell {
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
         self.cellSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
-        
+
         self.playButton.snp.updateConstraints {
             $0.right.equalToSuperview().inset(isEditing ? -24 : 20)
         }
@@ -105,7 +107,7 @@ private extension LikeStorageTableViewCell {
             cellSelectButton,
             playButton
         )
-        verticalStackView.addArrangedSubviews(titleLabel, artistLabel )
+        verticalStackView.addArrangedSubviews(titleLabel, artistLabel)
     }
 
     func setLayout() {
@@ -115,27 +117,27 @@ private extension LikeStorageTableViewCell {
             $0.left.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
         }
-        
+
         verticalStackView.snp.makeConstraints {
             $0.left.equalTo(albumImageView.snp.right).offset(8)
             $0.right.equalTo(playButton.snp.left).offset(-16)
             $0.centerY.equalToSuperview()
         }
-        
+
         playButton.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.right.equalToSuperview().inset(20)
             $0.centerY.equalToSuperview()
         }
-        
+
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
-        
+
         artistLabel.snp.makeConstraints {
             $0.height.equalTo(18)
         }
-        
+
         cellSelectButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.left.equalToSuperview()

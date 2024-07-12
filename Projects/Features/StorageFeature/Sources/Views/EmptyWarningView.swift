@@ -1,12 +1,13 @@
 import DesignSystem
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
 final class EmptyWarningView: UIView {
     private let imageView = UIImageView().then {
         $0.image = DesignSystemAsset.Search.warning.image
     }
+
     private let label = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -22,7 +23,8 @@ final class EmptyWarningView: UIView {
         self.setLayout()
         self.configureUI(text)
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -35,7 +37,7 @@ private extension EmptyWarningView {
             label
         )
     }
-    
+
     func setLayout() {
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(80)
@@ -48,7 +50,7 @@ private extension EmptyWarningView {
             $0.centerX.equalToSuperview()
         }
     }
-    
+
     func configureUI(_ text: String) {
         self.backgroundColor = .clear
         self.label.text = text

@@ -45,7 +45,7 @@ final class ListStorageView: UIView {
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
     fileprivate let emptyWarningView = EmptyWarningView(text: "좋아요한 곡이 없습니다.")
-    
+
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
@@ -150,7 +150,7 @@ extension ListStorageView: ListStorageStateProtocol {
         let isLoggedIn = loginWarningView.isHidden
         self.emptyWarningView.isHidden = isLoggedIn ? isHidden : true
     }
-    
+
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
         self.tableView.refreshControl = isEnabled ? refreshControl : nil
     }
