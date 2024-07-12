@@ -12,7 +12,7 @@ public protocol LikeStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum LikeStorageTableViewCellDelegateConstant {
-    case listTapped(indexPath: IndexPath)
+    case cellTapped(indexPath: IndexPath)
     case playTapped(song: SongEntity)
 }
 
@@ -57,7 +57,7 @@ class LikeStorageTableViewCell: UITableViewCell {
             spread: 0
         )
     }
-    private let listSelectButton = UIButton()
+    private let cellSelectButton = UIButton()
 
     weak var delegate: LikeStorageTableViewCellDelegate?
     var passToModel: (IndexPath, SongEntity?) = (IndexPath(row: 0, section: 0), nil)
@@ -88,7 +88,7 @@ extension LikeStorageTableViewCell {
         self.artistLabel.text = model.song.artist
 
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
-        self.listSelectButton.isHidden = !isEditing
+        self.cellSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
         
         self.playButton.snp.updateConstraints {
@@ -102,7 +102,7 @@ private extension LikeStorageTableViewCell {
         self.contentView.addSubviews(
             albumImageView,
             verticalStackView,
-            listSelectButton,
+            cellSelectButton,
             playButton
         )
         verticalStackView.addArrangedSubviews(titleLabel, artistLabel )
@@ -117,7 +117,6 @@ private extension LikeStorageTableViewCell {
         }
         
         verticalStackView.snp.makeConstraints {
-           // $0.verticalEdges.equalTo(albumImageView).inset(1)
             $0.left.equalTo(albumImageView.snp.right).offset(8)
             $0.right.equalTo(playButton.snp.left).offset(-16)
             $0.centerY.equalToSuperview()
@@ -137,7 +136,7 @@ private extension LikeStorageTableViewCell {
             $0.height.equalTo(18)
         }
         
-        listSelectButton.snp.makeConstraints {
+        cellSelectButton.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.left.equalToSuperview()
             $0.right.equalTo(verticalStackView.snp.right)
@@ -145,18 +144,18 @@ private extension LikeStorageTableViewCell {
     }
 
     func setAction() {
-        self.listSelectButton.addTarget(self, action: #selector(listSelectButtonAction), for: .touchUpInside)
+        self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
     }
 }
 
 private extension LikeStorageTableViewCell {
-    @objc func playButtonAction(_ sender: UIButton) {
+    @objc func playButtonAction() {
         guard let song = self.passToModel.1 else { return }
         delegate?.buttonTapped(type: .playTapped(song: song))
     }
 
-    @objc func listSelectButtonAction(_ sender: Any) {
-        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
+    @objc func cellSelectButtonAction() {
+        delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
     }
 }

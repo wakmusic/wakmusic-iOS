@@ -22,7 +22,8 @@ final class StorageViewController: TabmanViewController, View {
 
     private var viewControllers: [UIViewController]!
     let storageView = StorageView()
-
+    let bar = TMBar.ButtonBar()
+    
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
@@ -83,6 +84,8 @@ extension StorageViewController {
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in
                 owner.storageView.updateIsHiddenEditButton(isHidden: isEditing)
+                owner.isScrollEnabled = isEditing ? false : true
+                owner.bar.isUserInteractionEnabled = isEditing ? false : true
             }
             .disposed(by: disposeBag)
 
@@ -127,7 +130,6 @@ private extension StorageViewController {
 
         // 탭바 설정
         self.dataSource = self
-        let bar = TMBar.ButtonBar()
 
         // 배경색
         bar.backgroundView.style = .flat(color: .clear)

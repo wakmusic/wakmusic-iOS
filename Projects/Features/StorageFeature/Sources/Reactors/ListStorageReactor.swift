@@ -140,8 +140,8 @@ final class ListStorageReactor: Reactor {
             .flatMap { owner, editingState -> Observable<Mutation> in
                 // 편집이 종료될 때 처리
                 if editingState == false {
-                    let new = owner.currentState.dataSource
-                    let original = owner.currentState.backupDataSource
+                    let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.key }
+                    let original = owner.currentState.backupDataSource.flatMap { $0.items }.map { $0.key }
                     let isChanged = new != original
                     if isChanged {
                         return .concat(
@@ -155,6 +155,7 @@ final class ListStorageReactor: Reactor {
                     } else {
                         return .concat(
                             .just(.updateSelectedItemCount(0)),
+                            .just(.undoDataSource),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )

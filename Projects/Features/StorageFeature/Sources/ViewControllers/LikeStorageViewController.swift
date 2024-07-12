@@ -33,6 +33,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setTableView()
     }
 
     static func viewController(
@@ -50,7 +51,6 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
 
     override func configureUI() {
         super.configureUI()
-
         reactor?.action.onNext(.viewDidLoad)
     }
 
@@ -62,11 +62,147 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         super.bindState(reactor: reactor)
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.isLoggedIn)
+            .distinctUntilChanged()
+            .bind(with: self, onNext: { owner, isLoggedIn in
+                owner.likeStorageView.updateIsHiddenLoginWarningView(isHidden: isLoggedIn)
+            })
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.isShowActivityIndicator)
+            .distinctUntilChanged()
+            .bind(with: self, onNext: { owner, isShow in
+                owner.likeStorageView.updateActivityIndicatorState(isPlaying: isShow)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$hideSongCart)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                owner.hideSongCart()
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$showToast)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$showAddToPlaylistPopup)
+            .compactMap { $0 }
+            .bind(with: self) { owner, songs in
+                let vc = owner.containSongsFactory.makeView(songs: songs)
+                vc.modalPresentationStyle = .overFullScreen
+                owner.present(vc, animated: true) {
+                    owner.reactor?.action.onNext(.presentAddToPlaylistPopup)
+                    //owner.reactor?.action.onNext(.tapAll(isSelecting: false))
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$showDeletePopup)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, itemCount in
+                guard let vc = owner.textPopUpFactory.makeView(
+                    text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.reactor?.action.onNext(.confirmDeleteButtonDidTap)
+                    },
+                    cancelCompletion: {}
+                ) as? TextPopupViewController else {
+                    return
+                }
+                owner.showBottomSheet(content: vc)
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$showLoginAlert)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                guard let vc = owner.textPopUpFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                ) as? TextPopupViewController else {
+                    return
+                }
+                owner.showBottomSheet(content: vc)
+            })
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.dataSource)
+            // .skip(1)
+            .withUnretained(self)
+            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
+            .do(onNext: { owner, _, _ in
+                owner.likeStorageView.updateRefreshControlState(isPlaying: false)
+            })
+            .map { $0.1 }
+            .bind(to: likeStorageView.tableView.rx.items(dataSource: createDatasources()))
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.isEditing)
+            .distinctUntilChanged()
+            .withUnretained(self)
+            .bind { owner, flag in
+                owner.likeStorageView.tableView.isEditing = flag
+                owner.likeStorageView.tableView.reloadData()
+                owner.likeStorageView.updateIsEnabledRefreshControl(isEnabled: !flag)
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.selectedItemCount)
+            .distinctUntilChanged()
+            .bind(with: self, onNext: { owner, count in
+                if count == 0 {
+                    self.hideSongCart()
+                } else {
+                    owner.showSongCart(
+                        in: (UIApplication.shared.connectedScenes.first as? UIWindowScene)?.windows.first?
+                            .rootViewController?.view ?? UIView(),
+                        type: .likeSong,
+                        selectedSongCount: count,
+                        totalSongCount: owner.reactor?.currentState.dataSource.first?.items.count ?? 0,
+                        useBottomSpace: true
+                    )
+                    owner.songCartView.delegate = owner
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        
     }
     
     override func bindAction(reactor: LikeStorageReactor) {
         super.bindAction(reactor: reactor)
+        
+        likeStorageView.rx.loginButtonDidTap
+            .map { Reactor.Action.loginButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
 
+        likeStorageView.rx.refreshControlValueChanged
+            .map { Reactor.Action.refresh }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        likeStorageView.tableView.rx.itemMoved
+            .map { Reactor.Action.itemMoved($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
     }
     
 }
@@ -89,6 +225,7 @@ extension LikeStorageViewController {
                     indexPath: indexPath
                 )
                 cell.delegate = self
+                cell.selectionStyle = .none
                 return cell
 
             },
@@ -110,35 +247,10 @@ extension LikeStorageViewController: SongCartViewDelegate {
             reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
             reactor?.action.onNext(.addToPlaylistButtonDidTap)
-//            input.addSongs.onNext(())
-            self.hideSongCart()
         case .addPlayList:
             reactor?.action.onNext(.addToCurrentPlaylistButtonDidTap)
-            // input.addPlayList.onNext(())
-            self.hideSongCart()
         case .remove:
             reactor?.action.onNext(.deleteButtonDidTap)
-            // TODO: useCase 연결 후
-//            let count: Int = output.indexPathOfSelectedLikeLists.value.count
-//
-//            guard let textPopupViewController = self.textPopUpFactory.makeView(
-//                text: "선택한 좋아요 리스트 \(count)곡이 삭제됩니다.?",
-//                cancelButtonIsHidden: false,
-//                confirmButtonText: nil,
-//                cancelButtonText: nil,
-//                completion: { [weak self] in
-//
-//                    guard let self else { return }
-//                    self.input.deleteLikeList.onNext(())
-//                    self.hideSongCart()
-//
-//                },
-//                cancelCompletion: nil
-//            ) as? TextPopupViewController else {
-//                return
-//            }
-
-        // self.showBottomSheet(content: textPopupViewController)
         default: return
         }
     }
@@ -147,11 +259,10 @@ extension LikeStorageViewController: SongCartViewDelegate {
 extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
     public func buttonTapped(type: LikeStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .listTapped(indexPath):
+        case let .cellTapped(indexPath):
             self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
-            // TODO: useCase 연결 후
-            break
+            self.reactor?.action.onNext(.playDidTap(song: song))
         }
     }
 }

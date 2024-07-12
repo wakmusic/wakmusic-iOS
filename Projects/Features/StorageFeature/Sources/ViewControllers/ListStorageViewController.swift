@@ -222,24 +222,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        listStorageView.tableView.rx.itemSelected
-            .withUnretained(self)
-            .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
-            .withLatestFrom(currentState.map(\.dataSource)) { ($0.0, $0.1, $0.2, $1) }
-            .bind { owner, indexPath, isEditing, dataSource in
-                guard isEditing else {
-                    owner.navigationController?.pushViewController(
-                        owner.playlistDetailFactory.makeView(
-                            key: dataSource[indexPath.section].items[indexPath.row].key,
-                            kind: .my
-                        ),
-                        animated: true
-                    )
-                    return
-                }
-            }
-            .disposed(by: disposeBag)
-
         listStorageView.tableView.rx.itemMoved
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)

@@ -20,9 +20,11 @@ final class LikeStorageReactor: Reactor {
         case tapAll(isSelecting: Bool)
         case playDidTap(song: SongEntity)
         case addToPlaylistButtonDidTap // 노래담기
+        case presentAddToPlaylistPopup
         case addToCurrentPlaylistButtonDidTap // 재생목록추가
         case deleteButtonDidTap
         case confirmDeleteButtonDidTap
+        case loginButtonDidTap
     }
 
     enum Mutation {
@@ -34,13 +36,12 @@ final class LikeStorageReactor: Reactor {
         case updateIsLoggedIn(Bool)
         case updateIsShowActivityIndicator(Bool)
         case showToast(String)
-        case showAddToPlaylistPopup
+        case showLoginAlert
+        case showAddToPlaylistPopup([String])
         case showDeletePopup(Int)
         case hideSongCart
         case updateSelectedItemCount(Int)
         case updateOrder([FavoriteSongEntity])
-        case changeSelectedState(data: [FavoriteSongEntity], selectedCount: Int)
-        case changeAllState(data: [FavoriteSongEntity], selectedCount: Int)
     }
 
     struct State {
@@ -50,10 +51,11 @@ final class LikeStorageReactor: Reactor {
         var backupDataSource: [FavoriteSectionModel]
         var selectedItemCount: Int
         var isShowActivityIndicator: Bool
-        @Pulse var showAddToPlaylistPopup: Void?
+        @Pulse var showAddToPlaylistPopup: [String]?
         @Pulse var showToast: String?
         @Pulse var hideSongCart: Void?
         @Pulse var showDeletePopup: Int?
+        @Pulse var showLoginAlert: Void?
     }
 
     var initialState: State
@@ -101,14 +103,14 @@ final class LikeStorageReactor: Reactor {
         case let .songDidTap(index):
             return changeSelectingState(index)
             
-        case let .tapAll(isSelecting):
-            return tapAll(isSelecting)
-            
         case let .playDidTap(song):
             return playWithAddToCurrentPlaylist()
             
+        case let .tapAll(isSelecting):
+            return tapAll(isSelecting)
+            
         case .addToPlaylistButtonDidTap:
-            return .just(.showAddToPlaylistPopup)
+            return showAddToPlaylistPopup()
             
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
@@ -119,6 +121,12 @@ final class LikeStorageReactor: Reactor {
             
         case .confirmDeleteButtonDidTap:
             return deleteSongs()
+        
+        case .loginButtonDidTap:
+            return .just(.showLoginAlert)
+            
+        case .presentAddToPlaylistPopup:
+            return presentAddToPlaylistPopup()
         }
     }
 
@@ -129,8 +137,8 @@ final class LikeStorageReactor: Reactor {
             .flatMap { owner, editingState -> Observable<Mutation> in
                 // 편집이 종료될 때 처리
                 if editingState == false {
-                    let new = owner.currentState.dataSource
-                    let original = owner.currentState.backupDataSource
+                    let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.song.id }
+                    let original = owner.currentState.backupDataSource.flatMap { $0.items }.map { $0.song.id }
                     let isChanged = new != original
                     if isChanged {
                         return .concat(
@@ -144,6 +152,7 @@ final class LikeStorageReactor: Reactor {
                     } else {
                         return .concat(
                             .just(.updateSelectedItemCount(0)),
+                            .just(.undoDataSource),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
@@ -175,12 +184,6 @@ final class LikeStorageReactor: Reactor {
             newState.isEditing = flag
         case let .updateOrder(dataSource):
             newState.dataSource = [FavoriteSectionModel(model: 0, items: dataSource)]
-        case let .changeSelectedState(data: data, selectedCount: selectedCount):
-            newState.dataSource = [FavoriteSectionModel(model: 0, items: data)]
-            newState.selectedItemCount = selectedCount
-        case let .changeAllState(data: data, selectedCount: selectedCount):
-            newState.dataSource = [FavoriteSectionModel(model: 0, items: data)]
-            newState.selectedItemCount = selectedCount
         case .clearDataSource:
             newState.dataSource = []
         case let .updateBackupDataSource(dataSource):
@@ -193,14 +196,16 @@ final class LikeStorageReactor: Reactor {
             newState.isShowActivityIndicator = isShow
         case let .showToast(isShow):
             newState.showToast = isShow
-        case .showAddToPlaylistPopup:
-            newState.showAddToPlaylistPopup = ()
+        case let .showAddToPlaylistPopup(selectedItemIDs):
+            newState.showAddToPlaylistPopup = selectedItemIDs
         case let .showDeletePopup(itemCount):
             newState.showDeletePopup = itemCount
         case .hideSongCart:
             newState.hideSongCart = ()
         case let .updateSelectedItemCount(count):
             newState.selectedItemCount = count
+        case .showLoginAlert:
+            newState.showLoginAlert = ()
         }
 
         return newState
@@ -250,6 +255,25 @@ extension LikeStorageReactor {
         )
     }
     
+    func showAddToPlaylistPopup() -> Observable<Mutation> {
+        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }.map { $0.song.id }
+        return .just(.showAddToPlaylistPopup(selectedItemIDs))
+    }
+    
+    func presentAddToPlaylistPopup() -> Observable<Mutation> {
+        guard var tmp = currentState.dataSource.first?.items else {
+            LogManager.printError("favorite datasource is empty")
+            return .empty()
+        }
+        for index in tmp.indices { tmp[index].isSelected = false }
+        
+        storageCommonService.isEditingState.onNext(false)
+        return .concat(
+            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateSelectedItemCount(0))
+        )
+    }
+    
     func addToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
         return .just(.showToast("개발이 필요해요"))
@@ -287,13 +311,17 @@ extension LikeStorageReactor {
         let target = tmp[index]
         count = target.isSelected ? count - 1 : count + 1
         tmp[index].isSelected = !tmp[index].isSelected
-        return .just(.changeSelectedState(data: tmp, selectedCount: count))
+
+        return .concat(
+            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateSelectedItemCount(count))
+        )
     }
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
-            LogManager.printError("playlist datasource is empty")
+            LogManager.printError("favorite datasource is empty")
             return .empty()
         }
 
@@ -302,7 +330,11 @@ extension LikeStorageReactor {
         for i in 0 ..< tmp.count {
             tmp[i].isSelected = flag
         }
-        return .just(.changeAllState(data: tmp, selectedCount: count))
+
+        return .concat(
+            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateSelectedItemCount(count))
+        )
     }
 }
 

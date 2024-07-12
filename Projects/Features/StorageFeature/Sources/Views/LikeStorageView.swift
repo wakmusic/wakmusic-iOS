@@ -75,7 +75,6 @@ final class LikeStorageView: UIView {
     }
 
     func setLayout() {
-        tableView.backgroundColor = .yellow
         tableView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(52)
             $0.horizontalEdges.equalToSuperview()
@@ -89,8 +88,8 @@ final class LikeStorageView: UIView {
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
-            //$0.top.equalTo(createListButton.snp.bottom).offset(80)
-            $0.center.equalToSuperview()
+            $0.top.equalTo(tableView.snp.bottom).offset(148)
+            $0.centerX.equalToSuperview()
         }
         activityIndicator.snp.makeConstraints {
             $0.width.height.equalTo(30)
