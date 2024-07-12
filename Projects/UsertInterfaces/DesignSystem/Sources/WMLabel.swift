@@ -8,17 +8,8 @@ public final class WMLabel: UILabel {
         get {
             self.attributedText?.string
         } set {
-//            self.attributedText = NSMutableAttributedString(string: newValue ?? "", attributes: attributes)
+            self.attributedText = NSMutableAttributedString(string: newValue ?? "", attributes: attributes)
 
-            print(attributes)
-            let attributedString = NSMutableAttributedString(
-                attributedString: self
-                    .attributedText ?? NSAttributedString(string: "")
-            )
-
-            attributedString.mutableString.setString(newValue ?? "")
-
-            self.attributedText = attributedString
         }
     }
 

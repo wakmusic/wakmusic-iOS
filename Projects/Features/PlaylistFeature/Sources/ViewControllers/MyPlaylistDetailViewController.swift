@@ -501,17 +501,17 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 text: "\(currentState.selectedCount)곡을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false, confirmButtonText: "확인",
                 cancelButtonText: "취소",
-                completion: { [weak self] in
-
-                    guard let self else { return }
-
-                    self.reactor?.action.onNext(.removeSongs)
-                }, cancelCompletion: nil
+                completion: {
+                    reactor.action.onNext(.removeSongs)
+                    reactor.action.onNext(.forceEndEditing)
+                }, cancelCompletion: {
+                    reactor.action.onNext(.forceEndEditing)
+                }
             )
 
             self.showBottomSheet(content: vc)
 
-            reactor.action.onNext(.forceEndEditing)
+            
         }
     }
 }
