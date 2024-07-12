@@ -87,8 +87,8 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z24-eA-zLh">
                                                 <rect key="frame" x="0.0" y="0.0" width="295" height="50"/>
                                                 <subviews>
-                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iphone" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="xeh-AY-giA">
-                                                        <rect key="frame" x="0.0" y="9.3333333333333037" width="32" height="31.333333333333339"/>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xeh-AY-giA">
+                                                        <rect key="frame" x="0.0" y="8.9999999999999716" width="32" height="32"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="32" id="OnK-WB-MhJ"/>
                                                             <constraint firstAttribute="height" constant="32" id="QMr-EO-T7p"/>
@@ -407,7 +407,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="iphone" catalog="system" width="112" height="128"/>
         <namedColor name="POINT">
             <color red="0.035294117647058823" green="0.78431372549019607" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

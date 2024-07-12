@@ -75,6 +75,7 @@ private extension PermissionViewController {
             lineHeight: 24,
             alignment: .left
         )
+        setSubAttributedString(with: deviceInfoLabel, target: "(필수)")
 
         deviceInfoDescriptionLabel.numberOfLines = 0
         setAttributedString(
@@ -95,6 +96,7 @@ private extension PermissionViewController {
             lineHeight: 24,
             alignment: .left
         )
+        setSubAttributedString(with: notificationLabel, target: "(선택)")
 
         notificationDescriptionLabel.numberOfLines = 0
         setAttributedString(
@@ -115,6 +117,7 @@ private extension PermissionViewController {
             lineHeight: 24,
             alignment: .left
         )
+        setSubAttributedString(with: cameraLabel, target: "(선택)")
 
         cameraDescriptionLabel.numberOfLines = 0
         setAttributedString(
@@ -135,6 +138,7 @@ private extension PermissionViewController {
             lineHeight: 24,
             alignment: .left
         )
+        setSubAttributedString(with: albumLabel, target: "(선택)")
 
         albumDescriptionLabel.numberOfLines = 0
         setAttributedString(
@@ -181,9 +185,7 @@ private extension PermissionViewController {
         )
         confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
         confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-
         borderViewWidthConstraint.constant = APP_WIDTH() < 375 ? (APP_WIDTH() - 40.0) : 335.0
-        view.layoutIfNeeded()
     }
 
     func setAttributedString(
@@ -198,5 +200,20 @@ private extension PermissionViewController {
         label.font = font
         label.textColor = textColor
         label.setTextWithAttributes(lineHeight: lineHeight, kernValue: -0.5, alignment: alignment)
+    }
+
+    func setSubAttributedString(
+        with label: UILabel,
+        target text: String
+    ) {
+        guard let attributedString = label.attributedText else { return }
+        let new = NSMutableAttributedString(attributedString: attributedString)
+        let emailRange = (attributedString.string as NSString).range(of: text)
+        new.addAttributes(
+            [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color],
+            range: emailRange
+        )
+        label.attributedText = new
     }
 }
