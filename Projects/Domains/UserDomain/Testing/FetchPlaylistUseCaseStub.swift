@@ -1,7 +1,6 @@
 import Foundation
 import RxSwift
 import UserDomainInterface
-import Utility
 
 public struct FetchPlaylistUseCaseStub: FetchPlaylistUseCase {
     let items: [PlaylistEntity] = [
@@ -20,8 +19,6 @@ public struct FetchPlaylistUseCaseStub: FetchPlaylistUseCase {
     public init() {}
 
     public func execute() -> Single<[PlaylistEntity]> {
-        let isLoggedIn = PreferenceManager.userInfo != nil
-        let items = isLoggedIn ? items : []
         return .just(items).delay(.seconds(1), scheduler: MainScheduler.instance)
     }
 }
