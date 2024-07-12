@@ -158,8 +158,10 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             // .skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
-            .do(onNext: { owner, _, _ in
+            .do(onNext: { owner, dataSource, _ in
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
+                let dataSourceIsEmpty = dataSource.flatMap { $0.items }.isEmpty
+                owner.listStorageView.updateIsHiddenEmptyWarningView(isHidden: !dataSourceIsEmpty)
             })
             .map { $0.1 }
             .bind(to: listStorageView.tableView.rx.items(dataSource: createDatasources()))

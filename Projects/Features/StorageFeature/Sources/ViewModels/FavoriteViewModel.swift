@@ -38,8 +38,8 @@ public final class FavoriteViewModel: ViewModelType {
 
     public struct Output {
         let state: BehaviorRelay<EditState> = BehaviorRelay(value: EditState(isEditing: false, force: true))
-        let dataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
-        let backUpdataSource: BehaviorRelay<[FavoriteSectionModel]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[LikeSectionModel]> = BehaviorRelay(value: [])
+        let backUpdataSource: BehaviorRelay<[LikeSectionModel]> = BehaviorRelay(value: [])
         let indexPathOfSelectedLikeLists: BehaviorRelay<[IndexPath]> = BehaviorRelay(value: [])
         let willAddSongList: BehaviorRelay<[String]> = BehaviorRelay(value: [])
         let willAddPlayList: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
@@ -82,7 +82,7 @@ public final class FavoriteViewModel: ViewModelType {
                     .catchAndReturn([])
                     .asObservable()
             }
-            .map { [FavoriteSectionModel(model: 0, items: $0)] }
+            .map { [LikeSectionModel(model: 0, items: $0)] }
             .bind(to: output.dataSource, output.backUpdataSource)
             .disposed(by: disposeBag)
 
@@ -109,7 +109,7 @@ public final class FavoriteViewModel: ViewModelType {
         input.itemMoved
             .withLatestFrom(output.dataSource) { ($0.sourceIndex, $0.destinationIndex, $1) }
             .withLatestFrom(output.indexPathOfSelectedLikeLists) { ($0.0, $0.1, $0.2, $1) }
-            .map { sourceIndexPath, destinationIndexPath, dataSource, selectedLikeLists -> [FavoriteSectionModel] in
+            .map { sourceIndexPath, destinationIndexPath, dataSource, selectedLikeLists -> [LikeSectionModel] in
                 // 데이터 소스의 이동
                 var newModel = dataSource.first?.items ?? []
                 let temp = newModel[sourceIndexPath.row]
@@ -128,7 +128,7 @@ public final class FavoriteViewModel: ViewModelType {
                 }
                 output.indexPathOfSelectedLikeLists.accept(newSelectedPlayLists.sorted { $0 < $1 })
 
-                let sectionModel = [FavoriteSectionModel(model: 0, items: newModel)]
+                let sectionModel = [LikeSectionModel(model: 0, items: newModel)]
                 return sectionModel
             }
             .bind(to: output.dataSource)

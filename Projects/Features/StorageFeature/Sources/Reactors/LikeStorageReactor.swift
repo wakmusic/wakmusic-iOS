@@ -29,8 +29,8 @@ final class LikeStorageReactor: Reactor {
 
     enum Mutation {
         case clearDataSource
-        case updateDataSource([FavoriteSectionModel])
-        case updateBackupDataSource([FavoriteSectionModel])
+        case updateDataSource([LikeSectionModel])
+        case updateBackupDataSource([LikeSectionModel])
         case undoDataSource
         case switchEditingState(Bool)
         case updateIsLoggedIn(Bool)
@@ -47,8 +47,8 @@ final class LikeStorageReactor: Reactor {
     struct State {
         var isLoggedIn: Bool
         var isEditing: Bool
-        var dataSource: [FavoriteSectionModel]
-        var backupDataSource: [FavoriteSectionModel]
+        var dataSource: [LikeSectionModel]
+        var backupDataSource: [LikeSectionModel]
         var selectedItemCount: Int
         var isShowActivityIndicator: Bool
         @Pulse var showAddToPlaylistPopup: [String]?
@@ -183,7 +183,7 @@ final class LikeStorageReactor: Reactor {
         case let .switchEditingState(flag):
             newState.isEditing = flag
         case let .updateOrder(dataSource):
-            newState.dataSource = [FavoriteSectionModel(model: 0, items: dataSource)]
+            newState.dataSource = [LikeSectionModel(model: 0, items: dataSource)]
         case .clearDataSource:
             newState.dataSource = []
         case let .updateBackupDataSource(dataSource):
@@ -230,7 +230,7 @@ extension LikeStorageReactor {
             .execute()
             .catchAndReturn([])
             .asObservable()
-            .map { [FavoriteSectionModel(model: 0, items: $0)] }
+            .map { [LikeSectionModel(model: 0, items: $0)] }
             .flatMap { fetchedDataSource -> Observable<Mutation> in
                 .concat(
                     .just(.updateDataSource(fetchedDataSource)),
@@ -269,7 +269,7 @@ extension LikeStorageReactor {
         
         storageCommonService.isEditingState.onNext(false)
         return .concat(
-            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateDataSource([LikeSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(0))
         )
     }
@@ -313,7 +313,7 @@ extension LikeStorageReactor {
         tmp[index].isSelected = !tmp[index].isSelected
 
         return .concat(
-            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateDataSource([LikeSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(count))
         )
     }
@@ -332,7 +332,7 @@ extension LikeStorageReactor {
         }
 
         return .concat(
-            .just(.updateDataSource([FavoriteSectionModel(model: 0, items: tmp)])),
+            .just(.updateDataSource([LikeSectionModel(model: 0, items: tmp)])),
             .just(.updateSelectedItemCount(count))
         )
     }

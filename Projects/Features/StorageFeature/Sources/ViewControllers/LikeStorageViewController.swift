@@ -14,6 +14,8 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+typealias LikeSectionModel = SectionModel<Int, FavoriteSongEntity>
+
 final class LikeStorageViewController: BaseReactorViewController<LikeStorageReactor>, SongCartViewType {
     let likeStorageView = LikeStorageView()
     
@@ -97,7 +99,6 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
                 vc.modalPresentationStyle = .overFullScreen
                 owner.present(vc, animated: true) {
                     owner.reactor?.action.onNext(.presentAddToPlaylistPopup)
-                    //owner.reactor?.action.onNext(.tapAll(isSelecting: false))
                 }
             }
             .disposed(by: disposeBag)
@@ -146,8 +147,10 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
             // .skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
-            .do(onNext: { owner, _, _ in
+            .do(onNext: { owner, dataSource, _ in
                 owner.likeStorageView.updateRefreshControlState(isPlaying: false)
+                let dataSourceIsEmpty = dataSource.flatMap { $0.items }.isEmpty
+                owner.likeStorageView.updateIsHiddenEmptyWarningView(isHidden: !dataSourceIsEmpty)
             })
             .map { $0.1 }
             .bind(to: likeStorageView.tableView.rx.items(dataSource: createDatasources()))
@@ -208,8 +211,8 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
 }
 
 extension LikeStorageViewController {
-    private func createDatasources() -> RxTableViewSectionedReloadDataSource<FavoriteSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<FavoriteSectionModel>(
+    private func createDatasources() -> RxTableViewSectionedReloadDataSource<LikeSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<LikeSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell()
                 }

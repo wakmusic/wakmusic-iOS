@@ -19,29 +19,24 @@ private protocol LikeStorageStateProtocol {
     func updateRefreshControlState(isPlaying: Bool)
     func updateIsEnabledRefreshControl(isEnabled: Bool)
     func updateIsHiddenLoginWarningView(isHidden: Bool)
+    func updateIsHiddenEmptyWarningView(isHidden: Bool)
 }
 
 private protocol LikeStorageActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
-    var createListButtonDidTap: Observable<Void> { get }
     var refreshControlValueChanged: Observable<Void> { get }
-    var drawFruitButtonDidTap: Observable<Void> { get }
 }
 
 final class LikeStorageView: UIView {
-    let createListButton = CreateListButton(frame: .zero)
-
     let tableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(LikeStorageTableViewCell.self, forCellReuseIdentifier: LikeStorageTableViewCell.reuseIdentifer)
         $0.separatorStyle = .none
     }
 
-    fileprivate let drawFruitButton = UIButton().then {
-        $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
-    }
-
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
+    
+    fileprivate let emptyWarningView = EmptyWarningView(text: "좋아요한 곡이 없습니다.")
 
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
@@ -50,8 +45,6 @@ final class LikeStorageView: UIView {
     )
 
     fileprivate let refreshControl = UIRefreshControl()
-
-    private var gradientLayer = CAGradientLayer()
 
     init() {
         super.init(frame: .zero)
@@ -68,7 +61,7 @@ final class LikeStorageView: UIView {
     func addView() {
         self.addSubviews(
             tableView,
-            drawFruitButton,
+            emptyWarningView,
             loginWarningView,
             activityIndicator
         )
@@ -78,17 +71,18 @@ final class LikeStorageView: UIView {
         tableView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(52)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(drawFruitButton.snp.top)
-        }
-        drawFruitButton.snp.makeConstraints {
-            $0.height.equalTo(56)
-            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
+        }
+        emptyWarningView.snp.makeConstraints {
+            $0.width.equalTo(164)
+            $0.height.equalTo(176)
+            $0.top.equalTo(tableView.snp.top).offset(148)
+            $0.centerX.equalToSuperview()
         }
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
-            $0.top.equalTo(tableView.snp.bottom).offset(148)
+            $0.top.equalTo(tableView.snp.top).offset(148)
             $0.centerX.equalToSuperview()
         }
         activityIndicator.snp.makeConstraints {
@@ -101,35 +95,19 @@ final class LikeStorageView: UIView {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         tableView.refreshControl = refreshControl
         tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-
+        emptyWarningView.isHidden = true
         loginWarningView.isHidden = true
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
-
-        drawFruitButton.setAttributedTitle(
-            NSAttributedString(
-                string: "음표 열매 뽑으러 가기",
-                attributes: [
-                    .kern: -0.5,
-                    .font: UIFont.WMFontSystem.t4(weight: .bold).font,
-                    .foregroundColor: UIColor.white
-                ]
-            ),
-            for: .normal
-        )
-        gradientLayer.colors = [UIColor(hex: "#0098E5").cgColor, UIColor(hex: "#968FE8").cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
-        drawFruitButton.layer.addSublayer(gradientLayer)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = drawFruitButton.bounds
     }
 }
 
 extension LikeStorageView: LikeStorageStateProtocol {
+    func updateIsHiddenEmptyWarningView(isHidden: Bool) {
+        let isLoggedIn = loginWarningView.isHidden
+        self.emptyWarningView.isHidden = isLoggedIn ? isHidden : true
+    }
+    
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
         self.tableView.refreshControl = isEnabled ? refreshControl : nil
     }
@@ -160,15 +138,7 @@ extension Reactive: LikeStorageActionProtocol where Base: LikeStorageView {
         base.loginWarningView.loginButtonDidTapSubject.asObservable()
     }
 
-    var drawFruitButtonDidTap: Observable<Void> {
-        base.drawFruitButton.rx.tap.asObservable()
-    }
-
     var refreshControlValueChanged: Observable<Void> {
         base.refreshControl.rx.controlEvent(.valueChanged).map { () }.asObservable()
-    }
-
-    var createListButtonDidTap: Observable<Void> {
-        base.createListButton.rx.tap.asObservable()
     }
 }
