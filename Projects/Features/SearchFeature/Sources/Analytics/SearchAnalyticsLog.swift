@@ -1,7 +1,6 @@
 import LogManager
 
 enum SearchAnalyticsLog: AnalyticsLogType {
-
     /// 검색 전:
     case clickRecommendPlaylistMore
     case clickLatestWakmuYoutubeVideo
