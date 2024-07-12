@@ -1,15 +1,19 @@
-//
-//  WMLabel.swift
-//  DesignSystem
-//
-//  Created by YoungK on 11/22/23.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
+
 
 import MarqueeLabel
 import UIKit
 
 public final class WMLabel: UILabel {
+    override public var text: String? {
+        get {
+            self.attributedText?.string
+        } set {
+            self.attributedText = NSMutableAttributedString(string: newValue ?? "", attributes: attributes)
+        }
+    }
+
+    var attributes: [NSAttributedString.Key: Any]?
+
     public init(
         text: String,
         textColor: UIColor = .init(),
@@ -21,17 +25,18 @@ public final class WMLabel: UILabel {
         lineHeightMultiple: CGFloat? = nil
     ) {
         super.init(frame: .zero)
-        self.text = text
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        self.setTextWithAttributes(
+        attributes = self.setTextWithAttributes(
             lineHeight: lineHeight,
             kernValue: kernValue,
             lineSpacing: lineSpacing,
             lineHeightMultiple: lineHeightMultiple,
             alignment: alignment
         )
+
+        self.attributedText = NSMutableAttributedString(string: text, attributes: attributes)
     }
 
     convenience init(

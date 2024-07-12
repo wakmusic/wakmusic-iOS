@@ -48,7 +48,7 @@ final class PlaylistDateTableViewCell: UITableViewCell {
         text: "날짜",
         textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t7(weight: .score3Light),
-        alignment: .left,
+        alignment: .right,
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
         kernValue: -0.5
     ).then {
@@ -88,7 +88,7 @@ final class PlaylistDateTableViewCell: UITableViewCell {
         }
 
         dateLabel.snp.makeConstraints {
-            $0.width.equalTo(70)
+            $0.width.lessThanOrEqualTo(66)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }

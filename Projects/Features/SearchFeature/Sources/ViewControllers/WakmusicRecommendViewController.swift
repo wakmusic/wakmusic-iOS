@@ -35,7 +35,7 @@ final class WakmusicRecommendViewController: BaseReactorViewController<WakmusicR
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
 
-        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "wakmusic_recommend_playlist"))
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .wakmusicRecommendPlaylist))
     }
 
     override public func viewDidAppear(_ animated: Bool) {

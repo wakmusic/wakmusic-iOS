@@ -109,7 +109,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "my_playlist_detail"))
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPlaylistDetail))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -501,17 +501,15 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 text: "\(currentState.selectedCount)곡을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false, confirmButtonText: "확인",
                 cancelButtonText: "취소",
-                completion: { [weak self] in
-
-                    guard let self else { return }
-
-                    self.reactor?.action.onNext(.removeSongs)
-                }, cancelCompletion: nil
+                completion: {
+                    reactor.action.onNext(.removeSongs)
+                    reactor.action.onNext(.forceEndEditing)
+                }, cancelCompletion: {
+                    reactor.action.onNext(.forceEndEditing)
+                }
             )
 
             self.showBottomSheet(content: vc)
-
-            reactor.action.onNext(.forceEndEditing)
         }
     }
 }
@@ -587,7 +585,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistDefaultImageButton)
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
             let vc = defaultPlaylistImageFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
 
@@ -595,7 +593,7 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
         } else {
             LogManager.analytics(
-                PlaylistAnalyticsLog.clickPlaylistCustomImageButton
+                PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
             requestPhotoLibraryPermission()
         }
