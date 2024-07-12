@@ -66,7 +66,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
         LogManager
-            .analytics(PlaylistAnalyticsLog.viewPage(pageName: "wakmusic_playlist_detail"))
+            .analytics(CommonAnalyticsLog.viewPage(pageName: .wakmusicPlaylistDetail))
     }
 
     override func viewDidDisappear(_ animated: Bool) {

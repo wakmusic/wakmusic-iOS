@@ -54,7 +54,7 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
 
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        LogManager.analytics(SearchAnalyticsLog.viewPage(pageName: "search"))
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .search))
     }
 
     override public func addView() {

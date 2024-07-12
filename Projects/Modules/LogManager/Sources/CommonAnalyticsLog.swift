@@ -11,6 +11,10 @@ public extension CommonAnalyticsLog {
         case musicDetail = "music_detail"
         case musicLyrics = "music_lyrics"
         case recentMusic = "recent_music"
+        case wakmusicRecommendPlaylist = "wakmusic_recommend_playlist"
+        case wakmusicPlaylistDetail = "wakmusic_playlist_detail"
+        case unknownPlaylistDetail = "unknown_playlist_detail"
+        case myPlaylistDetail = "my_playlist_detail"
         case chart
         case artist
         case storage

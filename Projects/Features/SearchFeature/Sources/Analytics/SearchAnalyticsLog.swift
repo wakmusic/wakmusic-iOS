@@ -1,9 +1,6 @@
 import LogManager
 
 enum SearchAnalyticsLog: AnalyticsLogType {
-    case viewPage(pageName: String)
-
-    case clickPlaylistItem(location: String)
 
     /// 검색 전:
     case clickRecommendPlaylistMore

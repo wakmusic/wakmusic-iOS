@@ -233,7 +233,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
         let id = PreferenceManager.userInfo?.decryptedID ?? ""
         let isMine = model.ownerId == id
 
-        LogManager.analytics(SearchAnalyticsLog.clickPlaylistItem(location: "search"))
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
         navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
     }
 

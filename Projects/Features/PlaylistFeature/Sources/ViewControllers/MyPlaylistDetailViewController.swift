@@ -109,7 +109,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        LogManager.analytics(PlaylistAnalyticsLog.viewPage(pageName: "my_playlist_detail"))
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPlaylistDetail))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
