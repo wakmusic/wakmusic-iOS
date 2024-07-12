@@ -9,7 +9,6 @@ public final class WMLabel: UILabel {
             self.attributedText?.string
         } set {
             self.attributedText = NSMutableAttributedString(string: newValue ?? "", attributes: attributes)
-
         }
     }
 

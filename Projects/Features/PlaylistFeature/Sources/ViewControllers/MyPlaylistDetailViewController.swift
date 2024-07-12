@@ -510,8 +510,6 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             )
 
             self.showBottomSheet(content: vc)
-
-            
         }
     }
 }
