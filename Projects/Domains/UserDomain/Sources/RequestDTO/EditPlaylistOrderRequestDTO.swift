@@ -1,5 +1,5 @@
 import Foundation
 
-struct EditPlayListOrderRequestDTO: Encodable {
+struct EditPlaylistOrderRequestDTO: Encodable {
     var playlistKeys: [String]
 }

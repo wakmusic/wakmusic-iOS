@@ -11,7 +11,7 @@ import SongsDomainInterface
 import UserDomainInterface
 import Utility
 
-final class FavoriteReactoer: Reactor {
+final class LikeStorageReactor: Reactor {
     enum Action {
         case viewDidLoad
         case refresh
@@ -105,55 +105,13 @@ final class FavoriteReactoer: Reactor {
     }
 }
 
-extension FavoriteReactoer {
+extension LikeStorageReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .just(
             .updateDataSource(
                 [FavoriteSectionModel(
                     model: 0,
                     items: [
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "1",
-                                title: "1234",
-                                artist: "!2344",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        ),
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "2",
-                                title: "123",
-                                artist: "!23",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        ),
-                        .init(
-                            like: 1,
-                            song: SongEntity(
-                                id: "3",
-                                title: "112323",
-                                artist: "!55523",
-                                remix: "",
-                                reaction: "",
-                                views: 0,
-                                last: 0,
-                                date: ""
-                            ),
-                            isSelected: false
-                        )
                     ]
                 )]
             )

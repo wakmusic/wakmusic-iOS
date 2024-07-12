@@ -1,17 +1,9 @@
-//
-//  FetchArtistListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import Foundation
 import RxSwift
 import UserDomainInterface
 
-public struct DeletePlayListUseCaseImpl: DeletePlayListUseCase {
+public struct DeletePlaylistUseCaseImpl: DeletePlaylistUseCase {
     private let userRepository: any UserRepository
 
     public init(
@@ -21,6 +13,6 @@ public struct DeletePlayListUseCaseImpl: DeletePlayListUseCase {
     }
 
     public func execute(ids: [String]) -> Single<BaseEntity> {
-        userRepository.deletePlayList(ids: ids)
+        userRepository.deletePlaylist(ids: ids)
     }
 }

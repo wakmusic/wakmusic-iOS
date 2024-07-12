@@ -1,7 +1,7 @@
 import Foundation
 import SongsDomainInterface
 
-public struct PlaylistEntity {
+public struct PlaylistEntity: Equatable {
     public init(
         key: String,
         title: String,

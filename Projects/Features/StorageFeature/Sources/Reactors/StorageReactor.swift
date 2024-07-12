@@ -1,54 +1,83 @@
 import Foundation
 import ReactorKit
+import UserDomainInterface
 import Utility
 
 final class StorageReactor: Reactor {
     enum Action {
+        case viewDidLoad
         case switchTab(Int)
-        case tabDidEditButton
+        case editButtonDidTap
         case saveButtonTap
-        case showLoginAlert
     }
 
     enum Mutation {
+        case updateIsLoggedIn(Bool)
         case switchTabIndex(Int)
         case switchEditingState(Bool)
         case showLoginAlert
     }
 
     struct State {
+        var isLoggedIn: Bool
         var isEditing: Bool
         var tabIndex: Int
-        @Pulse var showLoginAlert: Void
+        @Pulse var showLoginAlert: Void?
     }
 
     let initialState: State
     private var disposeBag = DisposeBag()
     private let storageCommonService: any StorageCommonService
 
-    init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
+    init(
+        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared
+    ) {
         initialState = State(
+            isLoggedIn: false,
             isEditing: false,
-            tabIndex: 0,
-            showLoginAlert: ()
+            tabIndex: 0
         )
         self.storageCommonService = storageCommonService
-        observeMovedFavoriteTab()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewDidLoad:
+            return .empty()
         case let .switchTab(index):
             return switchTabIndex(index)
-        case .tabDidEditButton:
-            storageCommonService.isEditingState.onNext(true)
-            return switchEditingState(true)
-        case .showLoginAlert:
-            return showLoginAlert()
+        case .editButtonDidTap:
+            if currentState.isLoggedIn {
+                storageCommonService.isEditingState.onNext(true)
+                return switchEditingState(true)
+            } else {
+                return .just(.showLoginAlert)
+            }
         case .saveButtonTap:
             storageCommonService.isEditingState.onNext(false)
             return switchEditingState(false)
         }
+    }
+
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let switchEditingStateMutation = storageCommonService.isEditingState
+            .map { Mutation.switchEditingState($0) }
+
+        let movedToLikeStorageMutation = storageCommonService.movedLikeStorageEvent
+            .map { _ in Mutation.switchTabIndex(1) }
+
+        let updateIsLoggedInMutation = storageCommonService.changedUserInfoEvent
+            .withUnretained(self)
+            .flatMap { owner, userInfo -> Observable<Mutation> in
+                owner.updateIsLoggedIn(userInfo)
+            }
+
+        return Observable.merge(
+            mutation,
+            switchEditingStateMutation,
+            movedToLikeStorageMutation,
+            updateIsLoggedInMutation
+        )
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -61,26 +90,17 @@ final class StorageReactor: Reactor {
             newState.isEditing = flag
         case .showLoginAlert:
             newState.showLoginAlert = ()
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
         }
 
         return newState
     }
-
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let editState = storageCommonService.isEditingState
-            .map { Mutation.switchEditingState($0) }
-
-        return Observable.merge(mutation, editState)
-    }
 }
 
-extension StorageReactor {
-    func observeMovedFavoriteTab() {
-        NotificationCenter.default.rx.notification(.movedStorageFavoriteTab)
-            .bind(with: self) { owner, _ in
-                owner.action.onNext(.switchTab(1))
-            }
-            .disposed(by: disposeBag)
+private extension StorageReactor {
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
     }
 
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
@@ -89,9 +109,5 @@ extension StorageReactor {
 
     func switchEditingState(_ flag: Bool) -> Observable<Mutation> {
         return .just(.switchEditingState(flag))
-    }
-
-    func showLoginAlert() -> Observable<Mutation> {
-        return .just(.showLoginAlert)
     }
 }

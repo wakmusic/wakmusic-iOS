@@ -96,6 +96,7 @@ private extension SettingView {
 
         withDrawLabel.snp.makeConstraints {
             $0.top.equalTo(settingItemTableView.snp.bottom).offset(12)
+            $0.height.equalTo(18)
             $0.left.equalTo(dotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }

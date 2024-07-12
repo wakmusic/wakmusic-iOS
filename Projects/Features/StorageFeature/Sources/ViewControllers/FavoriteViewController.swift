@@ -15,7 +15,7 @@ import Utility
 
 typealias FavoriteSectionModel = SectionModel<Int, FavoriteSongEntity>
 
-final class FavoriteViewController: BaseStoryboardReactorViewController<FavoriteReactoer>, SongCartViewType {
+final class FavoriteViewController: BaseStoryboardReactorViewController<LikeStorageReactor>, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
@@ -35,7 +35,7 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
     }
 
     static func viewController(
-        reactor: FavoriteReactoer,
+        reactor: LikeStorageReactor,
         containSongsFactory: ContainSongsFactory,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory
@@ -62,13 +62,13 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
         reactor?.action.onNext(.viewDidLoad)
     }
 
-    override func bind(reactor: FavoriteReactoer) {
+    override func bind(reactor: LikeStorageReactor) {
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: FavoriteReactoer) {
+    override func bindAction(reactor: LikeStorageReactor) {
         super.bindAction(reactor: reactor)
 
         let currentState = reactor.state
@@ -93,7 +93,7 @@ final class FavoriteViewController: BaseStoryboardReactorViewController<Favorite
             .disposed(by: disposeBag)
     }
 
-    override func bindState(reactor: FavoriteReactoer) {
+    override func bindState(reactor: LikeStorageReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share(replay: 3)

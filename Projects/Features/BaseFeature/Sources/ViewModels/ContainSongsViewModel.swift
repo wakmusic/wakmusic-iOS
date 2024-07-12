@@ -9,7 +9,7 @@ import UserDomainInterface
 import Utility
 
 public final class ContainSongsViewModel: ViewModelType {
-    private let fetchPlayListUseCase: any FetchPlayListUseCase
+    private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
     private let createPlaylistUseCase: any CreatePlaylistUseCase
     private let logoutUseCase: LogoutUseCase
@@ -36,7 +36,7 @@ public final class ContainSongsViewModel: ViewModelType {
     init(
         songs: [String],
         createPlaylistUseCase: any CreatePlaylistUseCase,
-        fetchPlayListUseCase: any FetchPlayListUseCase,
+        fetchPlayListUseCase: any FetchPlaylistUseCase,
         addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
         logoutUseCase: LogoutUseCase
     ) {

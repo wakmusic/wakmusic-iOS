@@ -8,7 +8,7 @@ import UserDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
-    var fetchPlayListUseCase: any FetchPlayListUseCase { get }
+    var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var createPlaylistUseCase: any CreatePlaylistUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
