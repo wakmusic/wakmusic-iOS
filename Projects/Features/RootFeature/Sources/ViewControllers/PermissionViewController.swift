@@ -210,8 +210,10 @@ private extension PermissionViewController {
         let new = NSMutableAttributedString(attributedString: attributedString)
         let emailRange = (attributedString.string as NSString).range(of: text)
         new.addAttributes(
-            [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-            .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color],
+            [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color
+            ],
             range: emailRange
         )
         label.attributedText = new
