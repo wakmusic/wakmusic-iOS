@@ -215,7 +215,7 @@ private extension MyPlaylistDetailReactor {
         let updatingPlaylistItemModels = currentPlaylists.map {
             return $0.updateIsSelected(isSelected: false)
         }
-        
+
         return updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
             .andThen(
                 .concat([
@@ -223,7 +223,7 @@ private extension MyPlaylistDetailReactor {
                     .just(.updatePlaylist(updatingPlaylistItemModels)),
                     .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
                     .just(.updateSelectedCount(0)),
-                    
+
                 ])
             )
             .catch { error in
@@ -232,8 +232,6 @@ private extension MyPlaylistDetailReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 )
             }
-
-        
     }
 
     func endEditing() -> Observable<Mutation> {
@@ -260,7 +258,6 @@ private extension MyPlaylistDetailReactor {
 
         let message: String = prev.private ? "리스트를 비공개 처리했습니다." : "리스트를 공개 처리했습니다."
 
-        
         return updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
             .andThen(.concat([
                 .just(.updateHeader(prev)),
@@ -272,7 +269,6 @@ private extension MyPlaylistDetailReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 )
             }
-        
     }
 
     func updateTitle(text: String) -> Observable<Mutation> {
@@ -382,7 +378,6 @@ private extension MyPlaylistDetailReactor {
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
 
-        
         return removeSongsUseCase.execute(key: key, songs: removeSongs)
             .andThen(.concat([
                 .just(.updatePlaylist(remainSongs)),
@@ -398,7 +393,6 @@ private extension MyPlaylistDetailReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 )
             }
-
     }
 
     func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
