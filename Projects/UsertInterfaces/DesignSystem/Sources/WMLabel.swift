@@ -4,21 +4,16 @@ import MarqueeLabel
 import UIKit
 
 public final class WMLabel: UILabel {
-    
-    public override var text: String? {
-        
+    override public var text: String? {
         get {
             self.attributedText?.string
         } set {
-            
             self.attributedText = NSMutableAttributedString(string: newValue ?? "", attributes: attributes)
-            
         }
-        
     }
-    
+
     var attributes: [NSAttributedString.Key: Any]?
-    
+
     public init(
         text: String,
         textColor: UIColor = .init(),
@@ -40,8 +35,8 @@ public final class WMLabel: UILabel {
             lineHeightMultiple: lineHeightMultiple,
             alignment: alignment
         )
-        
-        self.attributedText =  NSMutableAttributedString(string: text, attributes: attributes)
+
+        self.attributedText = NSMutableAttributedString(string: text, attributes: attributes)
     }
 
     convenience init(

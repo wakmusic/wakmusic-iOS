@@ -68,7 +68,6 @@ public extension UILabel {
         lineHeightMultiple: CGFloat? = nil,
         alignment: NSTextAlignment = .left
     ) -> [NSAttributedString.Key: Any] {
-    
         let paragraphStyle = NSMutableParagraphStyle()
 
         if let lineSpacing { paragraphStyle.lineSpacing = lineSpacing }
@@ -94,7 +93,5 @@ public extension UILabel {
         ]
 
         return attributes
-
-
     }
 }
