@@ -78,9 +78,9 @@ extension LikeStorageViewController {
                 guard let self = self, let reactor = self.reactor else { return UITableViewCell()
                 }
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "FavoriteTableViewCell",
+                    withIdentifier: LikeStorageTableViewCell.reuseIdentifer,
                     for: IndexPath(row: indexPath.row, section: 0)
-                ) as? FavoriteTableViewCell
+                ) as? LikeStorageTableViewCell
                 else { return UITableViewCell() }
 
                 cell.update(
@@ -109,13 +109,15 @@ extension LikeStorageViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
+            reactor?.action.onNext(.addToPlaylistButtonDidTap)
 //            input.addSongs.onNext(())
             self.hideSongCart()
         case .addPlayList:
+            reactor?.action.onNext(.addToCurrentPlaylistButtonDidTap)
             // input.addPlayList.onNext(())
             self.hideSongCart()
         case .remove:
-            break
+            reactor?.action.onNext(.deleteButtonDidTap)
             // TODO: useCase 연결 후
 //            let count: Int = output.indexPathOfSelectedLikeLists.value.count
 //
@@ -142,8 +144,8 @@ extension LikeStorageViewController: SongCartViewDelegate {
     }
 }
 
-extension LikeStorageViewController: FavoriteTableViewCellDelegate {
-    public func buttonTapped(type: FavoriteTableViewCellDelegateConstant) {
+extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
+    public func buttonTapped(type: LikeStorageTableViewCellDelegateConstant) {
         switch type {
         case let .listTapped(indexPath):
             self.reactor?.action.onNext(.songDidTap(indexPath.row))

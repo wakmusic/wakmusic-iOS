@@ -189,10 +189,10 @@ extension StorageViewController: EqualHandleTappedType {
     func scrollToTop() {
         let current: Int = self.currentIndex ?? 0
         guard self.viewControllers.count > current else { return }
-        if let myPlayList = self.viewControllers[current] as? ListStorageViewController {
-            myPlayList.scrollToTop()
-        } else if let favorite = self.viewControllers[current] as? FavoriteViewController {
-            favorite.scrollToTop()
+        if let listVC = self.viewControllers[current] as? ListStorageViewController {
+            listVC.scrollToTop()
+        } else if let likeVC = self.viewControllers[current] as? LikeStorageViewController {
+            likeVC.scrollToTop()
         }
     }
 

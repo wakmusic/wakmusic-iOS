@@ -16,39 +16,71 @@ final class LikeStorageReactor: Reactor {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case editButtonDidTap
-        case saveButtonDidTap
         case songDidTap(Int)
         case tapAll(isSelecting: Bool)
+        case playDidTap(song: SongEntity)
+        case addToPlaylistButtonDidTap // 노래담기
+        case addToCurrentPlaylistButtonDidTap // 재생목록추가
+        case deleteButtonDidTap
+        case confirmDeleteButtonDidTap
     }
 
     enum Mutation {
+        case clearDataSource
         case updateDataSource([FavoriteSectionModel])
+        case updateBackupDataSource([FavoriteSectionModel])
+        case undoDataSource
         case switchEditingState(Bool)
+        case updateIsLoggedIn(Bool)
+        case updateIsShowActivityIndicator(Bool)
+        case showToast(String)
+        case showAddToPlaylistPopup
+        case showDeletePopup(Int)
+        case hideSongCart
+        case updateSelectedItemCount(Int)
         case updateOrder([FavoriteSongEntity])
         case changeSelectedState(data: [FavoriteSongEntity], selectedCount: Int)
         case changeAllState(data: [FavoriteSongEntity], selectedCount: Int)
     }
 
     struct State {
+        var isLoggedIn: Bool
         var isEditing: Bool
         var dataSource: [FavoriteSectionModel]
         var backupDataSource: [FavoriteSectionModel]
         var selectedItemCount: Int
+        var isShowActivityIndicator: Bool
+        @Pulse var showAddToPlaylistPopup: Void?
+        @Pulse var showToast: String?
+        @Pulse var hideSongCart: Void?
+        @Pulse var showDeletePopup: Int?
     }
 
     var initialState: State
     private let storageCommonService: any StorageCommonService
-
-    init(storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared) {
+    private let fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase
+    private let deleteFavoriteListUseCase: any DeleteFavoriteListUseCase
+    private let editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
+    
+    init(
+        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase,
+        deleteFavoriteListUseCase: any DeleteFavoriteListUseCase,
+        editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
+    ) {
         self.initialState = State(
+            isLoggedIn: false,
             isEditing: false,
             dataSource: [],
             backupDataSource: [],
-            selectedItemCount: 0
+            selectedItemCount: 0,
+            isShowActivityIndicator: false
         )
 
         self.storageCommonService = storageCommonService
+        self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
+        self.deleteFavoriteListUseCase = deleteFavoriteListUseCase
+        self.editFavoriteSongsOrderUseCase = editFavoriteSongsOrderUseCase
     }
 
     deinit {
@@ -58,30 +90,87 @@ final class LikeStorageReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            updateDataSource()
+            return viewDidLoad()
+            
         case .refresh:
-            updateDataSource()
-        case .editButtonDidTap:
-            switchEditing(true)
-        case .saveButtonDidTap:
-            // TODO: USECASE 연결
-            switchEditing(false)
+            return fetchDataSource()
+            
         case let .itemMoved((sourceIndex, destinationIndex)):
-            updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
+            return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
+            
         case let .songDidTap(index):
-            changeSelectingState(index)
+            return changeSelectingState(index)
+            
         case let .tapAll(isSelecting):
-            tapAll(isSelecting)
+            return tapAll(isSelecting)
+            
+        case let .playDidTap(song):
+            return playWithAddToCurrentPlaylist()
+            
+        case .addToPlaylistButtonDidTap:
+            return .just(.showAddToPlaylistPopup)
+            
+        case .addToCurrentPlaylistButtonDidTap:
+            return addToCurrentPlaylist()
+            
+        case .deleteButtonDidTap:
+            let itemCount = currentState.selectedItemCount
+            return .just(.showDeletePopup(itemCount))
+            
+        case .confirmDeleteButtonDidTap:
+            return deleteSongs()
         }
     }
 
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let switchEditingStateMutation = storageCommonService.isEditingState
+            .skip(1)
+            .withUnretained(self)
+            .flatMap { owner, editingState -> Observable<Mutation> in
+                // 편집이 종료될 때 처리
+                if editingState == false {
+                    let new = owner.currentState.dataSource
+                    let original = owner.currentState.backupDataSource
+                    let isChanged = new != original
+                    if isChanged {
+                        return .concat(
+                            .just(.updateIsShowActivityIndicator(true)),
+                            owner.mutateEditSongsOrderUseCase(),
+                            .just(.updateIsShowActivityIndicator(false)),
+                            .just(.updateSelectedItemCount(0)),
+                            .just(.hideSongCart),
+                            .just(.switchEditingState(false))
+                        )
+                    } else {
+                        return .concat(
+                            .just(.updateSelectedItemCount(0)),
+                            .just(.hideSongCart),
+                            .just(.switchEditingState(false))
+                        )
+                    }
+                } else {
+                    return .just(.switchEditingState(editingState))
+                }
+            }
+
+        let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
+            .withUnretained(self)
+            .flatMap { owner, userInfo -> Observable<Mutation> in
+                .concat(
+                    owner.updateIsLoggedIn(userInfo),
+                    owner.fetchDataSource()
+                )
+            }
+        
+        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+    }
+    
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
 
         switch mutation {
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
-            newState.backupDataSource = dataSource
         case let .switchEditingState(flag):
             newState.isEditing = flag
         case let .updateOrder(dataSource):
@@ -92,36 +181,89 @@ final class LikeStorageReactor: Reactor {
         case let .changeAllState(data: data, selectedCount: selectedCount):
             newState.dataSource = [FavoriteSectionModel(model: 0, items: data)]
             newState.selectedItemCount = selectedCount
+        case .clearDataSource:
+            newState.dataSource = []
+        case let .updateBackupDataSource(dataSource):
+            newState.backupDataSource = dataSource
+        case .undoDataSource:
+            newState.dataSource = currentState.backupDataSource
+        case let .updateIsLoggedIn(isLoggedIn):
+            newState.isLoggedIn = isLoggedIn
+        case let .updateIsShowActivityIndicator(isShow):
+            newState.isShowActivityIndicator = isShow
+        case let .showToast(isShow):
+            newState.showToast = isShow
+        case .showAddToPlaylistPopup:
+            newState.showAddToPlaylistPopup = ()
+        case let .showDeletePopup(itemCount):
+            newState.showDeletePopup = itemCount
+        case .hideSongCart:
+            newState.hideSongCart = ()
+        case let .updateSelectedItemCount(count):
+            newState.selectedItemCount = count
         }
 
         return newState
     }
-
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let editState = storageCommonService.isEditingState
-            .map { Mutation.switchEditingState($0) }
-
-        return Observable.merge(mutation, editState)
-    }
 }
 
 extension LikeStorageReactor {
-    func updateDataSource() -> Observable<Mutation> {
-        return .just(
-            .updateDataSource(
-                [FavoriteSectionModel(
-                    model: 0,
-                    items: [
-                    ]
-                )]
+    func viewDidLoad() -> Observable<Mutation> {
+        if currentState.isLoggedIn {
+            return .concat(
+                .just(.updateIsShowActivityIndicator(true)),
+                fetchDataSource(),
+                .just(.updateIsShowActivityIndicator(false))
             )
+        } else {
+            return .empty()
+        }
+    }
+
+    func fetchDataSource() -> Observable<Mutation> {
+        fetchFavoriteSongsUseCase
+            .execute()
+            .catchAndReturn([])
+            .asObservable()
+            .map { [FavoriteSectionModel(model: 0, items: $0)] }
+            .flatMap { fetchedDataSource -> Observable<Mutation> in
+                .concat(
+                    .just(.updateDataSource(fetchedDataSource)),
+                    .just(.updateBackupDataSource(fetchedDataSource))
+                )
+            }
+    }
+    
+    func clearDataSource() -> Observable<Mutation> {
+        return .just(.clearDataSource)
+    }
+
+    func deleteSongs() -> Observable<Mutation> {
+        let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }.map { $0.song.id }
+        storageCommonService.isEditingState.onNext(false)
+        return .concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            mutateDeleteSongsUseCase(selectedItemIDs),
+            .just(.updateIsShowActivityIndicator(false)),
+            .just(.hideSongCart),
+            .just(.switchEditingState(false))
         )
     }
-
-    func switchEditing(_ flag: Bool) -> Observable<Mutation> {
-        return .just(.switchEditingState(flag))
+    
+    func addToCurrentPlaylist() -> Observable<Mutation> {
+        #warning("PlayState 리팩토링 끝나면 수정 예정")
+        return .just(.showToast("개발이 필요해요"))
     }
 
+    func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
+        #warning("PlayState 리팩토링 끝나면 수정 예정")
+        return .just(.showToast("개발이 필요해요"))
+    }
+
+    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(userInfo != nil))
+    }
+    
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
@@ -161,5 +303,42 @@ extension LikeStorageReactor {
             tmp[i].isSelected = flag
         }
         return .just(.changeAllState(data: tmp, selectedCount: count))
+    }
+}
+
+private extension LikeStorageReactor {
+    func mutateDeleteSongsUseCase(_ ids: [String]) -> Observable<Mutation> {
+        deleteFavoriteListUseCase.execute(ids: ids)
+            .asObservable()
+            .withUnretained(self)
+            .flatMap { owner, _ -> Observable<Mutation> in
+                return owner.fetchDataSource()
+            }
+            .catch { error in
+                let error = error.asWMError
+                return .concat(
+                    .just(.undoDataSource),
+                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                )
+            }
+    }
+
+    func mutateEditSongsOrderUseCase() -> Observable<Mutation> {
+        let currentDataSource = currentState.dataSource
+        let songsOrder = currentDataSource.flatMap { $0.items.map { $0.song.id } }
+        return editFavoriteSongsOrderUseCase.execute(ids: songsOrder)
+            .asObservable()
+            .flatMap { _ -> Observable<Mutation> in
+                return .concat(
+                    .just(.updateBackupDataSource(currentDataSource))
+                )
+            }
+            .catch { error in
+                let error = error.asWMError
+                return Observable.concat([
+                    .just(.undoDataSource),
+                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                ])
+            }
     }
 }

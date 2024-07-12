@@ -33,7 +33,7 @@ final class LikeStorageView: UIView {
 
     let tableView = UITableView().then {
         $0.backgroundColor = .clear
-        $0.register(ListStorageTableViewCell.self, forCellReuseIdentifier: ListStorageTableViewCell.reuseIdentifer)
+        $0.register(LikeStorageTableViewCell.self, forCellReuseIdentifier: LikeStorageTableViewCell.reuseIdentifer)
         $0.separatorStyle = .none
     }
 
@@ -67,7 +67,6 @@ final class LikeStorageView: UIView {
 
     func addView() {
         self.addSubviews(
-            createListButton,
             tableView,
             drawFruitButton,
             loginWarningView,
@@ -76,14 +75,9 @@ final class LikeStorageView: UIView {
     }
 
     func setLayout() {
-        createListButton.snp.makeConstraints {
-            $0.height.equalTo(52)
-            $0.top.equalTo(safeAreaLayoutGuide).offset(68)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-        }
-
+        tableView.backgroundColor = .yellow
         tableView.snp.makeConstraints {
-            $0.top.equalTo(createListButton.snp.bottom).offset(12)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(52)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(drawFruitButton.snp.top)
         }
@@ -95,8 +89,8 @@ final class LikeStorageView: UIView {
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
-            $0.top.equalTo(createListButton.snp.bottom).offset(80)
-            $0.centerX.equalToSuperview()
+            //$0.top.equalTo(createListButton.snp.bottom).offset(80)
+            $0.center.equalToSuperview()
         }
         activityIndicator.snp.makeConstraints {
             $0.width.height.equalTo(30)
