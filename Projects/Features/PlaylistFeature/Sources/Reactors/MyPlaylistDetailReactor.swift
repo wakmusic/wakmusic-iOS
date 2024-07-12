@@ -215,15 +215,25 @@ private extension MyPlaylistDetailReactor {
         let updatingPlaylistItemModels = currentPlaylists.map {
             return $0.updateIsSelected(isSelected: false)
         }
+        
+        return updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
+            .andThen(
+                .concat([
+                    .just(.updateEditingState(false)),
+                    .just(.updatePlaylist(updatingPlaylistItemModels)),
+                    .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
+                    .just(.updateSelectedCount(0)),
+                    
+                ])
+            )
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                )
+            }
 
-        return .concat([
-            .just(.updateEditingState(false)),
-            .just(.updatePlaylist(updatingPlaylistItemModels)),
-            .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
-            .just(.updateSelectedCount(0)),
-            updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
-                .andThen(.empty())
-        ])
+        
     }
 
     func endEditing() -> Observable<Mutation> {
@@ -250,12 +260,19 @@ private extension MyPlaylistDetailReactor {
 
         let message: String = prev.private ? "리스트를 비공개 처리했습니다." : "리스트를 공개 처리했습니다."
 
-        return .concat([
-            .just(.updateHeader(prev)),
-            .just(.showToast(message)),
-            updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
-                .andThen(.empty())
-        ])
+        
+        return updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
+            .andThen(.concat([
+                .just(.updateHeader(prev)),
+                .just(.showToast(message)),
+            ]))
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                )
+            }
+        
     }
 
     func updateTitle(text: String) -> Observable<Mutation> {
@@ -365,17 +382,23 @@ private extension MyPlaylistDetailReactor {
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
 
-        return .concat([
-            .just(.updatePlaylist(remainSongs)),
-            .just(.updateBackUpPlaylist(remainSongs)),
-            .just(.updateEditingState(false)),
-            .just(.updateSelectedCount(0)),
-            .just(.updateHeader(prevHeader)),
-            .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
-            removeSongsUseCase.execute(key: key, songs: removeSongs)
-                .andThen(.never())
+        
+        return removeSongsUseCase.execute(key: key, songs: removeSongs)
+            .andThen(.concat([
+                .just(.updatePlaylist(remainSongs)),
+                .just(.updateBackUpPlaylist(remainSongs)),
+                .just(.updateEditingState(false)),
+                .just(.updateSelectedCount(0)),
+                .just(.updateHeader(prevHeader)),
+                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+            ]))
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                )
+            }
 
-        ])
     }
 
     func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
