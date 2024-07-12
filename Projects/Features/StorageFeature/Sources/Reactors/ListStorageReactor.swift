@@ -119,7 +119,8 @@ final class ListStorageReactor: Reactor {
             return addToCurrentPlaylist()
 
         case .createListButtonDidTap:
-            return .just(.showCreateListPopup)
+            let isLoggedIn = currentState.isLoggedIn
+            return isLoggedIn ? .just(.showCreateListPopup) : .just(.showLoginAlert)
 
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
