@@ -28,7 +28,7 @@ final class ListStorageReactor: Reactor {
         case clearDataSource
         case updateDataSource([MyPlayListSectionModel])
         case updateBackupDataSource([MyPlayListSectionModel])
-        case undoDateSource
+        case undoDataSource
         case switchEditingState(Bool)
         case updateIsLoggedIn(Bool)
         case updateIsShowActivityIndicator(Bool)
@@ -141,8 +141,8 @@ final class ListStorageReactor: Reactor {
             .flatMap { owner, editingState -> Observable<Mutation> in
                 // 편집이 종료될 때 처리
                 if editingState == false {
-                    let new = owner.currentState.dataSource
-                    let original = owner.currentState.backupDataSource
+                    let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.key }
+                    let original = owner.currentState.backupDataSource.flatMap { $0.items }.map { $0.key }
                     let isChanged = new != original
                     if isChanged {
                         return .concat(
@@ -156,6 +156,7 @@ final class ListStorageReactor: Reactor {
                     } else {
                         return .concat(
                             .just(.updateSelectedItemCount(0)),
+                            .just(.undoDataSource),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
@@ -185,7 +186,7 @@ final class ListStorageReactor: Reactor {
             newState.dataSource = dataSource
         case .updateBackupDataSource:
             newState.backupDataSource = currentState.dataSource
-        case .undoDateSource:
+        case .undoDataSource:
             newState.dataSource = currentState.backupDataSource
         case .clearDataSource:
             newState.dataSource = []
@@ -243,7 +244,6 @@ extension ListStorageReactor {
     }
 
     func clearDataSource() -> Observable<Mutation> {
-        print("🚀 clearDataSource called Reactor")
         return .just(.clearDataSource)
     }
 
@@ -365,7 +365,7 @@ private extension ListStorageReactor {
             .catch { error in
                 let error = error.asWMError
                 return .concat(
-                    .just(.undoDateSource),
+                    .just(.undoDataSource),
                     .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
                 )
             }
@@ -384,7 +384,7 @@ private extension ListStorageReactor {
             .catch { error in
                 let error = error.asWMError
                 return Observable.concat([
-                    .just(.undoDateSource),
+                    .just(.undoDataSource),
                     .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
                 ])
             }

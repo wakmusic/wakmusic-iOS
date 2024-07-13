@@ -22,6 +22,7 @@ final class StorageViewController: TabmanViewController, View {
 
     private var viewControllers: [UIViewController]!
     let storageView = StorageView()
+    let bar = TMBar.ButtonBar()
 
     init(reactor: Reactor) {
         super.init(nibName: nil, bundle: nil)
@@ -83,6 +84,8 @@ extension StorageViewController {
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in
                 owner.storageView.updateIsHiddenEditButton(isHidden: isEditing)
+                owner.isScrollEnabled = isEditing ? false : true
+                owner.bar.isUserInteractionEnabled = isEditing ? false : true
             }
             .disposed(by: disposeBag)
 
@@ -127,7 +130,6 @@ private extension StorageViewController {
 
         // 탭바 설정
         self.dataSource = self
-        let bar = TMBar.ButtonBar()
 
         // 배경색
         bar.backgroundView.style = .flat(color: .clear)
@@ -189,10 +191,10 @@ extension StorageViewController: EqualHandleTappedType {
     func scrollToTop() {
         let current: Int = self.currentIndex ?? 0
         guard self.viewControllers.count > current else { return }
-        if let myPlayList = self.viewControllers[current] as? ListStorageViewController {
-            myPlayList.scrollToTop()
-        } else if let favorite = self.viewControllers[current] as? FavoriteViewController {
-            favorite.scrollToTop()
+        if let listVC = self.viewControllers[current] as? ListStorageViewController {
+            listVC.scrollToTop()
+        } else if let likeVC = self.viewControllers[current] as? LikeStorageViewController {
+            likeVC.scrollToTop()
         }
     }
 

@@ -20,8 +20,12 @@ public protocol LikeStorageDependency: Dependency {
 
 public final class LikeStorageComponent: Component<LikeStorageDependency> {
     public func makeView() -> UIViewController {
-        return FavoriteViewController.viewController(
-            reactor: LikeStorageReactor(),
+        return LikeStorageViewController.viewController(
+            reactor: LikeStorageReactor(
+                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
+                deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
+                editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase
+            ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
             signInFactory: dependency.signInFactory

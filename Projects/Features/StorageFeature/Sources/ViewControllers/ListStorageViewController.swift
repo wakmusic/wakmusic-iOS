@@ -158,8 +158,10 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             // .skip(1)
             .withUnretained(self)
             .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
-            .do(onNext: { owner, _, _ in
+            .do(onNext: { owner, dataSource, _ in
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
+                let dataSourceIsEmpty = dataSource.flatMap { $0.items }.isEmpty
+                owner.listStorageView.updateIsHiddenEmptyWarningView(isHidden: !dataSourceIsEmpty)
             })
             .map { $0.1 }
             .bind(to: listStorageView.tableView.rx.items(dataSource: createDatasources()))
@@ -220,24 +222,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         listStorageView.rx.createListButtonDidTap
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-
-        listStorageView.tableView.rx.itemSelected
-            .withUnretained(self)
-            .withLatestFrom(currentState.map(\.isEditing)) { ($0.0, $0.1, $1) }
-            .withLatestFrom(currentState.map(\.dataSource)) { ($0.0, $0.1, $0.2, $1) }
-            .bind { owner, indexPath, isEditing, dataSource in
-                guard isEditing else {
-                    owner.navigationController?.pushViewController(
-                        owner.playlistDetailFactory.makeView(
-                            key: dataSource[indexPath.section].items[indexPath.row].key,
-                            kind: .my
-                        ),
-                        animated: true
-                    )
-                    return
-                }
-            }
             .disposed(by: disposeBag)
 
         listStorageView.tableView.rx.itemMoved
