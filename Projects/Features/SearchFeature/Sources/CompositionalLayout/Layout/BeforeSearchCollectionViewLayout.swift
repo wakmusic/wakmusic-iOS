@@ -52,15 +52,15 @@ extension BeforeSearchCollectionViewLayout {
         case .recommend:
 
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.41),
-                heightDimension: .fractionalHeight(1.0)
+                widthDimension: .fractionalWidth(0.5),
+                heightDimension: .fractionalWidth(0.25)
             )
 
             let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
 
             let groupSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalWidth(0.21)
+                heightDimension: .fractionalWidth(0.25)
             )
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 2)
 
