@@ -53,7 +53,7 @@ extension BeforeSearchCollectionViewLayout {
 
             let itemSize = NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(0.5),
-                heightDimension: .fractionalWidth(0.25)
+                heightDimension: .fractionalWidth(0.2439)
             )
 
             let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
