@@ -120,7 +120,8 @@ extension PlaylistTableViewCell {
     internal func setContent(
         model: PlaylistItemModel,
         index: Int,
-        isEditing: Bool
+        isEditing: Bool,
+        isSelected: Bool
     ) {
         self.thumbnailImageView.kf.setImage(
             with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
@@ -131,7 +132,7 @@ extension PlaylistTableViewCell {
         self.titleLabel.text = model.title
         self.artistLabel.text = model.artist
         self.model = (index, model)
-        self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
+        self.backgroundColor = isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
 
         self.updateButtonHidden(isEditing: isEditing)
         self.updateConstraintPlayImageView(isEditing: isEditing)

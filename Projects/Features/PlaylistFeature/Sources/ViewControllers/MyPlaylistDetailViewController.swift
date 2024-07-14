@@ -358,17 +358,26 @@ extension MyPlaylistDetailViewController {
             MyPlaylistDetailDataSource(
                 reactor: reactor!,
                 tableView: tableView
-            ) { [weak self] tableView, indexPath, itemIdentifier in
+            ) {
+                [weak self] tableView,
+                    indexPath,
+                    itemIdentifier in
 
-                guard let self, let cell = tableView.dequeueReusableCell(
-                    withIdentifier: PlaylistTableViewCell.identifier,
-                    for: indexPath
-                ) as? PlaylistTableViewCell else {
+                guard let self,
+                      let cell = tableView.dequeueReusableCell(
+                          withIdentifier: PlaylistTableViewCell.identifier,
+                          for: indexPath
+                      ) as? PlaylistTableViewCell else {
                     return UITableViewCell()
                 }
 
                 cell.delegate = self
-                cell.setContent(model: itemIdentifier, index: indexPath.row, isEditing: tableView.isEditing)
+                cell.setContent(
+                    model: itemIdentifier,
+                    index: indexPath.row,
+                    isEditing: tableView.isEditing,
+                    isSelected: itemIdentifier.isSelected
+                )
                 cell.selectionStyle = .none
 
                 return cell
