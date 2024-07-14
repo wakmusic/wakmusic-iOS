@@ -8,37 +8,56 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import LogManager
 
 public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
-    private let disposeBag = DisposeBag()
-    private var viewModel: ChartContentViewModel!
-
-    private lazy var input = ChartContentViewModel.Input()
-    private lazy var output = viewModel.transform(from: input)
-
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 
+    private lazy var frontHalfPlayButton = HorizontalAlignButton(
+        imagePlacement: .trailing,
+        title: "1 ~ 50위",
+        image: DesignSystemAsset.Chart.halfPlay.image,
+        font: .setFont(.t5(weight: .medium)),
+        titleColor: DesignSystemAsset.BlueGrayColor.gray25.color,
+        spacing: 4
+    )
+    private lazy var backHalfPlayButton = HorizontalAlignButton(
+        imagePlacement: .trailing,
+        title: "51 ~ 100위",
+        image: DesignSystemAsset.Chart.halfPlay.image,
+        font: .setFont(.t5(weight: .medium)),
+        titleColor: DesignSystemAsset.BlueGrayColor.gray25.color,
+        spacing: 4
+    )
+    private lazy var wmBottomSheetView = WMBottomSheetView(
+        items: [frontHalfPlayButton, backHalfPlayButton]
+    )
+
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    private var refreshControl = UIRefreshControl()
+    private let refreshControl = UIRefreshControl()
 
-    let playState = PlayState.shared
+    private var viewModel: ChartContentViewModel!
+    private lazy var input = ChartContentViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
+    private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
 
-    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+    deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
+        inputBind()
         outputBind()
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.input.allSongSelected.onNext(false)
+        input.allSongSelected.onNext(false)
+        hideInlineBottomSheet()
     }
 
     public static func viewController(
@@ -53,12 +72,11 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
 }
 
 private extension ChartContentViewController {
-    func bind() {
+    func inputBind() {
         tableView.register(ChartContentTableViewCell.self, forCellReuseIdentifier: "\(ChartContentTableViewCell.self)")
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
         tableView.rx.itemSelected
-            .map { $0.row }
             .bind(to: input.songTapped)
             .disposed(by: disposeBag)
 
@@ -66,13 +84,23 @@ private extension ChartContentViewController {
             .controlEvent(.valueChanged)
             .bind(to: input.refreshPulled)
             .disposed(by: disposeBag)
+
+        Observable.merge(
+            frontHalfPlayButton.rx.tap.map { _ in HalfPlayType.front },
+            backHalfPlayButton.rx.tap.map { _ in HalfPlayType.back }
+        )
+        .do(onNext: { [weak self] _ in
+            self?.hideInlineBottomSheet()
+        })
+        .bind(to: input.halfPlayTapped)
+        .disposed(by: disposeBag)
     }
 
     func outputBind() {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
-                guard let `self` = self else { return }
+                guard let self = self else { return }
                 self.activityIncidator.stopAnimating()
                 self.refreshControl.endRefreshing()
                 let space: CGFloat = APP_HEIGHT() - 40 - 102 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
@@ -102,7 +130,8 @@ private extension ChartContentViewController {
                 }
                 cell.update(model: model, index: index, type: self.viewModel.type)
                 return cell
-            }.disposed(by: disposeBag)
+            }
+            .disposed(by: disposeBag)
 
         output.indexOfSelectedSongs
             .skip(1)
@@ -122,7 +151,8 @@ private extension ChartContentViewController {
                     )
                     self.songCartView?.delegate = self
                 }
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
 
         output.songEntityOfSelectedSongs
             .filter { !$0.isEmpty }
@@ -130,19 +160,33 @@ private extension ChartContentViewController {
             .disposed(by: disposeBag)
 
         output.groupPlaySongs
-            .subscribe(onNext: { [weak self] songs in
-                guard let self = self else { return }
-                self.playState.loadAndAppendSongsToPlaylist(songs)
+            .bind(with: self, onNext: { owner, source in
+                LogManager.printDebug(source.map { $0.title })
+                guard !source.isEmpty else {
+                    owner.output.showToast.onNext("차트 데이터가 없습니다.")
+                    return
+                }
+                PlayState.shared.loadAndAppendSongsToPlaylist(source)
             })
+            .disposed(by: disposeBag)
+
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    verticalOffset: 56 + 20
+                )
+            }
             .disposed(by: disposeBag)
     }
 
     func configureUI() {
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        self.activityIncidator.type = .circleStrokeSpin
-        self.activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
-        self.activityIncidator.startAnimating()
-        self.tableView.refreshControl = refreshControl
+        activityIncidator.type = .circleStrokeSpin
+        activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIncidator.startAnimating()
+        tableView.refreshControl = refreshControl
     }
 }
 
@@ -165,7 +209,15 @@ extension ChartContentViewController: UITableViewDelegate {
 
 extension ChartContentViewController: PlayButtonForChartViewDelegate {
     public func pressPlay(_ event: PlayEvent) {
-        input.groupPlayTapped.onNext(event)
+        guard !output.dataSource.value.isEmpty else {
+            output.showToast.onNext("차트 데이터가 없습니다.")
+            return
+        }
+        if event == .allPlay {
+            showInlineBottomSheet(content: wmBottomSheetView)
+        } else {
+            input.shufflePlayTapped.onNext(())
+        }
     }
 }
 
@@ -179,18 +231,19 @@ extension ChartContentViewController: SongCartViewDelegate {
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsFactory.makeView(songs: songs)
             viewController.modalPresentationStyle = .overFullScreen
-            self.present(viewController, animated: true) {
+            present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
+
         case .addPlayList:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.appendSongsToPlaylist(songs)
-            self.input.allSongSelected.onNext(false)
+            PlayState.shared.appendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
 
         case .play:
             let songs = output.songEntityOfSelectedSongs.value
-            playState.loadAndAppendSongsToPlaylist(songs)
-            self.input.allSongSelected.onNext(false)
+            PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            input.allSongSelected.onNext(false)
 
         case .remove:
             return

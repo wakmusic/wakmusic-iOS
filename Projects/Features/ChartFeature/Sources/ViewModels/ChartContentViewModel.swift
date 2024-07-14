@@ -6,9 +6,13 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
+enum HalfPlayType {
+    case front
+    case back
+}
+
 public final class ChartContentViewModel: ViewModelType {
     public let type: ChartDateType
-
     private let disposeBag = DisposeBag()
     private let fetchChartRankingUseCase: FetchChartRankingUseCase
 
@@ -21,18 +25,20 @@ public final class ChartContentViewModel: ViewModelType {
     }
 
     public struct Input {
-        var songTapped: PublishSubject<Int> = PublishSubject()
-        var allSongSelected: PublishSubject<Bool> = PublishSubject()
-        let groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
-        var refreshPulled: PublishSubject<Void> = PublishSubject()
+        let songTapped: PublishSubject<IndexPath> = PublishSubject()
+        let allSongSelected: PublishSubject<Bool> = PublishSubject()
+        let halfPlayTapped: PublishSubject<HalfPlayType> = PublishSubject()
+        let shufflePlayTapped: PublishSubject<Void> = PublishSubject()
+        let refreshPulled: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
-        var updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let dataSource: BehaviorRelay<[ChartRankingEntity]> = BehaviorRelay(value: [])
+        let updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
+        let showToast: PublishSubject<String> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
@@ -62,6 +68,7 @@ public final class ChartContentViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.songTapped
+            .map { $0.row }
             .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
                 if selectedSongs.contains(index) {
                     guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
@@ -122,34 +129,61 @@ public final class ChartContentViewModel: ViewModelType {
             .bind(to: output.songEntityOfSelectedSongs)
             .disposed(by: disposeBag)
 
-        input.groupPlayTapped
+        input.halfPlayTapped
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { type, dataSource -> (PlayEvent, [SongEntity]) in
-                let songEntities: [SongEntity] = dataSource.map {
-                    return SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        remix: "",
-                        reaction: "",
-                        views: $0.views,
-                        last: $0.last,
-                        date: $0.date
-                    )
-                }
-                return (type, songEntities)
+            .map { [weak self] type, source -> [ChartRankingEntity] in
+                self?.halfSplitArray(array: source, type: type) ?? []
             }
-            .map { type, dataSource -> [SongEntity] in
-                switch type {
-                case .allPlay:
-                    return dataSource
-                case .shufflePlay:
-                    return dataSource.shuffled()
-                }
+            .map { [weak self] entities -> [SongEntity] in
+                self?.toSongEntities(array: entities) ?? []
+            }
+            .bind(to: output.groupPlaySongs)
+            .disposed(by: disposeBag)
+
+        input.shufflePlayTapped
+            .withLatestFrom(output.dataSource)
+            .map { [weak self] source -> [ChartRankingEntity] in
+                self?.shuffledSplitArray(array: source) ?? []
+            }
+            .map { [weak self] entities -> [SongEntity] in
+                self?.toSongEntities(array: entities) ?? []
             }
             .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
 
         return output
+    }
+}
+
+private extension ChartContentViewModel {
+    func halfSplitArray<T>(array: [T], type: HalfPlayType, limit: Int = 50) -> [T] {
+        switch type {
+        case .front:
+            return Array(array.prefix(limit))
+        case .back:
+            return array.count > limit ? Array(array[limit..<array.count].prefix(limit)) : []
+        }
+    }
+
+    func shuffledSplitArray<T>(array: [T], limit: Int = 50) -> [T] {
+        let shuffledArray = array.shuffled()
+        let result = Array(shuffledArray.prefix(limit))
+        return result
+    }
+    
+    func toSongEntities(array: [ChartRankingEntity]) -> [SongEntity] {
+        let songEntities: [SongEntity] = array.map {
+            return SongEntity(
+                id: $0.id,
+                title: $0.title,
+                artist: $0.artist,
+                remix: "",
+                reaction: "",
+                views: $0.views,
+                last: $0.last,
+                date: $0.date
+            )
+        }
+        return songEntities
     }
 }
