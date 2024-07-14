@@ -16,7 +16,7 @@ extension TokenRefreshAPI: WMAPI {
 
     var jwtTokenType: JwtTokenType { .refreshToken }
 
-    var errorMap: [Int : WMError] {
+    var errorMap: [Int: WMError] {
         [
             400: .badRequest,
             401: .tokenExpired,

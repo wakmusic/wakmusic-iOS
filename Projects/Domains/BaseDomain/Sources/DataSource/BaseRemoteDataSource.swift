@@ -69,7 +69,7 @@ private extension BaseRemoteDataSource {
                 return Single.error(api.errorMap[errorCode] ?? error)
             }
     }
-    
+
     func authorizedRequest(_ api: API) -> Single<Response> {
         if checkAccessTokenIsValid() {
             return defaultRequest(api)
