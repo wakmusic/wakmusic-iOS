@@ -161,7 +161,7 @@ private extension ChartContentViewModel {
         case .front:
             return Array(array.prefix(limit))
         case .back:
-            return array.count > limit ? Array(array[limit..<array.count].prefix(limit)) : []
+            return array.count > limit ? Array(array[limit ..< array.count].prefix(limit)) : []
         }
     }
 
@@ -170,7 +170,7 @@ private extension ChartContentViewModel {
         let result = Array(shuffledArray.prefix(limit))
         return result
     }
-    
+
     func toSongEntities(array: [ChartRankingEntity]) -> [SongEntity] {
         let songEntities: [SongEntity] = array.map {
             return SongEntity(

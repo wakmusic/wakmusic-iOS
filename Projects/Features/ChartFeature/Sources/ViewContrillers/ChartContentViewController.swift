@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
@@ -8,7 +9,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import LogManager
 
 public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
