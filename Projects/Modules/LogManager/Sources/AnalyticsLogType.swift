@@ -17,17 +17,6 @@ public extension AnalyticsLogType {
     var params: [String: Any] {
         var dict: [String: Any] = [:]
 
-        let currentDate = Date()
-        let timestamp = currentDate.timeIntervalSince1970
-        let dateString = {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            return dateFormatter.string(from: currentDate)
-        }()
-
-        dict["timestamp"] = timestamp
-        dict["date"] = dateString
-
         let enumMirror = Mirror(reflecting: self)
 
         guard let associated = enumMirror.children.first else { return dict }
