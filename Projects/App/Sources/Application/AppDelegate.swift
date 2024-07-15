@@ -16,8 +16,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        // Override point for customization after application launch.
-
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
         setAnalyticsDefaultParameters()
@@ -39,9 +37,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerKey = NAVER_CONSUMER_KEY() // 클라이언트 아이디
         naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() // 시크릿 아이디
         naverInstance?.appName = NAVER_APP_NAME() // 앱이름
-
-        // Realm register
-        RealmManager.shared.register()
 
         return true
     }

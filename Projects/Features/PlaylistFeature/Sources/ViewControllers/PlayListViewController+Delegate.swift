@@ -62,16 +62,6 @@ extension PlaylistViewController: UITableViewDelegate {
 
     public func tableView(
         _ tableView: UITableView,
-        moveRowAt sourceIndexPath: IndexPath,
-        to destinationIndexPath: IndexPath
-    ) {
-        // 이동할 데이터를 가져와서 새로운 위치에 삽입합니다.
-        playState.playList.reorderPlaylist(from: sourceIndexPath.row, to: destinationIndexPath.row)
-        HapticManager.shared.impact(style: .light)
-    }
-
-    public func tableView(
-        _ tableView: UITableView,
         targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {

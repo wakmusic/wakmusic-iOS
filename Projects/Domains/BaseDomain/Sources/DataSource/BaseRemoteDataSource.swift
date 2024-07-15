@@ -15,6 +15,7 @@ import RxSwift
 open class BaseRemoteDataSource<API: WMAPI> {
     private let keychain: any Keychain
     private let provider: MoyaProvider<API>
+    private var refreshProvider: MoyaProvider<TokenRefreshAPI>?
     private let decoder = JSONDecoder()
     private let maxRetryCount = 2
 
@@ -34,12 +35,21 @@ open class BaseRemoteDataSource<API: WMAPI> {
     public func request(_ api: API) -> Single<Response> {
         return Single<Response>.create { single in
             var disposabels = [Disposable]()
-            disposabels.append(
-                self.defaultRequest(api).subscribe(
-                    onSuccess: { single(.success($0)) },
-                    onFailure: { single(.failure($0)) }
+            if self.checkIsApiNeedsAuthorization(api) {
+                disposabels.append(
+                    self.authorizedRequest(api).subscribe(
+                        onSuccess: { single(.success($0)) },
+                        onFailure: { single(.failure($0)) }
+                    )
                 )
-            )
+            } else {
+                disposabels.append(
+                    self.defaultRequest(api).subscribe(
+                        onSuccess: { single(.success($0)) },
+                        onFailure: { single(.failure($0)) }
+                    )
+                )
+            }
             return Disposables.create(disposabels)
         }
     }
@@ -60,7 +70,34 @@ private extension BaseRemoteDataSource {
             }
     }
 
+    func authorizedRequest(_ api: API) -> Single<Response> {
+        if checkAccessTokenIsValid() {
+            return defaultRequest(api)
+        } else {
+            return reissueToken()
+                .andThen(defaultRequest(api))
+                .retry(maxRetryCount)
+        }
+    }
+
     func checkIsApiNeedsAuthorization(_ api: API) -> Bool {
         api.jwtTokenType == .accessToken
+    }
+
+    func checkAccessTokenIsValid() -> Bool {
+        guard let expired = Double(keychain.load(type: .accessExpiresIn)) else { return false }
+        let today = Date()
+        let expiredDate = (expired / 1000.0).unixTimeToDate
+        return today < expiredDate
+    }
+
+    func reissueToken() -> Completable {
+        let provider = refreshProvider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
+        if refreshProvider == nil {
+            refreshProvider = provider
+        }
+
+        return provider.rx.request(.refresh)
+            .asCompletable()
     }
 }
