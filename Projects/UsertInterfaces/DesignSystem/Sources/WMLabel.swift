@@ -28,7 +28,7 @@ public final class WMLabel: UILabel {
         self.textColor = textColor
         self.font = .setFont(font)
         self.textAlignment = alignment
-        attributes = self.setTextWithAttributes(
+        attributes = self.getTextWithAttributes(
             lineHeight: lineHeight,
             kernValue: kernValue,
             lineSpacing: lineSpacing,
