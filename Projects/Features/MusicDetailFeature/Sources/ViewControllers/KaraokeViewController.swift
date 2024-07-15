@@ -1,6 +1,7 @@
-import Foundation
+import UIKit
 import BaseFeature
 import DesignSystem
+import Utility
 
 final class KaraokeViewController: BaseViewController {
     
@@ -13,6 +14,16 @@ final class KaraokeViewController: BaseViewController {
         alignment: .center
     )
     
+    private let karaokeInfoView: KaraokeInfoView = KaraokeInfoView()
+    
+    private let confirmButton: UIButton = UIButton().then {
+        $0.setTitle("확인", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = .setFont(.t4(weight: .medium))
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
+        $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
+    }
     
     init(karaoke: PlaylistModel.SongModel.KaraokeNumber) {
         
@@ -29,13 +40,14 @@ final class KaraokeViewController: BaseViewController {
         super.viewDidLoad()
         addViews()
         setLayout()
-        
+        configureUI()
+        bindAction()
     }
 }
 
 extension KaraokeViewController {
     private func addViews() {
-        self.view.addSubview(titleLabel)
+        self.view.addSubviews(titleLabel, karaokeInfoView, confirmButton)
     }
     
     private func setLayout() {
@@ -43,6 +55,31 @@ extension KaraokeViewController {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.top.equalToSuperview().inset(32)
         }
+        
+        karaokeInfoView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(titleLabel.snp.bottom).offset(16)
+        }
+        
+        confirmButton.snp.makeConstraints {
+            $0.top.equalTo(karaokeInfoView.snp.bottom).offset(40)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(56)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
+        }
     }
     
+    private func configureUI() {
+        self.view.backgroundColor = .white
+        karaokeInfoView.update(model: karaoke)
+    }
+ 
+    private func bindAction() {
+        confirmButton.addAction { [weak self] in
+            
+            guard let self else { return }
+            
+            self.dismiss(animated: true)
+        }
+    }
 }

@@ -13,6 +13,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 
+        
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
                 rootViewController: UIViewController()
