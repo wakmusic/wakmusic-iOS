@@ -85,12 +85,13 @@ private extension BaseRemoteDataSource {
     }
 
     func checkAccessTokenIsValid() -> Bool {
-        let accessToken = keychain.load(type: .accessToken)
-        return !accessToken.isEmpty
+        guard let expired = Double(keychain.load(type: .accessExpiresIn)) else { return false }
+        let today = Date()
+        let expiredDate = (expired / 1000.0).unixTimeToDate
+        return today < expiredDate
     }
 
     func reissueToken() -> Completable {
-        let refreshAPI = TokenRefreshAPI.refresh
         let provider = refreshProvider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
         if refreshProvider == nil {
             refreshProvider = provider
