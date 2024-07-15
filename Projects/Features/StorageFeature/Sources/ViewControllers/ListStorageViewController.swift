@@ -104,6 +104,15 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$showDrawFruitPopup)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                let vc = owner.fruitDrawFactory.makeView(delegate: owner)
+                vc.modalPresentationStyle = .fullScreen
+                owner.present(vc, animated: true)
+            })
+            .disposed(by: disposeBag)
+
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
@@ -211,12 +220,8 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         listStorageView.rx.drawFruitButtonDidTap
-            .bind(onNext: { [weak self] _ in
-                guard let self else { return }
-                let vc = self.fruitDrawFactory.makeView(delegate: self)
-                vc.modalPresentationStyle = .fullScreen
-                self.present(vc, animated: true)
-            })
+            .map { Reactor.Action.drawFruitButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         listStorageView.rx.createListButtonDidTap
