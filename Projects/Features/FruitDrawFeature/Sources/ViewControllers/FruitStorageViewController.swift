@@ -77,9 +77,15 @@ public final class FruitStorageViewController: UIViewController {
         inputBind()
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override public func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         LogManager.analytics(FruitDrawAnalyticsLog.viewPage(pageName: "fruit_storage"))
+        NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
+    }
+
+    override public func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.post(name: .statusBarEnterLightBackground, object: nil)
     }
 
     override public func viewDidLayoutSubviews() {
