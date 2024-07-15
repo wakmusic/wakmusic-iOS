@@ -34,9 +34,9 @@ final class TMPViewController: UIViewController {
         
         
         
-        let karaokeModel = PlaylistModel.SongModel.KaraokeNumber(tj: 84250, ky: 84250)
+        let karaokeModel = PlaylistModel.SongModel.KaraokeNumber(tj: 84250, ky: nil)
         
-        let vc = KaraokeViewController(karaoke: karaokeModel)
+        let vc = KaraokeViewController(model: karaokeModel)
         
         
         button.addAction {
