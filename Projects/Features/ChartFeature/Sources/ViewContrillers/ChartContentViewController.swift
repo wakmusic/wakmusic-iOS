@@ -14,26 +14,6 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 
-    private lazy var frontHalfPlayButton = HorizontalAlignButton(
-        imagePlacement: .trailing,
-        title: "1 ~ 50위",
-        image: DesignSystemAsset.Chart.halfPlay.image,
-        font: .setFont(.t5(weight: .medium)),
-        titleColor: DesignSystemAsset.BlueGrayColor.gray25.color,
-        spacing: 4
-    )
-    private lazy var backHalfPlayButton = HorizontalAlignButton(
-        imagePlacement: .trailing,
-        title: "51 ~ 100위",
-        image: DesignSystemAsset.Chart.halfPlay.image,
-        font: .setFont(.t5(weight: .medium)),
-        titleColor: DesignSystemAsset.BlueGrayColor.gray25.color,
-        spacing: 4
-    )
-    private lazy var wmBottomSheetView = WMBottomSheetView(
-        items: [frontHalfPlayButton, backHalfPlayButton]
-    )
-
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private let refreshControl = UIRefreshControl()
@@ -57,7 +37,6 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     override public func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         input.allSongSelected.onNext(false)
-        hideInlineBottomSheet()
     }
 
     public static func viewController(
@@ -84,16 +63,6 @@ private extension ChartContentViewController {
             .controlEvent(.valueChanged)
             .bind(to: input.refreshPulled)
             .disposed(by: disposeBag)
-
-        Observable.merge(
-            frontHalfPlayButton.rx.tap.map { _ in HalfPlayType.front },
-            backHalfPlayButton.rx.tap.map { _ in HalfPlayType.back }
-        )
-        .do(onNext: { [weak self] _ in
-            self?.hideInlineBottomSheet()
-        })
-        .bind(to: input.halfPlayTapped)
-        .disposed(by: disposeBag)
     }
 
     func outputBind() {
@@ -213,11 +182,21 @@ extension ChartContentViewController: PlayButtonForChartViewDelegate {
             output.showToast.onNext("차트 데이터가 없습니다.")
             return
         }
+
         if event == .allPlay {
-            showInlineBottomSheet(content: wmBottomSheetView)
+            let viewController = ChartPlayPopupViewController()
+            viewController.delegate = self
+            showBottomSheet(content: viewController, size: .fixed(192 + SAFEAREA_BOTTOM_HEIGHT()))
+
         } else {
             input.shufflePlayTapped.onNext(())
         }
+    }
+}
+
+extension ChartContentViewController: ChartPlayPopupViewControllerDelegate {
+    public func playTapped(type: HalfPlayType) {
+        input.halfPlayTapped.onNext(type)
     }
 }
 

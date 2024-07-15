@@ -6,11 +6,6 @@ import RxSwift
 import SongsDomainInterface
 import Utility
 
-enum HalfPlayType {
-    case front
-    case back
-}
-
 public final class ChartContentViewModel: ViewModelType {
     public let type: ChartDateType
     private let disposeBag = DisposeBag()
@@ -112,7 +107,6 @@ public final class ChartContentViewModel: ViewModelType {
         output.indexOfSelectedSongs
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .map { indexOfSelectedSongs, dataSource -> [SongEntity] in
-
                 return indexOfSelectedSongs.map {
                     SongEntity(
                         id: dataSource[$0].id,
