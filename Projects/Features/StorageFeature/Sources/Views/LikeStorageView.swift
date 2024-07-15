@@ -95,17 +95,16 @@ final class LikeStorageView: UIView {
 extension LikeStorageView: LikeStorageStateProtocol {
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
         let isLoggedIn = loginWarningView.isHidden
-        
+
         let warningView = WMWarningView(
             text: "좋아요한 곡이 없습니다."
         )
-        
+
         if !isHidden && isLoggedIn {
             tableView.setBackgroundView(warningView, tableView.frame.height / 3 - 40)
         } else {
             tableView.restore()
         }
-        
     }
 
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
