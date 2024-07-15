@@ -15,7 +15,7 @@ public extension AppComponent {
     var musicDetailFactory: any MusicDetailFactory {
         MusicDetailComponent(parent: self)
     }
-    
+
     var karaokeFactory: any KaraokeFactory {
         KaraokeComponent(parent: self)
     }
