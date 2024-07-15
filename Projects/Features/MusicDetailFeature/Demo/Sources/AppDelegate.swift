@@ -64,10 +64,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 //            selectedIndex: 0
 //        )
 
-        var rootVc = TMPViewController()
 
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: rootVc)
+            UINavigationController(rootViewController: UIViewController())
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
