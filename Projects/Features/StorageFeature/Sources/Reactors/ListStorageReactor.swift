@@ -22,6 +22,7 @@ final class ListStorageReactor: Reactor {
         case addToCurrentPlaylistButtonDidTap
         case deleteButtonDidTap
         case confirmDeleteButtonDidTap
+        case drawFruitButtonDidTap
     }
 
     enum Mutation {
@@ -39,6 +40,7 @@ final class ListStorageReactor: Reactor {
         case showDetail(key: String, isMine: Bool)
         case hideSongCart
         case updateSelectedItemCount(Int)
+        case showDrawFruitPopup
     }
 
     struct State {
@@ -54,6 +56,7 @@ final class ListStorageReactor: Reactor {
         @Pulse var showCreateListPopup: Void?
         @Pulse var showDeletePopup: Int?
         @Pulse var showDetail: (key: String, isMine: Bool)?
+        @Pulse var showDrawFruitPopup: Void?
     }
 
     var initialState: State
@@ -131,6 +134,10 @@ final class ListStorageReactor: Reactor {
 
         case .confirmDeleteButtonDidTap:
             return deleteList()
+            
+        case .drawFruitButtonDidTap:
+            let isLoggedIn = currentState.isLoggedIn
+            return isLoggedIn ? .just(.showDrawFruitPopup) : .just(.showLoginAlert)
         }
     }
 
@@ -210,6 +217,8 @@ final class ListStorageReactor: Reactor {
             newState.selectedItemCount = count
         case let .showDetail(key, isMine):
             newState.showDetail = (key, isMine)
+        case .showDrawFruitPopup:
+            newState.showDrawFruitPopup = ()
         }
 
         return newState
