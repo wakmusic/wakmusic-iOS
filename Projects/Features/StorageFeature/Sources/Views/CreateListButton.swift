@@ -52,7 +52,7 @@ final class CreateListButton: UIButton {
         self.layer.borderWidth = 1
         self.setBackgroundColor(.white.withAlphaComponent(0.4), for: .normal)
         self.setBackgroundColor(.lightGray, for: .selected)
-        self.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
+        self.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor.copy(alpha: 0.4)
         self.clipsToBounds = true
     }
 }

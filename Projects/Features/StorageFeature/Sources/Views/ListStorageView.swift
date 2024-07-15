@@ -44,8 +44,6 @@ final class ListStorageView: UIView {
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
-    fileprivate let emptyWarningView = EmptyWarningView(text: "좋아요한 곡이 없습니다.")
-
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
@@ -73,7 +71,6 @@ final class ListStorageView: UIView {
             createListButton,
             tableView,
             drawFruitButton,
-            emptyWarningView,
             loginWarningView,
             activityIndicator
         )
@@ -94,12 +91,6 @@ final class ListStorageView: UIView {
             $0.height.equalTo(56)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-        emptyWarningView.snp.makeConstraints {
-            $0.width.equalTo(164)
-            $0.height.equalTo(176)
-            $0.top.equalTo(createListButton.snp.bottom).offset(80)
-            $0.centerX.equalToSuperview()
         }
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
@@ -148,7 +139,16 @@ final class ListStorageView: UIView {
 extension ListStorageView: ListStorageStateProtocol {
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
         let isLoggedIn = loginWarningView.isHidden
-        self.emptyWarningView.isHidden = isLoggedIn ? isHidden : true
+
+        let warningView = WMWarningView(
+            text: "리스트가 없습니다."
+        )
+
+        if !isHidden && isLoggedIn {
+            tableView.setBackgroundView(warningView, tableView.frame.height / 3 - 40)
+        } else {
+            tableView.restore()
+        }
     }
 
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
