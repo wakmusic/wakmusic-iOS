@@ -1,11 +1,9 @@
 import Foundation
 
-
 enum KaraokeKind {
     case KY
     case TJ
-    
-    
+
     var koreanTitle: String {
         switch self {
         case .KY:
@@ -14,5 +12,4 @@ enum KaraokeKind {
             "태진"
         }
     }
-    
 }

@@ -63,26 +63,23 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 //            playlist: playListModel,
 //            selectedIndex: 0
 //        )
-        
+
         let karaokeModel = PlaylistModel.SongModel.KaraokeNumber(tj: 84250, ky: 84250)
-        
+
         var rootVc = UIViewController()
-        
+
         var button: UIButton = UIButton().then {
             $0.backgroundColor = .red
         }
-        
+
         let vc = KaraokeViewController(karaoke: karaokeModel)
-        
+
         rootVc.view.addSubview(button)
-        
-        
-        
+
         button.addAction {
-            vc.showBottomSheet(content: vc, size: .fixed(268 + SAFEAREA_BOTTOM_HEIGHT() ))
+            vc.showBottomSheet(content: vc, size: .fixed(268 + SAFEAREA_BOTTOM_HEIGHT()))
         }
-        
-   
+
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: rootVc)
         )
