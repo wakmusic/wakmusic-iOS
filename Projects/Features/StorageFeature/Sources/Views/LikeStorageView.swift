@@ -36,8 +36,6 @@ final class LikeStorageView: UIView {
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
-    fileprivate let emptyWarningView = EmptyWarningView(text: "좋아요한 곡이 없습니다.")
-
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
@@ -61,7 +59,6 @@ final class LikeStorageView: UIView {
     func addView() {
         self.addSubviews(
             tableView,
-            emptyWarningView,
             loginWarningView,
             activityIndicator
         )
@@ -72,12 +69,6 @@ final class LikeStorageView: UIView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(52)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-        emptyWarningView.snp.makeConstraints {
-            $0.width.equalTo(164)
-            $0.height.equalTo(176)
-            $0.top.equalTo(tableView.snp.top).offset(148)
-            $0.centerX.equalToSuperview()
         }
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
@@ -95,7 +86,6 @@ final class LikeStorageView: UIView {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         tableView.refreshControl = refreshControl
         tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
-        emptyWarningView.isHidden = true
         loginWarningView.isHidden = true
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
@@ -105,7 +95,16 @@ final class LikeStorageView: UIView {
 extension LikeStorageView: LikeStorageStateProtocol {
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
         let isLoggedIn = loginWarningView.isHidden
-        self.emptyWarningView.isHidden = isLoggedIn ? isHidden : true
+
+        let warningView = WMWarningView(
+            text: "좋아요한 곡이 없습니다."
+        )
+
+        if !isHidden && isLoggedIn {
+            tableView.setBackgroundView(warningView, tableView.frame.height / 3 - 40)
+        } else {
+            tableView.restore()
+        }
     }
 
     func updateIsEnabledRefreshControl(isEnabled: Bool) {
