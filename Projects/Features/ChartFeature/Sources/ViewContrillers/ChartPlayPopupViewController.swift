@@ -1,8 +1,8 @@
 import DesignSystem
-import UIKit
+import LogManager
 import SnapKit
 import Then
-import LogManager
+import UIKit
 
 public protocol ChartPlayPopupViewControllerDelegate: AnyObject {
     func playTapped(type: HalfPlayType)
