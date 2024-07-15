@@ -134,7 +134,7 @@ final class ListStorageReactor: Reactor {
 
         case .confirmDeleteButtonDidTap:
             return deleteList()
-            
+
         case .drawFruitButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
             return isLoggedIn ? .just(.showDrawFruitPopup) : .just(.showLoginAlert)
