@@ -64,7 +64,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 //            selectedIndex: 0
 //        )
 
-
         let viewController = Inject.ViewControllerHost(
             UINavigationController(rootViewController: UIViewController())
         )
