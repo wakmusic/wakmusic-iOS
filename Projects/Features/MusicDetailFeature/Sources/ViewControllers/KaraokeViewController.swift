@@ -10,7 +10,8 @@ final class KaraokeViewController: BaseViewController {
         text: "노래방",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
         font: .t2(weight: .bold),
-        alignment: .center
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t2(weight: .bold).lineHeight
     )
 
     private let karaokeInfoView: KaraokeInfoView = KaraokeInfoView()
