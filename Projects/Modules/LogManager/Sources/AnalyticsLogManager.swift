@@ -79,22 +79,6 @@ public extension LogManager {
         )
     }
 
-    static func setDefaultParameters(
-        params: [String: Any],
-        file: String = #file,
-        function: String = #function,
-        line: Int = #line
-    ) {
-        Analytics.setDefaultEventParameters(params)
-
-        LogManager.printDebug(
-            "Set Analytics Default Parameters :\n\(params)",
-            file: file,
-            function: function,
-            line: line
-        )
-    }
-
     static func printDebug(
         _ message: Any,
         file: String = #file,

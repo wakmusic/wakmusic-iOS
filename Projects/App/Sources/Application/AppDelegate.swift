@@ -18,7 +18,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-        setAnalyticsDefaultParameters()
         if let userInfo = PreferenceManager.userInfo {
             LogManager.setUserID(userID: userInfo.decryptedID)
         } else {
@@ -53,36 +52,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
-}
-
-private extension AppDelegate {
-    func setAnalyticsDefaultParameters() {
-        let platform = "iOS"
-        let os = "iOS \(UIDevice.current.systemVersion)"
-        let device = Device().modelName
-        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
-
-        let currentLocale = Locale.current
-        let region = if #available(iOS 16.0, *) {
-            currentLocale.region?.identifier ?? ""
-        } else {
-            currentLocale.regionCode ?? "unknown"
-        }
-        let language = if #available(iOS 16.0, *) {
-            currentLocale.language.languageCode?.identifier ?? "unknown"
-        } else {
-            currentLocale.languageCode ?? "unknown"
-        }
-
-        LogManager.setDefaultParameters(params: [
-            "platform": platform,
-            "os": os,
-            "device": device,
-            "version": version,
-            "region": region,
-            "language": language
-        ])
-    }
 }
 
 #if DEBUG
