@@ -1,4 +1,5 @@
-import Foundation
+import UIKit
+import DesignSystem
 
 enum KaraokeKind {
     case KY
@@ -10,6 +11,14 @@ enum KaraokeKind {
             "금영"
         case .TJ:
             "태진"
+        }
+    }
+    var logoImage: UIImage {
+        switch self {
+        case .KY:
+            return DesignSystemAsset.MusicDetail.ky.image
+        case .TJ:
+            return DesignSystemAsset.MusicDetail.tj.image
         }
     }
 }

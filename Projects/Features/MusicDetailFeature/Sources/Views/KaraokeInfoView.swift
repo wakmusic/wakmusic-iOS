@@ -4,7 +4,7 @@ import Then
 import UIKit
 
 private protocol KaraokeStateProtocol {
-    func update(model: PlaylistModel.SongModel.KaraokeNumber)
+    func update(ky: Int?, tj: Int?)
 }
 
 final class KaraokeInfoView: UIView {
@@ -53,8 +53,8 @@ final class KaraokeInfoView: UIView {
 }
 
 extension KaraokeInfoView: KaraokeStateProtocol {
-    func update(model: PlaylistModel.SongModel.KaraokeNumber) {
-        kyKaraokeView.update(number: model.ky, kind: .KY)
-        tyKaraokeView.update(number: model.tj, kind: .TJ)
+    func update(ky: Int?, tj: Int?) {
+        kyKaraokeView.update(number: ky, kind: .KY)
+        tyKaraokeView.update(number: tj, kind: .TJ)
     }
 }

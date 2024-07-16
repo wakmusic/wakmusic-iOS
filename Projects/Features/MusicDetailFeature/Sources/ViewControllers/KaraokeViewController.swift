@@ -4,8 +4,9 @@ import UIKit
 import Utility
 
 final class KaraokeViewController: BaseViewController {
-    private let model: PlaylistModel.SongModel.KaraokeNumber
-
+    private var ky: Int?
+    private var tj: Int?
+    
     private let titleLabel: WMLabel = WMLabel(
         text: "노래방",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -25,8 +26,9 @@ final class KaraokeViewController: BaseViewController {
         $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
     }
 
-    init(model: PlaylistModel.SongModel.KaraokeNumber) {
-        self.model = model
+    init(ky: Int?, tj: Int?) {
+        self.ky = ky
+        self.tj = tj
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -71,7 +73,7 @@ extension KaraokeViewController {
 
     private func configureUI() {
         self.view.backgroundColor = .white
-        karaokeInfoView.update(model: model)
+        karaokeInfoView.update(ky: ky, tj: tj)
     }
 
     private func bindAction() {

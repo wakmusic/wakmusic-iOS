@@ -1,5 +1,5 @@
 import UIKit
 
 public protocol KaraokeFactory {
-    func makeViewController(tj: Int?, ky: Int?) -> UIViewController
+    func makeViewController(ky: Int?, tj: Int?) -> UIViewController
 }

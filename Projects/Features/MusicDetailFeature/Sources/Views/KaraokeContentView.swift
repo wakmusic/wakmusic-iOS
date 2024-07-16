@@ -72,7 +72,7 @@ final class KaraokeContentView: UIView {
 
 extension KaraokeContentView: KaraokeContentStateProtocol {
     func update(number: Int?, kind: KaraokeKind) {
-        imageView.image = kind == .KY ? DesignSystemAsset.MusicDetail.ky.image : DesignSystemAsset.MusicDetail.tj.image
+        imageView.image = kind.logoImage
         titleLabel.text = kind.koreanTitle
 
         guard let number = number else {
