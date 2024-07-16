@@ -189,7 +189,7 @@ extension NewSongsContentViewController: SongCartViewDelegate {
         case .addSong:
             let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
             let viewController = containSongsFactory.makeView(songs: songs)
-            viewController.modalPresentationStyle = .fullScreen
+            viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
