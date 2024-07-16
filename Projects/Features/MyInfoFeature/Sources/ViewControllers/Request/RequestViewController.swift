@@ -50,7 +50,7 @@ public final class RequestViewController: UIViewController, ViewControllerFromSt
 
     @IBAction func moveQuestionAction(_ sender: Any) {
         let vc = questionFactory.makeView().wrapNavigationController
-        vc.modalPresentationStyle = .overFullScreen
+        vc.modalPresentationStyle = .fullScreen
         self.present(vc, animated: true)
     }
 

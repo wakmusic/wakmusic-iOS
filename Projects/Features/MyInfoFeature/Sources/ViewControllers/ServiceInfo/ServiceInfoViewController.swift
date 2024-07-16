@@ -59,11 +59,11 @@ extension ServiceInfoViewController {
                 switch model.identifier {
                 case .termsOfUse:
                     let vc = ContractViewController.viewController(type: .service)
-                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalPresentationStyle = .fullScreen
                     owner.present(vc, animated: true)
                 case .privacy:
                     let vc = ContractViewController.viewController(type: .privacy)
-                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalPresentationStyle = .fullScreen
                     owner.present(vc, animated: true)
                 case .openSourceLicense:
                     let vc = owner.openSourceLicenseFactory.makeView()

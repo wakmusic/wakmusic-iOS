@@ -146,7 +146,7 @@ extension MainTabBarViewController: NoticePopupViewControllerDelegate {
     public func noticeTapped(model: FetchNoticeEntity) {
         if model.thumbnail.link.isEmpty {
             let viewController = noticeDetailFactory.makeView(model: model)
-            viewController.modalPresentationStyle = .overFullScreen
+            viewController.modalPresentationStyle = .fullScreen
             present(viewController, animated: true)
 
         } else {

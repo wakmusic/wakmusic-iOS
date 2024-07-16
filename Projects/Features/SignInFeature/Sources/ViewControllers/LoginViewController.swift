@@ -130,7 +130,7 @@ private extension LoginViewController {
         serviceButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .service)
-                vc.modalPresentationStyle = .overFullScreen
+                vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -138,7 +138,7 @@ private extension LoginViewController {
         privacyButton.rx.tap
             .bind(with: self) { owner, _ in
                 let vc = ContractViewController.viewController(type: .privacy)
-                vc.modalPresentationStyle = .overFullScreen
+                vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
             }
             .disposed(by: disposeBag)

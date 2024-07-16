@@ -77,11 +77,11 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .serviceTerms:
                     let vc = owner.serviceTermsFactory.makeView()
-                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalPresentationStyle = .fullScreen
                     owner.present(vc, animated: true)
                 case .privacy:
                     let vc = owner.privacyFactory.makeView()
-                    vc.modalPresentationStyle = .overFullScreen
+                    vc.modalPresentationStyle = .fullScreen
                     owner.present(vc, animated: true)
                 case .openSource:
                     let vc = owner.openSourceLicenseFactory.makeView()
