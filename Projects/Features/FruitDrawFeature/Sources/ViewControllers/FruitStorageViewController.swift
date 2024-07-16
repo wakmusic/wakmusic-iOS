@@ -143,8 +143,8 @@ private extension FruitStorageViewController {
 private extension FruitStorageViewController {
     func addSubViews() {
         view.addSubviews(
-            navigationBarView,
             collectionView,
+            navigationBarView,
             activityIndicator
         )
         navigationBarView.setLeftViews([backButton])
@@ -159,8 +159,7 @@ private extension FruitStorageViewController {
         }
 
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(navigationBarView.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.edges.equalToSuperview()
         }
 
         activityIndicator.snp.makeConstraints {
@@ -182,7 +181,7 @@ private extension FruitStorageViewController {
     func configureUI() {
         view.backgroundColor = .white
         collectionView.register(FruitListCell.self, forCellWithReuseIdentifier: "\(FruitListCell.self)")
-        collectionView.contentInset = .init(top: 0, left: 0, bottom: PLAYER_HEIGHT(), right: 0)
+        collectionView.contentInset = .init(top: 48, left: 0, bottom: 0, right: 0)
         collectionView.showsVerticalScrollIndicator = false
         activityIndicator.startAnimating()
     }
@@ -195,7 +194,10 @@ extension FruitStorageViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         let width: CGFloat = APP_WIDTH()
-        let height: CGFloat = (collectionView.frame.height - 24 - 40 - (32.0.correctTop * 4)) / 5
+        let height: CGFloat = (
+            collectionView.frame.height
+            - 24 - 40 - STATUS_BAR_HEGHIT() - 48 - (32.0.correctTop * 4)
+        ) / 5
         return .init(width: width, height: height)
     }
 }
