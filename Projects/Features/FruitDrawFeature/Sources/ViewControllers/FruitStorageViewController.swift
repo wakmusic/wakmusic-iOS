@@ -196,7 +196,7 @@ extension FruitStorageViewController: UICollectionViewDelegateFlowLayout {
         let width: CGFloat = APP_WIDTH()
         let height: CGFloat = (
             collectionView.frame.height
-            - 24 - 40 - STATUS_BAR_HEGHIT() - 48 - (32.0.correctTop * 4)
+                - 24 - 40 - STATUS_BAR_HEGHIT() - 48 - (32.0.correctTop * 4)
         ) / 5
         return .init(width: width, height: height)
     }
