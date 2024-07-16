@@ -42,7 +42,6 @@
         func configure(log: any AnalyticsLogType) {
             logTitleLabel.text = log.name
             logParametersLabel.text = log.params
-                .filter { !($0.key == "date" || $0.key == "timestamp") }
                 .map { "- \($0) : \($1)" }
                 .joined(separator: "\n")
         }
