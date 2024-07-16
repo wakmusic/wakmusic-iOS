@@ -1,5 +1,5 @@
-import UIKit
 import DesignSystem
+import UIKit
 
 enum KaraokeKind {
     case KY
@@ -13,6 +13,7 @@ enum KaraokeKind {
             "태진"
         }
     }
+
     var logoImage: UIImage {
         switch self {
         case .KY:

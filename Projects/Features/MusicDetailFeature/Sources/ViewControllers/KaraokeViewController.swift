@@ -6,7 +6,7 @@ import Utility
 final class KaraokeViewController: BaseViewController {
     private var ky: Int?
     private var tj: Int?
-    
+
     private let titleLabel: WMLabel = WMLabel(
         text: "노래방",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
