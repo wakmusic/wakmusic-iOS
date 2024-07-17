@@ -33,4 +33,5 @@ public extension TargetDependency.SPM {
     static let Inject = TargetDependency.external(name: "Inject")
     static let Realm = TargetDependency.external(name: "Realm")
     static let RealmSwift = TargetDependency.external(name: "RealmSwift")
+    static let RxGesture = TargetDependency.external(name: "RxGesture")
 }

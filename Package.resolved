@@ -289,6 +289,15 @@
       }
     },
     {
+      "identity" : "rxgesture",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RxSwiftCommunity/RxGesture.git",
+      "state" : {
+        "revision" : "1b137c576b4aaaab949235752278956697c9e4a0",
+        "version" : "4.0.4"
+      }
+    },
+    {
       "identity" : "rxkeyboard",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/RxSwiftCommunity/RxKeyboard.git",
