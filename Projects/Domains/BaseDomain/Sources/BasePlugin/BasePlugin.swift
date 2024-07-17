@@ -20,10 +20,8 @@ public struct BasePlugin: PluginType {
         var newRequest = request
 
         if request.httpMethod == "GET" {
-            guard let url = request.url else {
-                return request
-            }
-            guard var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            guard let url = request.url,
+                  var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 return request
             }
 
