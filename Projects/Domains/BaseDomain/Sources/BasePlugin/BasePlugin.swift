@@ -14,7 +14,8 @@ public struct BasePlugin: PluginType {
         _ request: URLRequest,
         target: TargetType
     ) -> URLRequest {
-        guard let deviceInfoTypes = (target as? DeviceInfoSendable)?.deviceInfoTypes else {
+        guard let deviceInfoTypes = (target as? DeviceInfoSendable)?.deviceInfoTypes,
+            deviceInfoTypes.isEmpty == false else {
             return request
         }
         var newRequest = request
