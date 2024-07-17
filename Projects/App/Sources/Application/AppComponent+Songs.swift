@@ -16,6 +16,10 @@ public extension AppComponent {
         MusicDetailComponent(parent: self)
     }
 
+    var karaokeFactory: any KaraokeFactory {
+        KaraokeComponent(parent: self)
+    }
+
     var newSongsComponent: NewSongsComponent {
         NewSongsComponent(parent: self)
     }
