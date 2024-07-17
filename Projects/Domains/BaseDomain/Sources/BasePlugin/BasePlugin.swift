@@ -84,7 +84,7 @@ private extension BasePlugin {
         if keychain.load(type: .deviceID).isEmpty {
             let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
             keychain.save(type: .deviceID, value: uuidString)
-            return "\(keychain.load(type: .deviceID))"
+            return uuidString
 
         } else {
             return "\(keychain.load(type: .deviceID))"
