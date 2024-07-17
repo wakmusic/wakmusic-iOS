@@ -35,9 +35,9 @@ public struct BasePlugin: PluginType {
                 case .version:
                     value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
                 case .deviceID:
-                    value = getDeviceID()
+                    value = fetchDeviceID()
                 case .pushToken:
-                    value = getPushToken()
+                    value = fetchPushToken()
                 }
                 let queryItem = URLQueryItem(name: type.apiKey, value: value)
                 queryItems.append(queryItem)
@@ -60,9 +60,9 @@ public struct BasePlugin: PluginType {
                 case .version:
                     value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
                 case .deviceID:
-                    value = getDeviceID()
+                    value = fetchDeviceID()
                 case .pushToken:
-                    value = getPushToken()
+                    value = fetchPushToken()
                 }
                 json[type.apiKey] = value
             }
@@ -78,19 +78,19 @@ public struct BasePlugin: PluginType {
 }
 
 private extension BasePlugin {
-    func getDeviceID() -> String {
+    func fetchDeviceID() -> String {
         if keychain.load(type: .deviceID).isEmpty {
             let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
             keychain.save(type: .deviceID, value: uuidString)
             return uuidString
 
         } else {
-            return "\(keychain.load(type: .deviceID))"
+            return keychain.load(type: .deviceID)
         }
     }
 
     #warning("FCM SDK 셋업 이후 작업")
-    func getPushToken() -> String {
+    func fetchPushToken() -> String {
         return ""
     }
 }
