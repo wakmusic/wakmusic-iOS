@@ -1,6 +1,6 @@
-public enum DeviceInfoType: String {
+public enum BaseInfoType: String {
     case os
-    case version
+    case appVersion
     case deviceID
     case pushToken
 
@@ -8,7 +8,7 @@ public enum DeviceInfoType: String {
         switch self {
         case .os:
             return "os"
-        case .version:
+        case .appVersion:
             return "version"
         case .deviceID:
             return "uniqueDeviceId"
@@ -18,6 +18,6 @@ public enum DeviceInfoType: String {
     }
 }
 
-public protocol DeviceInfoSendable {
-    var deviceInfoTypes: [DeviceInfoType] { get }
+public protocol BaseInfoSendable {
+    var baseInfoTypes: [BaseInfoType] { get }
 }

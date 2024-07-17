@@ -12,7 +12,7 @@ import KeychainModule
 import Moya
 import Utility
 
-public protocol WMAPI: TargetType, JwtAuthorizable, DeviceInfoSendable {
+public protocol WMAPI: TargetType, JwtAuthorizable, BaseInfoSendable {
     var domain: WMDomain { get }
     var urlPath: String { get }
     var errorMap: [Int: WMError] { get }
@@ -35,7 +35,7 @@ public extension WMAPI {
         return .successCodes
     }
 
-    var deviceInfoTypes: [DeviceInfoType] {
+    var baseInfoTypes: [BaseInfoType] {
         return []
     }
 }

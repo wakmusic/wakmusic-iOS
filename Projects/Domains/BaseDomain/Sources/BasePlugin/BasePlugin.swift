@@ -14,8 +14,8 @@ public struct BasePlugin: PluginType {
         _ request: URLRequest,
         target: TargetType
     ) -> URLRequest {
-        guard let deviceInfoTypes = (target as? DeviceInfoSendable)?.deviceInfoTypes,
-              deviceInfoTypes.isEmpty == false else {
+        guard let baseInfoTypes = (target as? BaseInfoSendable)?.baseInfoTypes,
+              baseInfoTypes.isEmpty == false else {
             return request
         }
         var newRequest = request
@@ -28,7 +28,7 @@ public struct BasePlugin: PluginType {
 
             var queryItems: [URLQueryItem] = urlComponents.queryItems ?? []
 
-            for type in deviceInfoTypes {
+            for type in baseInfoTypes {
                 let queryItem = URLQueryItem(name: type.apiKey, value: typeToValue(with: type))
                 queryItems.append(queryItem)
             }
@@ -42,7 +42,7 @@ public struct BasePlugin: PluginType {
                 return request
             }
 
-            for type in deviceInfoTypes {
+            for type in baseInfoTypes {
                 json[type.apiKey] = typeToValue(with: type)
             }
 
@@ -57,11 +57,11 @@ public struct BasePlugin: PluginType {
 }
 
 private extension BasePlugin {
-    func typeToValue(with type: DeviceInfoType) -> String {
+    func typeToValue(with type: BaseInfoType) -> String {
         switch type {
         case .os:
             return "ios"
-        case .version:
+        case .appVersion:
             return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         case .deviceID:
             return fetchDeviceID()

@@ -42,8 +42,8 @@ extension AppAPI: WMAPI {
         return .none
     }
 
-    public var deviceInfoTypes: [DeviceInfoType] {
-        return [.os, .version]
+    public var baseInfoTypes: [BaseInfoType] {
+        return [.os, .appVersion]
     }
 
     public var errorMap: [Int: WMError] {

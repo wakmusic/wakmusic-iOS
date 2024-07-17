@@ -41,7 +41,7 @@ extension NotificationAPI: WMAPI {
         }
     }
 
-    public var deviceInfoTypes: [DeviceInfoType] {
+    public var baseInfoTypes: [BaseInfoType] {
         switch self {
         case let .updateNotificationToken(type):
             return type == .update ? [.deviceID, .pushToken] : [.deviceID]
