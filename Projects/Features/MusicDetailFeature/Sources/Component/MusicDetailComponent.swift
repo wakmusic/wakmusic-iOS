@@ -1,3 +1,4 @@
+import BaseFeature
 import BaseFeatureInterface
 import LyricHighlightingFeatureInterface
 import MusicDetailFeatureInterface
@@ -10,6 +11,7 @@ public protocol MusicDetailDependency: Dependency {
     var fetchSongUseCase: any FetchSongUseCase { get }
     var lyricHighlightingFactory: any LyricHighlightingFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
 }
 
 public final class MusicDetailComponent: Component<MusicDetailDependency>, MusicDetailFactory {
@@ -23,7 +25,8 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
         let viewController = MusicDetailViewController(
             reactor: reactor,
             lyricHighlightingFactory: dependency.lyricHighlightingFactory,
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            playlistPresenterGlobalState: dependency.playlistPresenterGlobalState
         )
 
         return UINavigationController(

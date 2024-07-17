@@ -8,7 +8,7 @@ public protocol MainContainerDependency: Dependency {
     var bottomTabBarComponent: BottomTabBarComponent { get }
     var mainTabBarComponent: MainTabBarComponent { get }
     var playlistFactory: any PlaylistFactory { get }
-    var playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol { get }
+    var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
 }
 
 public final class MainContainerComponent: Component<MainContainerDependency> {

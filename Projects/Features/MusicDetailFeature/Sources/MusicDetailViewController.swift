@@ -13,14 +13,17 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     private let musicDetailView = MusicDetailView()
     private let lyricHighlightingFactory: any LyricHighlightingFactory
     private let containSongsFactory: any ContainSongsFactory
+    private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
     init(
         reactor: MusicDetailReactor,
         lyricHighlightingFactory: any LyricHighlightingFactory,
-        containSongsFactory: any ContainSongsFactory
+        containSongsFactory: any ContainSongsFactory,
+        playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
         self.containSongsFactory = containSongsFactory
+        self.playlistPresenterGlobalState = playlistPresenterGlobalState
         super.init(reactor: reactor)
     }
 
@@ -100,6 +103,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.navigateLyricsHighlighing(model: model)
                 case let .musicPick(id):
                     owner.presentMusicPick(id: id)
+                case .playlist:
+                    owner.presentPlaylist()
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -187,6 +192,12 @@ private extension MusicDetailViewController {
         )
         viewController.modalPresentationStyle = .fullScreen
         self.present(viewController, animated: true)
+    }
+
+    func presentPlaylist() {
+        self.dismiss(animated: true) { [playlistPresenterGlobalState] in
+            playlistPresenterGlobalState.presentPlayList()
+        }
     }
 
     func dismiss() {
