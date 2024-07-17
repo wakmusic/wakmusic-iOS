@@ -86,7 +86,7 @@ private extension NoticeViewController {
         output.goNoticeDetailScene
             .bind(with: self) { owner, model in
                 let viewController = owner.noticeDetailFactory.makeView(model: model)
-                viewController.modalPresentationStyle = .overFullScreen
+                viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)
             }
             .disposed(by: disposeBag)

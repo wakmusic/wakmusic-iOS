@@ -23,7 +23,7 @@ public final class FruitInfoPopupViewController: UIViewController {
     }
 
     private let noteImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
     }
 
@@ -109,12 +109,19 @@ private extension FruitInfoPopupViewController {
         view.backgroundColor = .clear
         popupContentView.layer.cornerRadius = 24
         popupContentView.clipsToBounds = true
-        descriptionLabel.text = item.name
-        noteImageView.kf.setImage(
-            with: URL(string: item.imageURL),
-            placeholder: nil,
-            options: [.transition(.fade(0.2))]
-        )
+
+        if item.quantity == -1 {
+            descriptionLabel.text = "? 음표"
+            noteImageView.image = DesignSystemAsset.FruitDraw.unidentifiedNoteBig.image
+
+        } else {
+            descriptionLabel.text = item.name
+            noteImageView.kf.setImage(
+                with: URL(string: item.imageURL),
+                placeholder: nil,
+                options: [.transition(.fade(0.2))]
+            )
+        }
     }
 
     func addAction() {

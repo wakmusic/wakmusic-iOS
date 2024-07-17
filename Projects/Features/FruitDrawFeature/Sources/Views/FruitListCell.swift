@@ -84,11 +84,11 @@ private extension FruitListCell {
 
     @objc private func imageViewTapped(_ sender: UITapGestureRecognizer) {
         if let tappedImageView = sender.view {
-            if tappedImageView == firstNoteImageView, items[0].quantity != -1 {
+            if tappedImageView == firstNoteImageView {
                 delegate?.itemSelected(item: items[0])
-            } else if tappedImageView == secondNoteImageView, items[1].quantity != -1 {
+            } else if tappedImageView == secondNoteImageView {
                 delegate?.itemSelected(item: items[1])
-            } else if tappedImageView == thirdNoteImageView, items[2].quantity != -1 {
+            } else if tappedImageView == thirdNoteImageView {
                 delegate?.itemSelected(item: items[2])
             }
         }
