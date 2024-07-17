@@ -16,6 +16,8 @@ public final class FruitStorageViewController: UIViewController {
 
     private let navigationBarView = WMNavigationBarView()
 
+    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+
     private let backButton = UIButton(type: .system).then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
             .withTintColor(DesignSystemAsset.PrimaryColorV2.white.color, renderingMode: .alwaysOriginal)
@@ -144,6 +146,7 @@ private extension FruitStorageViewController {
     func addSubViews() {
         view.addSubviews(
             collectionView,
+            visualEffectView,
             navigationBarView,
             activityIndicator
         )
@@ -156,6 +159,12 @@ private extension FruitStorageViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
+        }
+
+        visualEffectView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(navigationBarView.snp.bottom)
         }
 
         collectionView.snp.makeConstraints {
@@ -209,5 +218,13 @@ extension FruitStorageViewController: FruitListCellDelegate {
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         present(viewController, animated: true)
+    }
+}
+
+extension FruitStorageViewController: UIScrollViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        UIView.animate(withDuration: 0.1) {
+            self.visualEffectView.alpha = scrollView.contentOffset.y > -(STATUS_BAR_HEGHIT() + 48) ? 1 : 0
+        }
     }
 }
