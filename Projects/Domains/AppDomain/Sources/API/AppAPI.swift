@@ -34,18 +34,16 @@ extension AppAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case .fetchAppCheck:
-            return .requestParameters(
-                parameters: [
-                    "os": "ios",
-                    "version": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-                ],
-                encoding: URLEncoding.queryString
-            )
+            return .requestPlain
         }
     }
 
     public var jwtTokenType: JwtTokenType {
         return .none
+    }
+
+    public var deviceInfoTypes: [DeviceInfoType] {
+        return [.os, .version]
     }
 
     public var errorMap: [Int: WMError] {

@@ -16,6 +16,8 @@ extension TokenRefreshAPI: WMAPI {
 
     var jwtTokenType: JwtTokenType { .refreshToken }
 
+    var deviceInfoTypes: [DeviceInfoType] { [] }
+
     var errorMap: [Int: WMError] {
         [
             400: .badRequest,

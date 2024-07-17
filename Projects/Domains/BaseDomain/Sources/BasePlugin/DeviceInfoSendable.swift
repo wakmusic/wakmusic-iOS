@@ -19,5 +19,5 @@ public enum DeviceInfoType: String {
 }
 
 public protocol DeviceInfoSendable {
-    var deviceInfoType: DeviceInfoType { get }
+    var deviceInfoTypes: [DeviceInfoType] { get }
 }
