@@ -1,5 +1,5 @@
 import UIKit
 
 public protocol MusicDetailFactory {
-    func makeViewController() -> UIViewController
+    func makeViewController(songIDs: [String], selectedID: String) -> UIViewController
 }

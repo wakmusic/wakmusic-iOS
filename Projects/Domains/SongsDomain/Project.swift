@@ -18,6 +18,12 @@ let project = Project.module(
                 .domain(target: .SongsDomain, type: .interface)
             ]
         ),
+        .testing(
+            module: .domain(.SongsDomain),
+            dependencies: [
+                .domain(target: .SongsDomain, type: .interface)
+            ]
+        ),
         .tests(
             module: .domain(.SongsDomain),
             dependencies: [.domain(target: .SongsDomain)]

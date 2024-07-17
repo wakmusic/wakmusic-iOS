@@ -9,9 +9,16 @@
 import ChartDomainInterface
 import DesignSystem
 import Kingfisher
+import RxGesture
+import RxSwift
 import SnapKit
 import UIKit
 import Utility
+
+protocol HomeChartCellDelegate: AnyObject {
+    func thumbnailDidTap(model: ChartRankingEntity)
+    func playButtonDidTap(model: ChartRankingEntity)
+}
 
 class HomeChartCell: UITableViewCell {
     @IBOutlet weak var rankLabel: UILabel!
@@ -22,16 +29,22 @@ class HomeChartCell: UITableViewCell {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var playImageView: UIImageView!
 
+    var delegate: (any HomeChartCellDelegate)?
+    private var model: ChartRankingEntity?
+    private let disposeBag = DisposeBag()
+
     override func awakeFromNib() {
         super.awakeFromNib()
         albumImageView.layer.cornerRadius = 4
         albumImageView.contentMode = .scaleAspectFill
         playImageView.image = DesignSystemAsset.Home.playSmall.image
+        bind()
     }
 }
 
 extension HomeChartCell {
     public func update(model: ChartRankingEntity, index: Int) {
+        self.model = model
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
@@ -122,5 +135,25 @@ extension HomeChartCell {
             rankImageView.isHidden = false
             rankChangedLabel.isHidden = false
         }
+    }
+}
+
+private extension HomeChartCell {
+    func bind() {
+        albumImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind { [weak self] _ in
+                guard let model = self?.model else { return }
+                self?.delegate?.thumbnailDidTap(model: model)
+            }
+            .disposed(by: disposeBag)
+
+        playImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind { [weak self] _ in
+                guard let model = self?.model else { return }
+                self?.delegate?.playButtonDidTap(model: model)
+            }
+            .disposed(by: disposeBag)
     }
 }

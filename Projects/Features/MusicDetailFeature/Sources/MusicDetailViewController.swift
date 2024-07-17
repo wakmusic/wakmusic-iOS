@@ -1,6 +1,7 @@
 import BaseFeature
 import DesignSystem
 import LogManager
+import LyricHighlightingFeatureInterface
 import RxSwift
 import SnapKit
 import Then
@@ -9,6 +10,15 @@ import Utility
 
 final class MusicDetailViewController: BaseReactorViewController<MusicDetailReactor> {
     private let musicDetailView = MusicDetailView()
+    private let lyricHighlightingFactory: any LyricHighlightingFactory
+
+    init(
+        reactor: MusicDetailReactor,
+        lyricHighlightingFactory: any LyricHighlightingFactory
+    ) {
+        self.lyricHighlightingFactory = lyricHighlightingFactory
+        super.init(reactor: reactor)
+    }
 
     override func loadView() {
         view = musicDetailView
@@ -24,13 +34,15 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     }
 
     override func bindState(reactor: MusicDetailReactor) {
-        let sharedState = reactor.state.share(replay: 8)
+        let sharedState = reactor.state
+            .subscribe(on: MainScheduler.asyncInstance)
+            .share(replay: 2)
         let youtubeURLGenerator = YoutubeURLGenerator()
 
-        sharedState.map(\.songs)
+        sharedState.map(\.songIDs)
             .distinctUntilChanged()
             .map { songs in
-                songs.map { youtubeURLGenerator.generateHDThumbnailURL(id: $0.videoID) }
+                songs.map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
             }
             .bind(onNext: musicDetailView.updateThumbnails(thumbnailURLs:))
             .disposed(by: disposeBag)
@@ -47,6 +59,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
 
         sharedState
             .compactMap(\.selectedSong)
+            .distinctUntilChanged()
             .bind(with: self) { owner, song in
                 owner.musicDetailView.updateTitle(title: song.title)
                 owner.musicDetailView.updateArtist(artist: song.artistString)
@@ -58,7 +71,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         sharedState
-            .filter { !$0.songs.isEmpty }
+            .filter { !$0.songIDs.isEmpty }
             .map(\.selectedIndex)
             .skip(1)
             .distinctUntilChanged()
@@ -66,7 +79,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         sharedState
-            .filter { !$0.songs.isEmpty }
+            .filter { !$0.songIDs.isEmpty }
             .map(\.selectedIndex)
             .take(1)
             .bind(onNext: musicDetailView.updateInitialSelectedIndex(index:))
@@ -79,6 +92,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.openYoutube(id: id)
                 case let .credit(id):
                     owner.navigateCredits(id: id)
+                case let .lyricsHighlighting(model):
+                    owner.navigateLyricsHighlighing(model: model)
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -87,6 +102,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     }
 
     override func bindAction(reactor: MusicDetailReactor) {
+        self.rx.methodInvoked(#selector(viewDidLoad))
+            .map { _ in Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         musicDetailView.rx.prevMusicButtonDidTap
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.prevButtonDidTap }
@@ -143,22 +163,16 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
 
 private extension MusicDetailViewController {
     func openYoutube(id: String) {
-        let youtubeURLGenerator = YoutubeURLGenerator()
-
-        guard
-            let youtubeAppURL = URL(string: youtubeURLGenerator.generateYoutubeVideoAppURL(id: id))
-        else { return }
-        if UIApplication.shared.canOpenURL(youtubeAppURL) {
-            UIApplication.shared.open(youtubeAppURL)
-        } else if
-            let youtubeWebURL = URL(string: youtubeURLGenerator.generateYoutubeVideoWebURL(id: id)),
-            UIApplication.shared.canOpenURL(youtubeWebURL) {
-            UIApplication.shared.open(youtubeWebURL)
-        }
+        WakmusicYoutubePlayer(id: id).play()
     }
 
     func navigateCredits(id: String) {
         LogManager.printDebug("Navigate Music Credit : id=\(id)")
+    }
+
+    func navigateLyricsHighlighing(model: LyricHighlightingRequiredModel) {
+        let viewController = lyricHighlightingFactory.makeView(model: model)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 
     func dismiss() {
