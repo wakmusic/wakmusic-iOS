@@ -36,7 +36,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         naverInstance?.consumerKey = NAVER_CONSUMER_KEY() // 클라이언트 아이디
         naverInstance?.consumerSecret = NAVER_CONSUMER_SECRET() // 시크릿 아이디
         naverInstance?.appName = NAVER_APP_NAME() // 앱이름
-//
+
         return true
     }
 
