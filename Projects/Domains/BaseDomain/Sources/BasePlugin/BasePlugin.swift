@@ -29,18 +29,7 @@ public struct BasePlugin: PluginType {
             var queryItems: [URLQueryItem] = urlComponents.queryItems ?? []
 
             for type in deviceInfoTypes {
-                var value: String = ""
-                switch type {
-                case .os:
-                    value = "ios"
-                case .version:
-                    value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-                case .deviceID:
-                    value = fetchDeviceID()
-                case .pushToken:
-                    value = fetchPushToken()
-                }
-                let queryItem = URLQueryItem(name: type.apiKey, value: value)
+                let queryItem = URLQueryItem(name: type.apiKey, value: typeToValue(with: type))
                 queryItems.append(queryItem)
             }
 
@@ -54,18 +43,7 @@ public struct BasePlugin: PluginType {
             }
 
             for type in deviceInfoTypes {
-                var value: String = ""
-                switch type {
-                case .os:
-                    value = "ios"
-                case .version:
-                    value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
-                case .deviceID:
-                    value = fetchDeviceID()
-                case .pushToken:
-                    value = fetchPushToken()
-                }
-                json[type.apiKey] = value
+                json[type.apiKey] = typeToValue(with: type)
             }
 
             guard let newBodyData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
@@ -79,6 +57,21 @@ public struct BasePlugin: PluginType {
 }
 
 private extension BasePlugin {
+    func typeToValue(with type: DeviceInfoType) -> String {
+        var value: String = ""
+        switch type {
+        case .os:
+            value = "ios"
+        case .version:
+            value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+        case .deviceID:
+            value = fetchDeviceID()
+        case .pushToken:
+            value = fetchPushToken()
+        }
+        return value
+    }
+
     func fetchDeviceID() -> String {
         if keychain.load(type: .deviceID).isEmpty {
             let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
