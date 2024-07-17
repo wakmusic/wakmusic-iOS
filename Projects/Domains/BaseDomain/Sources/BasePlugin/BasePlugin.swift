@@ -58,18 +58,16 @@ public struct BasePlugin: PluginType {
 
 private extension BasePlugin {
     func typeToValue(with type: DeviceInfoType) -> String {
-        var value: String = ""
         switch type {
         case .os:
-            value = "ios"
+            return "ios"
         case .version:
-            value = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+            return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
         case .deviceID:
-            value = fetchDeviceID()
+            return fetchDeviceID()
         case .pushToken:
-            value = fetchPushToken()
+            return fetchPushToken()
         }
-        return value
     }
 
     func fetchDeviceID() -> String {
