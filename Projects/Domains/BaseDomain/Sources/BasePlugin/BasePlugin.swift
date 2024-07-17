@@ -71,13 +71,15 @@ private extension BasePlugin {
     }
 
     func fetchDeviceID() -> String {
-        if keychain.load(type: .deviceID).isEmpty {
-            let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        let deviceIDFromKeychain: String = keychain.load(type: .deviceID)
+        let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
+
+        if deviceIDFromKeychain.isEmpty {
             keychain.save(type: .deviceID, value: uuidString)
             return uuidString
 
         } else {
-            return keychain.load(type: .deviceID)
+            return deviceIDFromKeychain
         }
     }
 
