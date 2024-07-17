@@ -27,26 +27,10 @@ extension NotificationAPI: WMAPI {
         }
     }
 
-    #warning("TO-DO:: plugin으로 교체 예정")
     public var task: Moya.Task {
         switch self {
         case let .updateNotificationToken(type):
-            if type == .update {
-                return .requestParameters(
-                    parameters: [
-                        "uniqueDeviceId": "",
-                        "token": ""
-                    ],
-                    encoding: URLEncoding.queryString
-                )
-            } else {
-                return .requestParameters(
-                    parameters: [
-                        "uniqueDeviceId": ""
-                    ],
-                    encoding: URLEncoding.queryString
-                )
-            }
+            return .requestPlain
         }
     }
 
@@ -54,6 +38,13 @@ extension NotificationAPI: WMAPI {
         switch self {
         case .updateNotificationToken:
             return .accessToken
+        }
+    }
+
+    public var deviceInfoTypes: [DeviceInfoType] {
+        switch self {
+        case let .updateNotificationToken(type):
+            return type == .update ? [.deviceID, .pushToken] : [.deviceID]
         }
     }
 
