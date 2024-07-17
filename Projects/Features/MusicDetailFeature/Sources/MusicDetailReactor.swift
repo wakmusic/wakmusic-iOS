@@ -31,6 +31,7 @@ final class MusicDetailReactor: Reactor {
         case youtube(id: String)
         case credit(id: String)
         case lyricsHighlighting(model: LyricHighlightingRequiredModel)
+        case musicPick(id: String)
         case dismiss
     }
 
@@ -39,6 +40,15 @@ final class MusicDetailReactor: Reactor {
         var selectedIndex: Int
         var songDictionary: [String: SongModel] = [:]
         var selectedSong: SongModel? {
+            return .init(
+                videoID: songIDs.first ?? "",
+                title: "팬섭",
+                artistString: "세구",
+                date: "yyy",
+                likes: 0,
+                isLiked: false,
+                karaokeNumber: .init(tj: nil, ky: nil)
+            )
             guard selectedIndex >= 0, selectedIndex < songIDs.count else { return nil }
             return songDictionary[songIDs[selectedIndex]]
         }
@@ -229,7 +239,10 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickMusicPickButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+        return .concat(
+            .just(.navigate(.musicPick(id: song.videoID))),
+            .just(.navigate(nil))
+        )
     }
 
     func playListButtonDidTap() -> Observable<Mutation> {

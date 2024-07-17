@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import LyricHighlightingFeatureInterface
@@ -11,12 +12,15 @@ import Utility
 final class MusicDetailViewController: BaseReactorViewController<MusicDetailReactor> {
     private let musicDetailView = MusicDetailView()
     private let lyricHighlightingFactory: any LyricHighlightingFactory
+    private let containSongsFactory: any ContainSongsFactory
 
     init(
         reactor: MusicDetailReactor,
-        lyricHighlightingFactory: any LyricHighlightingFactory
+        lyricHighlightingFactory: any LyricHighlightingFactory,
+        containSongsFactory: any ContainSongsFactory
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
+        self.containSongsFactory = containSongsFactory
         super.init(reactor: reactor)
     }
 
@@ -94,6 +98,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.navigateCredits(id: id)
                 case let .lyricsHighlighting(model):
                     owner.navigateLyricsHighlighing(model: model)
+                case let .musicPick(id):
+                    owner.presentMusicPick(id: id)
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -173,6 +179,14 @@ private extension MusicDetailViewController {
     func navigateLyricsHighlighing(model: LyricHighlightingRequiredModel) {
         let viewController = lyricHighlightingFactory.makeView(model: model)
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    func presentMusicPick(id: String) {
+        let viewController = containSongsFactory.makeView(
+            songs: [id]
+        )
+        viewController.modalPresentationStyle = .fullScreen
+        self.present(viewController, animated: true)
     }
 
     func dismiss() {
