@@ -8,7 +8,7 @@ import RxSwift
 import UserDomainInterface
 import Utility
 
-#warning("커스텀 에러 ")
+#warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
@@ -60,11 +60,11 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
-                    .catch { (error: Error) in
+                    .catch { [logoutUseCase] (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
-                            return self.logoutUseCase.execute()
+                            return logoutUseCase.execute()
                                 .andThen(Observable.error(wmError))
                         } else {
                             return Observable.error(wmError)
