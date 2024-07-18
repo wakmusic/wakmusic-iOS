@@ -8,7 +8,6 @@ import RxSwift
 import UserDomainInterface
 import Utility
 
-
 #warning("커스텀 에러 ")
 public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
