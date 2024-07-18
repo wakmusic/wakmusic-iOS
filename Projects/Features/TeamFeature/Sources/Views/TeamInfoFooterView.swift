@@ -1,6 +1,4 @@
 import Foundation
 import UIKit
 
-final class TeamInfoFooterView: UIView {
-    
-}
+final class TeamInfoFooterView: UIView {}

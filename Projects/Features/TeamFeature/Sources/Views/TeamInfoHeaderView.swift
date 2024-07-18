@@ -1,6 +1,4 @@
 import Foundation
 import UIKit
 
-final class TeamInfoHeaderView: UIView {
-    
-}
+final class TeamInfoHeaderView: UIView {}

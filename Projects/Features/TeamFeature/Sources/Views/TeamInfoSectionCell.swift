@@ -1,6 +1,4 @@
 import Foundation
 import UIKit
 
-final class TeamInfoSectionCell: UITableViewCell {
-    
-}
+final class TeamInfoSectionCell: UITableViewCell {}
