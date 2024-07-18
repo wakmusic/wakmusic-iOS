@@ -11,6 +11,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import TeamFeatureInterface
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()

@@ -11,10 +11,6 @@ extension AppComponent {
         SettingComponent(parent: self)
     }
 
-    var teamInfoFactory: any TeamInfoFactory {
-        TeamInfoComponent(parent: self)
-    }
-
     var appPushSettingFactory: any AppPushSettingFactory {
         AppPushSettingComponent(parent: self)
     }
