@@ -138,10 +138,7 @@ public final class NewSongsContentViewModel: ViewModelType {
                         id: dataSource[$0].id,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
-                        remix: "",
-                        reaction: "",
                         views: dataSource[$0].views,
-                        last: 0,
                         date: "\(dataSource[$0].date)"
                     )
                 }
@@ -157,10 +154,7 @@ public final class NewSongsContentViewModel: ViewModelType {
                         id: $0.id,
                         title: $0.title,
                         artist: $0.artist,
-                        remix: "",
-                        reaction: "",
                         views: $0.views,
-                        last: 0,
                         date: "\($0.date)"
                     )
                 }

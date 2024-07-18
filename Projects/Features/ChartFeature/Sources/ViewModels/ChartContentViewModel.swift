@@ -112,10 +112,7 @@ public final class ChartContentViewModel: ViewModelType {
                         id: dataSource[$0].id,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
-                        remix: "",
-                        reaction: "",
                         views: dataSource[$0].views,
-                        last: dataSource[$0].last,
                         date: dataSource[$0].date
                     )
                 }
@@ -171,10 +168,7 @@ private extension ChartContentViewModel {
                 id: $0.id,
                 title: $0.title,
                 artist: $0.artist,
-                remix: "",
-                reaction: "",
                 views: $0.views,
-                last: $0.last,
                 date: $0.date
             )
         }

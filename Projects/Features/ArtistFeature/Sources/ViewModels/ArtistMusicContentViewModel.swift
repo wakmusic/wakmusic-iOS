@@ -131,10 +131,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
                         id: dataSource[$0].songID,
                         title: dataSource[$0].title,
                         artist: dataSource[$0].artist,
-                        remix: "",
-                        reaction: "",
                         views: 0,
-                        last: 0,
                         date: dataSource[$0].date
                     )
                 }

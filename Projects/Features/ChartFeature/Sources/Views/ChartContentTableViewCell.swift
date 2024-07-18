@@ -338,10 +338,7 @@ extension ChartContentTableViewCell {
             id: song.id,
             title: song.title,
             artist: song.artist,
-            remix: "",
-            reaction: "",
             views: song.views,
-            last: song.last,
             date: song.date
         )
         PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])

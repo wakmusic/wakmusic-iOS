@@ -10,10 +10,7 @@ public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
                 id: "123",
                 title: "리와인드 (RE:WIND)",
                 artist: "이세계아이돌",
-                remix: "",
-                reaction: "",
                 views: 10,
-                last: 1,
                 date: ""
             ),
             isSelected: false
@@ -24,10 +21,7 @@ public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
                 id: "123",
                 title: "리와인드 (RE:WIND)",
                 artist: "이세계아이돌",
-                remix: "",
-                reaction: "",
                 views: 10,
-                last: 1,
                 date: ""
             ),
             isSelected: false
@@ -38,10 +32,7 @@ public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
                 id: "123",
                 title: "리와인드 (RE:WIND)",
                 artist: "이세계아이돌",
-                remix: "",
-                reaction: "",
                 views: 10,
-                last: 1,
                 date: ""
             ),
             isSelected: false
@@ -52,10 +43,7 @@ public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
                 id: "123",
                 title: "리와인드 (RE:WIND)",
                 artist: "이세계아이돌",
-                remix: "",
-                reaction: "",
                 views: 10,
-                last: 1,
                 date: ""
             ),
             isSelected: false
