@@ -38,7 +38,7 @@ public final class TeamInfoViewModel: ViewModelType {
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
-        
+
         return output
     }
 }

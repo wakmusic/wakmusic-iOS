@@ -16,7 +16,7 @@ final class TeamInfoContentViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = 0
     }
-    
+
     private let viewModel: TeamInfoContentViewModel
 
     public init(viewModel: TeamInfoContentViewModel) {

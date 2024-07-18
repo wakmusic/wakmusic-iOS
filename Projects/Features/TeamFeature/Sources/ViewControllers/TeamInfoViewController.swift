@@ -1,6 +1,8 @@
+import BaseFeature
 import DesignSystem
 import Foundation
 import LogManager
+import NVActivityIndicatorView
 import Pageboy
 import RxCocoa
 import RxSwift
@@ -11,8 +13,6 @@ import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
-import NVActivityIndicatorView
-import BaseFeature
 
 public final class TeamInfoViewController: TabmanViewController {
     private let navigationbarView = WMNavigationBarView()
@@ -79,8 +79,10 @@ private extension TeamInfoViewController {
             .skip(1)
             .bind(with: self, onNext: { owner, source in
                 owner.viewControllers =
-                [TeamInfoContentViewController(viewModel: .init(entities: source)),
-                TeamInfoContentViewController(viewModel: .init(entities: source))]
+                    [
+                        TeamInfoContentViewController(viewModel: .init(entities: source)),
+                        TeamInfoContentViewController(viewModel: .init(entities: source))
+                    ]
                 owner.reloadData()
                 owner.warningView.isHidden = !source.isEmpty
                 owner.activityIndicator.stopAnimating()
