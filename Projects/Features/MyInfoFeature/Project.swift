@@ -23,8 +23,7 @@ let project = Project.module(
                     .domain(target: .NoticeDomain, type: .interface),
                     .domain(target: .AuthDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
-                    .domain(target: .ImageDomain, type: .interface),
-                    .domain(target: .TeamDomain, type: .interface)
+                    .domain(target: .ImageDomain, type: .interface)
                 ]
             )
         ),
