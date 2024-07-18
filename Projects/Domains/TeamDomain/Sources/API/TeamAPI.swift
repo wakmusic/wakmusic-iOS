@@ -1,8 +1,8 @@
 import BaseDomain
 import ErrorModule
 import Foundation
-import TeamDomainInterface
 import Moya
+import TeamDomainInterface
 
 public enum TeamAPI {
     case fetchTeamList

@@ -1,7 +1,7 @@
 import BaseDomain
 import Foundation
-import TeamDomainInterface
 import RxSwift
+import TeamDomainInterface
 
 public final class RemoteTeamDataSourceImpl: BaseRemoteDataSource<TeamAPI>, RemoteTeamDataSource {
     public func fetchTeamList() -> Single<[TeamListEntity]> {

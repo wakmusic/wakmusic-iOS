@@ -1,6 +1,6 @@
 import Foundation
-import TeamDomainInterface
 import RxSwift
+import TeamDomainInterface
 
 public struct FetchTeamListUseCaseImpl: FetchTeamListUseCase {
     private let teamRepository: any TeamRepository

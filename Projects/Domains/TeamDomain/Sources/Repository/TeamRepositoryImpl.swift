@@ -1,6 +1,6 @@
 import Foundation
-import TeamDomainInterface
 import RxSwift
+import TeamDomainInterface
 
 public final class TeamRepositoryImpl: TeamRepository {
     private let remoteTeamDataSource: any RemoteTeamDataSource
