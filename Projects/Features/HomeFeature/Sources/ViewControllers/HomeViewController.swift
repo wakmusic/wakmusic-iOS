@@ -134,12 +134,12 @@ extension HomeViewController {
         tableView.rx.itemSelected
             .withLatestFrom(output.chartDataSource) { ($0, $1) }
             .map { SongEntity(
-                    id: $0.1[$0.0.row].id,
-                    title: $0.1[$0.0.row].title,
-                    artist: $0.1[$0.0.row].artist,
-                    views: $0.1[$0.0.row].views,
-                    date: $0.1[$0.0.row].date
-                )
+                id: $0.1[$0.0.row].id,
+                title: $0.1[$0.0.row].title,
+                artist: $0.1[$0.0.row].artist,
+                views: $0.1[$0.0.row].views,
+                date: $0.1[$0.0.row].date
+            )
             }
             .subscribe(onNext: { song in
                 LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100))
