@@ -1,16 +1,16 @@
 import DesignSystem
 import Foundation
 import LogManager
+import Pageboy
 import RxCocoa
 import RxSwift
 import SnapKit
+import Tabman
 import TeamDomainInterface
 import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
-import Pageboy
-import Tabman
 
 public final class TeamInfoViewController: TabmanViewController {
     private let navigationbarView = WMNavigationBarView()
@@ -92,9 +92,9 @@ private extension TeamInfoViewController {
         }
 
         tabContentView.snp.makeConstraints {
-            $0.top.equalTo(navigationbarView.snp.bottom).offset(16+1.71)
+            $0.top.equalTo(navigationbarView.snp.bottom).offset(16 + 1.71)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(36-1.71)
+            $0.height.equalTo(36 - 1.71)
         }
 
         singleLineLabel.snp.makeConstraints {
