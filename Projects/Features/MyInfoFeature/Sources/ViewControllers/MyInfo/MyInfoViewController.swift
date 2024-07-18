@@ -8,10 +8,10 @@ import MyInfoFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
+import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
-import TeamFeatureInterface
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()

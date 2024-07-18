@@ -4,8 +4,8 @@ import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
 import SignInFeatureInterface
-import UIKit
 import TeamFeatureInterface
+import UIKit
 
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }

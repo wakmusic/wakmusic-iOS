@@ -3,7 +3,7 @@ import Foundation
 enum TeamInfoType {
     case develop
     case weeklyWM
-    
+
     var title: String {
         switch self {
         case .develop:

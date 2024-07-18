@@ -1,7 +1,7 @@
-import TeamFeatureInterface
 import NeedleFoundation
-import UIKit
 import TeamDomainInterface
+import TeamFeatureInterface
+import UIKit
 
 public protocol TeamInfoDependency: Dependency {
     var fetchTeamListUseCase: any FetchTeamListUseCase { get }
