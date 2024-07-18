@@ -11,6 +11,8 @@ import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
+import NVActivityIndicatorView
+import BaseFeature
 
 public final class TeamInfoViewController: TabmanViewController {
     private let navigationbarView = WMNavigationBarView()
@@ -20,16 +22,23 @@ public final class TeamInfoViewController: TabmanViewController {
     }
 
     private let tabContentView = UIView()
+
     private let singleLineLabel = UILabel().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray300.color.withAlphaComponent(0.4)
     }
 
+    private let warningView = WarningView(frame: .zero).then {
+        $0.text = "팀 데이터가 없습니다."
+        $0.isHidden = true
+    }
+
+    private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.color = DesignSystemAsset.PrimaryColorV2.point.color
+        $0.type = .circleStrokeSpin
+    }
+
     private lazy var viewControllers: [UIViewController] = {
-        let viewControllers = [
-            TeamInfoContentViewController(),
-            TeamInfoContentViewController()
-        ]
-        return viewControllers
+        return []
     }()
 
     private let viewModel: TeamInfoViewModel
@@ -65,9 +74,23 @@ public final class TeamInfoViewController: TabmanViewController {
 }
 
 private extension TeamInfoViewController {
-    func outputBind() {}
+    func outputBind() {
+        output.dataSource
+            .skip(1)
+            .bind(with: self, onNext: { owner, source in
+                owner.viewControllers =
+                [TeamInfoContentViewController(viewModel: .init(entities: source)),
+                TeamInfoContentViewController(viewModel: .init(entities: source))]
+                owner.reloadData()
+                owner.warningView.isHidden = !source.isEmpty
+                owner.activityIndicator.stopAnimating()
+            })
+            .disposed(by: disposeBag)
+    }
 
     func inputBind() {
+        input.fetchTeamList.onNext(())
+
         backButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
@@ -78,7 +101,7 @@ private extension TeamInfoViewController {
 
 private extension TeamInfoViewController {
     func addSubviews() {
-        view.addSubviews(navigationbarView, tabContentView)
+        view.addSubviews(warningView, navigationbarView, tabContentView, activityIndicator)
         tabContentView.addSubview(singleLineLabel)
         navigationbarView.setLeftViews([backButton])
         navigationbarView.setTitle("팀 소개", textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color)
@@ -102,10 +125,20 @@ private extension TeamInfoViewController {
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(1)
         }
+
+        warningView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
+        activityIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(30)
+        }
     }
 
     func configureUI() {
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
+        activityIndicator.startAnimating()
     }
 }
 
