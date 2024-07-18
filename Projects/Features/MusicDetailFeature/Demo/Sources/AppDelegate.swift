@@ -1,8 +1,8 @@
 import BaseFeature
 import BaseFeatureInterface
 import Inject
-@testable import MusicDetailFeature
 import LyricHighlightingFeatureInterface
+@testable import MusicDetailFeature
 import RxSwift
 import SongsDomainTesting
 import UIKit
