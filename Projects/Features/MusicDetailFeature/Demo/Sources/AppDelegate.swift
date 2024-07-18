@@ -25,10 +25,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     id: "DPEtmqvaKqY",
                     title: "팬서비스",
                     artist: "고세구",
-                    remix: "",
-                    reaction: "",
                     views: 120,
-                    last: 0,
                     date: "2024.03.11",
                     likes: 120,
                     karaokeNumber: .init(TJ: 36, KY: nil)
