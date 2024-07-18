@@ -92,9 +92,9 @@ private extension TeamInfoViewController {
         }
 
         tabContentView.snp.makeConstraints {
-            $0.top.equalTo(navigationbarView.snp.bottom).offset(16 + 1.71)
+            $0.top.equalTo(navigationbarView.snp.bottom).offset(16 + 2)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(36 - 1.71)
+            $0.height.equalTo(36 - 2)
         }
 
         singleLineLabel.snp.makeConstraints {
@@ -131,7 +131,7 @@ private extension TeamInfoViewController {
         }
 
         // indicator
-        bar.indicator.weight = .custom(value: 1.71)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColor.point.color
         bar.indicator.overscrollBehavior = .compress
 
