@@ -191,10 +191,7 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
                 id: $0.songID,
                 title: $0.title,
                 artist: $0.artist,
-                remix: "",
-                reaction: "",
                 views: 0,
-                last: 0,
                 date: $0.date
             )
         }

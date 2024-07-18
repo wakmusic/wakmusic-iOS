@@ -36,10 +36,7 @@ public extension SingleSongResponseDTO {
             id: songID,
             title: title,
             artist: artists.joined(separator: ", "),
-            remix: "",
-            reaction: "",
             views: views,
-            last: 0,
             date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
             likes: likes,
             karaokeNumber: .init(TJ: karaokeNumber.TJ, KY: karaokeNumber.KY)

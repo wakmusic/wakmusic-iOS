@@ -42,10 +42,7 @@ class ArtistMusicCell: UITableViewCell {
             id: song.songID,
             title: song.title,
             artist: song.artist,
-            remix: "",
-            reaction: "",
             views: 0,
-            last: 0,
             date: song.date
         )
         PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
