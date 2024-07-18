@@ -8,6 +8,8 @@ import RxSwift
 import UserDomainInterface
 import Utility
 
+
+#warning("커스텀 에러 ")
 public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
@@ -59,29 +61,25 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
                 return self.fetchPlayListUseCase.execute()
                     .asObservable()
-                    .catch { [logoutUseCase] (error: Error) in
+                    .catch { (error: Error) in
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
-                            return logoutUseCase.execute()
-                                .asObservable()
-                                .catch { error in
-                                    let description = error.asWMError.errorDescription ?? ""
-                                    output.showToastMessage.onNext(BaseEntity(status: 0, description: description))
-                                    return Observable.never()
-                                }
-                                .flatMap { _ in
-                                    Observable.never()
-                                }
+                            return self.logoutUseCase.execute()
+                                .andThen(Observable.error(wmError))
                         } else {
                             return Observable.error(wmError)
                         }
                     }
             }
-            .do(onError: { error in
-                let wmError: WMError = error.asWMError
-                output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
+            .do(onError: { (error: Error) in
+                let wmError = error.asWMError
+                output.showToastMessage.onNext(BaseEntity(
+                    status: 401,
+                    description: wmError.errorDescription ?? "알 수 없는 오류가 발생하였습니다."
+                ))
             })
+            .catchAndReturn([])
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .map { playlist, userInfo in
 
