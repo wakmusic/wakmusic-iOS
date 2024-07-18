@@ -120,6 +120,8 @@
 		<string>$(WMDOMAIN_SONGS)</string>
 		<key>WMDOMAIN_USER</key>
 		<string>$(WMDOMAIN_USER)</string>
+		<key>WMDOMAIN_TEAM</key>
+		<string>$(WMDOMAIN_TEAM)</string>
 		<key>WM_APP_ID</key>
 		<string>$(WM_APP_ID)</string>
 	</dict>

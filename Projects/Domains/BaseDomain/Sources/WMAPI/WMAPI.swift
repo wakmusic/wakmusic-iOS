@@ -55,6 +55,7 @@ public enum WMDomain: String {
     case search
     case image
     case notification
+    case team
 }
 
 extension WMDomain {
@@ -94,6 +95,8 @@ extension WMDomain {
             return WMDOMAIN_IMAGE()
         case .notification:
             return WMDOMAIN_NOTIFICATION()
+        case .team:
+            return WMDOMAIN_TEAM()
         }
     }
 }
