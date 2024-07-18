@@ -1,13 +1,13 @@
+import DesignSystem
 import Foundation
 import UIKit
-import DesignSystem
 
 final class TeamInfoSectionCell: UITableViewCell {
     private let folderImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Team.folderOn.image
         $0.contentMode = .scaleAspectFit
     }
-    
+
     private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -20,7 +20,7 @@ final class TeamInfoSectionCell: UITableViewCell {
         $0.image = DesignSystemAsset.Team.arrowTop.image
         $0.contentMode = .scaleAspectFit
     }
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubViews()
@@ -34,23 +34,21 @@ final class TeamInfoSectionCell: UITableViewCell {
 }
 
 extension TeamInfoSectionCell {
-    func update() {
-        
-    }
+    func update() {}
 }
 
 private extension TeamInfoSectionCell {
     func addSubViews() {
         contentView.addSubviews(folderImageView, titleLabel, arrowImageView)
     }
-    
+
     func setLayout() {
         folderImageView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
             $0.size.equalTo(40)
         }
-        
+
         titleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(8)
             $0.trailing.equalToSuperview().offset(-10)

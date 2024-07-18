@@ -46,6 +46,5 @@ private extension TeamInfoContentViewController {
         }
     }
 
-    func configureUI() {
-    }
+    func configureUI() {}
 }

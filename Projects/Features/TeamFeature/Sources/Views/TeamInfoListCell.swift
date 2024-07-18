@@ -1,6 +1,6 @@
+import DesignSystem
 import Foundation
 import UIKit
-import DesignSystem
 
 final class TeamInfoListCell: UITableViewCell {
     private let leadLabel = WMLabel(
@@ -50,9 +50,7 @@ final class TeamInfoListCell: UITableViewCell {
 }
 
 extension TeamInfoListCell {
-    func update() {
-        
-    }
+    func update() {}
 }
 
 private extension TeamInfoListCell {
