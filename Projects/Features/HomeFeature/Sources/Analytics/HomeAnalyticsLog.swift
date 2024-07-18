@@ -3,7 +3,10 @@ import LogManager
 enum HomeAnalyticsLog: AnalyticsLogType {
     case clickChartTop100MusicsTitleButton
     case clickAllChartTop100MusicsButton
-    case clickMusicItem(location: MusicItemLocation)
+    case clickRecentMusicsTitleButton
+    case clickAllRecentMusicsButton
+    case clickMusicItem(location: MusicItemLocation, id: String)
+    case clickMusicItemPlayButton(location: MusicItemLocation, id: String)
 }
 
 enum MusicItemLocation: String, CustomStringConvertible {

@@ -36,7 +36,9 @@ public final class HomeViewModel: ViewModelType {
 
     public struct Input {
         let fetchHomeUseCase: PublishSubject<Void> = PublishSubject()
+        @available(*, deprecated, message: "스펙 변경에 따라 all listen 제거")
         let chartAllListenTapped: PublishSubject<Void> = PublishSubject()
+        @available(*, deprecated, message: "스펙 변경에 따라 all listen 제거")
         let newSongsAllListenTapped: PublishSubject<Void> = PublishSubject()
         let refreshPulled: PublishSubject<Void> = PublishSubject()
     }
