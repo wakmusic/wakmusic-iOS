@@ -16,6 +16,10 @@ env:
   GOOGLE_SERVICE_INFO_PLIST_PATH: Projects/App/Resources/GoogleService-Info.plist
   SECRET_XCCONFIG_PATH: Projects/App/XCConfig/Secrets.xcconfig
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   prepare-ci:
     name: ⚙️ Prepare CI
