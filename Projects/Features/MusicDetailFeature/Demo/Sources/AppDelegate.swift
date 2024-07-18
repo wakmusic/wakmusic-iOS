@@ -1,6 +1,9 @@
+import BaseFeature
+import BaseFeatureInterface
 import Inject
-import LyricHighlightingFeatureInterface
 @testable import MusicDetailFeature
+import LyricHighlightingFeatureInterface
+import RxSwift
 import SongsDomainTesting
 import UIKit
 import Utility
@@ -47,7 +50,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             UINavigationController(
                 rootViewController: MusicDetailViewController(
                     reactor: reactor,
-                    lyricHighlightingFactory: DummyLyricHighlightingFactory()
+                    lyricHighlightingFactory: DummyLyricHighlightingFactory(),
+                    containSongsFactory: DummyContainSongsFactory(),
+                    playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
                 )
             )
         )
@@ -62,4 +67,15 @@ final class DummyLyricHighlightingFactory: LyricHighlightingFactory {
     func makeView(model: LyricHighlightingRequiredModel) -> UIViewController {
         return UIViewController()
     }
+}
+
+final class DummyContainSongsFactory: ContainSongsFactory {
+    func makeView(songs: [String]) -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
+    var presentPlayListObservable: RxSwift.Observable<Void> { .empty() }
+    func presentPlayList() {}
 }
