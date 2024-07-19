@@ -39,15 +39,19 @@ extension TeamInfoHeaderView {
         let descriptionString = "\(target) · \(name)"
         let attributedString = NSMutableAttributedString(
             string: descriptionString,
-            attributes: [.font: UIFont.WMFontSystem.t5(weight: .medium).font,
-                         .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-                         .kern: -0.5]
+            attributes: [
+                .font: UIFont.WMFontSystem.t5(weight: .medium).font,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+                .kern: -0.5
+            ]
         )
 
         attributedString.addAttributes(
-            [.font: UIFont.WMFontSystem.t5(weight: .light).font,
-             .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-             .kern: -0.5],
+            [
+                .font: UIFont.WMFontSystem.t5(weight: .light).font,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+                .kern: -0.5
+            ],
             range: NSRange(location: 0, length: target.count)
         )
         descriptionLabel.attributedText = attributedString

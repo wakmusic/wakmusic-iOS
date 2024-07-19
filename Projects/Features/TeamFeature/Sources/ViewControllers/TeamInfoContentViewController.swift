@@ -58,7 +58,7 @@ private extension TeamInfoContentViewController {
             .skip(1)
             .bind(with: self, onNext: { owner, source in
                 let header = owner.output.type.value == .weeklyWM ?
-                TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
+                    TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
                 header?.update(name: "은수저")
                 owner.tableView.tableHeaderView = header
 
