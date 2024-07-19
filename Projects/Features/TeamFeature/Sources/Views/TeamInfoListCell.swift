@@ -76,13 +76,13 @@ private extension TeamInfoListCell {
 
         profileImageView.snp.makeConstraints {
             $0.leading.equalTo(leadLabel.snp.trailing).offset(9)
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(leadLabel.snp.centerY)
             $0.size.equalTo(32)
         }
 
         stackView.snp.makeConstraints {
             $0.leading.equalTo(profileImageView.snp.trailing).offset(8)
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(leadLabel.snp.centerY)
             $0.trailing.equalToSuperview().offset(-20)
         }
 

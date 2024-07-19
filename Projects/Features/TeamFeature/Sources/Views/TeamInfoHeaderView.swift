@@ -15,13 +15,10 @@ final class TeamInfoHeaderView: UIView {
         $0.image = DesignSystemAsset.Team.crown.image
     }
 
-    private let descriptionLabel = WMLabel(
-        text: "총괄",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t5(weight: .medium),
-        alignment: .center,
-        lineHeight: UIFont.WMFontSystem.t5(weight: .medium).lineHeight
-    )
+    private let descriptionLabel = UILabel().then {
+        $0.textAlignment = .center
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 40
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -33,6 +30,27 @@ final class TeamInfoHeaderView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension TeamInfoHeaderView {
+    func update(name: String) {
+        let target = "총괄"
+        let descriptionString = "\(target) · \(name)"
+        let attributedString = NSMutableAttributedString(
+            string: descriptionString,
+            attributes: [.font: UIFont.WMFontSystem.t5(weight: .medium).font,
+                         .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+                         .kern: -0.5]
+        )
+
+        attributedString.addAttributes(
+            [.font: UIFont.WMFontSystem.t5(weight: .light).font,
+             .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
+             .kern: -0.5],
+            range: NSRange(location: 0, length: target.count)
+        )
+        descriptionLabel.attributedText = attributedString
     }
 }
 
@@ -56,7 +74,7 @@ private extension TeamInfoHeaderView {
 
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(profileImageView.snp.bottom).offset(4)
-            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.centerX.equalToSuperview()
             $0.height.equalTo(24)
         }
     }

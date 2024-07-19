@@ -1,6 +1,7 @@
 import DesignSystem
 import Foundation
 import UIKit
+import Utility
 
 final class TeamInfoFooterView: UIView {
     private let dotContentView = UIView()
@@ -18,6 +19,7 @@ final class TeamInfoFooterView: UIView {
         lineHeight: UIFont.WMFontSystem.t7(weight: .light).lineHeight
     ).then {
         $0.numberOfLines = 0
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 20 - 16 - 20
     }
 
     override init(frame: CGRect) {
@@ -52,9 +54,8 @@ private extension TeamInfoFooterView {
         }
 
         descriptionLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalTo(dotContentView.snp.top)
             $0.leading.equalTo(dotContentView.snp.trailing)
-            $0.trailing.equalToSuperview().offset(-20)
         }
     }
 

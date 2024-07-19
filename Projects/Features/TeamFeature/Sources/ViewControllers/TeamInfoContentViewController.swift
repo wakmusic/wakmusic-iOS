@@ -56,12 +56,17 @@ private extension TeamInfoContentViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .debug()
-            .bind(with: self, onNext: { owner, _ in
-                owner.tableView.tableHeaderView = owner.output.type.value == .weeklyWM ?
-                    TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
-                owner.tableView.tableFooterView =
-                    TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
+            .bind(with: self, onNext: { owner, source in
+                let header = owner.output.type.value == .weeklyWM ?
+                TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
+                header?.update(name: "은수저")
+                owner.tableView.tableHeaderView = header
+
+                let footer = TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
+                owner.tableView.tableFooterView = footer
+
+                owner.warningView.isHidden = !source.isEmpty
+                owner.tableView.isHidden = !owner.warningView.isHidden
                 owner.tableView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -70,15 +75,23 @@ private extension TeamInfoContentViewController {
     func inputBind() {
         input.combineTeamList.onNext(())
     }
+}
 
+private extension TeamInfoContentViewController {
     func addSubviews() {
-        view.addSubviews(tableView)
+        view.addSubviews(tableView, warningView)
     }
 
     func setLayout() {
         tableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(output.type.value == .develop ? 104 : 100)
             $0.horizontalEdges.bottom.equalToSuperview()
+        }
+
+        warningView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(APP_WIDTH())
+            $0.height.equalTo(tableView.frame.height / 3 * 2)
         }
     }
 
@@ -93,10 +106,7 @@ extension TeamInfoContentViewController: TeamInfoSectionViewDelegate {
         var newDataSource = output.dataSource.value
         newDataSource[section].model.isOpen = !newDataSource[section].model.isOpen
         output.dataSource.accept(newDataSource)
-
         tableView.reloadSections([section], with: .none)
-        guard newDataSource[section].model.isOpen else { return }
-        tableView.scrollToRow(at: IndexPath(row: 0, section: section), at: .middle, animated: true)
     }
 }
 
