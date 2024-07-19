@@ -9,6 +9,7 @@ final class TeamInfoListCell: UITableViewCell {
         $0.axis = .vertical
         $0.spacing = 0
     }
+
     private let topSpacingView = UIView()
     private let outsideView = UIView()
     private let bottomSpacingView = UIView()
@@ -64,14 +65,14 @@ extension TeamInfoListCell {
     static func cellHeight(index: Int, totalCount: Int) -> CGFloat {
         if totalCount == 1 {
             return 12 + 40 + 12
-            
+
         } else {
             if index == 0 {
                 return 8 + 4 + 40 + 4
-                
+
             } else if index == totalCount - 1 {
                 return 4 + 40 + 4 + 8
-                
+
             } else {
                 return 4 + 40 + 4
             }
@@ -82,7 +83,7 @@ extension TeamInfoListCell {
         leadLabel.isHidden = !entity.isLead
         nameLabel.text = entity.name
         positionLabel.text = entity.position
-        
+
         if totalCount == 1 {
             topSpacingView.isHidden = false
             bottomSpacingView.isHidden = false
