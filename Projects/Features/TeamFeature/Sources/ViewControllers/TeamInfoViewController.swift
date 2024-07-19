@@ -27,11 +27,6 @@ public final class TeamInfoViewController: TabmanViewController {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray300.color.withAlphaComponent(0.4)
     }
 
-    private let warningView = WarningView(frame: .zero).then {
-        $0.text = "팀 데이터가 없습니다."
-        $0.isHidden = true
-    }
-
     private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
         $0.type = .circleStrokeSpin
@@ -77,13 +72,13 @@ private extension TeamInfoViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .bind(with: self, onNext: { owner, source in
+            .bind(with: self, onNext: { owner, sources in
+                let (source1, source2) = sources
                 owner.viewControllers = [
-                    TeamInfoContentViewController(viewModel: .init(type: .develop, entities: source)),
-                    TeamInfoContentViewController(viewModel: .init(type: .weeklyWM, entities: source))
+                    TeamInfoContentViewController(viewModel: .init(type: .develop, entities: source1)),
+                    TeamInfoContentViewController(viewModel: .init(type: .weeklyWM, entities: source2))
                 ]
                 owner.reloadData()
-                owner.warningView.isHidden = !source.isEmpty
                 owner.activityIndicator.stopAnimating()
             })
             .disposed(by: disposeBag)
@@ -102,7 +97,7 @@ private extension TeamInfoViewController {
 
 private extension TeamInfoViewController {
     func addSubviews() {
-        view.addSubviews(warningView, navigationbarView, tabContentView, activityIndicator)
+        view.addSubviews(navigationbarView, tabContentView, activityIndicator)
         tabContentView.addSubview(singleLineLabel)
         navigationbarView.setLeftViews([backButton])
         navigationbarView.setTitle("팀 소개", textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color)
@@ -125,10 +120,6 @@ private extension TeamInfoViewController {
             $0.bottom.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(1)
-        }
-
-        warningView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
         }
 
         activityIndicator.snp.makeConstraints {

@@ -7,6 +7,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import BaseFeature
 
 final class TeamInfoContentViewController: UIViewController {
     private let tableView = UITableView().then {
@@ -15,6 +16,11 @@ final class TeamInfoContentViewController: UIViewController {
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = 0
         $0.allowsSelection = false
+    }
+
+    private let warningView = WarningView(frame: .zero).then {
+        $0.text = "팀 데이터가 없습니다."
+        $0.isHidden = true
     }
 
     private let viewModel: TeamInfoContentViewModel

@@ -1,6 +1,7 @@
 import DesignSystem
 import Foundation
 import UIKit
+import Utility
 
 final class TeamInfoHeaderView: UIView {
     private let profileImageView = UIImageView().then {
@@ -61,6 +62,7 @@ private extension TeamInfoHeaderView {
     }
 
     func configureUI() {
+        backgroundColor = colorFromRGB(0xe4e7ec, alpha: 0.5)
         profileImageView.backgroundColor = UIColor.random()
     }
 }
