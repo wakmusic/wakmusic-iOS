@@ -115,19 +115,28 @@ extension HomeViewController {
             .disposed(by: disposeBag)
 
         chartAllListenButton.rx.tap
-            .bind(to: input.chartAllListenTapped)
+            .bind(with: self) { owner, _ in
+                LogManager.analytics(HomeAnalyticsLog.clickAllChartTop100MusicsButton)
+                let viewController = owner.chartFactory.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
             .disposed(by: disposeBag)
 
         latestSongsMoveButton.rx.tap
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
+                LogManager.analytics(HomeAnalyticsLog.clickRecentMusicsTitleButton)
                 let viewController = owner.newSongsComponent.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
             })
             .disposed(by: disposeBag)
 
         latestSongsPlayButton.rx.tap
-            .bind(to: input.newSongsAllListenTapped)
+            .bind(with: self) { owner, _ in
+                LogManager.analytics(HomeAnalyticsLog.clickAllRecentMusicsButton)
+                let viewController = owner.newSongsComponent.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
             .disposed(by: disposeBag)
 
         refreshControl.rx
@@ -136,8 +145,18 @@ extension HomeViewController {
             .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
-            .bind(with: self) { owner, _ in
-                LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100))
+            .withLatestFrom(output.chartDataSource) { ($0, $1) }
+            .map { SongEntity(
+                id: $0.1[$0.0.row].id,
+                title: $0.1[$0.0.row].title,
+                artist: $0.1[$0.0.row].artist,
+                views: $0.1[$0.0.row].views,
+                date: "\($0.1[$0.0.row].date)"
+            ) }
+            .bind(with: self) { owner, song in
+                LogManager.analytics(
+                    HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: song.id)
+                )
                 let viewController = owner.chartFactory.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
@@ -151,12 +170,14 @@ extension HomeViewController {
                 artist: $0.1[$0.0.row].artist,
                 views: $0.1[$0.0.row].views,
                 date: "\($0.1[$0.0.row].date)"
-            )
+            ) }
+            .bind(with: self) { owner, song in
+                LogManager.analytics(
+                    HomeAnalyticsLog.clickMusicItem(location: .homeRecent, id: song.id)
+                )
+                let viewController = owner.newSongsComponent.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
             }
-            .subscribe(onNext: { song in
-                LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent))
-                PlayState.shared.loadAndAppendSongsToPlaylist([song])
-            })
             .disposed(by: disposeBag)
     }
 
@@ -199,7 +220,7 @@ extension HomeViewController {
                 self?.activityIndicator.stopAnimating()
                 self?.latestSongEmptyLabel.isHidden = !model.isEmpty
             })
-            .bind(to: collectionView.rx.items) { collectionView, index, model -> UICollectionViewCell in
+            .bind(to: collectionView.rx.items) { [weak self] collectionView, index, model -> UICollectionViewCell in
                 let indexPath = IndexPath(item: index, section: 0)
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "HomeNewSongCell",
@@ -207,6 +228,7 @@ extension HomeViewController {
                 ) as? HomeNewSongCell else {
                     return UICollectionViewCell()
                 }
+                cell.delegate = self
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
@@ -377,12 +399,29 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 
 extension HomeViewController: HomeChartCellDelegate {
     func thumbnailDidTap(model: ChartRankingEntity) {
+        LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: model.id))
         let musicDetailViewController = musicDetailFactory.makeViewController(songIDs: [model.id], selectedID: model.id)
         musicDetailViewController.modalPresentationStyle = .fullScreen
         self.present(musicDetailViewController, animated: true)
     }
 
     func playButtonDidTap(model: ChartRankingEntity) {
+        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeTop100, id: model.id))
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+        WakmusicYoutubePlayer(id: model.id).play()
+    }
+}
+
+extension HomeViewController: HomeNewSongCellDelegate {
+    func thumbnailDidTap(model: NewSongsEntity) {
+        LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent, id: model.id))
+        let musicDetailViewController = musicDetailFactory.makeViewController(songIDs: [model.id], selectedID: model.id)
+        musicDetailViewController.modalPresentationStyle = .fullScreen
+        self.present(musicDetailViewController, animated: true)
+    }
+
+    func playButtonDidTap(model: NewSongsEntity) {
+        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeRecent, id: model.id))
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
         WakmusicYoutubePlayer(id: model.id).play()
     }
