@@ -4,6 +4,7 @@ import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
 import SignInFeatureInterface
+import TeamFeatureInterface
 import UIKit
 
 public protocol MyInfoDependency: Dependency {

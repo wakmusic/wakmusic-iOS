@@ -76,3 +76,7 @@ public func WMDOMAIN_IMAGE() -> String {
 public func WMDOMAIN_NOTIFICATION() -> String {
     return config(key: "WMDOMAIN_NOTIFICATION")
 }
+
+public func WMDOMAIN_TEAM() -> String {
+    return config(key: "WMDOMAIN_TEAM")
+}

@@ -21,6 +21,7 @@ let project = Project.module(
                     .feature(target: .PlaylistFeature, type: .interface),
                     .feature(target: .LyricHighlightingFeature),
                     .feature(target: .FruitDrawFeature),
+                    .feature(target: .TeamFeature),
                     .domain(target: .NoticeDomain, type: .interface),
                     .domain(target: .NotificationDomain, type: .interface)
                 ]
