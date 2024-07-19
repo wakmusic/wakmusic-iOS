@@ -2,11 +2,11 @@ import DesignSystem
 import UIKit
 import Utility
 
-public protocol TeamInfoSectionViewDelegate: AnyObject {
-    func sectionTapped(with section: Int)
+protocol TeamInfoSectionViewDelegate: AnyObject {
+    func toggleSection(header: TeamInfoSectionView, section: Int)
 }
 
-final class TeamInfoSectionView: UIView {
+final class TeamInfoSectionView: UITableViewHeaderFooterView {
     private let folderImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Team.folderOn.image
         $0.contentMode = .scaleAspectFit
@@ -28,8 +28,8 @@ final class TeamInfoSectionView: UIView {
     private var section: Int = 0
     weak var delegate: TeamInfoSectionViewDelegate?
 
-    init() {
-        super.init(frame: .zero)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         addSubViews()
         setLayout()
         configureUI()
@@ -48,8 +48,11 @@ extension TeamInfoSectionView {
         titleLabel.text = title
         folderImageView.image = isOpen ?
             DesignSystemAsset.Team.folderOn.image : DesignSystemAsset.Team.folderOff.image
-        arrowImageView.image = isOpen ?
-            DesignSystemAsset.Team.arrowTop.image : DesignSystemAsset.Team.arrowBottom.image
+        rotate(isOpen: isOpen)
+    }
+
+    func rotate(isOpen: Bool) {
+        arrowImageView.rotate(isOpen ? 0 : .pi)
     }
 }
 
@@ -61,7 +64,10 @@ private extension TeamInfoSectionView {
     }
 
     @objc func sectionTapped(_ sender: UITapGestureRecognizer) {
-        delegate?.sectionTapped(with: section)
+        guard let header = sender.view as? TeamInfoSectionView else {
+            return
+        }
+        delegate?.toggleSection(header: header, section: section)
     }
 
     func addSubViews() {
@@ -89,6 +95,6 @@ private extension TeamInfoSectionView {
     }
 
     func configureUI() {
-        backgroundColor = colorFromRGB(0xF2F4F7)
+        contentView.backgroundColor = colorFromRGB(0xF2F4F7)
     }
 }

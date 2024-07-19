@@ -12,6 +12,7 @@ import Utility
 final class TeamInfoContentViewController: UIViewController {
     private let tableView = UITableView().then {
         $0.register(TeamInfoListCell.self, forCellReuseIdentifier: "\(TeamInfoListCell.self)")
+        $0.register(TeamInfoSectionView.self, forHeaderFooterViewReuseIdentifier: "\(TeamInfoSectionView.self)")
         $0.separatorStyle = .none
         $0.backgroundColor = .clear
         $0.sectionHeaderTopPadding = 0
@@ -103,11 +104,12 @@ private extension TeamInfoContentViewController {
 }
 
 extension TeamInfoContentViewController: TeamInfoSectionViewDelegate {
-    func sectionTapped(with section: Int) {
+    func toggleSection(header: TeamInfoSectionView, section: Int) {
         var newDataSource = output.dataSource.value
         newDataSource[section].model.isOpen = !newDataSource[section].model.isOpen
         output.dataSource.accept(newDataSource)
-        tableView.reloadSections([section], with: .automatic)
+        header.rotate(isOpen: newDataSource[section].model.isOpen)
+        tableView.reloadSections(IndexSet(integer: section), with: .automatic)
     }
 }
 
@@ -131,7 +133,11 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionView = TeamInfoSectionView()
+        guard let sectionView = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: "\(TeamInfoSectionView.self)"
+        ) as? TeamInfoSectionView else {
+            return nil
+        }
         sectionView.delegate = self
         sectionView.update(
             section: section,
