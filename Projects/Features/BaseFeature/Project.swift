@@ -22,7 +22,8 @@ let project = Project.module(
                     .module(target: .ErrorModule),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
-                    .Project.Module.Utility
+                    .Project.Module.Utility,
+                    .SPM.RxGesture
                 ]
             )
         ),

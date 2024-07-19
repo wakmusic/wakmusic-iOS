@@ -1,5 +1,10 @@
+import BaseFeature
+import BaseFeatureInterface
 import Inject
+import LyricHighlightingFeatureInterface
 @testable import MusicDetailFeature
+import RxSwift
+import SongsDomainTesting
 import UIKit
 import Utility
 
@@ -13,63 +18,61 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
 
-//        let playListModel = PlaylistModel(
-//            key: "key",
-//            title: "플리1",
-//            isPrivate: false,
-//            imageURL: "https://google.com",
-//            songs: [
-//                .init(
-//                    videoID: "fgSXAKsq-Vo",
-//                    title: "리와인드",
-//                    artistString: "이세계아이돌",
-//                    date: "2024.10.10",
-//                    likes: 1_000_000,
-//                    isLiked: true,
-//                    karaokeNumber: .init(tj: 0, ky: 0)
-//                ),
-//                .init(
-//                    videoID: "DPEtmqvaKqY",
-//                    title: "팬서비스",
-//                    artistString: "고세구",
-//                    date: "2024.10.10",
-//                    likes: 1_000_000,
-//                    isLiked: true,
-//                    karaokeNumber: .init(tj: 0, ky: 0)
-//                ),
-//                .init(
-//                    videoID: "KQa297hRop0",
-//                    title: "UP!",
-//                    artistString: "징버거",
-//                    date: "2024.10.10",
-//                    likes: 1_000_000,
-//                    isLiked: false,
-//                    karaokeNumber: .init(tj: 0, ky: 0)
-//                ),
-//                .init(
-//                    videoID: "qZi1Xh0_8q4",
-//                    title: "긍지높은 아이돌",
-//                    artistString: "고세구",
-//                    date: "2024.10.10",
-//                    likes: 1_000_000,
-//                    isLiked: true,
-//                    karaokeNumber: .init(tj: 0, ky: 0)
-//                )
-//            ],
-//            createdAt: 0,
-//            modifiedAt: 0
-//        )
-//        let reactor = MusicDetailReactor(
-//            playlist: playListModel,
-//            selectedIndex: 0
-//        )
+        let fetchSongUseCase = FetchSongUseCaseSpy()
+        fetchSongUseCase.handler = { _ in
+            .just(
+                .init(
+                    id: "DPEtmqvaKqY",
+                    title: "팬서비스",
+                    artist: "고세구",
+                    views: 120,
+                    date: "2024.03.11",
+                    likes: 120,
+                    karaokeNumber: .init(TJ: 36, KY: nil)
+                )
+            )
+        }
 
+        let reactor = MusicDetailReactor(
+            songIDs: [
+                "fgSXAKsq-Vo",
+                "DPEtmqvaKqY",
+                "KQa297hRop0",
+                "qZi1Xh0_8q4"
+            ],
+            selectedID: "DPEtmqvaKqY",
+            fetchSongUseCase: fetchSongUseCase
+        )
         let viewController = Inject.ViewControllerHost(
-            UINavigationController(rootViewController: UIViewController())
+            UINavigationController(
+                rootViewController: MusicDetailViewController(
+                    reactor: reactor,
+                    lyricHighlightingFactory: DummyLyricHighlightingFactory(),
+                    containSongsFactory: DummyContainSongsFactory(),
+                    playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
+                )
+            )
         )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
 
         return true
     }
+}
+
+final class DummyLyricHighlightingFactory: LyricHighlightingFactory {
+    func makeView(model: LyricHighlightingRequiredModel) -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummyContainSongsFactory: ContainSongsFactory {
+    func makeView(songs: [String]) -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
+    var presentPlayListObservable: RxSwift.Observable<Void> { .empty() }
+    func presentPlayList() {}
 }

@@ -41,6 +41,7 @@ let package = Package(
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.2.0"),
         .package(url: "https://github.com/Quick/Quick.git", from: "7.5.0"),
         .package(url: "https://github.com/Quick/Nimble.git", from: "13.3.0"),
-        .package(url: "https://github.com/krzysztofzablocki/Inject.git", from: "1.5.0")
+        .package(url: "https://github.com/krzysztofzablocki/Inject.git", from: "1.5.0"),
+        .package(url: "https://github.com/RxSwiftCommunity/RxGesture.git", from: "4.0.4")
     ]
 )

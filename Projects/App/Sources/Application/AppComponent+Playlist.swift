@@ -12,7 +12,7 @@ import StorageFeature
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
 public extension AppComponent {
-    var playlistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
+    var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol {
         shared {
             PlayListPresenterGlobalState()
         }

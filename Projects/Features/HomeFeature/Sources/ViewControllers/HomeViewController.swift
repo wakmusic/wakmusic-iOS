@@ -3,6 +3,7 @@ import ChartDomainInterface
 import ChartFeatureInterface
 import DesignSystem
 import LogManager
+import MusicDetailFeatureInterface
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -54,9 +55,10 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     }
 
     private var refreshControl = UIRefreshControl()
-    var chartFactory: ChartFactory!
-    var playlistDetailFactory: PlaylistDetailFactory!
-    var newSongsComponent: NewSongsComponent!
+    private var chartFactory: ChartFactory!
+    private var playlistDetailFactory: PlaylistDetailFactory!
+    private var newSongsComponent: NewSongsComponent!
+    private var musicDetailFactory: (any MusicDetailFactory)!
     var recommendViewHeightConstraint: NSLayoutConstraint?
 
     var viewModel: HomeViewModel!
@@ -87,13 +89,15 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         viewModel: HomeViewModel,
         playlistDetailFactory: PlaylistDetailFactory,
         newSongsComponent: NewSongsComponent,
-        chartFactory: ChartFactory
+        chartFactory: ChartFactory,
+        musicDetailFactory: any MusicDetailFactory
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
         viewController.chartFactory = chartFactory
+        viewController.musicDetailFactory = musicDetailFactory
         return viewController
     }
 }
@@ -132,19 +136,11 @@ extension HomeViewController {
             .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
-            .withLatestFrom(output.chartDataSource) { ($0, $1) }
-            .map { SongEntity(
-                id: $0.1[$0.0.row].id,
-                title: $0.1[$0.0.row].title,
-                artist: $0.1[$0.0.row].artist,
-                views: $0.1[$0.0.row].views,
-                date: $0.1[$0.0.row].date
-            )
-            }
-            .subscribe(onNext: { song in
+            .bind(with: self) { owner, _ in
                 LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100))
-                PlayState.shared.loadAndAppendSongsToPlaylist([song])
-            })
+                let viewController = owner.chartFactory.makeView()
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
             .disposed(by: disposeBag)
 
         collectionView.rx.itemSelected
@@ -180,7 +176,7 @@ extension HomeViewController {
             .do(onNext: { [weak self] _ in
                 self?.activityIndicator.stopAnimating()
             })
-            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
+            .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView
                     .dequeueReusableCell(
@@ -190,6 +186,7 @@ extension HomeViewController {
                     return UITableViewCell()
                 }
                 cell.update(model: model, index: indexPath.row)
+                cell.delegate = self
                 return cell
             }
             .disposed(by: disposeBag)
@@ -375,6 +372,19 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
         return 8.0
+    }
+}
+
+extension HomeViewController: HomeChartCellDelegate {
+    func thumbnailDidTap(model: ChartRankingEntity) {
+        let musicDetailViewController = musicDetailFactory.makeViewController(songIDs: [model.id], selectedID: model.id)
+        musicDetailViewController.modalPresentationStyle = .fullScreen
+        self.present(musicDetailViewController, animated: true)
+    }
+
+    func playButtonDidTap(model: ChartRankingEntity) {
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+        WakmusicYoutubePlayer(id: model.id).play()
     }
 }
 

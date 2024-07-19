@@ -9,13 +9,15 @@ let project = Project.module(
         .implements(module: .feature(.MusicDetailFeature), dependencies: [
             .feature(target: .MusicDetailFeature, type: .interface),
             .feature(target: .BaseFeature),
-            .feature(target: .LyricHighlightingFeature, type: .interface)
+            .feature(target: .LyricHighlightingFeature, type: .interface),
+            .domain(target: .SongsDomain, type: .interface)
         ]),
         .tests(module: .feature(.MusicDetailFeature), dependencies: [
             .feature(target: .MusicDetailFeature)
         ]),
         .demo(module: .feature(.MusicDetailFeature), dependencies: [
-            .feature(target: .MusicDetailFeature)
+            .feature(target: .MusicDetailFeature),
+            .domain(target: .SongsDomain, type: .testing)
         ])
     ]
 )

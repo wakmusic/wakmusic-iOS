@@ -1,11 +1,14 @@
 import Foundation
 import Kingfisher
 import LogManager
+import LyricHighlightingFeatureInterface
 import ReactorKit
+import SongsDomainInterface
 import Utility
 
 final class MusicDetailReactor: Reactor {
     enum Action {
+        case viewDidLoad
         case prevButtonDidTap
         case playButtonDidTap
         case nextButtonDidTap
@@ -21,25 +24,29 @@ final class MusicDetailReactor: Reactor {
     enum Mutation {
         case updateSelectedIndex(Int)
         case navigate(NavigateType?)
+        case updateSongDictionary(key: String, value: SongModel)
     }
 
     enum NavigateType {
         case youtube(id: String)
         case credit(id: String)
+        case lyricsHighlighting(model: LyricHighlightingRequiredModel)
+        case musicPick(id: String)
+        case playlist
         case dismiss
     }
 
     struct State {
-        var playlist: PlaylistModel
+        var songIDs: [String]
         var selectedIndex: Int
-        var songs: [PlaylistModel.SongModel] { playlist.songs }
-        var selectedSong: PlaylistModel.SongModel? {
-            guard selectedIndex >= 0, selectedIndex < songs.count else { return nil }
-            return songs[selectedIndex]
+        var songDictionary: [String: SongModel] = [:]
+        var selectedSong: SongModel? {
+            guard selectedIndex >= 0, selectedIndex < songIDs.count else { return nil }
+            return songDictionary[songIDs[selectedIndex]]
         }
 
         var isFirstSong: Bool { selectedIndex == 0 }
-        var isLastSong: Bool { selectedIndex == songs.count - 1 }
+        var isLastSong: Bool { selectedIndex == songIDs.count - 1 }
         var navigateType: NavigateType?
     }
 
@@ -47,25 +54,37 @@ final class MusicDetailReactor: Reactor {
 
     var initialState: State
     private let youtubeURLGenerator = YoutubeURLGenerator()
+    private let fetchSongUseCase: any FetchSongUseCase
 
     init(
-        playlist: PlaylistModel,
-        selectedIndex: Int
+        songIDs: [String],
+        selectedID: String,
+        fetchSongUseCase: any FetchSongUseCase
     ) {
-        #warning("'PlayState' 클래스가 v3 대응 완료 시 실제 로직 추가")
+        let selectedIndex = songIDs.firstIndex(of: selectedID) ?? 0
         self.initialState = .init(
-            playlist: playlist,
+            songIDs: songIDs,
             selectedIndex: selectedIndex
         )
 
-        let urls = playlist.songs.map(\.videoID)
-            .map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
-            .compactMap { URL(string: $0) }
+        self.fetchSongUseCase = fetchSongUseCase
+
+        let urls = [
+            songIDs[safe: selectedIndex - 1],
+            songIDs[safe: selectedIndex],
+            songIDs[safe: selectedIndex + 1]
+        ]
+        .compactMap { $0 }
+        .map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
+        .compactMap { URL(string: $0) }
+
         ImagePrefetcher(urls: urls).start()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewDidLoad:
+            return viewDidLoad()
         case .prevButtonDidTap:
             return prevButtonDidTap()
         case .playButtonDidTap:
@@ -96,6 +115,8 @@ final class MusicDetailReactor: Reactor {
             newState.selectedIndex = index
         case let .navigate(navigate):
             newState.navigateType = navigate
+        case let .updateSongDictionary(key, value):
+            newState.songDictionary[key] = value
         }
         return newState
     }
@@ -103,16 +124,37 @@ final class MusicDetailReactor: Reactor {
 
 // MARK: - Mutate
 private extension MusicDetailReactor {
+    func viewDidLoad() -> Observable<Mutation> {
+        let selectedIndex = currentState.selectedIndex
+        guard let selectedSongID = currentState.songIDs[safe: selectedIndex] else { return .empty() }
+        let prefetchingSongMutationObservable = [
+            currentState.songIDs[safe: selectedIndex - 1],
+            currentState.songIDs[safe: selectedIndex + 1]
+        ].compactMap { $0 }
+            .map { index in
+                fetchSongUseCase.execute(id: index)
+                    .map { Mutation.updateSongDictionary(key: index, value: $0.toModel(isLiked: false)) }
+                    .asObservable()
+            }
+
+        let songMutationObservable = fetchSongUseCase.execute(id: selectedSongID)
+            .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0.toModel(isLiked: false)) }
+            .asObservable()
+
+        return Observable.merge(
+            [songMutationObservable] + prefetchingSongMutationObservable
+        )
+    }
+
     func prevButtonDidTap() -> Observable<Mutation> {
         guard !currentState.isFirstSong else { return .empty() }
         if let song = currentState.selectedSong {
-            let log = Log.clickPrevMusicButton(
-                key: currentState.playlist.key,
-                id: song.videoID
-            )
+            let log = Log.clickPrevMusicButton(id: song.videoID)
             LogManager.analytics(log)
         }
         let newIndex = currentState.selectedIndex - 1
+        prefetchThumbnailImage(index: newIndex)
+
         return .just(.updateSelectedIndex(newIndex))
     }
 
@@ -120,7 +162,6 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong else { return .empty() }
         if let song = currentState.selectedSong {
             let log = Log.clickPlaylistButton(
-                key: currentState.playlist.key,
                 id: song.videoID
             )
             LogManager.analytics(log)
@@ -135,32 +176,42 @@ private extension MusicDetailReactor {
         guard !currentState.isLastSong else { return .empty() }
         if let song = currentState.selectedSong {
             let log = Log.clickNextMusicButton(
-                key: currentState.playlist.key,
                 id: song.videoID
             )
             LogManager.analytics(log)
         }
         let newIndex = currentState.selectedIndex + 1
+        prefetchThumbnailImage(index: newIndex)
+
         return .just(.updateSelectedIndex(newIndex))
     }
 
     func singingRoomButtonDiTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickSingingRoomButton(key: currentState.playlist.key, id: song.videoID)
+        let log = Log.clickSingingRoomButton(id: song.videoID)
         LogManager.analytics(log)
         return .empty()
     }
 
     func lyricsButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickLyricsButton(key: currentState.playlist.key, id: song.videoID)
+        let log = Log.clickLyricsButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+
+        let lyricHighlightingModel = LyricHighlightingRequiredModel(
+            songID: song.videoID,
+            title: song.title,
+            artist: song.artistString
+        )
+        return .concat(
+            .just(.navigate(.lyricsHighlighting(model: lyricHighlightingModel))),
+            .just(.navigate(nil))
+        )
     }
 
     func creditButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickCreditButton(key: currentState.playlist.key, id: song.videoID)
+        let log = Log.clickCreditButton(id: song.videoID)
         LogManager.analytics(log)
         return .just(.navigate(.credit(id: song.videoID)))
     }
@@ -169,9 +220,8 @@ private extension MusicDetailReactor {
         let isLike = currentState.selectedSong?.isLiked ?? false
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickLikeMusicButton(
-            key: currentState.playlist.key,
             id: song.videoID,
-            like: !isLike
+            like: isLike
         )
         LogManager.analytics(log)
         return .empty()
@@ -179,15 +229,33 @@ private extension MusicDetailReactor {
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickMusicPickButton(key: currentState.playlist.key, id: song.videoID)
+        let log = Log.clickMusicPickButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+        return .concat(
+            .just(.navigate(.musicPick(id: song.videoID))),
+            .just(.navigate(nil))
+        )
     }
 
     func playListButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickPlaylistButton(key: currentState.playlist.key, id: song.videoID)
+        let log = Log.clickPlaylistButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+        return .concat(
+            .just(.navigate(.playlist)),
+            .just(.navigate(nil))
+        )
+    }
+}
+
+private extension MusicDetailReactor {
+    func prefetchThumbnailImage(index: Int) {
+        if let songID = currentState.songIDs[safe: index],
+           let thumbnailPrefetchingSongID = currentState.songDictionary[songID]?.videoID,
+           let thumbnailURL = URL(
+               string: youtubeURLGenerator.generateHDThumbnailURL(id: thumbnailPrefetchingSongID)
+           ) {
+            ImagePrefetcher(urls: [thumbnailURL]).start()
+        }
     }
 }
