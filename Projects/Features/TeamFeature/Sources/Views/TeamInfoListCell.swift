@@ -1,6 +1,8 @@
 import DesignSystem
 import Foundation
 import UIKit
+import TeamDomainInterface
+import Utility
 
 final class TeamInfoListCell: UITableViewCell {
     private let leadLabel = WMLabel(
@@ -41,6 +43,7 @@ final class TeamInfoListCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubViews()
         setLayout()
+        configureUI()
     }
 
     @available(*, unavailable)
@@ -50,7 +53,11 @@ final class TeamInfoListCell: UITableViewCell {
 }
 
 extension TeamInfoListCell {
-    func update() {}
+    func update(entity: TeamListEntity) {
+        leadLabel.isHidden = !entity.isLead
+        nameLabel.text = entity.name
+        positionLabel.text = entity.position
+    }
 }
 
 private extension TeamInfoListCell {
@@ -86,5 +93,10 @@ private extension TeamInfoListCell {
         positionLabel.snp.makeConstraints {
             $0.height.equalTo(18)
         }
+    }
+
+    func configureUI() {
+        contentView.backgroundColor = colorFromRGB(0xebedf1)
+        profileImageView.backgroundColor = UIColor.random()
     }
 }

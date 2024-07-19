@@ -5,7 +5,12 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.TeamFeature.rawValue,
     targets: [
-        .interface(module: .feature(.TeamFeature)),
+        .interface(
+            module: .feature(.TeamFeature),
+            dependencies: [
+                .domain(target: .TeamDomain, type: .interface)
+            ]
+        ),
         .implements(
             module: .feature(.TeamFeature),
             dependencies: [

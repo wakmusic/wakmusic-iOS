@@ -78,11 +78,8 @@ private extension TeamInfoViewController {
         output.dataSource
             .skip(1)
             .bind(with: self, onNext: { owner, source in
-                owner.viewControllers =
-                    [
-                        TeamInfoContentViewController(viewModel: .init(entities: source)),
-                        TeamInfoContentViewController(viewModel: .init(entities: source))
-                    ]
+                owner.viewControllers = [TeamInfoContentViewController(viewModel: .init(entities: source)),
+                                         TeamInfoContentViewController(viewModel: .init(entities: source))]
                 owner.reloadData()
                 owner.warningView.isHidden = !source.isEmpty
                 owner.activityIndicator.stopAnimating()
