@@ -122,7 +122,7 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let members = output.dataSource.value[indexPath.section].model.members
-        return members.count == 1 ? (12 + 40 + 12) : (4 + 40 + 4)
+        return TeamInfoListCell.cellHeight(index: indexPath.row, totalCount: members.count)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -147,7 +147,11 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
         ) as? TeamInfoListCell else {
             return UITableViewCell()
         }
-        cell.update(entity: output.dataSource.value[indexPath.section].model.members[indexPath.row])
+        cell.update(
+            entity: output.dataSource.value[indexPath.section].model.members[indexPath.row],
+            index: indexPath.row,
+            totalCount: output.dataSource.value[indexPath.section].model.members.count
+        )
         return cell
     }
 }

@@ -5,6 +5,14 @@ import UIKit
 import Utility
 
 final class TeamInfoListCell: UITableViewCell {
+    private let outsideStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 0
+    }
+    private let topSpacingView = UIView()
+    private let outsideView = UIView()
+    private let bottomSpacingView = UIView()
+
     private let leadLabel = WMLabel(
         text: "팀장",
         textColor: .white,
@@ -22,7 +30,7 @@ final class TeamInfoListCell: UITableViewCell {
         $0.clipsToBounds = true
     }
 
-    private let stackView = UIStackView().then {
+    private let descriptionStackView = UIStackView().then {
         $0.axis = .vertical
         $0.spacing = 0
     }
@@ -53,20 +61,75 @@ final class TeamInfoListCell: UITableViewCell {
 }
 
 extension TeamInfoListCell {
-    func update(entity: TeamListEntity) {
+    static func cellHeight(index: Int, totalCount: Int) -> CGFloat {
+        if totalCount == 1 {
+            return 12 + 40 + 12
+            
+        } else {
+            if index == 0 {
+                return 8 + 4 + 40 + 4
+                
+            } else if index == totalCount - 1 {
+                return 4 + 40 + 4 + 8
+                
+            } else {
+                return 4 + 40 + 4
+            }
+        }
+    }
+
+    func update(entity: TeamListEntity, index: Int, totalCount: Int) {
         leadLabel.isHidden = !entity.isLead
         nameLabel.text = entity.name
         positionLabel.text = entity.position
+        
+        if totalCount == 1 {
+            topSpacingView.isHidden = false
+            bottomSpacingView.isHidden = false
+
+        } else {
+            if index == 0 {
+                topSpacingView.isHidden = false
+                bottomSpacingView.isHidden = true
+
+            } else if index == totalCount - 1 {
+                topSpacingView.isHidden = true
+                bottomSpacingView.isHidden = false
+
+            } else {
+                topSpacingView.isHidden = true
+                bottomSpacingView.isHidden = true
+            }
+        }
     }
 }
 
 private extension TeamInfoListCell {
     func addSubViews() {
-        contentView.addSubviews(leadLabel, profileImageView, stackView)
-        stackView.addArrangedSubviews(nameLabel, positionLabel)
+        contentView.addSubviews(outsideStackView)
+        outsideStackView.addArrangedSubviews(topSpacingView, outsideView, bottomSpacingView)
+        outsideView.addSubviews(leadLabel, profileImageView, descriptionStackView)
+        descriptionStackView.addArrangedSubviews(nameLabel, positionLabel)
     }
 
     func setLayout() {
+        outsideStackView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview()
+            $0.centerY.equalToSuperview()
+        }
+
+        topSpacingView.snp.makeConstraints {
+            $0.height.equalTo(8)
+        }
+
+        outsideView.snp.makeConstraints {
+            $0.height.equalTo(4 + 40 + 4)
+        }
+
+        bottomSpacingView.snp.makeConstraints {
+            $0.height.equalTo(8)
+        }
+
         leadLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()
@@ -80,7 +143,7 @@ private extension TeamInfoListCell {
             $0.size.equalTo(32)
         }
 
-        stackView.snp.makeConstraints {
+        descriptionStackView.snp.makeConstraints {
             $0.leading.equalTo(profileImageView.snp.trailing).offset(8)
             $0.centerY.equalTo(leadLabel.snp.centerY)
             $0.trailing.equalToSuperview().offset(-20)
