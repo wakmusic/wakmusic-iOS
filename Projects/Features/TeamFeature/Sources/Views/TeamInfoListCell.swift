@@ -1,7 +1,7 @@
 import DesignSystem
 import Foundation
-import UIKit
 import TeamDomainInterface
+import UIKit
 import Utility
 
 final class TeamInfoListCell: UITableViewCell {
@@ -96,7 +96,7 @@ private extension TeamInfoListCell {
     }
 
     func configureUI() {
-        contentView.backgroundColor = colorFromRGB(0xebedf1)
+        contentView.backgroundColor = colorFromRGB(0xEBEDF1)
         profileImageView.backgroundColor = UIColor.random()
     }
 }

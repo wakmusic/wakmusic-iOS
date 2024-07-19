@@ -47,9 +47,9 @@ extension TeamInfoSectionView {
         self.section = section
         titleLabel.text = title
         folderImageView.image = isOpen ?
-        DesignSystemAsset.Team.folderOn.image : DesignSystemAsset.Team.folderOff.image
+            DesignSystemAsset.Team.folderOn.image : DesignSystemAsset.Team.folderOff.image
         arrowImageView.image = isOpen ?
-        DesignSystemAsset.Team.arrowTop.image : DesignSystemAsset.Team.arrowBottom.image
+            DesignSystemAsset.Team.arrowTop.image : DesignSystemAsset.Team.arrowBottom.image
     }
 }
 
@@ -89,6 +89,6 @@ private extension TeamInfoSectionView {
     }
 
     func configureUI() {
-        backgroundColor = colorFromRGB(0xf2f4f7)
+        backgroundColor = colorFromRGB(0xF2F4F7)
     }
 }

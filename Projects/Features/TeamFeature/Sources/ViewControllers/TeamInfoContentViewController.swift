@@ -97,7 +97,7 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return output.dataSource.value[section].model.isOpen ?
-        output.dataSource.value[section].model.members.count : 0
+            output.dataSource.value[section].model.members.count : 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

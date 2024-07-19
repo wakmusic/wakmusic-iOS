@@ -3,8 +3,8 @@ import Foundation
 import LogManager
 import RxRelay
 import RxSwift
-import TeamFeatureInterface
 import TeamDomainInterface
+import TeamFeatureInterface
 
 public final class TeamInfoContentViewModel: ViewModelType {
     private let entities: [TeamListEntity]
