@@ -1,3 +1,4 @@
+import BaseFeature
 import DesignSystem
 import Foundation
 import LogManager
@@ -7,7 +8,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import BaseFeature
 
 final class TeamInfoContentViewController: UIViewController {
     private let tableView = UITableView().then {
