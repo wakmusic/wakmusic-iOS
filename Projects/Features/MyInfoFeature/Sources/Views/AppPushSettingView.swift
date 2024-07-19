@@ -68,8 +68,6 @@ private extension AppPushSettingView {
     }
 }
 
-extension TeamInfoView: AppPushSettingStateProtocol {}
-
 extension Reactive: AppPushSettingActionProtocol where Base: AppPushSettingView {
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
 }

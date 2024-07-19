@@ -1,10 +1,13 @@
 import TeamDomain
 import TeamDomainInterface
-
-// MARK: 변수명 주의
-// AppComponent 내 변수 == Dependency 내 변수 이름 같아야함
+import TeamFeature
+import TeamFeatureInterface
 
 public extension AppComponent {
+    var teamInfoFactory: any TeamInfoFactory {
+        TeamInfoComponent(parent: self)
+    }
+
     var remoteTeamDataSource: any RemoteTeamDataSource {
         shared {
             RemoteTeamDataSourceImpl(keychain: keychain)

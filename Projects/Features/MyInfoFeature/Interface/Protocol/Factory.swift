@@ -38,10 +38,6 @@ public protocol QuestionFactory {
     func makeView() -> UIViewController
 }
 
-public protocol TeamInfoFactory {
-    func makeView() -> UIViewController
-}
-
 public protocol ServiceInfoFactory {
     func makeView() -> UIViewController
 }
