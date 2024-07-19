@@ -7,6 +7,7 @@ import TeamDomainInterface
 import TeamFeatureInterface
 
 public final class TeamInfoContentViewModel: ViewModelType {
+    private let type: TeamInfoType
     private let entities: [TeamListEntity]
     private let disposeBag = DisposeBag()
 
@@ -14,7 +15,8 @@ public final class TeamInfoContentViewModel: ViewModelType {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    public init(entities: [TeamListEntity]) {
+    public init(type: TeamInfoType, entities: [TeamListEntity]) {
+        self.type = type
         self.entities = entities
     }
 
@@ -24,16 +26,18 @@ public final class TeamInfoContentViewModel: ViewModelType {
 
     public struct Output {
         let dataSource: BehaviorRelay<[TeamInfoSectionModel]> = .init(value: [])
+        let type: BehaviorRelay<TeamInfoType> = .init(value: .develop)
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
         let entities = self.entities
         let teams = entities.map { $0.team }.uniqueElements
+        
+        output.type.accept(type)
 
         input.combineTeamList
-            .map { [weak self] _ in
-                guard let self = self else { return [] }
+            .map { _ -> [TeamInfoSectionModel] in
                 return teams.map { team -> TeamInfoSectionModel in
                     return TeamInfoSectionModel(
                         title: team,
@@ -48,11 +52,5 @@ public final class TeamInfoContentViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         return output
-    }
-}
-
-private extension TeamInfoContentViewModel {
-    func makeDummy() -> TeamListEntity {
-        return TeamListEntity(team: "", name: "", position: "", profile: "", isLead: true)
     }
 }

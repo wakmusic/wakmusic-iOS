@@ -79,8 +79,8 @@ private extension TeamInfoViewController {
             .skip(1)
             .bind(with: self, onNext: { owner, source in
                 owner.viewControllers = [
-                    TeamInfoContentViewController(viewModel: .init(entities: source)),
-                    TeamInfoContentViewController(viewModel: .init(entities: source))
+                    TeamInfoContentViewController(viewModel: .init(type: .develop, entities: source)),
+                    TeamInfoContentViewController(viewModel: .init(type: .weeklyWM, entities: source))
                 ]
                 owner.reloadData()
                 owner.warningView.isHidden = !source.isEmpty

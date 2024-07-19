@@ -1,6 +1,6 @@
 import Foundation
 
-enum TeamInfoType {
+public enum TeamInfoType {
     case develop
     case weeklyWM
 

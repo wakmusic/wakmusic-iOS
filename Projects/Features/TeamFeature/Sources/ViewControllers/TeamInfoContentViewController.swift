@@ -52,6 +52,10 @@ private extension TeamInfoContentViewController {
             .skip(1)
             .debug()
             .bind(with: self, onNext: { owner, _ in
+                owner.tableView.tableHeaderView = owner.output.type.value == .weeklyWM ?
+                TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
+                owner.tableView.tableFooterView =
+                TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
                 owner.tableView.reloadData()
             })
             .disposed(by: disposeBag)
@@ -67,7 +71,7 @@ private extension TeamInfoContentViewController {
 
     func setLayout() {
         tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(104)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(output.type.value == .develop ? 104 : 100)
             $0.horizontalEdges.bottom.equalToSuperview()
         }
     }
@@ -101,7 +105,7 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 48
+        return 4 + 40 + 4
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
