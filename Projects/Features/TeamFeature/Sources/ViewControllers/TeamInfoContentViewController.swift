@@ -53,9 +53,9 @@ private extension TeamInfoContentViewController {
             .debug()
             .bind(with: self, onNext: { owner, _ in
                 owner.tableView.tableHeaderView = owner.output.type.value == .weeklyWM ?
-                TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
+                    TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
                 owner.tableView.tableFooterView =
-                TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
+                    TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
                 owner.tableView.reloadData()
             })
             .disposed(by: disposeBag)

@@ -33,7 +33,7 @@ public final class TeamInfoContentViewModel: ViewModelType {
         let output = Output()
         let entities = self.entities
         let teams = entities.map { $0.team }.uniqueElements
-        
+
         output.type.accept(type)
 
         input.combineTeamList

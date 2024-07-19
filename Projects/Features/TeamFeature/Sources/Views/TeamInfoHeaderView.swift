@@ -1,6 +1,6 @@
+import DesignSystem
 import Foundation
 import UIKit
-import DesignSystem
 
 final class TeamInfoHeaderView: UIView {
     private let profileImageView = UIImageView().then {
