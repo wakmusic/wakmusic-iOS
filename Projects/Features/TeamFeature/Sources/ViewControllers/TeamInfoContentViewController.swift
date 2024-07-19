@@ -56,6 +56,7 @@ private extension TeamInfoContentViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
+            .take(1)
             .bind(with: self, onNext: { owner, source in
                 let header = owner.output.type.value == .weeklyWM ?
                     TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
@@ -106,7 +107,7 @@ extension TeamInfoContentViewController: TeamInfoSectionViewDelegate {
         var newDataSource = output.dataSource.value
         newDataSource[section].model.isOpen = !newDataSource[section].model.isOpen
         output.dataSource.accept(newDataSource)
-        tableView.reloadSections([section], with: .none)
+        tableView.reloadSections([section], with: .automatic)
     }
 }
 
