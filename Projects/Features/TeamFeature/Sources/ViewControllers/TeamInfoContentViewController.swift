@@ -121,7 +121,8 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 4 + 40 + 4
+        let members = output.dataSource.value[indexPath.section].model.members
+        return members.count == 1 ? (12 + 40 + 12) : (4 + 40 + 4)
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -149,6 +150,10 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
         cell.update(entity: output.dataSource.value[indexPath.section].model.members[indexPath.row])
         return cell
     }
+}
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
+extension TeamInfoContentViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        tableView.bounces = scrollView.contentOffset.y > 0
+    }
 }

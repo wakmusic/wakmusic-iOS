@@ -96,7 +96,8 @@ private extension TeamInfoListCell {
     }
 
     func configureUI() {
-        contentView.backgroundColor = colorFromRGB(0xEBEDF1)
+        backgroundColor = UIColor.clear
+        contentView.backgroundColor = colorFromRGB(0xE4E7EC).withAlphaComponent(0.5)
         profileImageView.backgroundColor = UIColor.random()
     }
 }

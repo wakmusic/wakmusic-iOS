@@ -84,7 +84,7 @@ private extension TeamInfoHeaderView {
     }
 
     func configureUI() {
-        backgroundColor = colorFromRGB(0xE4E7EC, alpha: 0.5)
+        backgroundColor = colorFromRGB(0xE4E7EC).withAlphaComponent(0.5)
         profileImageView.backgroundColor = UIColor.random()
     }
 }
