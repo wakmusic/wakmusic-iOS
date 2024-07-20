@@ -14,7 +14,6 @@ import Utility
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var textPopUpFactory: TextPopUpFactory!
     private var signInFactory: SignInFactory!
-    private var appPushSettingFactory: AppPushSettingFactory!
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
@@ -35,7 +34,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor: SettingReactor,
         textPopUpFactory: TextPopUpFactory,
         signInFactory: SignInFactory,
-        appPushSettingFactory: AppPushSettingFactory,
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
         openSourceLicenseFactory: OpenSourceLicenseFactory
@@ -43,7 +41,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
-        viewController.appPushSettingFactory = appPushSettingFactory
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
@@ -73,8 +70,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 case .dismiss:
                     owner.navigationController?.popViewController(animated: true)
                 case .appPushSetting:
-                    let vc = owner.appPushSettingFactory.makeView()
-                    owner.navigationController?.pushViewController(vc, animated: true)
+                    guard let openSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                    UIApplication.shared.open(openSettingsURL)
                 case .serviceTerms:
                     let vc = owner.serviceTermsFactory.makeView()
                     vc.modalPresentationStyle = .fullScreen

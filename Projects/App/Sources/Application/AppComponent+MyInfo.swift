@@ -11,10 +11,6 @@ extension AppComponent {
         SettingComponent(parent: self)
     }
 
-    var appPushSettingFactory: any AppPushSettingFactory {
-        AppPushSettingComponent(parent: self)
-    }
-
     var openSourceLicenseFactory: any OpenSourceLicenseFactory {
         OpenSourceLicenseComponent(parent: self)
     }
