@@ -330,15 +330,23 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 /// 전체재생 , 랜덤 재생 델리게이트
 extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
-        #warning("재생 이벤트 넣기")
+        guard let reactor = reactor else {
+            return
+        }
+        let currentState = reactor.currentState
+        var songs = currentState.dataSource
+        
         switch event {
         case .allPlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
-            break
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
+            
         case .shufflePlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor?.key ?? ""))
-            break
+            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
+            songs.shuffle()
         }
+        
+        PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
+        WakmusicYoutubePlayer(ids: songs.map{ $0.id }).play()
     }
 }
 
@@ -350,6 +358,8 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
         }
 
         let currentState = reactor.currentState
+        
+        let songs = currentState.dataSource.filter { $0.isSelected }
 
         switch type {
         case let .allSelect(flag: flag):
@@ -359,19 +369,20 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+            let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-            #warning("재생목록 관련 구현체 구현 시 추가")
+            #warning("로컬 DB 저장")
+            PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
             reactor.action.onNext(.deselectAll)
-            break
+            
         case .play:
-            #warning("재생 구현")
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
-            break
+
         case .remove:
             break
         }
