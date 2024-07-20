@@ -87,8 +87,9 @@ private extension NewSongsContentViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .do(onNext: { [weak self] model in
-                guard let `self` = self else { return }
+            .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
+            .do(onNext: { [weak self] dataSource, songs in
+                guard let self = self else { return }
                 self.activityIncidator.stopAnimating()
                 self.refreshControl.endRefreshing()
                 let space: CGFloat = APP_HEIGHT() - 48 - 40 - 56 - 56 - STATUS_BAR_HEGHIT() - SAFEAREA_BOTTOM_HEIGHT()
@@ -100,13 +101,17 @@ private extension NewSongsContentViewController {
                     height: height
                 ))
                 warningView.text = "데이터가 없습니다."
-                self.tableView.tableFooterView = model.isEmpty ? warningView : UIView(frame: CGRect(
+                self.tableView.tableFooterView = dataSource.isEmpty ? warningView : UIView(frame: CGRect(
                     x: 0,
                     y: 0,
                     width: APP_WIDTH(),
                     height: PLAYER_HEIGHT()
                 ))
+                if let songCart = self.songCartView {
+                    songCart.updateAllSelect(isAll: songs.count == dataSource.count)
+                }
             })
+            .map { $0.0 }
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 let indexPath: IndexPath = IndexPath(row: index, section: 0)
                 guard let cell = tableView.dequeueReusableCell(
@@ -145,6 +150,16 @@ private extension NewSongsContentViewController {
             .filter { !$0.isEmpty }
             .subscribe()
             .disposed(by: disposeBag)
+
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    verticalOffset: 56 + 56 + 40
+                )
+            }
+            .disposed(by: disposeBag)
     }
 
     func configureUI() {
@@ -182,27 +197,40 @@ extension NewSongsContentViewController: PlayButtonGroupViewDelegate {
 
 extension NewSongsContentViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
+        let limit: Int = 50
+        let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
 
         case .addSong:
-            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsFactory.makeView(songs: songs)
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n노래담기는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
+            let songIds: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
+            let viewController = containSongsFactory.makeView(songs: songIds)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
 
         case .addPlayList:
-            let songs = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생목록추가는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.appendSongsToPlaylist(songs)
-            self.input.allSongSelected.onNext(false)
+            input.allSongSelected.onNext(false)
 
         case .play:
-            let songs = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생은 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-            self.input.allSongSelected.onNext(false)
+            input.allSongSelected.onNext(false)
 
         case .remove:
             return
