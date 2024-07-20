@@ -131,7 +131,7 @@ private extension ArtistMusicContentViewController {
                 }
             })
             .disposed(by: disposeBag)
-        
+
         output.showToast
             .bind(with: self) { owner, message in
                 owner.showToast(
@@ -212,7 +212,10 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
         LogManager.analytics(
-            ArtistAnalyticsLog.clickArtistPlayButton(type: event == .allPlay ? "all" : "random", artist: viewModel.model?.id ?? "")
+            ArtistAnalyticsLog.clickArtistPlayButton(
+                type: event == .allPlay ? "all" : "random",
+                artist: viewModel.model?.id ?? ""
+            )
         )
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
