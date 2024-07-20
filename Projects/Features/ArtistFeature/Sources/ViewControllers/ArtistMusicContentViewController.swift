@@ -129,7 +129,18 @@ private extension ArtistMusicContentViewController {
                     )
                     self.songCartView?.delegate = self
                 }
-            }).disposed(by: disposeBag)
+            })
+            .disposed(by: disposeBag)
+
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    verticalOffset: 56 + 56 + 40
+                )
+            }
+            .disposed(by: disposeBag)
     }
 
     func configureUI() {
@@ -142,24 +153,38 @@ private extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
+        let limit: Int = 50
+        let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
 
         case .addSong:
-            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsFactory.makeView(songs: songs)
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n노래담기는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
+            let songIds: [String] = songs.map { $0.id }
+            let viewController = containSongsFactory.makeView(songs: songIds)
             viewController.modalPresentationStyle = .overFullScreen
             self.present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
+
         case .addPlayList:
-            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생목록추가는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.appendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
 
         case .play:
-            let songs: [SongEntity] = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생은 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
 
@@ -186,6 +211,12 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
+        LogManager.analytics(
+            ArtistAnalyticsLog.clickArtistPlayButton(
+                type: event == .allPlay ? "all" : "random",
+                artist: viewModel.model?.id ?? ""
+            )
+        )
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
                 id: $0.songID,
@@ -197,19 +228,12 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
         }
         switch event {
         case .allPlay:
-            LogManager.analytics(
-                ArtistAnalyticsLog.clickArtistPlayButton(type: "all", artist: viewModel.model?.id ?? "")
-            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-            input.allSongSelected.onNext(false)
 
         case .shufflePlay:
-            LogManager.analytics(
-                ArtistAnalyticsLog.clickArtistPlayButton(type: "random", artist: viewModel.model?.id ?? "")
-            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs.shuffled())
-            input.allSongSelected.onNext(false)
         }
+        input.allSongSelected.onNext(false)
     }
 }
 
