@@ -174,7 +174,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addPlayList:
             guard songs.count <= limit else {
-                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n노래담기는 최대 \(limit)곡까지 가능합니다.")
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생목록추가는 최대 \(limit)곡까지 가능합니다.")
                 return
             }
             PlayState.shared.appendSongsToPlaylist(songs)
@@ -182,7 +182,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .play:
             guard songs.count <= limit else {
-                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n노래담기는 최대 \(limit)곡까지 가능합니다.")
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생은 최대 \(limit)곡까지 가능합니다.")
                 return
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
