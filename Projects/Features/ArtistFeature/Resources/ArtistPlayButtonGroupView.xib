@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,9 +11,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ArtistPlayButtonGroupView" customModule="ArtistFeature">
             <connections>
                 <outlet property="allPlayButton" destination="A1c-s9-wW4" id="Fcx-F9-qPN"/>
-                <outlet property="shufflePlayButton" destination="zwF-lw-QTI" id="m0i-0R-bWM"/>
+                <outlet property="imageView" destination="ilX-PP-tWb" id="KRn-Xa-x7f"/>
                 <outletCollection property="blurEffectViews" destination="mpQ-XN-5GZ" collectionClass="NSMutableArray" id="AaD-t9-yDl"/>
-                <outletCollection property="blurEffectViews" destination="tJa-1n-bXT" collectionClass="NSMutableArray" id="nQP-ne-MzN"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -22,15 +21,15 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mpQ-XN-5GZ">
-                    <rect key="frame" x="20" y="16" width="172.66666666666666" height="52"/>
+                    <rect key="frame" x="20" y="16" width="353" height="52"/>
                     <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Avm-yF-tv6">
-                        <rect key="frame" x="0.0" y="0.0" width="173" height="52"/>
+                        <rect key="frame" x="0.0" y="0.0" width="353" height="52"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </view>
                     <blurEffect style="regular"/>
                 </visualEffectView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="A1c-s9-wW4">
-                    <rect key="frame" x="20" y="16" width="172.66666666666666" height="52"/>
+                    <rect key="frame" x="20" y="16" width="353" height="52"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="52" id="1fq-10-ZdX"/>
                     </constraints>
@@ -43,41 +42,23 @@
                         <action selector="allPlayButtonAction:" destination="-1" eventType="touchUpInside" id="qM1-1z-kTQ"/>
                     </connections>
                 </button>
-                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tJa-1n-bXT">
-                    <rect key="frame" x="200.66666666666663" y="16" width="172.33333333333337" height="52"/>
-                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="gUt-lJ-c0i">
-                        <rect key="frame" x="0.0" y="0.0" width="172" height="52"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    </view>
-                    <blurEffect style="regular"/>
-                </visualEffectView>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zwF-lw-QTI">
-                    <rect key="frame" x="200.66666666666663" y="16" width="172.33333333333337" height="52"/>
-                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <state key="normal" title="랜덤재생">
-                        <color key="titleColor" name="gray900"/>
-                    </state>
-                    <connections>
-                        <action selector="shufflePlayButtonAction:" destination="-1" eventType="touchUpInside" id="VCW-vE-QSM"/>
-                    </connections>
-                </button>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ilX-PP-tWb">
+                    <rect key="frame" x="52" y="26" width="32" height="32"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="32" id="Eut-1p-FDj"/>
+                        <constraint firstAttribute="height" constant="32" id="v9d-Rm-fS5"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="zwF-lw-QTI" secondAttribute="trailing" constant="20" id="1B2-1t-ppr"/>
                 <constraint firstItem="A1c-s9-wW4" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="2lS-hc-QPq"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="leading" secondItem="A1c-s9-wW4" secondAttribute="trailing" constant="8" id="ALs-ID-rNq"/>
                 <constraint firstItem="A1c-s9-wW4" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="16" id="M8n-Zz-lEh"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="bottom" secondItem="tJa-1n-bXT" secondAttribute="bottom" id="MQ5-Ef-bdF"/>
+                <constraint firstAttribute="trailing" secondItem="A1c-s9-wW4" secondAttribute="trailing" constant="20" id="Nwx-9j-T3s"/>
                 <constraint firstItem="mpQ-XN-5GZ" firstAttribute="leading" secondItem="A1c-s9-wW4" secondAttribute="leading" id="TDr-XX-tQx"/>
                 <constraint firstItem="mpQ-XN-5GZ" firstAttribute="bottom" secondItem="A1c-s9-wW4" secondAttribute="bottom" id="UJl-gw-QbU"/>
-                <constraint firstItem="A1c-s9-wW4" firstAttribute="width" secondItem="zwF-lw-QTI" secondAttribute="width" id="W8E-hW-QUm"/>
-                <constraint firstItem="A1c-s9-wW4" firstAttribute="height" secondItem="zwF-lw-QTI" secondAttribute="height" id="WQ3-Nl-sB0"/>
                 <constraint firstItem="mpQ-XN-5GZ" firstAttribute="top" secondItem="A1c-s9-wW4" secondAttribute="top" id="f1s-Zm-MIY"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="top" secondItem="tJa-1n-bXT" secondAttribute="top" id="ifu-nQ-Age"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="trailing" secondItem="tJa-1n-bXT" secondAttribute="trailing" id="kbs-NO-iEL"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="leading" secondItem="tJa-1n-bXT" secondAttribute="leading" id="mgK-il-5Wx"/>
-                <constraint firstItem="zwF-lw-QTI" firstAttribute="centerY" secondItem="A1c-s9-wW4" secondAttribute="centerY" id="tod-oc-42q"/>
+                <constraint firstItem="ilX-PP-tWb" firstAttribute="centerY" secondItem="A1c-s9-wW4" secondAttribute="centerY" id="if5-zX-ivB"/>
+                <constraint firstItem="ilX-PP-tWb" firstAttribute="leading" secondItem="A1c-s9-wW4" secondAttribute="leading" constant="32" id="pJq-RX-dxX"/>
                 <constraint firstItem="mpQ-XN-5GZ" firstAttribute="trailing" secondItem="A1c-s9-wW4" secondAttribute="trailing" id="wNo-p6-ABT"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -86,7 +67,7 @@
     </objects>
     <resources>
         <namedColor name="gray900">
-            <color red="0.063000001013278961" green="0.093999996781349182" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.098039215686274508" green="0.10196078431372549" blue="0.10980392156862745" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
