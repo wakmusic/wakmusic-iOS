@@ -18,7 +18,8 @@ let project = Project.module(
             .feature(target: .SongCreditFeature)
         ]),
         .demo(module: .feature(.SongCreditFeature), dependencies: [
-            .feature(target: .SongCreditFeature)
+            .feature(target: .SongCreditFeature),
+            .domain(target: .SongsDomain, type: .testing)
         ])
     ]
 )
