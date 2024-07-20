@@ -20,10 +20,11 @@ let project = Project.module(
                     .domain(target: .UserDomain, type: .interface),
                     .domain(target: .NoticeDomain, type: .interface),
                     .module(target: .ErrorModule),
+                    .module(target: .Localization),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
                     .Project.Module.Utility,
-                    .SPM.RxGesture
+                    .SPM.RxGesture,
                 ]
             )
         ),
