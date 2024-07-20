@@ -1,13 +1,13 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
-import Localization
 
 public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
