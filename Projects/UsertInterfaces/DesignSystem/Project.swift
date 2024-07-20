@@ -10,9 +10,10 @@ let project = Project.module(
             product: .framework,
             spec: .init(
                 resources: ["Resources/**"],
-                dependencies: [.SPM.MarqueeLabel,
-                               .module(target: .Localization)
-                              ]
+                dependencies: [
+                    .SPM.MarqueeLabel,
+                    .module(target: .Localization)
+                ]
             )
         )
     ]

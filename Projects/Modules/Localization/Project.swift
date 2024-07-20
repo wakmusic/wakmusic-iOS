@@ -16,6 +16,5 @@ let project = Project.module(
                 ]
             )
         ),
-
     ]
 )
