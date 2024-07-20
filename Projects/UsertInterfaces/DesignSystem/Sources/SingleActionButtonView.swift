@@ -1,6 +1,6 @@
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
 public protocol SingleActionButtonViewDelegate: AnyObject {
     func tappedButtonAction()
