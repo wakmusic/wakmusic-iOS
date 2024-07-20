@@ -144,7 +144,7 @@ private extension ChartContentViewController {
                 owner.showToast(
                     text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 20
+                    verticalOffset: 56 + 56 + 40
                 )
             }
             .disposed(by: disposeBag)
@@ -202,25 +202,38 @@ extension ChartContentViewController: ChartPlayPopupViewControllerDelegate {
 
 extension ChartContentViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
+        let limit: Int = 50
+        let songs = output.songEntityOfSelectedSongs.value
+
         switch type {
         case let .allSelect(flag):
             input.allSongSelected.onNext(flag)
 
         case .addSong:
-            let songs: [String] = output.songEntityOfSelectedSongs.value.map { $0.id }
-            let viewController = containSongsFactory.makeView(songs: songs)
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n노래담기는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
+            let songIds: [String] = songs.map { $0.id }
+            let viewController = containSongsFactory.makeView(songs: songIds)
             viewController.modalPresentationStyle = .overFullScreen
             present(viewController, animated: true) {
                 self.input.allSongSelected.onNext(false)
             }
 
         case .addPlayList:
-            let songs = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생목록추가는 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.appendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
 
         case .play:
-            let songs = output.songEntityOfSelectedSongs.value
+            guard songs.count <= limit else {
+                output.showToast.onNext("곡 수가 \(limit)개를 초과했습니다.\n재생은 최대 \(limit)곡까지 가능합니다.")
+                return
+            }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
 
