@@ -179,19 +179,21 @@ extension NewSongsContentViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 80
+        return 78
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = PlayButtonGroupView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 80))
+        let view = SingleActionButtonView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 78))
         view.delegate = self
+        view.setTitleAndImage(text: "전체재생", image: DesignSystemAsset.Chart.allPlay.image)
         return view
     }
 }
 
-extension NewSongsContentViewController: PlayButtonGroupViewDelegate {
-    public func play(_ event: PlayEvent) {
-        input.groupPlayTapped.onNext(event)
+extension NewSongsContentViewController: SingleActionButtonViewDelegate {
+    public func tappedButtonAction() {
+        #warning("TO-DO:: 액션 수정해야함")
+        input.groupPlayTapped.onNext(PlayEvent.allPlay)
     }
 }
 
