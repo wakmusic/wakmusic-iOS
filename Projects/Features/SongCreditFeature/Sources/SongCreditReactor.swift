@@ -7,9 +7,11 @@ final class SongCreditReactor: Reactor {
     enum Action {
         case viewDidLoad
     }
+
     enum Mutation {
         case updateCredits([CreditModel])
     }
+
     struct State {
         var backgroundImageURL: String
         var credits: [CreditModel]

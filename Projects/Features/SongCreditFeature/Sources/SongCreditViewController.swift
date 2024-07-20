@@ -60,6 +60,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
     }
+
     private let dimmedBackgroundView = UIView()
     private var dimmedGridentLayer: DimmedGradientLayer?
 

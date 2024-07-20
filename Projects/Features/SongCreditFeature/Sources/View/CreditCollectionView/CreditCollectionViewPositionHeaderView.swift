@@ -1,5 +1,5 @@
-import UIKit
 import DesignSystem
+import UIKit
 
 final class CreditCollectionViewPositionHeaderView: UICollectionReusableView {
     private let positionLabel = UILabel().then {
@@ -15,6 +15,7 @@ final class CreditCollectionViewPositionHeaderView: UICollectionReusableView {
         setLayout()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
