@@ -378,7 +378,9 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
         case .addPlayList:
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
-            showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
+            showToast(text: Localization.LocalizationStrings.addList, 
+                      font: .setFont(.t6(weight: .light)),
+                      verticalOffset: 56 + 10)
 
         case .play:
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()

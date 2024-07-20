@@ -510,7 +510,9 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.forceEndEditing)
             PlayState.shared
                 .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
-            showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
+            showToast(text: Localization.LocalizationStrings.addList, 
+                      font: .setFont(.t6(weight: .light)),
+                      verticalOffset: 56 + 10)
 
         case .play:
             break
