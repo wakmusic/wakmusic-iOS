@@ -10,9 +10,9 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import Localization
 
 #warning("송카트, 공유하기, 이미지 업로드")
-#warning("다양한 바텀시트 겹침 현상")
 #warning("다운 샘플링")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
@@ -352,7 +352,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyPlaylistDetailDataSource {
-        #warning("옵셔널 해결하기")
 
         let dataSource =
             MyPlaylistDetailDataSource(
@@ -455,11 +454,14 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         switch event {
         case .allPlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
-            break
+            
         case .shufflePlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
-            break
+            songs.shuffle()
         }
+        
+        PlayState.shared.append(contentsOf: songs.map( { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) } ))
+        WakmusicYoutubePlayer(ids: songs.map{ $0.id }).play()
     }
 }
 
@@ -486,6 +488,8 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
         }
 
         let currentState = reactor.currentState
+        
+        let songs = currentState.playlistModels.filter { $0.isSelected }
 
         switch type {
         case let .allSelect(flag: flag):
@@ -496,7 +500,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             }
         case .addSong:
             let vc = containSongsFactory
-                .makeView(songs: currentState.playlistModels.filter { $0.isSelected }.map { $0.id })
+                .makeView(songs: songs.map(\.id) )
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
@@ -505,9 +509,10 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             break
         case .addPlayList:
-            #warning("재생목록 관련 구현체 구현 시 추가")
             reactor.action.onNext(.forceEndEditing)
-            break
+            PlayState.shared.append(contentsOf: songs.map( { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) } ))
+            showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
+         
         case .play:
             break
         case .remove:

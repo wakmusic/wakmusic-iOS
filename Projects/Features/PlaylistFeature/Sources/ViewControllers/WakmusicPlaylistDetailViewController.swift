@@ -9,6 +9,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import Localization
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
     SongCartViewType {
@@ -321,9 +322,9 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-            #warning("로컬 DB 저장")
             PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
             reactor.action.onNext(.deselectAll)
+            showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
             
         case .play:
             PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
