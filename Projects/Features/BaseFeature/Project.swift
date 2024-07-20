@@ -23,7 +23,7 @@ let project = Project.module(
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
                     .Project.Module.Utility,
-                    .SPM.RxGesture
+                    .SPM.RxGesture,
                 ]
             )
         ),
