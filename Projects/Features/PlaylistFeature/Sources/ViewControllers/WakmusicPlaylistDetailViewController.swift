@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import LogManager
 import PhotosUI
 import ReactorKit
@@ -9,7 +10,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import Localization
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
     SongCartViewType {
@@ -273,28 +273,25 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 
 /// 전체재생 , 랜덤 재생 델리게이트
 extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
-    
     func play(_ event: PlayEvent) {
-        
         guard let reactor = reactor else {
             return
         }
 
         let currentState = reactor.currentState
         var songs = currentState.dataSource
-                
+
         switch event {
         case .allPlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
-            
+
         case .shufflePlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
         }
-        
-        PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
-        WakmusicYoutubePlayer(ids: songs.map{ $0.id }).play()
 
+        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
+        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
     }
 }
 
@@ -322,15 +319,15 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-            PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
+            PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
             showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
-            
+
         case .play:
-            PlayState.shared.append(contentsOf: songs.map({ PlaylistItem(item: $0) }) )
+            PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
-            
+
         case .remove:
             break
         }

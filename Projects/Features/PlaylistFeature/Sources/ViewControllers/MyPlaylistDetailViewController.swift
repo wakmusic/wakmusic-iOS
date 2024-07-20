@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import LogManager
 import PhotosUI
 import PlaylistFeatureInterface
@@ -10,7 +11,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import Localization
 
 #warning("송카트, 공유하기, 이미지 업로드")
 #warning("다운 샘플링")
@@ -352,7 +352,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
 extension MyPlaylistDetailViewController {
     func createDataSource() -> MyPlaylistDetailDataSource {
-
         let dataSource =
             MyPlaylistDetailDataSource(
                 reactor: reactor!,
@@ -444,24 +443,23 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
 /// 전체재생 , 랜덤 재생 델리게이트
 extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
     func play(_ event: PlayEvent) {
-        
         guard let reactor = reactor else {
             return
         }
         let currentState = reactor.currentState
         var songs = currentState.playlistModels
-        
+
         switch event {
         case .allPlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
-            
+
         case .shufflePlay:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
         }
-        
-        PlayState.shared.append(contentsOf: songs.map( { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) } ))
-        WakmusicYoutubePlayer(ids: songs.map{ $0.id }).play()
+
+        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
+        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
     }
 }
 
@@ -488,7 +486,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
         }
 
         let currentState = reactor.currentState
-        
+
         let songs = currentState.playlistModels.filter { $0.isSelected }
 
         switch type {
@@ -500,7 +498,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             }
         case .addSong:
             let vc = containSongsFactory
-                .makeView(songs: songs.map(\.id) )
+                .makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
@@ -510,9 +508,10 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             break
         case .addPlayList:
             reactor.action.onNext(.forceEndEditing)
-            PlayState.shared.append(contentsOf: songs.map( { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) } ))
+            PlayState.shared
+                .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
             showToast(text: Localization.LocalizationStrings.addList, font: .setFont(.t6(weight: .light)))
-         
+
         case .play:
             break
         case .remove:
