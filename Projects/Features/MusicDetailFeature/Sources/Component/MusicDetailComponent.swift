@@ -4,7 +4,6 @@ import LyricHighlightingFeatureInterface
 import MusicDetailFeatureInterface
 import NeedleFoundation
 import SongsDomainInterface
-@testable import SongsDomainTesting
 import UIKit
 
 public protocol MusicDetailDependency: Dependency {
