@@ -188,22 +188,16 @@ private extension SettingReactor {
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
         // TODO: 회원탈퇴 처리
         return withDrawUserInfoUseCase.execute()
+            .andThen(
+                .concat(
+                    handleThirdPartyWithDraw(),
+                    logout()
+                )
+            )
+            .map { Mutation.withDrawResult($0) }
             .catch { error in
                 let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
-                return Single<BaseEntity>.just(baseEntity)
-            }
-            .asObservable()
-            .flatMap { [naverLoginInstance, logoutUseCase] entity in
-                let platform = Utility.PreferenceManager.userInfo?.platform
-                if platform == "naver" {
-                    naverLoginInstance?.requestDeleteToken()
-                }
-                return logoutUseCase.execute()
-                    .andThen(Single.just(entity))
-                    .map { entity in
-                        return Mutation.withDrawResult(entity)
-                    }
-                    .asObservable()
+                return Observable.just(Mutation.withDrawResult(baseEntity))
             }
     }
 
@@ -254,5 +248,39 @@ private extension SettingReactor {
 
     func showToast(message: String) -> Observable<Mutation> {
         return .just(.showToast(message))
+    }
+}
+
+private extension SettingReactor {
+    func handleThirdPartyWithDraw() -> Observable<BaseEntity> {
+        let platform = Utility.PreferenceManager.userInfo?.platform
+        if platform == "naver" {
+            naverLoginInstance?.requestDeleteToken()
+        }
+        return .empty()
+    }
+
+    func logout() -> Observable<BaseEntity> {
+        logoutUseCase.execute()
+            .andThen(
+                Observable.create { observable in
+                    observable.onNext(BaseEntity(
+                        status: 200,
+                        description: "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다."
+                    ))
+                    observable.onCompleted()
+                    return Disposables.create {}
+                }
+            )
+            .catch { error in
+                Observable.create { observable in
+                    observable.onNext(BaseEntity(
+                        status: 0,
+                        description: error.asWMError.errorDescription ?? ""
+                    ))
+                    observable.onCompleted()
+                    return Disposables.create {}
+                }
+            }
     }
 }

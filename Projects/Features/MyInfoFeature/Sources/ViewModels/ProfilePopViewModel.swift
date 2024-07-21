@@ -76,50 +76,11 @@ public final class ProfilePopViewModel {
 
         input.setProfileRequest
             .flatMap { [weak self] id -> Observable<BaseEntity> in
-                guard let self = self else { return Observable.empty() }
-                return self.setProfileUseCase.execute(image: id)
-                    .asObservable()
-                    .catch { [output, logoutUseCase] error -> Observable<BaseEntity> in
-                        let wmError = error.asWMError
-
-                        if wmError == .tokenExpired {
-                            output.onLogout.accept(error)
-                            return logoutUseCase.execute()
-                                .andThen(.never())
-                                .catch { error in
-                                    return Observable<BaseEntity>.create { observable in
-                                        observable.onNext(BaseEntity(
-                                            status: 0,
-                                            description: error.asWMError.errorDescription ?? ""
-                                        ))
-                                        observable.onCompleted()
-                                        return Disposables.create {}
-                                    }
-                                }
-                        } else {
-                            return Observable<BaseEntity>.create { observable in
-                                observable.onNext(BaseEntity(
-                                    status: 0,
-                                    description: error.asWMError.errorDescription ?? ""
-                                ))
-                                observable.onCompleted()
-                                return Disposables.create {}
-                            }
-                        }
-                    }
+                guard let self else { return Observable.empty() }
+                return setProfile(imageId: id)
             }
             .withLatestFrom(input.setProfileRequest) { ($0, $1) }
-            .do(onNext: { [weak self] model, profile in
-
-                guard let self else { return }
-
-                if model.status == 401 {
-                    return
-                }
-
-                guard model.status == 200 else { return }
-                Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: profile)
-            })
+            .do(onNext: updateUserInfoProfile)
             .map { $0.0 }
             .bind(to: output.setProfileResult)
             .disposed(by: disposeBag)
@@ -143,5 +104,76 @@ public final class ProfilePopViewModel {
                     (CGFloat(remain) * spacing)
             }
         }
+    }
+}
+
+private extension ProfilePopViewModel {
+    func setProfile(imageId: String) -> Observable<BaseEntity> {
+        return self.setProfileUseCase.execute(image: imageId)
+            .andThen(
+                Observable<BaseEntity>.create { observable in
+                    observable.onNext(BaseEntity(
+                        status: 200,
+                        description: "success"
+                    ))
+                    observable.onCompleted()
+                    return Disposables.create {}
+                }
+            )
+            .catch(handleSetProfileError)
+
+//            .catch { [weak self, output, logoutUseCase] error -> Observable<BaseEntity> in
+//                guard let self else { return Observable.empty() }
+//                return self.handleSetProfileError(error: error, logoutUseCase: logoutUseCase)
+//            }
+    }
+
+    func handleSetProfileError(error: Error) -> Observable<BaseEntity> {
+        let wmError = error.asWMError
+
+        if wmError == .tokenExpired {
+            output.onLogout.accept(error)
+            return logoutUseCase.execute()
+                .andThen(.never())
+                .catch { error in
+                    return Observable.just(BaseEntity(
+                        status: 0,
+                        description: error.asWMError.errorDescription ?? ""
+                    ))
+
+//                    return Observable<BaseEntity>.create { observable in
+//                        observable.onNext(BaseEntity(
+//                            status: 0,
+//                            description: error.asWMError.errorDescription ?? ""
+//                        ))
+//                        observable.onCompleted()
+//                        return Disposables.create {}
+//                    }
+                }
+        } else {
+            return Observable.just(BaseEntity(
+                status: 0,
+                description: error.asWMError.errorDescription ?? ""
+            ))
+
+//            return Observable<BaseEntity>.create { observable in
+//                observable.onNext(BaseEntity(
+//                    status: 0,
+//                    description: error.asWMError.errorDescription ?? ""
+//                ))
+//                observable.onCompleted()
+//                return Disposables.create {}
+//            }
+        }
+    }
+
+    func updateUserInfoProfile(model: BaseEntity, profileURL: String) {
+        switch model.status {
+        case 200:
+            Utility.PreferenceManager.userInfo = Utility.PreferenceManager.userInfo?.update(profile: profileURL)
+        default:
+            break
+        }
+        return
     }
 }

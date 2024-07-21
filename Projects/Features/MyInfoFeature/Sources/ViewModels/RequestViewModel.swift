@@ -6,17 +6,17 @@
 ////  Copyright © 2023 yongbeomkwak. All rights reserved.
 ////
 //
-//import AuthDomainInterface
-//import BaseDomainInterface
-//import BaseFeature
-//import Foundation
-//import NaverThirdPartyLogin
-//import RxRelay
-//import RxSwift
-//import UserDomainInterface
-//import Utility
+// import AuthDomainInterface
+// import BaseDomainInterface
+// import BaseFeature
+// import Foundation
+// import NaverThirdPartyLogin
+// import RxRelay
+// import RxSwift
+// import UserDomainInterface
+// import Utility
 //
-//public final class RequestViewModel: ViewModelType {
+// public final class RequestViewModel: ViewModelType {
 //    var disposeBag = DisposeBag()
 //    var withDrawUserInfoUseCase: WithdrawUserInfoUseCase
 //    private let logoutUseCase: any LogoutUseCase
@@ -69,9 +69,9 @@
 //
 //        return output
 //    }
-//}
+// }
 //
-//private extension RequestViewModel {
+// private extension RequestViewModel {
 //    func handleThirdPartyWithDraw() -> Observable<BaseEntity> {
 //        let platform = Utility.PreferenceManager.userInfo?.platform
 //        if platform == "naver" {
@@ -79,7 +79,7 @@
 //        }
 //        return .empty()
 //    }
-//    
+//
 //    func logout() -> Observable<BaseEntity> {
 //        logoutUseCase.execute()
 //            .andThen(
@@ -103,5 +103,5 @@
 //                }
 //            }
 //    }
-//  
-//}
+//
+// }

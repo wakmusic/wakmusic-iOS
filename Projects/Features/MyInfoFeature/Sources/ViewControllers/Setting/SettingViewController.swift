@@ -176,7 +176,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .map { Reactor.Action.dismissButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         settingView.rx.withDrawButtonDidTap
             .map { Reactor.Action.withDrawButtonDidTap }
             .bind(to: reactor.action)
