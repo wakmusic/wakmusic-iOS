@@ -6,15 +6,24 @@ import Utility
 final class SongCreditReactor: Reactor {
     enum Action {
         case viewDidLoad
+        case backButtonDidTap
+        case creditSelected(worker: CreditModel.CreditWorker)
     }
 
     enum Mutation {
         case updateCredits([CreditModel])
+        case updateNavigateType(NavigateType?)
+    }
+
+    enum NavigateType {
+        case back
+        case creditDetail(name: String)
     }
 
     struct State {
         var backgroundImageURL: String
         var credits: [CreditModel]
+        var navigateType: NavigateType?
     }
 
     var initialState: State
@@ -39,6 +48,12 @@ final class SongCreditReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+
+        case .backButtonDidTap:
+            return self.navigate(to: .back)
+
+        case let .creditSelected(worker):
+            return self.navigate(to: .creditDetail(name: worker.name))
         }
     }
 
@@ -48,6 +63,9 @@ final class SongCreditReactor: Reactor {
         switch mutation {
         case let .updateCredits(credits):
             newState.credits = credits
+
+        case let .updateNavigateType(navigateType):
+            newState.navigateType = navigateType
         }
 
         return newState
@@ -62,5 +80,14 @@ private extension SongCreditReactor {
             }
             .map { Mutation.updateCredits($0) }
             .asObservable()
+    }
+}
+
+private extension SongCreditReactor {
+    func navigate(to destination: NavigateType) -> Observable<Mutation> {
+        return .concat(
+            .just(.updateNavigateType(destination)),
+            .just(.updateNavigateType(nil))
+        )
     }
 }

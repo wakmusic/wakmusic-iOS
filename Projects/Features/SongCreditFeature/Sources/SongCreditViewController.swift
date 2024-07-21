@@ -1,11 +1,13 @@
 import BaseFeature
 import DesignSystem
 import Kingfisher
+import Localization
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
+import Utility
 
 final class SongCreditViewController: BaseReactorViewController<SongCreditReactor> {
     private typealias SectionType = String
@@ -55,6 +57,11 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         }
     }
 
+    private let dismissButton = UIButton(type: .system).then {
+        $0.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+        $0.tintColor = .white
+    }
+
     private let backgroundImageView = UIImageView().then {
         $0.backgroundColor = .gray
         $0.contentMode = .scaleAspectFill
@@ -63,6 +70,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
 
     private let dimmedBackgroundView = UIView()
     private var dimmedGridentLayer: DimmedGradientLayer?
+    private let wmNavigationbarView = WMNavigationBarView()
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -74,7 +82,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     }
 
     override func addView() {
-        view.addSubviews(backgroundImageView, dimmedBackgroundView, songCreditCollectionView)
+        view.addSubviews(backgroundImageView, dimmedBackgroundView, songCreditCollectionView, wmNavigationbarView)
     }
 
     override func setLayout() {
@@ -89,11 +97,32 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         dimmedBackgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+
+        wmNavigationbarView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(48)
+        }
+    }
+
+    override func configureNavigation() {
+        wmNavigationbarView.setLeftViews([dismissButton])
+        wmNavigationbarView.setTitle(LocalizationStrings.titleCreditList)
     }
 
     override func bindAction(reactor: SongCreditReactor) {
         self.rx.methodInvoked(#selector(viewDidLoad))
             .map { _ in Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        dismissButton.rx.tap
+            .map { Reactor.Action.backButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        songCreditCollectionView.rx.modelSelected(CreditModel.CreditWorker.self)
+            .map(Reactor.Action.creditSelected(worker:))
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -126,5 +155,30 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
                 )
             }
             .disposed(by: disposeBag)
+
+        sharedState
+            .compactMap(\.navigateType)
+            .bind(with: self) { owner, navigate in
+                switch navigate {
+                case .back:
+                    owner.back()
+
+                case let .creditDetail(name):
+                    owner.navigateCreditDetail(name: name)
+                }
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+private extension SongCreditViewController {
+    func back() {
+        self.navigationController?.popViewController(animated: true)
+    }
+
+    func navigateCreditDetail(name: String) {
+        let viewController = UIViewController()
+        viewController.view.backgroundColor = .blue
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
