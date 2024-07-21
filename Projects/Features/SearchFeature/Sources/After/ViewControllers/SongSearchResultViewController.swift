@@ -27,6 +27,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         $0.scrollIndicatorInsets = .init(top: .zero, left: .zero, bottom: 56.0, right: .zero)
         $0.isHidden = true
+        $0.bounces = false
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
@@ -268,12 +269,12 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard collectionView.isVerticallyScrollable else { return }
-        searchGlobalScrollState.scrollTo(
-            source: (
-                scrollView.contentOffset.y,
-                scrollView.contentSize.height - scrollView.frame.size.height
-            )
-        )
+//        searchGlobalScrollState.scrollTo(
+//            source: (
+//                scrollView.contentOffset.y,
+//                scrollView.contentSize.height - scrollView.frame.size.height
+//            )
+//        )
     }
 }
 
