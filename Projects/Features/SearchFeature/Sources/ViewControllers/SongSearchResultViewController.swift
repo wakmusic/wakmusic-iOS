@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import LogManager
 import RxCocoa
 import RxSwift
@@ -10,7 +11,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import Localization
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
@@ -289,12 +289,12 @@ extension SongSearchResultViewController: SongCartViewDelegate {
 
         DEBUG_LOG(songs.count)
         DEBUG_LOG(songs.map(\.title))
-        
+
         switch type {
         case let .allSelect(flag: flag):
             break
         case .addSong:
-            
+
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
@@ -305,14 +305,14 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 )
                 return
             }
-            
-            let vc = containSongsFactory.makeView(songs: songs.map(\.id) )
+
+            let vc = containSongsFactory.makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-            
+
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
@@ -323,12 +323,12 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 )
                 return
             }
-            
+
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
 
         case .play:
-            
+
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
@@ -339,15 +339,14 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 )
                 return
             }
-            
+
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
-            
+
             break
         case .remove:
             break
         }
-
     }
 }
