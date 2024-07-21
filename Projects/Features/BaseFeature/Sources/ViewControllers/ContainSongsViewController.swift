@@ -6,6 +6,7 @@ import PlaylistDomainInterface
 import RxSwift
 import UIKit
 import Utility
+import UserDomainInterface
 
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
@@ -85,10 +86,10 @@ extension ContainSongsViewController {
             .do(onNext: { [weak self] indexPath, _ in
                 self?.tableView.deselectRow(at: indexPath, animated: true)
             })
-            .map { indexPath, model -> String in
-                return model[indexPath.row].key
+            .map { indexPath, model -> PlaylistEntity in
+                return model[indexPath.row]
             }
-            .bind(to: input.containSongWithKey)
+            .bind(to: input.itemDidTap)
             .disposed(by: disposeBag)
 
         output.showToastMessage
@@ -102,7 +103,10 @@ extension ContainSongsViewController {
                 } else if result.status == 200 {
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
-                } else {
+                } else if result.status == -1 {
+                    return 
+                }
+                else {
                     self.dismiss(animated: true)
                 }
 

@@ -7,6 +7,7 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import Localization
 
 #warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
@@ -16,11 +17,12 @@ public final class ContainSongsViewModel: ViewModelType {
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
+    let limit: Int = 50
 
     public struct Input {
         let newPlayListTap: PublishSubject<Void> = PublishSubject()
         let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
-        let containSongWithKey: PublishSubject<String> = PublishSubject()
+        let itemDidTap: PublishSubject<PlaylistEntity> = PublishSubject()
         let createPlaylist: PublishSubject<String> = PublishSubject()
     }
 
@@ -87,13 +89,24 @@ public final class ContainSongsViewModel: ViewModelType {
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 
-        input.containSongWithKey
-            .flatMap { [weak self] (key: String) -> Observable<AddSongEntity> in
+        input.itemDidTap
+            .flatMap { [weak self] (model: PlaylistEntity) -> Observable<AddSongEntity> in
                 guard let self = self else {
                     return Observable.empty()
                 }
+                
+                let count = model.songCount + self.songs.count
+                
+                guard count <= limit else  {
+                    output.showToastMessage.onNext(BaseEntity(
+                        status: -1,
+                        description: LocalizationStrings.overFlowAddPlaylistWarning( count - limit ))
+                    )
+                    return .empty()
+                }
+                
                 return self.addSongIntoPlaylistUseCase
-                    .execute(key: key, songs: self.songs)
+                    .execute(key: model.key, songs: self.songs)
                     .catch { (error: Error) in
                         let wmError = error.asWMError
 
