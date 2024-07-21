@@ -60,13 +60,15 @@ final class SongSearchResultReactor: Reactor {
         let state = self.currentState
 
         switch action {
-        case .viewDidLoad, .askLoadMore:
+            
+        case .viewDidLoad,.askLoadMore:
             return updateDataSource(
                 order: state.sortType,
                 filter: state.filterType,
                 text: self.text,
                 scrollPage: state.scrollPage
             )
+                    
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
@@ -91,7 +93,7 @@ final class SongSearchResultReactor: Reactor {
         case let .updateDataSource(dataSource, canLoad):
             newState.dataSource = dataSource
             newState.canLoad = canLoad
-
+            
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
 
@@ -132,6 +134,8 @@ extension SongSearchResultReactor {
             updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
         ])
     }
+    
+
 
     private func updateDataSource(
         order: SortType,
@@ -140,10 +144,10 @@ extension SongSearchResultReactor {
         scrollPage: Int,
         byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
-        let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
+       
 
         return .concat([
-            .just(Mutation.updateLoadingState(true)), // 로딩
+            .just(.updateLoadingState(true)),
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
@@ -151,6 +155,8 @@ extension SongSearchResultReactor {
 
                     guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
 
+                    let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
+                    
                     if scrollPage == 1 {
                         LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
                             keyword: self.text,
@@ -168,10 +174,10 @@ extension SongSearchResultReactor {
                     )
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
-            .just(Mutation.updateLoadingState(false)) // 로딩 종료
+            .just(.updateLoadingState(false))
         ])
     }
-
+    
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
         var count = state.selectedCount
@@ -185,8 +191,8 @@ extension SongSearchResultReactor {
         prev[index].isSelected = !prev[index].isSelected
 
         return .concat([
-            .just(Mutation.updateSelectedCount(count)),
-            .just(Mutation.updateSelectingStateByIndex(prev))
+            .just(Mutation.updateSelectingStateByIndex(prev)),
+            .just(Mutation.updateSelectedCount(count))
         ])
     }
 

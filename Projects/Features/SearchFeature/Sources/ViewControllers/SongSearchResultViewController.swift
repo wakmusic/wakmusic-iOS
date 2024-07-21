@@ -25,6 +25,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        $0.scrollIndicatorInsets = .init(top: .zero, left: .zero, bottom: 56.0, right: .zero)
+        $0.isHidden = true
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
@@ -84,7 +86,10 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     return (indexPath, datasource.count)
                 }
             )
-            .filter { $0.0.row == $0.1 - 1 } // 마지막 인덱스 접근
+            .filter { $0.0.row == $0.1 - 1  } // 마지막 인덱스 접근 확인
+            .map{ _ in () }
+            .withLatestFrom(sharedState.map(\.isLoading)) // 로딩 중 확인
+            .filter { !$0 }
             .withLatestFrom(sharedState.map(\.canLoad)) { $1 } // 더 가져올께 있나?
             .filter { $0 }
             .map { _ in SongSearchResultReactor.Action.askLoadMore }
@@ -110,7 +115,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         headerView.rx.selectedFilterItem
             .distinctUntilChanged()
-            .bind(with: self) { owner, type in
+            .bind(with: self) { _, type in
                 LogManager.analytics(SearchAnalyticsLog.selectSearchFilter(option: type.rawValue))
                 reactor.action.onNext(.changeFilterType(type))
             }
@@ -136,32 +141,40 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             }
             .disposed(by: disposeBag)
 
-        sharedState.map { ($0.isLoading, $0.dataSource) }
-            .bind(with: self) { owner, info in
-
-                let (isLoading, dataSource) = (info.0, info.1)
-
+        sharedState.map(\.isLoading)
+            .bind(with: self) { owner, isLoading in
+                
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
+                    owner.collectionView.isHidden = false
                     owner.indicator.stopAnimating()
-
-                    var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
-
-                    snapshot.appendSections([.song])
-
-                    snapshot.appendItems(dataSource)
-
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
-
-                    let warningView = WMWarningView(text: "검색결과가 없습니다.")
-
-                    if dataSource.isEmpty {
-                        owner.collectionView.setBackgroundView(warningView, 100)
-                    } else {
-                        owner.collectionView.restore()
-                    }
                 }
+                                
+            }
+            .disposed(by: disposeBag)
+        
+        sharedState.map {$0.dataSource }
+            .bind(with: self) { owner, dataSource in
+
+
+
+                var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
+
+                snapshot.appendSections([.song])
+
+                snapshot.appendItems(dataSource)
+
+                owner.dataSource.apply(snapshot, animatingDifferences: false)
+
+                let warningView = WMWarningView(text: "검색결과가 없습니다.")
+
+                if dataSource.isEmpty {
+                    owner.collectionView.setBackgroundView(warningView, 100)
+                } else {
+                    owner.collectionView.restore()
+                }
+                
             }
             .disposed(by: disposeBag)
 
@@ -287,8 +300,6 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         let songs = currentState.dataSource.filter { $0.isSelected }
         let limit = 50
 
-        DEBUG_LOG(songs.count)
-        DEBUG_LOG(songs.map(\.title))
 
         switch type {
         case .allSelect(_):
@@ -344,7 +355,6 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
 
-            break
         case .remove:
             break
         }
