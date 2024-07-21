@@ -3,5 +3,5 @@ import Foundation
 import RxSwift
 
 public protocol EditPlaylistOrderUseCase {
-    func execute(ids: [String]) -> Single<BaseEntity>
+    func execute(ids: [String]) -> Completable
 }
