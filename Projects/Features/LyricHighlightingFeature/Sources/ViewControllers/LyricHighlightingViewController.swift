@@ -56,7 +56,7 @@ public final class LyricHighlightingViewController: UIViewController {
     }
 
     let emptyLabel = UILabel().then {
-        $0.text = "가사가 없습니다. 😭"
+        $0.text = "가사가 없습니다."
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
         $0.setTextWithAttributes(alignment: .center)
