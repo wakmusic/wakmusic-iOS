@@ -86,8 +86,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                     return (indexPath, datasource.count)
                 }
             )
-            .filter { $0.0.row == $0.1 - 1  } // 마지막 인덱스 접근 확인
-            .map{ _ in () }
+            .filter { $0.0.row == $0.1 - 1 } // 마지막 인덱스 접근 확인
+            .map { _ in () }
             .withLatestFrom(sharedState.map(\.isLoading)) // 로딩 중 확인
             .filter { !$0 }
             .withLatestFrom(sharedState.map(\.canLoad)) { $1 } // 더 가져올께 있나?
@@ -143,21 +143,18 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         sharedState.map(\.isLoading)
             .bind(with: self) { owner, isLoading in
-                
+
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.collectionView.isHidden = false
                     owner.indicator.stopAnimating()
                 }
-                                
             }
             .disposed(by: disposeBag)
-        
-        sharedState.map {$0.dataSource }
+
+        sharedState.map { $0.dataSource }
             .bind(with: self) { owner, dataSource in
-
-
 
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
@@ -174,7 +171,6 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                 } else {
                     owner.collectionView.restore()
                 }
-                
             }
             .disposed(by: disposeBag)
 
@@ -299,7 +295,6 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         let currentState = reactor.currentState
         let songs = currentState.dataSource.filter { $0.isSelected }
         let limit = 50
-
 
         switch type {
         case .allSelect(_):
