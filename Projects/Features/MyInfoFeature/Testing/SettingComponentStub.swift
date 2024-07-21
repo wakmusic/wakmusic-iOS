@@ -19,7 +19,6 @@ public final class SettingComponentStub: SettingFactory {
             ),
             textPopUpFactory: TextPopUpComponentStub(),
             signInFactory: SignInComponentStub(),
-            appPushSettingFactory: AppPushSettingComponentStub(),
             serviceTermsFactory: ServiceTermComponentStub(),
             privacyFactory: PrivacyComponentStub(),
             openSourceLicenseFactory: OpenSourceLicenseComponentStub()
