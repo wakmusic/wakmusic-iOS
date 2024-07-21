@@ -13,7 +13,7 @@ extension PlaylistViewController: SongCartViewDelegate {
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
             }
-       
+
             viewController.modalPresentationStyle = .overFullScreen
 
             self.present(viewController, animated: true) {
@@ -78,4 +78,3 @@ extension PlaylistViewController: PlaylistTableViewCellDelegate {
         tappedCellIndex.onNext(index)
     }
 }
-

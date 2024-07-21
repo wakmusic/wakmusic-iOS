@@ -2,12 +2,12 @@ import AuthDomainInterface
 import BaseDomainInterface
 import ErrorModule
 import Foundation
+import Localization
 import PlaylistDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
-import Localization
 
 #warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
@@ -94,17 +94,19 @@ public final class ContainSongsViewModel: ViewModelType {
                 guard let self = self else {
                     return Observable.empty()
                 }
-                
+
                 let count = model.songCount + self.songs.count
-                
-                guard count <= limit else  {
-                    output.showToastMessage.onNext(BaseEntity(
-                        status: -1,
-                        description: LocalizationStrings.overFlowAddPlaylistWarning( count - limit ))
+
+                guard count <= limit else {
+                    output.showToastMessage.onNext(
+                        BaseEntity(
+                            status: -1,
+                            description: LocalizationStrings.overFlowAddPlaylistWarning(count - limit)
+                        )
                     )
                     return .empty()
                 }
-                
+
                 return self.addSongIntoPlaylistUseCase
                     .execute(key: model.key, songs: self.songs)
                     .catch { (error: Error) in

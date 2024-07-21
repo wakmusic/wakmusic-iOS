@@ -5,9 +5,8 @@ import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
 import UIKit
-import Utility
 import UserDomainInterface
-
+import Utility
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -104,9 +103,8 @@ extension ContainSongsViewController {
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
                 } else if result.status == -1 {
-                    return 
-                }
-                else {
+                    return
+                } else {
                     self.dismiss(animated: true)
                 }
 
@@ -184,4 +182,3 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
     }
 }
-
