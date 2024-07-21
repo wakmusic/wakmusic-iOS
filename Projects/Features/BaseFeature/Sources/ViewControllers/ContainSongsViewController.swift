@@ -7,9 +7,6 @@ import RxSwift
 import UIKit
 import Utility
 
-public protocol ContainSongsViewDelegate: AnyObject {
-    func tokenExpired()
-}
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -25,7 +22,6 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
-    public weak var delegate: ContainSongsViewDelegate?
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
@@ -119,9 +115,7 @@ extension ContainSongsViewController {
                 owner.showToast(text: error.localizedDescription, font: toastFont)
                 NotificationCenter.default.post(name: .movedTab, object: 4)
 
-                owner.dismiss(animated: true) {
-                    owner.delegate?.tokenExpired()
-                }
+                owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
 
@@ -187,14 +181,3 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     }
 }
 
-#warning("토근 만료 처리")
-// extension ContainSongsViewController: MultiPurposePopupViewDelegate {
-//    public func didTokenExpired() {
-//        self.dismiss(animated: true) { [weak self] in
-//
-//            guard let self else { return }
-//
-//            self.delegate?.tokenExpired()
-//        }
-//    }
-// }
