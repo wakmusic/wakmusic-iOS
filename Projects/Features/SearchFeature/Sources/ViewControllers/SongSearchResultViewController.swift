@@ -291,7 +291,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         DEBUG_LOG(songs.map(\.title))
 
         switch type {
-        case let .allSelect(flag: flag):
+        case .allSelect(_):
             break
         case .addSong:
 
