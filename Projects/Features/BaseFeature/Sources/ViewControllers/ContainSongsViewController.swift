@@ -129,7 +129,7 @@ extension ContainSongsViewController {
         closeButton.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
 
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleLabel.text = "리스트에 담기"
         titleLabel.setTextWithAttributes(kernValue: -0.5)
 
