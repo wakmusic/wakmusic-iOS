@@ -3,7 +3,7 @@ import UIKit
 
 final class CreditCollectionViewPositionHeaderView: UICollectionReusableView {
     private let positionLabel = UILabel().then {
-        $0.font = .setFont(.t5(weight: .medium))
+        $0.font = .setFont(.t6(weight: .light))
         $0.textColor = DesignSystemAsset.PrimaryColorV2.white.color
         $0.textAlignment = .left
         $0.alpha = 0.6
