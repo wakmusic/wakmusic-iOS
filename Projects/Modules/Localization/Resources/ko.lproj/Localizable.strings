@@ -2,3 +2,4 @@
 "OVER_FLOW_CONTAIN_WARNING" = "노래담기는 최대 50곡까지 가능합니다.\n현재 %@이 초과됐습니다.";
 "OVER_FLOW_ADD_PLAYLIST_WARNING" = "재생목록추가는 최대 50곡까지 가능합니다.\n현재 %@곡이 초과됐습니다.";
 "ADD_LIST" = "재생목록에 추가했습니다.";
+"TITLE_CREDIT_LIST" = "참여 정보";
