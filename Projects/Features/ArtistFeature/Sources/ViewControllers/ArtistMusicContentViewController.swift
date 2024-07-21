@@ -163,7 +163,8 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addSong:
             guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowContainWarning)
+                DEBUG_LOG("\(songs.count)")
+                output.showToast.onNext(LocalizationStrings.overFlowContainWarning(songs.count-limit))
                 return
             }
             let songIds: [String] = songs.map { $0.id }
@@ -175,7 +176,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addPlayList:
             guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowAddPlaylistWarning)
+                output.showToast.onNext(LocalizationStrings.overFlowAddPlaylistWarning(songs.count-limit))
                 return
             }
             PlayState.shared.appendSongsToPlaylist(songs)
@@ -183,7 +184,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .play:
             guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowPlayWarning)
+                output.showToast.onNext(LocalizationStrings.overFlowPlayWarning(songs.count-limit))
                 return
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
