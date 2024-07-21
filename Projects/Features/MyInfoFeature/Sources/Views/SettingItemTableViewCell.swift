@@ -14,6 +14,15 @@ class SettingItemTableViewCell: UITableViewCell {
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
         $0.setTextWithAttributes(kernValue: -0.5)
         $0.textAlignment = .left
+        $0.numberOfLines = 2
+    }
+
+    private let subTitleLabel = UILabel().then {
+        $0.font = .setFont(.t5(weight: .medium))
+        $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
+        $0.setTextWithAttributes(kernValue: -0.5)
+        $0.textAlignment = .right
+        $0.isHidden = true
     }
 
     private let rightImageView = UIImageView().then {
@@ -86,20 +95,27 @@ private extension SettingItemTableViewCell {
 private extension SettingItemTableViewCell {
     func addView() {
         contentView.addSubview(titleLabel)
+        contentView.addSubview(subTitleLabel)
         contentView.addSubview(rightImageView)
         contentView.addSubview(rightLabel)
     }
 
     func setLayout() {
+        titleLabel.setContentCompressionResistancePriority(.init(rawValue: 749), for: .horizontal)
         titleLabel.snp.makeConstraints {
             $0.left.equalToSuperview().inset(20)
-            $0.right.equalTo(rightLabel.snp.left).offset(-20)
             $0.centerY.equalToSuperview()
         }
 
         rightImageView.snp.makeConstraints {
             $0.width.height.equalTo(24)
             $0.right.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
+        }
+
+        subTitleLabel.snp.makeConstraints {
+            $0.left.equalTo(titleLabel.snp.right).offset(10)
+            $0.right.equalTo(rightImageView.snp.left).offset(-2)
             $0.centerY.equalToSuperview()
         }
 
