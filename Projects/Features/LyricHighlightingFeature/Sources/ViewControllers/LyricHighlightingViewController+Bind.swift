@@ -39,9 +39,10 @@ extension LyricHighlightingViewController {
 
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator, emptyLabel] model in
+            .do(onNext: { [indicator, emptyLabel, collectionView] model in
                 indicator.stopAnimating()
                 emptyLabel.isHidden = !model.isEmpty
+                collectionView.isHidden = !emptyLabel.isHidden
             })
             .bind(to: collectionView.rx.items) { collectionView, index, entity in
                 guard let cell = collectionView.dequeueReusableCell(

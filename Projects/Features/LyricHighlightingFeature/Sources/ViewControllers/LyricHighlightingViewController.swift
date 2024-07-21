@@ -5,6 +5,7 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
+import Kingfisher
 
 public final class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
@@ -12,6 +13,11 @@ public final class LyricHighlightingViewController: UIViewController {
     let backButton = UIButton(type: .system).then {
         $0.tintColor = .white
         $0.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+    }
+
+    private let thumbnailImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
 
     private let dimmedBackgroundView = UIView()
@@ -50,11 +56,12 @@ public final class LyricHighlightingViewController: UIViewController {
     }
 
     let emptyLabel = UILabel().then {
-        $0.text = "가사가 없습니다."
+        $0.text = "가사가 없습니다. 😭"
         $0.textColor = .white
         $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
         $0.setTextWithAttributes(alignment: .center)
         $0.isHidden = true
+        $0.numberOfLines = 0
     }
 
     let completeButton = UIButton().then {
@@ -135,10 +142,11 @@ public final class LyricHighlightingViewController: UIViewController {
 private extension LyricHighlightingViewController {
     func addSubViews() {
         view.addSubviews(
+            thumbnailImageView,
             dimmedBackgroundView,
-            navigationBarView,
             collectionView,
             emptyLabel,
+            navigationBarView,
             indicator
         )
         navigationBarView.addSubviews(backButton, navigationTitleStackView, completeButton)
@@ -180,6 +188,10 @@ private extension LyricHighlightingViewController {
             $0.height.equalTo(20)
         }
 
+        thumbnailImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
         dimmedBackgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -190,8 +202,7 @@ private extension LyricHighlightingViewController {
         }
 
         emptyLabel.snp.makeConstraints {
-            $0.top.equalTo(collectionView)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.verticalEdges.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
@@ -205,6 +216,20 @@ private extension LyricHighlightingViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
         collectionView.register(LyricHighlightingCell.self, forCellWithReuseIdentifier: "\(LyricHighlightingCell.self)")
+        thumbnailImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnailHD(id: output.updateInfo.value.songID).toString),
+            options: [
+                .waitForCache,
+                .onlyFromCache,
+                .transition(.fade(0.2)),
+                .forceTransition,
+                .processor(
+                    DownsamplingImageProcessor(
+                        size: .init(width: 10, height: 10)
+                    )
+                )
+            ]
+        )
         indicator.startAnimating()
     }
 }
@@ -221,6 +246,6 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
 
 extension LyricHighlightingViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
+        return true
     }
 }
