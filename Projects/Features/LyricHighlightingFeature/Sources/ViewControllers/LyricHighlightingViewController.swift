@@ -1,11 +1,11 @@
 import DesignSystem
+import Kingfisher
 import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import Kingfisher
 
 public final class LyricHighlightingViewController: UIViewController {
     private let navigationBarView = UIView()
