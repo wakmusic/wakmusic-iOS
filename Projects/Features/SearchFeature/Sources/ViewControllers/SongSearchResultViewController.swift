@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import LogManager
 import RxCocoa
 import RxSwift
@@ -283,25 +284,69 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         }
 
         let currentState = reactor.currentState
+        let songs = currentState.dataSource.filter { $0.isSelected }
+        let limit = 50
+
+        DEBUG_LOG(songs.count)
+        DEBUG_LOG(songs.map(\.title))
 
         switch type {
-        case let .allSelect(flag: flag):
+        case .allSelect(_):
             break
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: currentState.dataSource.filter { $0.isSelected }.map { $0.id })
+
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
+
+                    font: .setFont(.t6(weight: .light)),
+
+                    verticalOffset: 56 + 10
+                )
+                return
+            }
+
+            let vc = containSongsFactory.makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
+            reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-            #warning("재생목록 관련 구현체 구현 시 추가")
-            break
+
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
+
+                    font: .setFont(.t6(weight: .light)),
+
+                    verticalOffset: 56 + 10
+                )
+                return
+            }
+
+            PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
+            reactor.action.onNext(.deselectAll)
+
         case .play:
-            #warning("재생 구현")
+
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
+
+                    font: .setFont(.t6(weight: .light)),
+
+                    verticalOffset: 56 + 10
+                )
+                return
+            }
+
+            PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            reactor.action.onNext(.deselectAll)
+
             break
         case .remove:
             break
         }
-
-        reactor.action.onNext(.deselectAll)
     }
 }
