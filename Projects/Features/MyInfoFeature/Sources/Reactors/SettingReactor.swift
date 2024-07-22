@@ -165,17 +165,18 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        logoutUseCase.execute()
-            .subscribe(with: self, onCompleted: { owner in
-                owner.action.onNext(.updateIsHiddenLogoutButton(true))
-                owner.action.onNext(.updateIsHiddenWithDrawButton(true))
-                owner.action.onNext(.showToast("로그아웃 되었습니다."))
-            }, onError: { owner, error in
+        return logoutUseCase.execute()
+            .andThen(
+                .concat(
+                    .just(.updateIsHiddenLogoutButton(true)),
+                    .just(.updateIsHiddenWithDrawButton(true)),
+                    .just(.showToast("로그아웃 되었습니다."))
+                )
+            )
+            .catch { error in
                 let description = error.asWMError.errorDescription ?? ""
-                owner.action.onNext(.showToast(description))
-            })
-            .disposed(by: disposeBag)
-        return .empty()
+                return Observable.just(Mutation.showToast(description))
+            }
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
@@ -186,19 +187,21 @@ private extension SettingReactor {
     }
 
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
-        // TODO: 회원탈퇴 처리
         return withDrawUserInfoUseCase.execute()
             .andThen(
                 .concat(
                     handleThirdPartyWithDraw(),
-                    logout()
+                    clearUserInfo()
                 )
             )
-            .map { Mutation.withDrawResult($0) }
             .catch { error in
-                let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
-                return Observable.just(Mutation.withDrawResult(baseEntity))
+                let baseEntity = BaseEntity(
+                    status: 0,
+                    description: error.asWMError.errorDescription ?? ""
+                )
+                return Observable.just(baseEntity)
             }
+            .map { Mutation.withDrawResult($0) }
     }
 
     func appPushSettingNavigationDidTap() -> Observable<Mutation> {
@@ -259,28 +262,16 @@ private extension SettingReactor {
         }
         return .empty()
     }
-
-    func logout() -> Observable<BaseEntity> {
-        logoutUseCase.execute()
-            .andThen(
-                Observable.create { observable in
-                    observable.onNext(BaseEntity(
-                        status: 200,
-                        description: "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다."
-                    ))
-                    observable.onCompleted()
-                    return Disposables.create {}
-                }
-            )
-            .catch { error in
-                Observable.create { observable in
-                    observable.onNext(BaseEntity(
-                        status: 0,
-                        description: error.asWMError.errorDescription ?? ""
-                    ))
-                    observable.onCompleted()
-                    return Disposables.create {}
-                }
-            }
+    
+    func clearUserInfo() -> Observable<BaseEntity> {
+        PreferenceManager.clearUserInfo()
+        return Observable.create { observable in
+            observable.onNext(BaseEntity(
+                status: 200,
+                description: ""
+            ))
+            observable.onCompleted()
+            return Disposables.create {}
+        }
     }
 }
