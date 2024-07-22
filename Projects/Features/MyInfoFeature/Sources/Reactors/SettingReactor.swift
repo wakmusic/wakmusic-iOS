@@ -221,8 +221,11 @@ private extension SettingReactor {
     }
 
     func removeCacheButtonDidTap() -> Observable<Mutation> {
-        let cacheSize = calculateCacheSize()
-        return .just(.removeCacheButtonDidTap(cacheSize: cacheSize))
+        calculateCacheSize()
+            .asObservable()
+            .map { cacheSize in
+                Mutation.removeCacheButtonDidTap(cacheSize: cacheSize)
+            }
     }
 
     func confirmRemoveCacheButtonDidTap() -> Observable<Mutation> {
@@ -231,18 +234,21 @@ private extension SettingReactor {
         return .just(.confirmRemoveCacheButtonDidTap)
     }
 
-    func calculateCacheSize() -> String {
-        var str = ""
-        ImageCache.default.calculateDiskStorageSize { result in
-            switch result {
-            case let .success(size):
-                let sizeString = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
-                str = sizeString
-            case let .failure(error):
-                str = ""
+    func calculateCacheSize() -> Single<String> {
+        return Single.create { single in
+            ImageCache.default.calculateDiskStorageSize { result in
+                switch result {
+                case let .success(size):
+                    let mbSize = (Double(size) / 1024 / 1024)
+                    let sizeString = String(format: "%.2f MB", mbSize)
+                    single(.success(sizeString))
+                case let .failure(error):
+                    let description = error.asWMError.errorDescription ?? ""
+                    single(.success(description))
+                }
             }
+            return Disposables.create()
         }
-        return str
     }
 
     func versionInfoButtonDidTap() -> Observable<Mutation> {
