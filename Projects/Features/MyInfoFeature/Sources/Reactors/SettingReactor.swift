@@ -262,7 +262,7 @@ private extension SettingReactor {
         }
         return .empty()
     }
-    
+
     func clearUserInfo() -> Observable<BaseEntity> {
         PreferenceManager.clearUserInfo()
         return Observable.create { observable in
