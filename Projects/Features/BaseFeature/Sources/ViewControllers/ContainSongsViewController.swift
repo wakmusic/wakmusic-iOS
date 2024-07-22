@@ -5,11 +5,8 @@ import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
 import UIKit
+import UserDomainInterface
 import Utility
-
-public protocol ContainSongsViewDelegate: AnyObject {
-    func tokenExpired()
-}
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -25,7 +22,6 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     lazy var input = ContainSongsViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     var disposeBag = DisposeBag()
-    public weak var delegate: ContainSongsViewDelegate?
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
@@ -89,10 +85,10 @@ extension ContainSongsViewController {
             .do(onNext: { [weak self] indexPath, _ in
                 self?.tableView.deselectRow(at: indexPath, animated: true)
             })
-            .map { indexPath, model -> String in
-                return model[indexPath.row].key
+            .map { indexPath, model -> PlaylistEntity in
+                return model[indexPath.row]
             }
-            .bind(to: input.containSongWithKey)
+            .bind(to: input.itemDidTap)
             .disposed(by: disposeBag)
 
         output.showToastMessage
@@ -106,6 +102,8 @@ extension ContainSongsViewController {
                 } else if result.status == 200 {
                     NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
+                } else if result.status == -1 {
+                    return
                 } else {
                     self.dismiss(animated: true)
                 }
@@ -119,9 +117,7 @@ extension ContainSongsViewController {
                 owner.showToast(text: error.localizedDescription, font: toastFont)
                 NotificationCenter.default.post(name: .movedTab, object: 4)
 
-                owner.dismiss(animated: true) {
-                    owner.delegate?.tokenExpired()
-                }
+                owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
 
@@ -135,7 +131,7 @@ extension ContainSongsViewController {
         closeButton.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
 
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleLabel.text = "리스트에 담기"
         titleLabel.setTextWithAttributes(kernValue: -0.5)
 
@@ -186,15 +182,3 @@ extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
         showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
     }
 }
-
-#warning("토근 만료 처리")
-// extension ContainSongsViewController: MultiPurposePopupViewDelegate {
-//    public func didTokenExpired() {
-//        self.dismiss(animated: true) { [weak self] in
-//
-//            guard let self else { return }
-//
-//            self.delegate?.tokenExpired()
-//        }
-//    }
-// }
