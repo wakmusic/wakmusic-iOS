@@ -93,7 +93,7 @@ extension SongResultCell {
     public func update(_ model: SongEntity) {
         thumbnailView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
-            placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
+            placeholder: DesignSystemAsset.Logo.placeHolderMedium.image,
             options: [.transition(.fade(0.2))]
         )
         titleLabel.text = model.title

@@ -24,6 +24,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        $0.bounces = false
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(false)

@@ -67,6 +67,7 @@ final class SongSearchResultReactor: Reactor {
                 text: self.text,
                 scrollPage: state.scrollPage
             )
+
         case let .changeSortType(type):
             return updateSortType(type)
         case let .changeFilterType(type):
@@ -140,16 +141,16 @@ extension SongSearchResultReactor {
         scrollPage: Int,
         byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
     ) -> Observable<Mutation> {
-        let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
-
         return .concat([
-            .just(Mutation.updateLoadingState(true)), // 로딩
+            .just(.updateLoadingState(true)),
             fetchSearchSongsUseCase
                 .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
                 .asObservable()
                 .map { [weak self] dataSource -> Mutation in
 
                     guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
+
+                    let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
 
                     if scrollPage == 1 {
                         LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
@@ -168,7 +169,7 @@ extension SongSearchResultReactor {
                     )
                 },
             .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
-            .just(Mutation.updateLoadingState(false)) // 로딩 종료
+            .just(.updateLoadingState(false))
         ])
     }
 
@@ -185,8 +186,8 @@ extension SongSearchResultReactor {
         prev[index].isSelected = !prev[index].isSelected
 
         return .concat([
-            .just(Mutation.updateSelectedCount(count)),
-            .just(Mutation.updateSelectingStateByIndex(prev))
+            .just(Mutation.updateSelectingStateByIndex(prev)),
+            .just(Mutation.updateSelectedCount(count))
         ])
     }
 
