@@ -9,10 +9,9 @@ import UIKit
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
     func updateData(_ model: PlaylistDetailHeaderModel)
-    func updateThumbnailByAlbum(_ data: Data)
+    func updateThumbnailFromGallery(_ data: Data)
     func updateThumbnailByDefault(_ url: String)
 
-    #warning("api 구현 후 함수명을 좀 더 명확하게 변경하기")
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -137,6 +136,8 @@ extension MyPlaylistHeaderView {
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
+
+    
     func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         countLabel.text = "\(model.songCount)곡"
@@ -148,7 +149,7 @@ extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
         cameraContainerView.isHidden = !isEditing
     }
 
-    func updateThumbnailByAlbum(_ data: Data) {
+    func updateThumbnailFromGallery(_ data: Data) {
         thumbnailImageView.image = UIImage(data: data)
     }
 

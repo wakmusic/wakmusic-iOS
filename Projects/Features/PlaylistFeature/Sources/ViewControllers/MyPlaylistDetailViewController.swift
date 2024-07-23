@@ -12,7 +12,7 @@ import Then
 import UIKit
 import Utility
 
-#warning("송카트, 공유하기, 이미지 업로드")
+#warning("공유하기, 이미지 업로드")
 #warning("다운 샘플링")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
@@ -560,7 +560,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         var configuration = PHPickerConfiguration()
         configuration.filter = .any(of: [.images])
         configuration.selectionLimit = 1 // 갯수 제한
-
+    
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
 
@@ -593,10 +593,13 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  let imageToData = image.pngData() else { return }
+                                  let imageToData = image.jpegData(compressionQuality: 0.8) else { return } // 80% 압축
 
                             let sizeMB: Double = Double(imageToData.count).megabytes
                             DEBUG_LOG("Image: \(imageToData) > \(sizeMB)")
+                            
+
+                            
                             self.reactor?.action.onNext(.changeThumnail(imageToData))
                         }
                     }
@@ -626,7 +629,7 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
-        headerView.updateThumbnailByAlbum(imageData)
+        headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
