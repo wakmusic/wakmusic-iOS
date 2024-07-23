@@ -72,7 +72,7 @@ public final class LyricHighlightingViewController: UIViewController {
         lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
     ).then {
         $0.numberOfLines = 0
-        $0.preferredMaxLayoutWidth = APP_WIDTH()-40
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 40
     }
 
     let completeButton = UIButton().then {
