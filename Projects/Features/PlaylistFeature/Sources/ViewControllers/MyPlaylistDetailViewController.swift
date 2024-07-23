@@ -13,7 +13,6 @@ import UIKit
 import Utility
 
 #warning("공유하기, 이미지 업로드")
-#warning("다운 샘플링")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
