@@ -55,13 +55,24 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
-    let emptyLabel = UILabel().then {
-        $0.text = "가사가 없습니다."
-        $0.textColor = .white
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
-        $0.setTextWithAttributes(alignment: .center)
+    let warningView = UIView().then {
         $0.isHidden = true
+    }
+
+    let warningImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.LyricHighlighting.errorDark.image
+    }
+
+    let warningLabel = WMLabel(
+        text: "노래 가사가 없습니다.",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray200.color,
+        font: .t6(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
+    ).then {
         $0.numberOfLines = 0
+        $0.preferredMaxLayoutWidth = APP_WIDTH()-40
     }
 
     let completeButton = UIButton().then {
@@ -145,13 +156,14 @@ private extension LyricHighlightingViewController {
             thumbnailImageView,
             dimmedBackgroundView,
             collectionView,
-            emptyLabel,
+            warningView,
             navigationBarView,
             indicator
         )
         navigationBarView.addSubviews(backButton, navigationTitleStackView, completeButton)
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
+        warningView.addSubviews(warningImageView, warningLabel)
     }
 
     func setLayout() {
@@ -201,9 +213,21 @@ private extension LyricHighlightingViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        emptyLabel.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview().inset(20)
+        warningView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(APP_HEIGHT() * ((294.0 - 6.0) / 812.0))
+            $0.centerX.equalToSuperview()
+        }
+
+        warningImageView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
+
+        warningLabel.snp.makeConstraints {
+            $0.top.equalTo(warningImageView.snp.bottom).offset(-2)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
 
         indicator.snp.makeConstraints {
