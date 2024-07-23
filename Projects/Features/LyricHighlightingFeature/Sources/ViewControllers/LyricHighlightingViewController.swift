@@ -1,4 +1,5 @@
 import DesignSystem
+import Kingfisher
 import LogManager
 import NVActivityIndicatorView
 import RxCocoa
@@ -12,6 +13,11 @@ public final class LyricHighlightingViewController: UIViewController {
     let backButton = UIButton(type: .system).then {
         $0.tintColor = .white
         $0.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
+    }
+
+    private let thumbnailImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
 
     private let dimmedBackgroundView = UIView()
@@ -49,12 +55,24 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
-    let emptyLabel = UILabel().then {
-        $0.text = "가사가 없습니다."
-        $0.textColor = .white
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 18)
-        $0.setTextWithAttributes(alignment: .center)
+    let warningView = UIView().then {
         $0.isHidden = true
+    }
+
+    let warningImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.LyricHighlighting.errorDark.image
+    }
+
+    let warningLabel = WMLabel(
+        text: "노래 가사가 없습니다.",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray200.color,
+        font: .t6(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
+    ).then {
+        $0.numberOfLines = 0
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 40
     }
 
     let completeButton = UIButton().then {
@@ -135,15 +153,17 @@ public final class LyricHighlightingViewController: UIViewController {
 private extension LyricHighlightingViewController {
     func addSubViews() {
         view.addSubviews(
+            thumbnailImageView,
             dimmedBackgroundView,
-            navigationBarView,
             collectionView,
-            emptyLabel,
+            warningView,
+            navigationBarView,
             indicator
         )
         navigationBarView.addSubviews(backButton, navigationTitleStackView, completeButton)
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
+        warningView.addSubviews(warningImageView, warningLabel)
     }
 
     func setLayout() {
@@ -180,6 +200,10 @@ private extension LyricHighlightingViewController {
             $0.height.equalTo(20)
         }
 
+        thumbnailImageView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
         dimmedBackgroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -189,10 +213,21 @@ private extension LyricHighlightingViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        emptyLabel.snp.makeConstraints {
-            $0.top.equalTo(collectionView)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalToSuperview().inset(20)
+        warningView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(APP_HEIGHT() * ((294.0 - 6.0) / 812.0))
+            $0.centerX.equalToSuperview()
+        }
+
+        warningImageView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
+
+        warningLabel.snp.makeConstraints {
+            $0.top.equalTo(warningImageView.snp.bottom).offset(-2)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
 
         indicator.snp.makeConstraints {
@@ -205,6 +240,20 @@ private extension LyricHighlightingViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
         collectionView.register(LyricHighlightingCell.self, forCellWithReuseIdentifier: "\(LyricHighlightingCell.self)")
+        thumbnailImageView.kf.setImage(
+            with: URL(string: WMImageAPI.fetchYoutubeThumbnailHD(id: output.updateInfo.value.songID).toString),
+            options: [
+                .waitForCache,
+                .onlyFromCache,
+                .transition(.fade(0.2)),
+                .forceTransition,
+                .processor(
+                    DownsamplingImageProcessor(
+                        size: .init(width: 10, height: 10)
+                    )
+                )
+            ]
+        )
         indicator.startAnimating()
     }
 }
@@ -221,6 +270,6 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
 
 extension LyricHighlightingViewController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
+        return true
     }
 }
