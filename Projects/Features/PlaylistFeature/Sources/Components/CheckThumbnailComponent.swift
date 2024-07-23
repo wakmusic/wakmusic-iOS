@@ -6,6 +6,9 @@ import UIKit
 
 public final class CheckThumbnailComponent: Component<EmptyDependency>, CheckThumbnailFactory {
     public func makeView(delegate: any CheckThumbnailDelegate, imageData: Data) -> UIViewController {
-        return CheckThumbnailViewController(delegate: delegate, imageData: imageData)
+        
+        let reactor = CheckThumbnailReactor(imageeData: imageData)
+        
+        return CheckThumbnailViewController(reactor: reactor ,delegate: delegate)
     }
 }

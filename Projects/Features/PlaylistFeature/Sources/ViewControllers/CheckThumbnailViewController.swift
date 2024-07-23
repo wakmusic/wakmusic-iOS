@@ -7,7 +7,7 @@ import Then
 import UIKit
 import Utility
 
-final class CheckThumbnailViewController: UIViewController {
+final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbnailReactor> {
     weak var delegate: CheckThumbnailDelegate?
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
@@ -20,16 +20,12 @@ final class CheckThumbnailViewController: UIViewController {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    private var imageData: Data?
-
     private var thumnailContainerView: UIView = UIView()
 
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
-        let image = UIImage(data: imageData ?? Data())
         $0.layer.cornerRadius = 32
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
-        $0.image = image
     }
 
     private var guideLineSuperView: UIView = UIView().then {
@@ -95,11 +91,10 @@ final class CheckThumbnailViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(delegate: any CheckThumbnailDelegate, imageData: Data) {
-        self.imageData = imageData
+    init(reactor: CheckThumbnailReactor ,delegate: any CheckThumbnailDelegate) {
         self.delegate = delegate
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(reactor: reactor)
     }
 
     @available(*, unavailable)
@@ -110,10 +105,9 @@ final class CheckThumbnailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        addViews()
-        setLayout()
-        bindAction()
+
     }
+    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -124,17 +118,20 @@ final class CheckThumbnailViewController: UIViewController {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-}
-
-private extension CheckThumbnailViewController {
-    func addViews() {
+    
+    override func addView() {
+        super.addView()
+        
         view.addSubviews(wmNavigationbarView, thumnailContainerView, guideLineSuperView)
         wmNavigationbarView.setLeftViews([backButton])
         thumnailContainerView.addSubviews(thumbnailImageView)
         guideLineSuperView.addSubviews(guideLineTitleLabel, guideLineStackView, confirmButton)
+        
     }
-
-    func setLayout() {
+    
+    override func setLayout() {
+        super.setLayout()
+        
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -174,22 +171,28 @@ private extension CheckThumbnailViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-
-    func bindAction() {
-        backButton.addAction { [weak self] () in
-            self?.navigationController?.popViewController(animated: true)
-        }
-
-        confirmButton.addAction { [weak self] () in
-
-            guard let data = self?.imageData else {
-                return
-            }
-
-            self?.dismiss(animated: true, completion: {
-                self?.delegate?.receive(data)
-            })
-        }
+    
+    override func bindState(reactor: CheckThumbnailReactor) {
+        super.bindState(reactor: reactor)
+    }
+    
+    override func bindAction(reactor: CheckThumbnailReactor) {
+        super.bindAction(reactor: reactor)
+        
+//        backButton.addAction { [weak self] () in
+//            self?.navigationController?.popViewController(animated: true)
+//        }
+//
+//        confirmButton.addAction { [weak self] () in
+//
+//            guard let data = self? else {
+//                return
+//            }
+//
+//            self?.dismiss(animated: true, completion: {
+//                self?.delegate?.receive(data)
+//            })
+//        }
     }
 }
 
