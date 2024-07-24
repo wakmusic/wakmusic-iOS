@@ -340,6 +340,21 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         sharedState.map(\.replaceThumnbnailData)
             .compactMap { $0 }
             .bind(with: self) { owner, data in
+                
+                if Double(data.count).megabytes  > owner.limitSizePerMB {
+                    let textPopupVC = owner.textPopUpFactory.makeView(
+                        text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil, 
+                        completion: nil,
+                        cancelCompletion: nil
+                    )
+
+                    owner.showBottomSheet(content: textPopupVC)
+                    return
+                }
+                
                 if let navigationController = owner.presentedViewController as? UINavigationController {
                     navigationController.pushViewController(
                         owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true
@@ -575,12 +590,9 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 /// 갤러리 신버전
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        if results.isEmpty {
-            reactor?.action.onNext(.changeThumnail(nil))
-            picker.dismiss(animated: true)
-            return
-        }
-
+       
+        picker.dismiss(animated: true)
+        
         results.forEach {
             let provider = $0.itemProvider
 
