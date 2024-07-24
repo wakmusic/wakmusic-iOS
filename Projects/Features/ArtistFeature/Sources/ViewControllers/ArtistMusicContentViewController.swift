@@ -138,7 +138,7 @@ private extension ArtistMusicContentViewController {
                 owner.showToast(
                     text: message,
                     font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 56 + 40
+                    options: [.tabBar, .songCart]
                 )
             }
             .disposed(by: disposeBag)
