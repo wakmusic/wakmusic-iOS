@@ -54,7 +54,20 @@ public extension UIViewController {
         )
     }
 
-    func showToast(text: String, font: UIFont, verticalOffset: CGFloat? = nil) {
+    @_disfavoredOverload
+    func showToast(
+        text: String,
+        font: UIFont,
+        options: WMToastOptions = [.empty]
+    ) {
+        showToast(text: text, font: font, verticalOffset: options.offset)
+    }
+
+    func showToast(
+        text: String,
+        font: UIFont,
+        verticalOffset: CGFloat? = nil
+    ) {
         var attributes = EKAttributes.bottomFloat
         attributes.displayDuration = 2
         attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
