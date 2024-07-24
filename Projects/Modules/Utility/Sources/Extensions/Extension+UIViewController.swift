@@ -54,10 +54,18 @@ public extension UIViewController {
         )
     }
 
+    @_disfavoredOverload
+    func showToast(
+      text: String,
+      font: UIFont,
+      options: WMToastOptions? = nil
+    ) {
+        showToast(text: text, font: font, verticalOffset: options?.offset)
+    }
+
     func showToast(
         text: String,
         font: UIFont,
-        options: WMToastOptions? = nil,
         verticalOffset: CGFloat? = nil
     ) {
         var attributes = EKAttributes.bottomFloat
@@ -72,10 +80,7 @@ public extension UIViewController {
             fade: .init(from: 1, to: 0, duration: 0.3)
         )
 
-        if let options = options {
-            attributes.positionConstraints.verticalOffset = options.offset
-
-        } else if let verticalOffset = verticalOffset {
+        if let verticalOffset = verticalOffset {
             attributes.positionConstraints.verticalOffset = verticalOffset
         }
 
