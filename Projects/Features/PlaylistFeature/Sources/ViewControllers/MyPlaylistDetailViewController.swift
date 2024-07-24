@@ -337,31 +337,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.replaceThumnbnailData)
-            .compactMap { $0 }
-            .bind(with: self) { owner, data in
-
-                if Double(data.count).megabytes > owner.limitSizePerMB {
-                    let textPopupVC = owner.textPopUpFactory.makeView(
-                        text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
-                        cancelButtonIsHidden: true,
-                        confirmButtonText: nil,
-                        cancelButtonText: nil,
-                        completion: nil,
-                        cancelCompletion: nil
-                    )
-
-                    owner.showBottomSheet(content: textPopupVC)
-                    return
-                }
-
-                if let navigationController = owner.presentedViewController as? UINavigationController {
-                    navigationController.pushViewController(
-                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true
-                    )
-                }
-            }
-            .disposed(by: disposeBag)
     }
 }
 
@@ -590,7 +565,12 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 /// 갤러리 신버전
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true)
+        
+        if results.isEmpty {
+            picker.dismiss(animated: true)
+            return
+        }
+        
 
         results.forEach {
             let provider = $0.itemProvider
@@ -604,19 +584,42 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  var imageRawData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
+                                  var imageData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
 
-                            let sizeMB: Double = Double(imageRawData.count).megabytes
+                            let sizeMB: Double = Double(imageData.count).megabytes
 
                             if sizeMB > self.limitSizePerMB {
-                                imageRawData = image.jpegData(compressionQuality: 0.8) ?? imageRawData
+                                imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
-                            self.reactor?.action.onNext(.changeThumnail(imageRawData))
+                            
+                            if let navigationController = self.presentedViewController as? UINavigationController {
+                                
+                                if  Double(imageData.count).megabytes + 10  > self.limitSizePerMB {
+                                    let textPopupVC = self.textPopUpFactory.makeView(
+                                        text: "파일당 10MB까지 업로드할 수 있습니다.",
+                                        cancelButtonIsHidden: true,
+                                        confirmButtonText: nil,
+                                        cancelButtonText: nil,
+                                        completion: nil,
+                                        cancelCompletion: nil
+                                    )
+
+                                    navigationController.showBottomSheet(content: textPopupVC)
+                                    return
+                                }
+                                navigationController.pushViewController(
+                                    self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData), animated: true
+                                )
+                            }
+                            
                         }
                     }
                 }
             }
         }
+        
+        
+       
     }
 }
 
@@ -640,12 +643,14 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
+        #warning("State에 저장")
         headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
     func receive(_ name: String, _ url: String) {
+        #warning("State에 저장")
         headerView.updateThumbnailByDefault(url)
     }
 }

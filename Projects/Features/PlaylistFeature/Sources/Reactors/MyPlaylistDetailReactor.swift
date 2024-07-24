@@ -21,7 +21,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case removeSongs
-        case changeThumnail(Data?)
     }
 
     enum Mutation {
@@ -31,7 +30,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateBackUpPlaylist([PlaylistItemModel])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateThumbnail(Data?)
         case showToast(String)
     }
 
@@ -129,8 +127,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case .removeSongs:
             return removeSongs()
 
-        case let .changeThumnail(data):
-            return updateThumbnail(data)
         }
     }
 
@@ -159,8 +155,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .showToast(message):
             newState.toastMessage = message
 
-        case let .updateThumbnail(data):
-            newState.replaceThumnbnailData = data
         }
 
         return newState
@@ -396,7 +390,4 @@ private extension MyPlaylistDetailReactor {
             }
     }
 
-    func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
-        return .just(.updateThumbnail(data))
-    }
 }
