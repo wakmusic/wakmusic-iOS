@@ -8,10 +8,12 @@ import UIKit
 import Utility
 import RxCocoa
 import RxSwift
+import BaseFeatureInterface
 
 final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbnailReactor> {
     weak var delegate: CheckThumbnailDelegate?
 
+    private let textPopUpFactory: any TextPopUpFactory
     private let limit: Double = 10.0
     
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
@@ -66,8 +68,9 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(reactor: CheckThumbnailReactor,delegate: any CheckThumbnailDelegate) {
+    init(reactor: CheckThumbnailReactor, textPopUpFactory: any TextPopUpFactory ,delegate: any CheckThumbnailDelegate) {
         self.delegate = delegate
+        self.textPopUpFactory = textPopUpFactory
 
         super.init(reactor: reactor)
     }
@@ -154,31 +157,14 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         
         
         let sharedState = reactor.state.share()
-        
-        
-        sharedState.map(\.imageData)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, data in
                 
-                owner.thumbnailImageView.image = UIImage(data: data)
-                
-                if Double(data.count).megabytes > owner.limit {
-                    
-                    owner.showToast(text: "\(Int(owner.limit))MB를 넘었습니다.", font: .setFont(.t6(weight: .light)))
-                    #warning("비활성화 디자인")
-                    owner.confirmButton.isEnabled = false
-                
-                } else {
-                    owner.confirmButton.isEnabled = true
-                }
-                
-            }
-            .disposed(by: disposeBag)
-        
         
         sharedState.map(\.isLoading)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, isLoading in
+            .withLatestFrom(sharedState.map(\.imageData)){($0, $1)}
+            .bind(with: self) { owner, info in
+                
+
+                let (isLoading, data) = info
                 
                 if isLoading {
                     owner.indicator.startAnimating()
@@ -186,8 +172,28 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                     owner.indicator.stopAnimating()
                 }
                 
+                owner.thumbnailImageView.image = UIImage(data: data)
                 owner.thumbnailImageView.isHidden = isLoading
                 owner.guideLineSuperView.isHidden = isLoading
+                
+                #warning("overflow를 위한 임시 + 10")
+                if Double(data.count).megabytes + 10 > owner.limit {
+                                        
+                    let textPopupVC =  owner.textPopUpFactory.makeView(
+                        text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: nil,
+                        cancelButtonText: nil, completion: {
+                        owner.dismiss(animated: true)
+                    }, cancelCompletion: nil)
+                    
+                    owner.wmNavigationbarView.isHidden = true
+                    owner.thumnailContainerView.isHidden = true
+                    owner.guideLineSuperView.isHidden = true
+                    owner.showBottomSheet(content: textPopupVC)
+                }
+                
+                
                 
             }
             .disposed(by: disposeBag)
