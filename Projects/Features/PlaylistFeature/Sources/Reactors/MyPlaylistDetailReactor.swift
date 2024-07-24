@@ -126,7 +126,6 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
-
         }
     }
 
@@ -154,7 +153,6 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
-
         }
 
         return newState
@@ -389,5 +387,4 @@ private extension MyPlaylistDetailReactor {
                 )
             }
     }
-
 }

@@ -336,7 +336,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-
     }
 }
 
@@ -565,12 +564,10 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 /// 갤러리 신버전
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        
         if results.isEmpty {
             picker.dismiss(animated: true)
             return
         }
-        
 
         results.forEach {
             let provider = $0.itemProvider
@@ -591,10 +588,9 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             if sizeMB > self.limitSizePerMB {
                                 imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
-                            
+
                             if let navigationController = self.presentedViewController as? UINavigationController {
-                                
-                                if  Double(imageData.count).megabytes + 10  > self.limitSizePerMB {
+                                if Double(imageData.count).megabytes + 10 > self.limitSizePerMB {
                                     let textPopupVC = self.textPopUpFactory.makeView(
                                         text: "파일당 10MB까지 업로드할 수 있습니다.",
                                         cancelButtonIsHidden: true,
@@ -608,18 +604,15 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                                     return
                                 }
                                 navigationController.pushViewController(
-                                    self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData), animated: true
+                                    self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData),
+                                    animated: true
                                 )
                             }
-                            
                         }
                     }
                 }
             }
         }
-        
-        
-       
     }
 }
 
