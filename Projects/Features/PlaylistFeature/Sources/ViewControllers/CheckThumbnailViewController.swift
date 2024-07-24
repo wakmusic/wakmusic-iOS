@@ -168,8 +168,8 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                 owner.thumbnailImageView.isHidden = isLoading
                 owner.guideLineSuperView.isHidden = isLoading
 
-                #warning("overflow를 위한 임시 + 10")
-                if Double(data.count).megabytes + 10 > owner.limit {
+        
+                if Double(data.count).megabytes > owner.limit {
                     let textPopupVC = owner.textPopUpFactory.makeView(
                         text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
                         cancelButtonIsHidden: true,
@@ -205,20 +205,25 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
     override func bindAction(reactor: CheckThumbnailReactor) {
         super.bindAction(reactor: reactor)
 
-        backButton.addAction { [weak self] () in
-            self?.navigationController?.popViewController(animated: true)
-        }
 
-//        confirmButton.addAction { [weak self] () in
-//
-//            guard let data = self? else {
-//                return
-//            }
-//
-//            self?.dismiss(animated: true, completion: {
-//                self?.delegate?.receive(data)
-//            })
-//        }
+        backButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        confirmButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true, completion: {
+                    owner.delegate?.receive(reactor.currentState.imageData)
+                })
+            }
+            .disposed(by: disposeBag)
+        
+        
+        
     }
 }
 
