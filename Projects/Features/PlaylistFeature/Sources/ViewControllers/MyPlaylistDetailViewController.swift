@@ -16,11 +16,10 @@ import Utility
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
-    
     private enum Limit {
-      static let imageSizeLimitPerMB: Double = 10.0
+        static let imageSizeLimitPerMB: Double = 10.0
     }
-    
+
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -595,7 +594,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             }
 
                             if let navigationController = self.presentedViewController as? UINavigationController {
-                                if Double(imageData.count).megabytes  > Limit.imageSizeLimitPerMB {
+                                if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
                                     let textPopupVC = self.textPopUpFactory.makeView(
                                         text: "파일당 10MB까지 업로드할 수 있습니다.",
                                         cancelButtonIsHidden: true,
