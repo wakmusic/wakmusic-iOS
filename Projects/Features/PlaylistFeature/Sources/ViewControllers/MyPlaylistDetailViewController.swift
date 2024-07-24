@@ -22,6 +22,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     var bottomSheetView: BottomSheetView!
 
+    fileprivate let limitSizePerMB: Double = 10.0
     private let multiPurposePopupFactory: any MultiPurposePopupFactory
 
     private let containSongsFactory: any ContainSongsFactory
@@ -592,13 +593,17 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  let imageRawData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
+                                var imageRawData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
 
                             let sizeMB: Double = Double(imageRawData.count).megabytes
-
+                            
+                            if sizeMB > self.limitSizePerMB {
+                                imageRawData = image.jpegData(compressionQuality: 0.8) ?? imageRawData
+                            }
+                            
                             let compressImageData = image.jpegData(compressionQuality: 0.8)
 
-                            self.reactor?.action.onNext(.changeThumnail(sizeMB > 10 ? compressImageData : imageRawData))
+                            self.reactor?.action.onNext(.changeThumnail(imageRawData))
                         }
                     }
                 }

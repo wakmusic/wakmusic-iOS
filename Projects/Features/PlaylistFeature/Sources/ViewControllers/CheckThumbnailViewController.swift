@@ -14,7 +14,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
     weak var delegate: CheckThumbnailDelegate?
 
     private let textPopUpFactory: any TextPopUpFactory
-    private let limit: Double = 10.0
+    private let limitSizePerMB: Double = 10.0
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("앨범에서 고르기")
@@ -168,7 +168,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                 owner.thumbnailImageView.isHidden = isLoading
                 owner.guideLineSuperView.isHidden = isLoading
 
-                if Double(data.count).megabytes > owner.limit {
+                if Double(data.count).megabytes > owner.limitSizePerMB {
                     let textPopupVC = owner.textPopUpFactory.makeView(
                         text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
                         cancelButtonIsHidden: true,
