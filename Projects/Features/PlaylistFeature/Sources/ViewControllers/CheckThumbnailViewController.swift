@@ -185,7 +185,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
 
         sharedState.map(\.guideLines)
             .distinctUntilChanged()
-            .filter({!$0.isEmpty})
+            .filter { !$0.isEmpty }
             .bind(with: self) { owner, guideLines in
 
                 owner.generateGuideView(guideLines: guideLines).forEach { view in
