@@ -20,8 +20,8 @@ final class CheckThumbnailReactor: Reactor {
 
     var initialState: State
 
-    init(imageeData: Data) {
-        initialState = State(imageData: imageeData, guideLines: [], isLoading: true)
+    init(imageData: Data) {
+        initialState = State(imageData: imageData, guideLines: [], isLoading: true)
     }
 
     func mutate(action: Action) -> Observable<Mutation> {

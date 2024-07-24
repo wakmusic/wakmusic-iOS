@@ -10,7 +10,7 @@ public protocol CheckThumbnailDependency: Dependency {
 
 public final class CheckThumbnailComponent: Component<CheckThumbnailDependency>, CheckThumbnailFactory {
     public func makeView(delegate: any CheckThumbnailDelegate, imageData: Data) -> UIViewController {
-        let reactor = CheckThumbnailReactor(imageeData: imageData)
+        let reactor = CheckThumbnailReactor(imageData: imageData)
 
         return CheckThumbnailViewController(
             reactor: reactor,

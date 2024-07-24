@@ -178,9 +178,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                         }, cancelCompletion: nil
                     )
 
-                    owner.wmNavigationbarView.isHidden = true
-                    owner.thumnailContainerView.isHidden = true
-                    owner.guideLineSuperView.isHidden = true
                     owner.showBottomSheet(content: textPopupVC)
                 }
             }
@@ -188,11 +185,8 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
 
         sharedState.map(\.guideLines)
             .distinctUntilChanged()
+            .filter({!$0.isEmpty})
             .bind(with: self) { owner, guideLines in
-
-                if guideLines.isEmpty {
-                    return
-                }
 
                 owner.generateGuideView(guideLines: guideLines).forEach { view in
                     owner.guideLineStackView.addArrangedSubviews(view)
