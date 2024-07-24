@@ -58,9 +58,9 @@ public extension UIViewController {
     func showToast(
         text: String,
         font: UIFont,
-        options: WMToastOptions? = nil
+        options: WMToastOptions = [.empty]
     ) {
-        showToast(text: text, font: font, verticalOffset: options?.offset)
+        showToast(text: text, font: font, verticalOffset: options.offset)
     }
 
     func showToast(
