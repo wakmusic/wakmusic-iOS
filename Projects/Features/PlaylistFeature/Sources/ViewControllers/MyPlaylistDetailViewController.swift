@@ -611,9 +611,6 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             if sizeMB > self.limitSizePerMB {
                                 imageRawData = image.jpegData(compressionQuality: 0.8) ?? imageRawData
                             }
-
-                            let compressImageData = image.jpegData(compressionQuality: 0.8)
-
                             self.reactor?.action.onNext(.changeThumnail(imageRawData))
                         }
                     }
