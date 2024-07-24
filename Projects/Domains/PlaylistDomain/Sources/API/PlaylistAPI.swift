@@ -14,7 +14,7 @@ public enum PlaylistAPI {
     case addSongIntoPlaylist(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
-    case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
+    case uploadDefaultImage(key: String, imageName: String) // 플레이리스트 default 이미지 업로드
     case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case checkSubscription(key: String)
     case fetchRecommendPlaylist // 추천 플리 불러오기
@@ -48,7 +48,7 @@ extension PlaylistAPI: WMAPI {
              let .removeSongs(key: key, _):
             return "/\(key)/songs"
 
-        case let .uploadImage(key: key, _):
+        case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
@@ -70,7 +70,7 @@ extension PlaylistAPI: WMAPI {
         case .removeSongs:
             return .delete
 
-        case .updatePlaylist, .updateTitleAndPrivate, .uploadImage:
+        case .updatePlaylist, .updateTitleAndPrivate, .uploadDefaultImage:
             return .patch
         }
     }
@@ -98,39 +98,15 @@ extension PlaylistAPI: WMAPI {
                 encoding: URLEncoding.queryString
             )
 
-        case let .uploadImage(_, model: model):
+        case let .uploadDefaultImage(_, imageName):
 
-            var datas: [MultipartFormData] = []
-
-            switch model {
-            case let .default(imageName: data):
-                datas.append(MultipartFormData(
-                    provider: .data("default".data(using: .utf8)!), name: "type"
-                ))
-
-                datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
-
-            case let .custom(imageName: data):
-                datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
-                datas.append(MultipartFormData(
-                    provider: .data(data),
-                    name: "imageFile",
-                    fileName: "image.jpeg"
-                ))
-            }
-            return .uploadMultipart(datas)
+            return .requestJSONEncodable(DefaultImageRequestDTO(imageName: imageName))
         }
     }
 
     public var headers: [String: String]? {
-        switch self {
-        case .uploadImage:
-
-            return ["Content-Type": "multipart/form-data"]
-
-        default:
-            return ["Content-Type": "application/json"]
-        }
+    
+        return ["Content-Type": "application/json"]
     }
 
     public var jwtTokenType: JwtTokenType {
@@ -142,7 +118,7 @@ extension PlaylistAPI: WMAPI {
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .checkSubscription:
+             .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist, .checkSubscription:
             return .accessToken
         }
     }

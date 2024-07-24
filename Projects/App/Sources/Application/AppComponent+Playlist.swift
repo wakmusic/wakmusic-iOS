@@ -104,9 +104,9 @@ public extension AppComponent {
         }
     }
 
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase {
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
         shared {
-            UploadPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
+            UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 

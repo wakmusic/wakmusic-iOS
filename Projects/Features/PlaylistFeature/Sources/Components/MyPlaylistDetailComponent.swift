@@ -12,7 +12,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
 
     var logoutUseCase: any LogoutUseCase { get }
 
@@ -34,7 +34,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
-                uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
+                uploadDefaultPlaylistImageUseCase: dependency.uploadDefaultPlaylistImageUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopupFactory: dependency.multiPurposePopUpFactory,

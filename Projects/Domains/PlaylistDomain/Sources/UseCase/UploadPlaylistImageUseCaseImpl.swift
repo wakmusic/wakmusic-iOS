@@ -3,7 +3,7 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct UploadPlaylistImageUseCaseImpl: UploadPlaylistImageUseCase {
+public struct UploadDefaultPlaylistImageUseCaseImpl: UploadDefaultPlaylistImageUseCase {
     private let playlistRepository: any PlaylistRepository
 
     public init(
@@ -12,7 +12,7 @@ public struct UploadPlaylistImageUseCaseImpl: UploadPlaylistImageUseCase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
-        playlistRepository.uploadImage(key: key, model: model)
+    public func execute(key: String, model: String) -> Completable {
+        playlistRepository.uploadDefaultImage(key: key, model: model)
     }
 }
