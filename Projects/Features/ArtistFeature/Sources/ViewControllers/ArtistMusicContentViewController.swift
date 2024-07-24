@@ -159,7 +159,6 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addSong:
             guard songs.count <= limit else {
-                DEBUG_LOG("\(songs.count)")
                 output.showToast.onNext(LocalizationStrings.overFlowContainWarning(songs.count - limit))
                 return
             }
