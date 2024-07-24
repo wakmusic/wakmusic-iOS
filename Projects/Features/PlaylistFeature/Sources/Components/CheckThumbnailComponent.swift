@@ -9,6 +9,6 @@ public final class CheckThumbnailComponent: Component<EmptyDependency>, CheckThu
         
         let reactor = CheckThumbnailReactor(imageeData: imageData)
         
-        return CheckThumbnailViewController(reactor: reactor ,delegate: delegate)
+        return CheckThumbnailViewController(reactor: reactor,delegate: delegate)
     }
 }

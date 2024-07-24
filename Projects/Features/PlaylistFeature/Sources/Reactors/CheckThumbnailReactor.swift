@@ -6,7 +6,7 @@ final class CheckThumbnailReactor: Reactor {
     #warning("가이드라인 UseCase 주입하기")
     enum Action {
         case viewDidLoad
-        
+
     }
     
     enum Mutation {
@@ -19,14 +19,13 @@ final class CheckThumbnailReactor: Reactor {
         var imageData: Data
         var guideLines: [String]
         var isLoading: Bool
-        @Pulse var toastMessage: String?
     }
     
     var initialState: State
     
     init(imageeData: Data) {
         
-        initialState = State(imageData: imageeData, guideLines: [] , isLoading: false)
+        initialState = State(imageData: imageeData, guideLines: [], isLoading: true)
         
     }
     
@@ -37,8 +36,10 @@ final class CheckThumbnailReactor: Reactor {
             
         case .viewDidLoad:
             return updateGuideLine()
-        
+            
         }
+        
+
         
     }
     
@@ -65,12 +66,12 @@ extension CheckThumbnailReactor {
         #warning("유즈케이스로 교체하기")
         
         return .concat([
-            .just(.updateLoadingState(false)),
+            .just(.updateLoadingState(true)),
             .just(.updateGuideLine([
                 "이미지를 변경하면 음표 열매 3개를 소모합니다.",
                 "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고 샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님"
             ])),
-            .just(.updateLoadingState(true)),
+            .just(.updateLoadingState(false)),
         ])
         
         
