@@ -11,7 +11,6 @@ private protocol MyPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel)
     func updateThumbnailFromGallery(_ data: Data)
     func updateThumbnailByDefault(_ url: String)
-
 }
 
 private protocol MyPlaylistHeaderActionProtocol {
@@ -136,8 +135,6 @@ extension MyPlaylistHeaderView {
 }
 
 extension MyPlaylistHeaderView: MyPlaylistHeaderStateProtocol {
-
-    
     func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         countLabel.text = "\(model.songCount)곡"

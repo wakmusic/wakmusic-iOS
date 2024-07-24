@@ -2,69 +2,53 @@ import Foundation
 import ReactorKit
 
 final class CheckThumbnailReactor: Reactor {
-
     #warning("가이드라인 UseCase 주입하기")
     enum Action {
         case viewDidLoad
-
     }
-    
+
     enum Mutation {
         case updateGuideLine([String])
         case updateLoadingState(Bool)
     }
-    
+
     struct State {
-        
         var imageData: Data
         var guideLines: [String]
         var isLoading: Bool
     }
-    
+
     var initialState: State
-    
+
     init(imageeData: Data) {
-        
         initialState = State(imageData: imageeData, guideLines: [], isLoading: true)
-        
     }
-    
-    
+
     func mutate(action: Action) -> Observable<Mutation> {
-        
         switch action {
-            
         case .viewDidLoad:
             return updateGuideLine()
-            
         }
-        
-
-        
     }
-    
+
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
-        
+
         switch mutation {
-            
         case let .updateGuideLine(text):
             newState.guideLines = text
         case let .updateLoadingState(isLoading):
             newState.isLoading = isLoading
         }
-        
-        
+
         return newState
     }
-    
 }
 
 extension CheckThumbnailReactor {
-    
     func updateGuideLine() -> Observable<Mutation> {
         #warning("유즈케이스로 교체하기")
-        
+
         return .concat([
             .just(.updateLoadingState(true)),
             .just(.updateGuideLine([
@@ -73,10 +57,5 @@ extension CheckThumbnailReactor {
             ])),
             .just(.updateLoadingState(false)),
         ])
-        
-        
     }
-    
-    
 }
- 

@@ -559,7 +559,7 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
         var configuration = PHPickerConfiguration()
         configuration.filter = .any(of: [.images])
         configuration.selectionLimit = 1 // 갯수 제한
-    
+
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
 
@@ -596,9 +596,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 
                             let sizeMB: Double = Double(imageToData.count).megabytes
                             DEBUG_LOG("Image: \(imageToData) > \(sizeMB)")
-                            
 
-                            
                             self.reactor?.action.onNext(.changeThumnail(imageToData))
                         }
                     }

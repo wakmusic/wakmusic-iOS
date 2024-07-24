@@ -1,21 +1,21 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import PlaylistFeatureInterface
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
-import RxCocoa
-import RxSwift
-import BaseFeatureInterface
 
 final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbnailReactor> {
     weak var delegate: CheckThumbnailDelegate?
 
     private let textPopUpFactory: any TextPopUpFactory
     private let limit: Double = 10.0
-    
+
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("앨범에서 고르기")
     }
@@ -52,7 +52,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         $0.axis = .vertical
         $0.spacing = 4
         $0.distribution = .fill
-
     }
 
     private let confirmButton: UIButton = UIButton().then {
@@ -68,7 +67,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(reactor: CheckThumbnailReactor, textPopUpFactory: any TextPopUpFactory ,delegate: any CheckThumbnailDelegate) {
+    init(reactor: CheckThumbnailReactor, textPopUpFactory: any TextPopUpFactory, delegate: any CheckThumbnailDelegate) {
         self.delegate = delegate
         self.textPopUpFactory = textPopUpFactory
 
@@ -84,9 +83,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         super.viewDidLoad()
         view.backgroundColor = .white
         reactor?.action.onNext(.viewDidLoad)
-
     }
-    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -97,20 +94,19 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-    
+
     override func addView() {
         super.addView()
-        
+
         view.addSubviews(wmNavigationbarView, thumnailContainerView, guideLineSuperView)
         wmNavigationbarView.setLeftViews([backButton])
         thumnailContainerView.addSubviews(thumbnailImageView)
         guideLineSuperView.addSubviews(guideLineTitleLabel, guideLineStackView, confirmButton)
-        
     }
-    
+
     override func setLayout() {
         super.setLayout()
-        
+
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -150,78 +146,65 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
             $0.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
         }
     }
-    
+
     override func bindState(reactor: CheckThumbnailReactor) {
         super.bindState(reactor: reactor)
-        
-        
-        
+
         let sharedState = reactor.state.share()
-                
-        
+
         sharedState.map(\.isLoading)
-            .withLatestFrom(sharedState.map(\.imageData)){($0, $1)}
+            .withLatestFrom(sharedState.map(\.imageData)) { ($0, $1) }
             .bind(with: self) { owner, info in
-                
 
                 let (isLoading, data) = info
-                
+
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
                 }
-                
+
                 owner.thumbnailImageView.image = UIImage(data: data)
                 owner.thumbnailImageView.isHidden = isLoading
                 owner.guideLineSuperView.isHidden = isLoading
-                
+
                 #warning("overflow를 위한 임시 + 10")
                 if Double(data.count).megabytes + 10 > owner.limit {
-                                        
-                    let textPopupVC =  owner.textPopUpFactory.makeView(
+                    let textPopupVC = owner.textPopUpFactory.makeView(
                         text: "업로드에 실패했습니다.\n파일당 10MB까지 업로드할 수 있습니다.",
                         cancelButtonIsHidden: true,
                         confirmButtonText: nil,
                         cancelButtonText: nil, completion: {
-                        owner.dismiss(animated: true)
-                    }, cancelCompletion: nil)
-                    
+                            owner.dismiss(animated: true)
+                        }, cancelCompletion: nil
+                    )
+
                     owner.wmNavigationbarView.isHidden = true
                     owner.thumnailContainerView.isHidden = true
                     owner.guideLineSuperView.isHidden = true
                     owner.showBottomSheet(content: textPopupVC)
                 }
-                
-                
-                
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.guideLines)
             .distinctUntilChanged()
             .bind(with: self) { owner, guideLines in
-                
-                if guideLines.isEmpty  {
+
+                if guideLines.isEmpty {
                     return
                 }
-                
+
                 owner.generateGuideView(guideLines: guideLines).forEach { view in
                     owner.guideLineStackView.addArrangedSubviews(view)
                 }
-                                
-
-                
             }
             .disposed(by: disposeBag)
-        
-    
-        
     }
-    
+
     override func bindAction(reactor: CheckThumbnailReactor) {
         super.bindAction(reactor: reactor)
-        
+
         backButton.addAction { [weak self] () in
             self?.navigationController?.popViewController(animated: true)
         }
@@ -240,12 +223,9 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
 }
 
 extension CheckThumbnailViewController {
-    
     func generateGuideView(guideLines: [String]) -> [UIView] {
-        
         var views: [UIView] = []
-        
-        
+
         for gl in guideLines {
             var label: WMLabel = WMLabel(
                 text: "\(gl)",
@@ -271,14 +251,12 @@ extension CheckThumbnailViewController {
                 $0.leading.equalTo(imageView.snp.trailing)
                 $0.top.trailing.bottom.equalToSuperview()
             }
-            
+
             views.append(containerView)
         }
-        
+
         return views
-        
     }
-    
 }
 
 extension CheckThumbnailViewController: UIGestureRecognizerDelegate {

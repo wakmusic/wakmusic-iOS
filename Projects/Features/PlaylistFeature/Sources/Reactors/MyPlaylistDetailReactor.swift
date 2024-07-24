@@ -128,7 +128,7 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
-            
+
         case let .changeThumnail(data):
             return updateThumbnail(data)
         }
