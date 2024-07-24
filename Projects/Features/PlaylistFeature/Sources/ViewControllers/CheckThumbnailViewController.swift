@@ -14,7 +14,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
     weak var delegate: CheckThumbnailDelegate?
 
     private let textPopUpFactory: any TextPopUpFactory
-   
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("앨범에서 고르기")
@@ -167,7 +166,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                 owner.thumbnailImageView.image = UIImage(data: data)
                 owner.thumbnailImageView.isHidden = isLoading
                 owner.guideLineSuperView.isHidden = isLoading
-
             }
             .disposed(by: disposeBag)
 
