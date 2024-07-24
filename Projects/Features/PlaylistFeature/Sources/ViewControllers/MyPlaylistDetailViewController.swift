@@ -593,14 +593,14 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                var imageRawData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
+                                  var imageRawData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
 
                             let sizeMB: Double = Double(imageRawData.count).megabytes
-                            
+
                             if sizeMB > self.limitSizePerMB {
                                 imageRawData = image.jpegData(compressionQuality: 0.8) ?? imageRawData
                             }
-                            
+
                             let compressImageData = image.jpegData(compressionQuality: 0.8)
 
                             self.reactor?.action.onNext(.changeThumnail(imageRawData))
