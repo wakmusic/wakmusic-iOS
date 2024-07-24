@@ -56,9 +56,9 @@ public extension UIViewController {
 
     @_disfavoredOverload
     func showToast(
-      text: String,
-      font: UIFont,
-      options: WMToastOptions? = nil
+        text: String,
+        font: UIFont,
+        options: WMToastOptions? = nil
     ) {
         showToast(text: text, font: font, verticalOffset: options?.offset)
     }
