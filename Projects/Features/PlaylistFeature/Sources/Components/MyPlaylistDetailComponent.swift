@@ -7,7 +7,6 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
- 
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }

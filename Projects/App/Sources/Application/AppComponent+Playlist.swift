@@ -104,7 +104,6 @@ public extension AppComponent {
         }
     }
 
-
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
@@ -117,13 +116,12 @@ public extension AppComponent {
         }
     }
 
-    
     var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
         shared {
             UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase {
         shared {
             FetchCustomImageUrlUseCaseImpl(playlistRepository: playlistRepository)

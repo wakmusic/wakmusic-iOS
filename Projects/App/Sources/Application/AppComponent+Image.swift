@@ -28,7 +28,7 @@ public extension AppComponent {
             FetchProfileListUseCaseImpl(imageRepository: imageRepository)
         }
     }
-    
+
     var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
         shared {
             FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
