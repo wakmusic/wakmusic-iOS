@@ -84,7 +84,7 @@ final class MyPlaylistDetailReactor: Reactor {
             ),
             playlistModels: [],
             backupPlaylistModels: [],
-            isLoading: false,
+            isLoading: true,
             selectedCount: 0,
             replaceThumnbnailData: nil
         )
