@@ -104,11 +104,6 @@ public extension AppComponent {
         }
     }
 
-    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
-        shared {
-            UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
-        }
-    }
 
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
@@ -122,9 +117,16 @@ public extension AppComponent {
         }
     }
 
-    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+    
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
         shared {
-            FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
+            UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+    
+    var fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase {
+        shared {
+            FetchCustomImageUrlUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

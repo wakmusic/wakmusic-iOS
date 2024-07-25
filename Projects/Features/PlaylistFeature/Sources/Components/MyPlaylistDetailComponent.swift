@@ -7,7 +7,7 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
-    #warning("추후 주입")
+ 
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
@@ -21,6 +21,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
     var checkThumbnailFactory: any CheckThumbnailFactory { get }
     var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
+    var fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -35,6 +36,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 uploadDefaultPlaylistImageUseCase: dependency.uploadDefaultPlaylistImageUseCase,
+                fetchCustomImageUrlUseCase: dependency.fetchCustomImageUrlUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopupFactory: dependency.multiPurposePopUpFactory,

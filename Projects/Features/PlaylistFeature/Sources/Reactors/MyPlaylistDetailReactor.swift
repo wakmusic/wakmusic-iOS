@@ -53,6 +53,7 @@ final class MyPlaylistDetailReactor: Reactor {
     private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
     private let uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase
+    private let fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase
 
     private let logoutUseCase: any LogoutUseCase
 
@@ -63,6 +64,7 @@ final class MyPlaylistDetailReactor: Reactor {
         updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
         uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase,
+        fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase,
         logoutUseCase: any LogoutUseCase
 
     ) {
@@ -72,6 +74,7 @@ final class MyPlaylistDetailReactor: Reactor {
         self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
         self.removeSongsUseCase = removeSongsUseCase
         self.uploadDefaultPlaylistImageUseCase = uploadDefaultPlaylistImageUseCase
+        self.fetchCustomImageUrlUseCase = fetchCustomImageUrlUseCase
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
