@@ -2,8 +2,7 @@ import Foundation
 import PlaylistDomainInterface
 
 public struct CustomImageUrlResponseDTO: Decodable {
-    public let imageUrl , presignedUrl: String
-
+    public let imageUrl, presignedUrl: String
 }
 
 public extension CustomImageUrlResponseDTO {

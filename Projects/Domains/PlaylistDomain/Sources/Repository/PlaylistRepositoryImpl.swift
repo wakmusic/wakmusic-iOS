@@ -55,7 +55,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func checkSubscription(key: String) -> Single<Bool> {
         remotePlaylistDataSource.checkSubscription(key: key)
     }
-    
+
     public func fetchCustomImageUrl(key: String, imageSize: Int) -> Single<CustomImageUrlEntity> {
         remotePlaylistDataSource.fetchCustomImageUrl(key: key, imageSize: imageSize)
     }

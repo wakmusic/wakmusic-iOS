@@ -51,13 +51,12 @@ extension PlaylistAPI: WMAPI {
 
         case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
-            
+
         case let .fetchCustomImageUrl(key):
             return "/\(key)/image/upload"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
-            
         }
     }
 
@@ -105,9 +104,12 @@ extension PlaylistAPI: WMAPI {
 
         case let .uploadDefaultImage(_, imageName):
             return .requestJSONEncodable(DefaultImageRequestDTO(imageName: imageName))
-        
+
         case let .fetchCustomImageUrl(key, imageSize):
-            return .requestParameters(parameters: ["key" : key, "contentLength" : imageSize ], encoding: URLEncoding.queryString)
+            return .requestParameters(
+                parameters: ["key": key, "contentLength": imageSize],
+                encoding: URLEncoding.queryString
+            )
         }
     }
 
