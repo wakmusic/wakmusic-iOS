@@ -63,7 +63,6 @@ final class DefaultPlaylistImageReactor: Reactor {
 
 extension DefaultPlaylistImageReactor {
     func updateDataSource() -> Observable<Mutation> {
-
         return .concat([
             .just(.updateLoadingState(true)),
             fetchDefaultPlaylistImageUseCase.execute()
