@@ -47,7 +47,8 @@ let targets: [Target] = [
             .domain(target: .SearchDomain),
             .domain(target: .ImageDomain),
             .domain(target: .NotificationDomain),
-            .domain(target: .TeamDomain)
+            .domain(target: .TeamDomain),
+            .domain(target: .CreditDomain)
         ],
         settings: .settings(
             base: env.baseSetting,
