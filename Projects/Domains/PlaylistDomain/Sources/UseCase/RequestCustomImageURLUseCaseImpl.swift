@@ -16,7 +16,7 @@ public struct RequestCustomImageURLUseCaseImpl: RequestCustomImageURLUseCase {
         let imageSize = data.count
 
         return playlistRepository.requestCustomImageURL(key: key, imageSize: imageSize)
-            .flatMap { entity -> Completable in
+            .flatMapCompletable { entity  in
                 return playlistRepository.uploadCustomImage(presignedURL: entity.presignedURL, data: data)
             }
     }
