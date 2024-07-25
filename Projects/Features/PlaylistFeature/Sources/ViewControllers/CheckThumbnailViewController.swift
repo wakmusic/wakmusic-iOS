@@ -31,7 +31,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         $0.layer.cornerRadius = 32
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
-        $0.isHidden = true // 로딩 끝난 후 해제
     }
 
     private var guideLineSuperView: UIView = UIView().then {

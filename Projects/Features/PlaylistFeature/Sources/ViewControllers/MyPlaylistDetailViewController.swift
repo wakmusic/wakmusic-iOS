@@ -26,7 +26,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     var bottomSheetView: BottomSheetView!
 
-    fileprivate let limitSizePerMB: Double = 10.0
     private let multiPurposePopupFactory: any MultiPurposePopupFactory
 
     private let containSongsFactory: any ContainSongsFactory
@@ -613,7 +612,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 
                             let sizeMB: Double = Double(imageData.count).megabytes
 
-                            if sizeMB > self.limitSizePerMB {
+                            if sizeMB > Limit.imageSizeLimitPerMB {
                                 imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
                             self.navigateToCheckThumbnail(imageData: imageData)
