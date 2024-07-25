@@ -11,19 +11,16 @@ public final class WMWarningView: UIView {
     private let label: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
-        font: .t6(weight: .medium),
+        font: .t6(weight: .light),
         alignment: .center,
         kernValue: -0.5
     )
 
     public init(text: String) {
         super.init(frame: .zero)
-
         addSubviews()
-
-        label.text = text
-
         setLayout()
+        label.text = text
     }
 
     @available(*, unavailable)
@@ -32,13 +29,13 @@ public final class WMWarningView: UIView {
     }
 }
 
-extension WMWarningView {
-    private func addSubviews() {
+private extension WMWarningView {
+    func addSubviews() {
         self.addSubview(imageView)
         self.addSubview(label)
     }
 
-    private func setLayout() {
+    func setLayout() {
         imageView.snp.makeConstraints {
             $0.width.height.equalTo(80)
             $0.top.equalToSuperview()
