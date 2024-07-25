@@ -63,11 +63,6 @@ final class DefaultPlaylistImageReactor: Reactor {
 
 extension DefaultPlaylistImageReactor {
     func updateDataSource() -> Observable<Mutation> {
-        var dataSource: [String] = []
-
-        for i in 0 ... 100 {
-            dataSource.append("theme_\(i)")
-        }
 
         return .concat([
             .just(.updateLoadingState(true)),
