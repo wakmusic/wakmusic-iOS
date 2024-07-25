@@ -384,7 +384,7 @@ extension MyPlaylistDetailViewController {
         hideSongCart()
         reactor?.action.onNext(.restore)
     }
-    
+
     func navigateToCheckThumbnail(imageData: Data) {
         if let navigationController = self.presentedViewController as? UINavigationController {
             if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
@@ -615,7 +615,6 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                                 imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
                             self.navigateToCheckThumbnail(imageData: imageData)
-  
                         }
                     }
                 }
