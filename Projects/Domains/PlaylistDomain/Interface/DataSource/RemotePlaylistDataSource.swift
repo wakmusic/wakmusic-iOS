@@ -17,5 +17,4 @@ public protocol RemotePlaylistDataSource {
     func checkSubscription(key: String) -> Single<Bool>
     func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity>
     func uploadCustomImage(presignedURL: String, data: Data) -> Single<String>
-    
 }

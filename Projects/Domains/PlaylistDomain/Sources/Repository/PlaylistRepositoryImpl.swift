@@ -1,12 +1,10 @@
 import BaseDomainInterface
+import Foundation
 import PlaylistDomainInterface
 import RxSwift
 import SongsDomainInterface
-import Foundation
 
 public final class PlaylistRepositoryImpl: PlaylistRepository {
-
-    
     private let remotePlaylistDataSource: any RemotePlaylistDataSource
 
     public init(
@@ -62,7 +60,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
         remotePlaylistDataSource.requestCustomImageURL(key: key, imageSize: imageSize)
     }
-    
+
     public func uploadCustomImage(presignedURL: String, data: Data) -> Single<String> {
         remotePlaylistDataSource.uploadCustomImage(presignedURL: presignedURL, data: data)
     }

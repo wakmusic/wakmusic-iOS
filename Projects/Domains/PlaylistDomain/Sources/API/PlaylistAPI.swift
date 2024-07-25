@@ -23,19 +23,16 @@ public enum PlaylistAPI {
 }
 
 extension PlaylistAPI: WMAPI {
-    
     public var baseURL: URL {
-        
         switch self {
-        case let .uploadCustomImage(url,_):
+        case let .uploadCustomImage(url, _):
             return URL(string: url)!
-            
+
         default:
             return URL(string: BASE_URL())!
         }
-        
     }
-    
+
     public var domain: WMDomain {
         .playlist
     }
@@ -71,7 +68,7 @@ extension PlaylistAPI: WMAPI {
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
-        
+
         default:
             return ""
         }
@@ -90,7 +87,7 @@ extension PlaylistAPI: WMAPI {
 
         case .removeSongs:
             return .delete
-            
+
         case .uploadCustomImage:
             return .put
 
@@ -130,7 +127,7 @@ extension PlaylistAPI: WMAPI {
                 parameters: ["key": key, "contentLength": imageSize],
                 encoding: URLEncoding.queryString
             )
-            
+
         case let .uploadCustomImage(_, data: data):
             return .requestData(data)
         }

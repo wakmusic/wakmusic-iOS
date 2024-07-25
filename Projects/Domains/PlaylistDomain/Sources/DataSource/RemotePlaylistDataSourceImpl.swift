@@ -73,7 +73,7 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map(CustomImageURLResponseDTO.self)
             .map { $0.toDomain() }
     }
-    
+
     public func uploadCustomImage(presignedURL: String, data: Data) -> Single<String> {
         request(.uploadCustomImage(url: presignedURL, data: data))
             .map(String.self)
