@@ -14,5 +14,6 @@ public protocol RemotePlaylistDataSource {
     func removeSongs(key: String, songs: [String]) -> Completable
     func uploadDefaultImage(key: String, model: String) -> Completable
     func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable
-    func checkSubscriptionUseCase(key: String) -> Single<Bool>
+    func checkSubscription(key: String) -> Single<Bool>
+    func fetchCustomImageUrl(key: String, imageSize: Int) -> Single<CustomImageUrlEntity>
 }

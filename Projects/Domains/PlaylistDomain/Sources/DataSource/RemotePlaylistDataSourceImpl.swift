@@ -62,9 +62,15 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .asCompletable()
     }
 
-    public func checkSubscriptionUseCase(key: String) -> Single<Bool> {
+    public func checkSubscription(key: String) -> Single<Bool> {
         request(.checkSubscription(key: key))
             .map(CheckSubscriptionResponseDTO.self)
             .map { $0.data }
+    }
+    
+    public func fetchCustomImageUrl(key: String, imageSize: Int) -> Single<CustomImageUrlEntity> {
+        request(.fetchCustomImageUrl(key: key, imageSize: imageSize))
+            .map(CustomImageUrlResponseDTO.self)
+            .map{ $0.toDomain() }
     }
 }
