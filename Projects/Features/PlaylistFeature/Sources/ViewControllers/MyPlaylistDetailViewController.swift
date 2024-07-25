@@ -384,6 +384,28 @@ extension MyPlaylistDetailViewController {
         hideSongCart()
         reactor?.action.onNext(.restore)
     }
+    
+    func navigateToCheckThumbnail(imageData: Data) {
+        if let navigationController = self.presentedViewController as? UINavigationController {
+            if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
+                let textPopupVC = self.textPopUpFactory.makeView(
+                    text: "파일당 10MB까지 업로드할 수 있습니다.",
+                    cancelButtonIsHidden: true,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: nil,
+                    cancelCompletion: nil
+                )
+
+                navigationController.showBottomSheet(content: textPopupVC)
+                return
+            }
+            navigationController.pushViewController(
+                self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData),
+                animated: true
+            )
+        }
+    }
 }
 
 /// 테이블 뷰 델리게이트
@@ -592,26 +614,8 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             if sizeMB > self.limitSizePerMB {
                                 imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
-
-                            if let navigationController = self.presentedViewController as? UINavigationController {
-                                if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
-                                    let textPopupVC = self.textPopUpFactory.makeView(
-                                        text: "파일당 10MB까지 업로드할 수 있습니다.",
-                                        cancelButtonIsHidden: true,
-                                        confirmButtonText: nil,
-                                        cancelButtonText: nil,
-                                        completion: nil,
-                                        cancelCompletion: nil
-                                    )
-
-                                    navigationController.showBottomSheet(content: textPopupVC)
-                                    return
-                                }
-                                navigationController.pushViewController(
-                                    self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData),
-                                    animated: true
-                                )
-                            }
+                            self.navigateToCheckThumbnail(imageData: imageData)
+  
                         }
                     }
                 }
