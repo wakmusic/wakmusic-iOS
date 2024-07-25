@@ -148,6 +148,7 @@ private extension UnknownPlaylistDetailReactor {
                     )
                 },
 
+            // 로그인 전이면 USECASE 안보냄
             checkSubscriptionUseCase.execute(key: key)
                 .asObservable()
                 .flatMap { flag -> Observable<Mutation> in
