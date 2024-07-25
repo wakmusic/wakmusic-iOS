@@ -15,5 +15,5 @@ public protocol PlaylistRepository {
     func uploadDefaultImage(key: String, model: String) -> Completable
     func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable
     func checkSubscription(key: String) -> Single<Bool>
-    func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageUrlEntity>
+    func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity>
 }

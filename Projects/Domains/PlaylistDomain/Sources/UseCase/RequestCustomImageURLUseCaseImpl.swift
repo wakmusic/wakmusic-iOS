@@ -12,7 +12,7 @@ public struct RequestCustomImageURLUseCaseImpl: RequestCustomImageURLUseCase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(key: String, imageSize: Int) -> Single<CustomImageUrlEntity> {
+    public func execute(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
         playlistRepository.requestCustomImageURL(key: key, imageSize: imageSize)
     }
 }

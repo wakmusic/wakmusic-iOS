@@ -68,9 +68,9 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map { $0.data }
     }
 
-    public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageUrlEntity> {
+    public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
         request(.requestCustomImageURL(key: key, imageSize: imageSize))
-            .map(CustomImageUrlResponseDTO.self)
+            .map(CustomImageURLResponseDTO.self)
             .map { $0.toDomain() }
     }
 }
