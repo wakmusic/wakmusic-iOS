@@ -2,7 +2,6 @@ import Foundation
 import ReactorKit
 
 final class CheckThumbnailReactor: Reactor {
-   
     enum Action {
         case viewDidLoad
     }
@@ -22,10 +21,6 @@ final class CheckThumbnailReactor: Reactor {
     init(imageData: Data) {
         initialState = State(imageData: imageData, guideLines: [], isLoading: true)
     }
-
- 
 }
 
-extension CheckThumbnailReactor {
-
-}
+extension CheckThumbnailReactor {}

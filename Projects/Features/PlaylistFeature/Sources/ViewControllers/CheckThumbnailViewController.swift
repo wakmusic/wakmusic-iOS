@@ -47,8 +47,8 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         stackView.axis = .vertical
         stackView.spacing = 4
         stackView.distribution = .fill
-        
-        generateGuideView(guideLines: ["표지를 변경하면 음표 열매가 소모됩니다.","사진의 용량은 10MB를 초과할 수 없습니다."]).forEach { view in
+
+        generateGuideView(guideLines: ["표지를 변경하면 음표 열매가 소모됩니다.", "사진의 용량은 10MB를 초과할 수 없습니다."]).forEach { view in
             stackView.addArrangedSubviews(view)
         }
     }
@@ -156,7 +156,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
                 owner.thumbnailImageView.image = UIImage(data: data)
             }
             .disposed(by: disposeBag)
-    
     }
 
     override func bindAction(reactor: CheckThumbnailReactor) {
