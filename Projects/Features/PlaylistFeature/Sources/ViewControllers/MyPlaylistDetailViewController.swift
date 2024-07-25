@@ -390,7 +390,7 @@ extension MyPlaylistDetailViewController {
         if let navigationController = self.presentedViewController as? UINavigationController {
             if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
                 let textPopupVC = self.textPopUpFactory.makeView(
-                    text: "파일당 10MB까지 업로드할 수 있습니다.",
+                    text: "사진의 용량은 10MB를 초과할 수 없습니다.\n다른 사진을 선택해 주세요.",
                     cancelButtonIsHidden: true,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
