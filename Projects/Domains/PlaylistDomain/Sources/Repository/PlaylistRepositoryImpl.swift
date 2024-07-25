@@ -61,7 +61,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.requestCustomImageURL(key: key, imageSize: imageSize)
     }
 
-    public func uploadCustomImage(presignedURL: String, data: Data) -> Single<String> {
+    public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
         remotePlaylistDataSource.uploadCustomImage(presignedURL: presignedURL, data: data)
     }
 }

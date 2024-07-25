@@ -3,5 +3,5 @@ import Foundation
 import RxSwift
 
 public protocol RequestCustomImageURLUseCase {
-    func execute(key: String, data: Data) -> Single<String>
+    func execute(key: String, data: Data) -> Completable
 }

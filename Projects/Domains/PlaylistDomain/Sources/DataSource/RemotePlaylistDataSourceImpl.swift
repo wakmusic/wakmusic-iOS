@@ -74,8 +74,8 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map { $0.toDomain() }
     }
 
-    public func uploadCustomImage(presignedURL: String, data: Data) -> Single<String> {
+    public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
         request(.uploadCustomImage(url: presignedURL, data: data))
-            .map(String.self)
+            .asCompletable()
     }
 }
