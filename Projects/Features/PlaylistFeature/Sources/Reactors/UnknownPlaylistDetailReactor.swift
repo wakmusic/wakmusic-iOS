@@ -66,7 +66,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
                 songCount: 0
             ),
             dataSource: [],
-            isLoading: false,
+            isLoading: true,
             selectedCount: 0,
             isSubscribing: false
         )
