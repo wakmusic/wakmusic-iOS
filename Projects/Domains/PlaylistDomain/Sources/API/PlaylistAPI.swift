@@ -15,7 +15,7 @@ public enum PlaylistAPI {
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
     case uploadDefaultImage(key: String, imageName: String) // 플레이리스트 default 이미지 업로드
-    case fetchCustomImageUrl(key: String, imageSize: Int) // 커스텀 이미지를 저장할 presigned url 받아오기
+    case requestCustomImageURL(key: String, imageSize: Int) // 커스텀 이미지를 저장할 presigned url 받아오기
     case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case checkSubscription(key: String)
     case fetchRecommendPlaylist // 추천 플리 불러오기
@@ -52,7 +52,7 @@ extension PlaylistAPI: WMAPI {
         case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
 
-        case let .fetchCustomImageUrl(key):
+        case let .requestCustomImageURL(key):
             return "/\(key)/image/upload"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
@@ -65,7 +65,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist, .fetchCustomImageUrl:
+        case .createPlaylist, .addSongIntoPlaylist, .requestCustomImageURL:
             return .post
 
         case let .subscribePlaylist(_, isSubscribing):
@@ -105,7 +105,7 @@ extension PlaylistAPI: WMAPI {
         case let .uploadDefaultImage(_, imageName):
             return .requestJSONEncodable(DefaultImageRequestDTO(imageName: imageName))
 
-        case let .fetchCustomImageUrl(key, imageSize):
+        case let .requestCustomImageURL(key, imageSize):
             return .requestParameters(
                 parameters: ["key": key, "contentLength": imageSize],
                 encoding: URLEncoding.queryString
@@ -125,7 +125,7 @@ extension PlaylistAPI: WMAPI {
         case let .fetchPlaylistDetail(_, type):
             return type == .my ? .accessToken : .none
 
-        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .fetchCustomImageUrl,
+        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .requestCustomImageURL,
              .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist, .checkSubscription:
             return .accessToken
         }

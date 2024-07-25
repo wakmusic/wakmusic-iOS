@@ -3,7 +3,7 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct FetchCustomImageUrlUseCaseImpl: FetchCustomImageUrlUseCase {
+public struct RequestCustomImageURLUseCaseImpl: RequestCustomImageURLUseCase {
     private let playlistRepository: any PlaylistRepository
 
     public init(
@@ -13,6 +13,6 @@ public struct FetchCustomImageUrlUseCaseImpl: FetchCustomImageUrlUseCase {
     }
 
     public func execute(key: String, imageSize: Int) -> Single<CustomImageUrlEntity> {
-        playlistRepository.fetchCustomImageUrl(key: key, imageSize: imageSize)
+        playlistRepository.requestCustomImageURL(key: key, imageSize: imageSize)
     }
 }

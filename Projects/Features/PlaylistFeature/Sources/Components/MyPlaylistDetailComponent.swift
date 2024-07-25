@@ -20,7 +20,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
     var checkThumbnailFactory: any CheckThumbnailFactory { get }
     var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
-    var fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase { get }
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -35,7 +35,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
                 uploadDefaultPlaylistImageUseCase: dependency.uploadDefaultPlaylistImageUseCase,
-                fetchCustomImageUrlUseCase: dependency.fetchCustomImageUrlUseCase,
+                requestCustomImageURLUseCase: dependency.requestCustomImageURLUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopupFactory: dependency.multiPurposePopUpFactory,

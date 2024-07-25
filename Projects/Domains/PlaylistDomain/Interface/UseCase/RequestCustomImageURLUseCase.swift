@@ -2,6 +2,6 @@ import BaseDomainInterface
 import Foundation
 import RxSwift
 
-public protocol FetchCustomImageUrlUseCase {
+public protocol RequestCustomImageURLUseCase {
     func execute(key: String, imageSize: Int) -> Single<CustomImageUrlEntity>
 }

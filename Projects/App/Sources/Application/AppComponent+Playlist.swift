@@ -122,9 +122,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchCustomImageUrlUseCase: any FetchCustomImageUrlUseCase {
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase {
         shared {
-            FetchCustomImageUrlUseCaseImpl(playlistRepository: playlistRepository)
+            RequestCustomImageURLUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }
