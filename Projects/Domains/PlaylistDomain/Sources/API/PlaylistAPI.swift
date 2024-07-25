@@ -66,7 +66,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist:
+        case .createPlaylist, .addSongIntoPlaylist, .fetchCustomImageUrl:
             return .post
 
         case let .subscribePlaylist(_, isSubscribing):
@@ -123,7 +123,7 @@ extension PlaylistAPI: WMAPI {
         case let .fetchPlaylistDetail(_, type):
             return type == .my ? .accessToken : .none
 
-        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
+        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .fetchCustomImageUrl,
              .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist, .checkSubscription:
             return .accessToken
         }
