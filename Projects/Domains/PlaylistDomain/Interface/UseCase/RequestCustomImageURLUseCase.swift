@@ -3,5 +3,5 @@ import Foundation
 import RxSwift
 
 public protocol RequestCustomImageURLUseCase {
-    func execute(key: String, imageSize: Int) -> Single<CustomImageURLEntity>
+    func execute(key: String, data: Data) -> Single<String>
 }

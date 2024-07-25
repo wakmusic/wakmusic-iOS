@@ -12,7 +12,16 @@ public struct RequestCustomImageURLUseCaseImpl: RequestCustomImageURLUseCase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
-        playlistRepository.requestCustomImageURL(key: key, imageSize: imageSize)
+    public func execute(key: String, data: Data) -> Single<String> {
+        
+        let imageSize = data.count
+        
+        return playlistRepository.requestCustomImageURL(key: key, imageSize: imageSize)
+            .flatMap { entity -> Single<String>  in
+                return playlistRepository.uploadCustomImage(presignedURL: entity.presignedURL, data: data)
+            }
+            
+            
+            
     }
 }
