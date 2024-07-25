@@ -57,7 +57,8 @@ public extension UIViewController {
     @_disfavoredOverload
     func showToast(
         text: String,
-        font: UIFont,
+        font: UIFont = UIFont(name: "Pretendard-Light", size: 14) ??
+            .systemFont(ofSize: 14, weight: .light),
         options: WMToastOptions = [.empty]
     ) {
         showToast(text: text, font: font, verticalOffset: options.offset)
@@ -65,7 +66,8 @@ public extension UIViewController {
 
     func showToast(
         text: String,
-        font: UIFont,
+        font: UIFont = UIFont(name: "Pretendard-Light", size: 14) ??
+            .systemFont(ofSize: 14, weight: .light),
         verticalOffset: CGFloat? = nil
     ) {
         var attributes = EKAttributes.bottomFloat

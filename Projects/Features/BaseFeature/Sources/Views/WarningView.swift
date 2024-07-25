@@ -1,8 +1,3 @@
-//
-//  WarningView.swift
-//  Created by yongbeomkwak on 2023/01/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
 import DesignSystem
 import UIKit
 
@@ -17,12 +12,12 @@ public class WarningView: UIView {
         }
     }
 
-    override public init(frame: CGRect) { // 코드쪽에서 생성 시 호출
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         self.setupView()
     }
 
-    required init?(coder aDecoder: NSCoder) { // StoryBoard에서 호출됨
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setupView()
     }
@@ -31,19 +26,19 @@ public class WarningView: UIView {
         guard let view = Bundle.module.loadNibNamed("Warning", owner: self, options: nil)?.first as? UIView
         else { return }
         view.frame = self.bounds
-        view.layoutIfNeeded() // 드로우 사이클을 호출할 때 쓰임
-        view.backgroundColor = .clear // 헤더 영역 흰 색 방지
+        view.layoutIfNeeded()
+        view.backgroundColor = .clear
         self.superView.backgroundColor = .clear
         self.addSubview(view)
         configureUI()
     }
 }
 
-extension WarningView {
-    private func configureUI() {
+private extension WarningView {
+    func configureUI() {
         warningImageView.image = DesignSystemAsset.Search.warning.image
-        warningLabelView.textColor = DesignSystemAsset.GrayColor.gray900.color
+        warningLabelView.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+        warningLabelView.font = UIFont.WMFontSystem.t6(weight: .light).font
         warningLabelView.setTextWithAttributes(kernValue: -0.5)
-        warningLabelView.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
     }
 }
