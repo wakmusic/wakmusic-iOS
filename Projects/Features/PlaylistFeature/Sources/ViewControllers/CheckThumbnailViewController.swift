@@ -35,7 +35,6 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
 
     private var guideLineSuperView: UIView = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        $0.isHidden = true // 로딩 끝난 후 해제
     }
 
     private let guideLineTitleLabel: WMLabel = WMLabel(
@@ -44,12 +43,14 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         font: .t5(weight: .medium)
     )
 
-    #warning("코스트 포함해서 가이드라인을 외부에서 주입해야함 ")
-
-    private lazy var guideLineStackView: UIStackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 4
-        $0.distribution = .fill
+    private lazy var guideLineStackView: UIStackView = UIStackView().then { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.distribution = .fill
+        
+        generateGuideView(guideLines: ["표지를 변경하면 음표 열매가 소모됩니다.","사진의 용량은 10MB를 초과할 수 없습니다."]).forEach { view in
+            stackView.addArrangedSubviews(view)
+        }
     }
 
     private let confirmButton: UIButton = UIButton().then {
@@ -150,34 +151,12 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
 
         let sharedState = reactor.state.share()
 
-        sharedState.map(\.isLoading)
-            .withLatestFrom(sharedState.map(\.imageData)) { ($0, $1) }
-            .bind(with: self) { owner, info in
-
-                let (isLoading, data) = info
-
-                if isLoading {
-                    owner.indicator.startAnimating()
-                } else {
-                    owner.indicator.stopAnimating()
-                }
-
+        sharedState.map(\.imageData)
+            .bind(with: self) { owner, data in
                 owner.thumbnailImageView.image = UIImage(data: data)
-                owner.thumbnailImageView.isHidden = isLoading
-                owner.guideLineSuperView.isHidden = isLoading
             }
             .disposed(by: disposeBag)
-
-        sharedState.map(\.guideLines)
-            .distinctUntilChanged()
-            .filter { !$0.isEmpty }
-            .bind(with: self) { owner, guideLines in
-
-                owner.generateGuideView(guideLines: guideLines).forEach { view in
-                    owner.guideLineStackView.addArrangedSubviews(view)
-                }
-            }
-            .disposed(by: disposeBag)
+    
     }
 
     override func bindAction(reactor: CheckThumbnailReactor) {
@@ -206,7 +185,7 @@ extension CheckThumbnailViewController {
         var views: [UIView] = []
 
         for gl in guideLines {
-            var label: WMLabel = WMLabel(
+            let label: WMLabel = WMLabel(
                 text: "\(gl)",
                 textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
                 font: .t7(weight: .light),
