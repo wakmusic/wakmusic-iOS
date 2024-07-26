@@ -32,17 +32,17 @@ public final class TeamInfoContentViewModel: ViewModelType {
     public func transform(from input: Input) -> Output {
         let output = Output()
         let entities = self.entities
-        let teams = entities.map { $0.team }.uniqueElements
+        let parts = entities.map { $0.part }.uniqueElements
 
         output.type.accept(type)
 
         input.combineTeamList
             .map { _ -> [TeamInfoSectionModel] in
-                return teams.map { team -> TeamInfoSectionModel in
+                return parts.map { part -> TeamInfoSectionModel in
                     return TeamInfoSectionModel(
-                        title: team,
+                        title: part,
                         model: TeamInfoModel(
-                            members: entities.filter { $0.team == team },
+                            members: entities.filter { $0.part == part },
                             isOpen: true
                         )
                     )
