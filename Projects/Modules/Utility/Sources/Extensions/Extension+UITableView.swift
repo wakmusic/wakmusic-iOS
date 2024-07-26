@@ -3,7 +3,7 @@ import UIKit
 
 public extension UITableView {
     func setBackgroundView(_ view: UIView, _ topOffset: CGFloat = .zero) {
-        let superView = UIView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: APP_HEIGHT()))
+        let superView = UIView()
 
         superView.addSubview(view)
 

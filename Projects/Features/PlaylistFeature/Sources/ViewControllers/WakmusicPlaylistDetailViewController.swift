@@ -155,7 +155,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                 )
 
                 if model.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 3)
                 } else {
                     owner.tableView.restore()
                 }
