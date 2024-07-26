@@ -60,7 +60,7 @@ extension YoutubeThumbnailCell {
         let url = WMImageAPI.fetchYoutubeThumbnailHD(id: model.id).toURL
         let subUrl = WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL
 
-        thumbnailView.kf.setImage(with: url) { [lottieView,thumbnailView] result in
+        thumbnailView.kf.setImage(with: url) { [lottieView, thumbnailView] result in
 
             switch result {
             case .failure:
