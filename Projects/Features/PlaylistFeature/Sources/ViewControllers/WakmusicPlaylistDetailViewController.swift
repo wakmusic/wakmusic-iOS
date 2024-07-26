@@ -132,7 +132,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                     return
                 }
 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, options: .tabBar)
             }
             .disposed(by: disposeBag)
 
@@ -325,10 +325,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
             showToast(
                 text: Localization.LocalizationStrings.addList,
-
-                font: .setFont(.t6(weight: .light)),
-
-                verticalOffset: 56 + 10
+                options: [.songCart, .tabBar]
             )
 
         case .play:

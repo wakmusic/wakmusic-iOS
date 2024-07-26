@@ -254,7 +254,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     return
                 }
 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, options: .tabBar)
             }
             .disposed(by: disposeBag)
 
@@ -528,9 +528,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
             showToast(
                 text: Localization.LocalizationStrings.addList,
-
-                font: .setFont(.t6(weight: .light)),
-                verticalOffset: 56 + 10
+                options: [.songCart, .tabBar]
             )
 
         case .play:
