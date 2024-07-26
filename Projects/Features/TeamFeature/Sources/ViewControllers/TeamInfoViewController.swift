@@ -72,12 +72,17 @@ private extension TeamInfoViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .bind(with: self, onNext: { owner, sources in
-                let (source1, source2) = sources
-                owner.viewControllers = [
-                    TeamInfoContentViewController(viewModel: .init(type: .develop, entities: source1)),
-                    TeamInfoContentViewController(viewModel: .init(type: .weeklyWM, entities: source2))
-                ]
+            .bind(with: self, onNext: { owner, source in
+                let teams: [String] = owner.output.teams.value
+                let viewControllers = teams.map { team -> TeamInfoContentViewController in
+                    return TeamInfoContentViewController(
+                        viewModel: .init(
+                            type: TeamInfoType(rawValue: team) ?? .unknown,
+                            entities: source.filter { $0.team == team }
+                        )
+                    )
+                }
+                owner.viewControllers = viewControllers
                 owner.reloadData()
                 owner.activityIndicator.stopAnimating()
             })
@@ -166,15 +171,7 @@ private extension TeamInfoViewController {
 
 extension TeamInfoViewController: PageboyViewControllerDataSource, TMBarDataSource {
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
-        switch index {
-        case 0:
-            return TMBarItem(title: "개발팀")
-        case 1:
-            return TMBarItem(title: "주간 왁뮤팀")
-        default:
-            let title = "Page \(index)"
-            return TMBarItem(title: title)
-        }
+        return TMBarItem(title: output.teams.value[index])
     }
 
     public func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {

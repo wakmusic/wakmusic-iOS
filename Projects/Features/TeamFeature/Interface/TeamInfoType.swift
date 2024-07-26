@@ -1,15 +1,7 @@
 import Foundation
 
-public enum TeamInfoType {
-    case develop
-    case weeklyWM
-
-    var title: String {
-        switch self {
-        case .develop:
-            return "개발팀"
-        case .weeklyWM:
-            return "주간 왁뮤팀"
-        }
-    }
+public enum TeamInfoType: String {
+    case develop = "개발팀"
+    case weeklyWM = "주간 왁뮤팀"
+    case unknown = ""
 }
