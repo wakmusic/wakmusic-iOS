@@ -1,14 +1,19 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import PlaylistFeatureInterface
+import RxCocoa
+import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
 
-final class CheckThumbnailViewController: UIViewController {
+final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbnailReactor> {
     weak var delegate: CheckThumbnailDelegate?
+
+    private let textPopUpFactory: any TextPopUpFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("앨범에서 고르기")
@@ -20,16 +25,12 @@ final class CheckThumbnailViewController: UIViewController {
         $0.setImage(dismissImage, for: .normal)
     }
 
-    private var imageData: Data?
-
     private var thumnailContainerView: UIView = UIView()
 
     private lazy var thumbnailImageView: UIImageView = UIImageView().then {
-        let image = UIImage(data: imageData ?? Data())
         $0.layer.cornerRadius = 32
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
-        $0.image = image
     }
 
     private var guideLineSuperView: UIView = UIView().then {
@@ -42,43 +43,13 @@ final class CheckThumbnailViewController: UIViewController {
         font: .t5(weight: .medium)
     )
 
-    #warning("코스트 포함해서 가이드라인을 외부에서 주입해야함 ")
-    private let guideLines: [String] = [
-        "이미지를 변경하면 음표 열매 3개를 소모합니다.",
-        "너무 큰 이미지는 서버에 과부화가 올 수있으니 어쩌고 샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님샴퓨님"
-    ]
+    private lazy var guideLineStackView: UIStackView = UIStackView().then { stackView in
+        stackView.axis = .vertical
+        stackView.spacing = 4
+        stackView.distribution = .fill
 
-    private lazy var guideLineStackView: UIStackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 4
-        $0.distribution = .fill
-
-        for gl in guideLines {
-            var label: WMLabel = WMLabel(
-                text: "\(gl)",
-                textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
-                font: .t7(weight: .light),
-                alignment: .left,
-                lineHeight: 18
-            ).then {
-                $0.numberOfLines = 0
-            }
-
-            let containerView: UIView = UIView()
-            let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
-                $0.contentMode = .scaleAspectFit
-            }
-            containerView.addSubviews(imageView, label)
-
-            imageView.snp.makeConstraints {
-                $0.size.equalTo(16)
-                $0.leading.top.equalToSuperview()
-            }
-            label.snp.makeConstraints {
-                $0.leading.equalTo(imageView.snp.trailing)
-                $0.top.trailing.bottom.equalToSuperview()
-            }
-            $0.addArrangedSubview(containerView)
+        generateGuideView(guideLines: ["표지를 변경하면 음표 열매가 소모됩니다.", "사진의 용량은 10MB를 초과할 수 없습니다."]).forEach { view in
+            stackView.addArrangedSubviews(view)
         }
     }
 
@@ -95,11 +66,11 @@ final class CheckThumbnailViewController: UIViewController {
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(delegate: any CheckThumbnailDelegate, imageData: Data) {
-        self.imageData = imageData
+    init(reactor: CheckThumbnailReactor, textPopUpFactory: any TextPopUpFactory, delegate: any CheckThumbnailDelegate) {
         self.delegate = delegate
+        self.textPopUpFactory = textPopUpFactory
 
-        super.init(nibName: nil, bundle: nil)
+        super.init(reactor: reactor)
     }
 
     @available(*, unavailable)
@@ -110,9 +81,7 @@ final class CheckThumbnailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        addViews()
-        setLayout()
-        bindAction()
+        reactor?.action.onNext(.viewDidLoad)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -124,17 +93,19 @@ final class CheckThumbnailViewController: UIViewController {
         super.viewDidDisappear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = nil
     }
-}
 
-private extension CheckThumbnailViewController {
-    func addViews() {
+    override func addView() {
+        super.addView()
+
         view.addSubviews(wmNavigationbarView, thumnailContainerView, guideLineSuperView)
         wmNavigationbarView.setLeftViews([backButton])
         thumnailContainerView.addSubviews(thumbnailImageView)
         guideLineSuperView.addSubviews(guideLineTitleLabel, guideLineStackView, confirmButton)
     }
 
-    func setLayout() {
+    override func setLayout() {
+        super.setLayout()
+
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -175,21 +146,73 @@ private extension CheckThumbnailViewController {
         }
     }
 
-    func bindAction() {
-        backButton.addAction { [weak self] () in
-            self?.navigationController?.popViewController(animated: true)
-        }
+    override func bindState(reactor: CheckThumbnailReactor) {
+        super.bindState(reactor: reactor)
 
-        confirmButton.addAction { [weak self] () in
+        let sharedState = reactor.state.share()
 
-            guard let data = self?.imageData else {
-                return
+        sharedState.map(\.imageData)
+            .bind(with: self) { owner, data in
+                owner.thumbnailImageView.image = UIImage(data: data)
+            }
+            .disposed(by: disposeBag)
+    }
+
+    override func bindAction(reactor: CheckThumbnailReactor) {
+        super.bindAction(reactor: reactor)
+
+        backButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        confirmButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true, completion: {
+                    owner.delegate?.receive(reactor.currentState.imageData)
+                })
+            }
+            .disposed(by: disposeBag)
+    }
+}
+
+extension CheckThumbnailViewController {
+    func generateGuideView(guideLines: [String]) -> [UIView] {
+        var views: [UIView] = []
+
+        for gl in guideLines {
+            let label: WMLabel = WMLabel(
+                text: "\(gl)",
+                textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+                font: .t7(weight: .light),
+                alignment: .left,
+                lineHeight: 18
+            ).then {
+                $0.numberOfLines = 0
             }
 
-            self?.dismiss(animated: true, completion: {
-                self?.delegate?.receive(data)
-            })
+            let containerView: UIView = UIView()
+            let imageView = UIImageView(image: DesignSystemAsset.Playlist.grayDot.image).then {
+                $0.contentMode = .scaleAspectFit
+            }
+            containerView.addSubviews(imageView, label)
+
+            imageView.snp.makeConstraints {
+                $0.size.equalTo(16)
+                $0.leading.top.equalToSuperview()
+            }
+            label.snp.makeConstraints {
+                $0.leading.equalTo(imageView.snp.trailing)
+                $0.top.trailing.bottom.equalToSuperview()
+            }
+
+            views.append(containerView)
         }
+
+        return views
     }
 }
 

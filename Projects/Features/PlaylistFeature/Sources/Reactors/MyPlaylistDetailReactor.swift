@@ -21,7 +21,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case removeSongs
-        case changeThumnail(Data?)
     }
 
     enum Mutation {
@@ -31,7 +30,6 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateBackUpPlaylist([PlaylistItemModel])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateThumbnail(Data?)
         case showToast(String)
     }
 
@@ -89,7 +87,7 @@ final class MyPlaylistDetailReactor: Reactor {
             ),
             playlistModels: [],
             backupPlaylistModels: [],
-            isLoading: false,
+            isLoading: true,
             selectedCount: 0,
             replaceThumnbnailData: nil
         )
@@ -131,8 +129,6 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
-        case let .changeThumnail(data):
-            return updateThumbnail(data)
         }
     }
 
@@ -160,9 +156,6 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
-
-        case let .updateThumbnail(data):
-            newState.replaceThumnbnailData = data
         }
 
         return newState
@@ -264,7 +257,7 @@ private extension MyPlaylistDetailReactor {
         return updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
             .andThen(.concat([
                 .just(.updateHeader(prev)),
-                .just(.showToast(message)),
+                .just(.showToast(message))
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -396,9 +389,5 @@ private extension MyPlaylistDetailReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 )
             }
-    }
-
-    func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
-        return .just(.updateThumbnail(data))
     }
 }

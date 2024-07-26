@@ -12,11 +12,14 @@ import Then
 import UIKit
 import Utility
 
-#warning("송카트, 공유하기, 이미지 업로드")
-#warning("다운 샘플링")
+#warning("공유하기, 이미지 업로드")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
+    private enum Limit {
+        static let imageSizeLimitPerMB: Double = 10.0
+    }
+
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -309,8 +312,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 if isLoading {
                     owner.indicator.startAnimating()
+                    owner.tableView.isHidden = true
                 } else {
                     owner.indicator.stopAnimating()
+                    owner.tableView.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -333,17 +338,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                         useBottomSpace: false
                     )
                     owner.songCartView.delegate = owner
-                }
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.replaceThumnbnailData)
-            .compactMap { $0 }
-            .bind(with: self) { owner, data in
-                if let navigationController = owner.presentedViewController as? UINavigationController {
-                    navigationController.pushViewController(
-                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true
-                    )
                 }
             }
             .disposed(by: disposeBag)
@@ -390,6 +384,28 @@ extension MyPlaylistDetailViewController {
         hideplaylistEditSheet()
         hideSongCart()
         reactor?.action.onNext(.restore)
+    }
+
+    func navigateToCheckThumbnail(imageData: Data) {
+        if let navigationController = self.presentedViewController as? UINavigationController {
+            if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
+                let textPopupVC = self.textPopUpFactory.makeView(
+                    text: "사진의 용량은 \(Int(Limit.imageSizeLimitPerMB))MB를 초과할 수 없습니다.\n다른 사진을 선택해 주세요.",
+                    cancelButtonIsHidden: true,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: nil,
+                    cancelCompletion: nil
+                )
+
+                navigationController.showBottomSheet(content: textPopupVC)
+                return
+            }
+            navigationController.pushViewController(
+                self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData),
+                animated: true
+            )
+        }
     }
 }
 
@@ -576,7 +592,6 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         if results.isEmpty {
-            reactor?.action.onNext(.changeThumnail(nil))
             picker.dismiss(animated: true)
             return
         }
@@ -593,11 +608,14 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  let imageToData = image.pngData() else { return }
+                                  var imageData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
 
-                            let sizeMB: Double = Double(imageToData.count).megabytes
-                            DEBUG_LOG("Image: \(imageToData) > \(sizeMB)")
-                            self.reactor?.action.onNext(.changeThumnail(imageToData))
+                            let sizeMB: Double = Double(imageData.count).megabytes
+
+                            if sizeMB > Limit.imageSizeLimitPerMB {
+                                imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
+                            }
+                            self.navigateToCheckThumbnail(imageData: imageData)
                         }
                     }
                 }
@@ -626,12 +644,14 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
-        headerView.updateThumbnailByAlbum(imageData)
+        #warning("State에 저장")
+        headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
     func receive(_ name: String, _ url: String) {
+        #warning("State에 저장")
         headerView.updateThumbnailByDefault(url)
     }
 }
