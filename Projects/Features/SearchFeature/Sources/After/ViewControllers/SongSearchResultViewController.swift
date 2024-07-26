@@ -184,17 +184,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .bind(with: self) { owner, info in
 
                 let (count, limit) = (info.0, info.1.count)
-
                 if count == .zero {
                     UIView.animate(withDuration: 0.5) {
                         owner.songCartContainerView.alpha = .zero
                     }
-
                     owner.hideSongCart()
-
                 } else {
                     owner.songCartContainerView.alpha = 1.0
-
                     owner.showSongCart(
                         in: owner.songCartContainerView,
                         type: .searchSong,
