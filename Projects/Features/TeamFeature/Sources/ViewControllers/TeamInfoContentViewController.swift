@@ -86,7 +86,7 @@ private extension TeamInfoContentViewController {
 
     func setLayout() {
         tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(output.type.value == .develop ? 104 : 100)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(output.type.value == .weeklyWM ? 100 : 104)
             $0.horizontalEdges.bottom.equalToSuperview()
         }
 
