@@ -2,9 +2,11 @@ import ArtistFeature
 import BaseFeature
 import DesignSystem
 import HomeFeature
+import LogManager
 import MyInfoFeature
 import MyInfoFeatureInterface
 import NoticeDomainInterface
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SafariServices
@@ -15,8 +17,6 @@ import StorageFeature
 import StorageFeatureInterface
 import UIKit
 import Utility
-import PlaylistFeatureInterface
-import LogManager
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!

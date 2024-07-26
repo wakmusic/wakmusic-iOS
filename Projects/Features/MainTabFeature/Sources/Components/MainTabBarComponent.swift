@@ -6,11 +6,11 @@ import MyInfoFeature
 import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
+import PlaylistFeatureInterface
 import SearchFeature
 import SearchFeatureInterface
 import StorageFeature
 import StorageFeatureInterface
-import PlaylistFeatureInterface
 
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticePopupUseCase: any FetchNoticePopupUseCase { get }

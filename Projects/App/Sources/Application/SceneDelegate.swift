@@ -1,10 +1,10 @@
 import BaseFeature
 import Combine
+import LogManager
 import NaverThirdPartyLogin
 import RootFeature
 import UIKit
 import Utility
-import LogManager
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = root?.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
 
-        /// Not Running Handling App Entry
+        // Not Running Handling App Entry
         handleAppEntry(with: connectionOptions)
     }
 
@@ -80,7 +80,7 @@ private extension SceneDelegate {
                   let webpageURL = userActivity?.webpageURL {
             handleUniversalLink(url: webpageURL)
         } else if let _ = connectionOptions.notificationResponse?.notification {
-        #warning("TO-DO:: Push Notification")
+            #warning("TO-DO:: Push Notification")
             // notification.request.content.userInfo
         }
     }
