@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window?.rootViewController = root?.makeRootView().wrapNavigationController
         self.window?.makeKeyAndVisible()
 
-        // Not Running Handling App Entry
+        // Handling App Entry:: Not Running State
         handleAppEntry(with: connectionOptions)
     }
 
