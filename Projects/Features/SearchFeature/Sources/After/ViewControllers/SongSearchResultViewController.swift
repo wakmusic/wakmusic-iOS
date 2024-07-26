@@ -27,10 +27,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         $0.scrollIndicatorInsets = .init(top: .zero, left: .zero, bottom: 56.0, right: .zero)
         $0.isHidden = true
-        $0.bounces = false
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
+    
+    private let songCartContainerView: UIView = UIView().then {
+        $0.alpha = .zero
+    }
 
     private lazy var dataSource: UICollectionViewDiffableDataSource<
         SongSearchResultSection,
@@ -182,11 +185,22 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                 let (count, limit) = (info.0, info.1.count)
 
+                
+                
                 if count == .zero {
+                    
+                    UIView.animate(withDuration: 1.0) {
+                        owner.songCartContainerView.alpha = .zero
+                    }
+                    
                     owner.hideSongCart()
+                  
                 } else {
+
+                        owner.songCartContainerView.alpha = 1.0
+                    
                     owner.showSongCart(
-                        in: owner.view,
+                        in: owner.songCartContainerView,
                         type: .searchSong,
                         selectedSongCount: count,
                         totalSongCount: limit,
@@ -200,7 +214,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(headerView, collectionView)
+        self.view.addSubviews(headerView, collectionView, songCartContainerView)
     }
 
     override func setLayout() {
@@ -215,6 +229,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         collectionView.snp.makeConstraints {
             $0.top.equalTo(headerView.snp.bottom).offset(8)
             $0.bottom.horizontalEdges.equalToSuperview()
+        }
+        
+        songCartContainerView.snp.makeConstraints {
+            $0.height.equalTo(56)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 
@@ -241,11 +261,7 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { (
-            collectionView: UICollectionView,
-            indexPath: IndexPath,
-            item: SongEntity
-        ) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { ( collectionView: UICollectionView, indexPath: IndexPath,item: SongEntity) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
@@ -269,12 +285,12 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard collectionView.isVerticallyScrollable else { return }
-//        searchGlobalScrollState.scrollTo(
-//            source: (
-//                scrollView.contentOffset.y,
-//                scrollView.contentSize.height - scrollView.frame.size.height
-//            )
-//        )
+        searchGlobalScrollState.scrollTo(
+            source: (
+                scrollView.contentOffset.y,
+                scrollView.contentSize.height - scrollView.frame.size.height
+            )
+        )
     }
 }
 
