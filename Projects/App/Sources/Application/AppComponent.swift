@@ -39,6 +39,12 @@ public extension AppComponent {
     var mainTabBarComponent: MainTabBarComponent {
         MainTabBarComponent(parent: self)
     }
+
+    var appEntryState: any AppEntryStateHandleable {
+        shared {
+            AppEntryState()
+        }
+    }
 }
 
 // MARK: - ETC

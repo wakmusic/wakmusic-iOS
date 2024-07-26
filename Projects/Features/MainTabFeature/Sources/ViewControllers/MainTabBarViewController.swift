@@ -15,6 +15,8 @@ import StorageFeature
 import StorageFeatureInterface
 import UIKit
 import Utility
+import PlaylistFeatureInterface
+import LogManager
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
@@ -37,20 +39,22 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var previousIndex: Int?
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
 
+    private var appEntryState: AppEntryStateHandleable!
     private var homeComponent: HomeComponent!
     private var searchFactory: SearchFactory!
     private var artistComponent: ArtistComponent!
     private var storageFactory: StorageFactory!
     private var myInfoFactory: MyInfoFactory!
     private var noticePopupComponent: NoticePopupComponent!
-    private var noticeFactory: NoticeFactory!
     private var noticeDetailFactory: NoticeDetailFactory!
+    private var playlistDetailFactory: PlaylistDetailFactory!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         outputBind()
         inputBind()
+        entryStateBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -65,30 +69,53 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     public static func viewController(
         viewModel: MainTabBarViewModel,
+        appEntryState: AppEntryStateHandleable,
         homeComponent: HomeComponent,
         searchFactory: SearchFactory,
         artistComponent: ArtistComponent,
         storageFactory: StorageFactory,
         myInfoFactory: MyInfoFactory,
         noticePopupComponent: NoticePopupComponent,
-        noticeFactory: NoticeFactory,
-        noticeDetailFactory: NoticeDetailFactory
+        noticeDetailFactory: NoticeDetailFactory,
+        playlistDetailFactory: PlaylistDetailFactory
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
+        viewController.appEntryState = appEntryState
         viewController.homeComponent = homeComponent
         viewController.searchFactory = searchFactory
         viewController.artistComponent = artistComponent
         viewController.storageFactory = storageFactory
         viewController.myInfoFactory = myInfoFactory
         viewController.noticePopupComponent = noticePopupComponent
-        viewController.noticeFactory = noticeFactory
         viewController.noticeDetailFactory = noticeDetailFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         return viewController
     }
 }
 
 private extension MainTabBarViewController {
+    func entryStateBind() {
+        appEntryState.moveSceneObservable
+            .filter { !$0.isEmpty }
+            .delay(.milliseconds(500), scheduler: MainScheduler.instance)
+            .bind(with: self, onNext: { owner, params in
+                LogManager.printDebug(params)
+                let page = params["page"] as? String ?? ""
+                let navigationController = owner.viewControllers[owner.selectedIndex] as? UINavigationController
+
+                switch page {
+                case "playlist":
+                    let key: String = params["key"] as? String ?? ""
+                    let viewController = owner.playlistDetailFactory.makeView(key: key, kind: .unknown)
+                    navigationController?.pushViewController(viewController, animated: true)
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+    }
+
     func inputBind() {
         input.fetchNoticePopup.onNext(())
         input.fetchNoticeIDList.onNext(())
@@ -119,18 +146,6 @@ extension MainTabBarViewController {
 
         self.previousIndex = previous
         self.selectedIndex = current
-    }
-
-    func forceUpdateContent(for index: Int) {
-        Utility.PreferenceManager.startPage = index
-
-        if let previous = self.previousIndex {
-            remove(asChildViewController: viewControllers[previous])
-        }
-        add(asChildViewController: viewControllers[index])
-
-        self.previousIndex = self.selectedIndex
-        self.selectedIndex = index
     }
 
     func equalHandleTapped(for index: Int) {
