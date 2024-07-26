@@ -14,6 +14,7 @@ import Utility
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
+    @IBOutlet weak var songCartOnView: UIView!
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
@@ -117,12 +118,13 @@ private extension ArtistMusicContentViewController {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] songs, dataSource in
                 guard let self = self else { return }
+                self.songCartOnView.isHidden = songs.isEmpty
                 switch songs.isEmpty {
                 case true:
                     self.hideSongCart()
                 case false:
                     self.showSongCart(
-                        in: self.view,
+                        in: self.songCartOnView,
                         type: .artistSong,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSource.count,
@@ -145,6 +147,7 @@ private extension ArtistMusicContentViewController {
         activityIndidator.type = .circleStrokeSpin
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
+        songCartOnView.isHidden = true
     }
 }
 
