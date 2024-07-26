@@ -7,12 +7,11 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
-    #warning("추후 주입")
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
 
     var logoutUseCase: any LogoutUseCase { get }
 
@@ -21,6 +20,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
     var checkThumbnailFactory: any CheckThumbnailFactory { get }
     var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -34,7 +34,8 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
-                uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
+                uploadDefaultPlaylistImageUseCase: dependency.uploadDefaultPlaylistImageUseCase,
+                requestCustomImageURLUseCase: dependency.requestCustomImageURLUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopupFactory: dependency.multiPurposePopUpFactory,

@@ -14,13 +14,25 @@ public enum PlaylistAPI {
     case addSongIntoPlaylist(key: String, songs: [String]) // 곡 추가
     case updatePlaylist(key: String, songs: [String]) // 최종 저장
     case removeSongs(key: String, songs: [String]) // 곡 삭제
-    case uploadImage(key: String, model: UploadImageType) // 플레이리스트 이미지 업로드
+    case uploadDefaultImage(key: String, imageName: String) // 플레이리스트 default 이미지 업로드
+    case requestCustomImageURL(key: String, imageSize: Int) // 커스텀 이미지를 저장할 presigned url 받아오기
     case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case checkSubscription(key: String)
     case fetchRecommendPlaylist // 추천 플리 불러오기
+    case uploadCustomImage(url: String, data: Data)
 }
 
 extension PlaylistAPI: WMAPI {
+    public var baseURL: URL {
+        switch self {
+        case let .uploadCustomImage(url, _):
+            return URL(string: url)!
+
+        default:
+            return URL(string: BASE_URL())!
+        }
+    }
+
     public var domain: WMDomain {
         .playlist
     }
@@ -48,11 +60,17 @@ extension PlaylistAPI: WMAPI {
              let .removeSongs(key: key, _):
             return "/\(key)/songs"
 
-        case let .uploadImage(key: key, _):
+        case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
+
+        case let .requestCustomImageURL(key):
+            return "/\(key)/image/upload"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
+
+        default:
+            return ""
         }
     }
 
@@ -61,7 +79,7 @@ extension PlaylistAPI: WMAPI {
         case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription:
             return .get
 
-        case .createPlaylist, .addSongIntoPlaylist:
+        case .createPlaylist, .addSongIntoPlaylist, .requestCustomImageURL:
             return .post
 
         case let .subscribePlaylist(_, isSubscribing):
@@ -70,7 +88,10 @@ extension PlaylistAPI: WMAPI {
         case .removeSongs:
             return .delete
 
-        case .updatePlaylist, .updateTitleAndPrivate, .uploadImage:
+        case .uploadCustomImage:
+            return .put
+
+        case .updatePlaylist, .updateTitleAndPrivate, .uploadDefaultImage:
             return .patch
         }
     }
@@ -98,51 +119,34 @@ extension PlaylistAPI: WMAPI {
                 encoding: URLEncoding.queryString
             )
 
-        case let .uploadImage(_, model: model):
+        case let .uploadDefaultImage(_, imageName):
+            return .requestJSONEncodable(DefaultImageRequestDTO(imageName: imageName))
 
-            var datas: [MultipartFormData] = []
+        case let .requestCustomImageURL(key, imageSize):
+            return .requestParameters(
+                parameters: ["key": key, "contentLength": imageSize],
+                encoding: URLEncoding.queryString
+            )
 
-            switch model {
-            case let .default(imageName: data):
-                datas.append(MultipartFormData(
-                    provider: .data("default".data(using: .utf8)!), name: "type"
-                ))
-
-                datas.append(MultipartFormData(provider: .data(data.data(using: .utf8)!), name: "imageName"))
-
-            case let .custom(imageName: data):
-                datas.append(MultipartFormData(provider: .data("custom".data(using: .utf8)!), name: "type"))
-                datas.append(MultipartFormData(
-                    provider: .data(data),
-                    name: "imageFile",
-                    fileName: "image.jpeg"
-                ))
-            }
-            return .uploadMultipart(datas)
+        case let .uploadCustomImage(_, data: data):
+            return .requestData(data)
         }
     }
 
     public var headers: [String: String]? {
-        switch self {
-        case .uploadImage:
-
-            return ["Content-Type": "multipart/form-data"]
-
-        default:
-            return ["Content-Type": "application/json"]
-        }
+        return ["Content-Type": "application/json"]
     }
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistSongs:
+        case .fetchRecommendPlaylist, .fetchPlaylistSongs, .uploadCustomImage:
             return .none
 
         case let .fetchPlaylistDetail(_, type):
             return type == .my ? .accessToken : .none
 
-        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist,
-             .removeSongs, .updateTitleAndPrivate, .uploadImage, .subscribePlaylist, .checkSubscription:
+        case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .requestCustomImageURL,
+             .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist, .checkSubscription:
             return .accessToken
         }
     }

@@ -52,10 +52,9 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .asCompletable()
     }
 
-    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
-        request(.uploadImage(key: key, model: model))
-            .map(BaseImageResponseDTO.self)
-            .map { $0.toDomain() }
+    public func uploadDefaultImage(key: String, model: String) -> Completable {
+        request(.uploadDefaultImage(key: key, imageName: model))
+            .asCompletable()
     }
 
     public func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable {
@@ -63,9 +62,20 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .asCompletable()
     }
 
-    public func checkSubscriptionUseCase(key: String) -> Single<Bool> {
+    public func checkSubscription(key: String) -> Single<Bool> {
         request(.checkSubscription(key: key))
             .map(CheckSubscriptionResponseDTO.self)
             .map { $0.data }
+    }
+
+    public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
+        request(.requestCustomImageURL(key: key, imageSize: imageSize))
+            .map(CustomImageURLResponseDTO.self)
+            .map { $0.toDomain() }
+    }
+
+    public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
+        request(.uploadCustomImage(url: presignedURL, data: data))
+            .asCompletable()
     }
 }

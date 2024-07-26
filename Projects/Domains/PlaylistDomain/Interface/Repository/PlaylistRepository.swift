@@ -12,7 +12,9 @@ public protocol PlaylistRepository {
     func updatePlaylist(key: String, songs: [String]) -> Completable
     func addSongIntoPlaylist(key: String, songs: [String]) -> Single<AddSongEntity>
     func removeSongs(key: String, songs: [String]) -> Completable
-    func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity>
+    func uploadDefaultImage(key: String, model: String) -> Completable
     func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable
-    func checkSubscriptionUseCase(key: String) -> Single<Bool>
+    func checkSubscription(key: String) -> Single<Bool>
+    func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity>
+    func uploadCustomImage(presignedURL: String, data: Data) -> Completable
 }
