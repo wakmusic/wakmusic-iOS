@@ -198,7 +198,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 )
 
                 if model.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT()/3)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 3)
                 } else {
                     owner.tableView.restore()
                 }
