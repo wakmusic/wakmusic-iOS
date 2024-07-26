@@ -21,6 +21,8 @@ import Utility
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
 
+    private var previousIndex: Int?
+    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     private lazy var viewControllers: [UIViewController] = {
         return [
             homeComponent.makeView().wrapNavigationController,
@@ -35,9 +37,6 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private lazy var input = MainTabBarViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
     private let disposeBag: DisposeBag = DisposeBag()
-
-    private var previousIndex: Int?
-    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
 
     private var appEntryState: AppEntryStateHandleable!
     private var homeComponent: HomeComponent!
