@@ -121,11 +121,9 @@ private extension ArtistMusicContentViewController {
 
                 switch songs.isEmpty {
                 case true:
-
                     UIView.animate(withDuration: 0.5) {
                         self.songCartOnView.alpha = .zero
                     }
-
                     self.hideSongCart()
                 case false:
                     self.songCartOnView.alpha = 1.0
