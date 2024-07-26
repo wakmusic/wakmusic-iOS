@@ -215,8 +215,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
                 if isLoading {
                     owner.indicator.startAnimating()
+                    owner.tableView.isHidden = true
                 } else {
                     owner.indicator.stopAnimating()
+                    owner.tableView.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
