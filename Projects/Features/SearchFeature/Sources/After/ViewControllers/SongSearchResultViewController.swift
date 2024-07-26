@@ -30,7 +30,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(true)
-    
+
     private let songCartContainerView: UIView = UIView().then {
         $0.alpha = .zero
     }
@@ -185,20 +185,16 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
                 let (count, limit) = (info.0, info.1.count)
 
-                
-                
                 if count == .zero {
-                    
                     UIView.animate(withDuration: 0.5) {
                         owner.songCartContainerView.alpha = .zero
                     }
-                    
-                    owner.hideSongCart()
-                  
-                } else {
 
-                        owner.songCartContainerView.alpha = 1.0
-                    
+                    owner.hideSongCart()
+
+                } else {
+                    owner.songCartContainerView.alpha = 1.0
+
                     owner.showSongCart(
                         in: owner.songCartContainerView,
                         type: .searchSong,
@@ -230,7 +226,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             $0.top.equalTo(headerView.snp.bottom).offset(8)
             $0.bottom.horizontalEdges.equalToSuperview()
         }
-        
+
         songCartContainerView.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.horizontalEdges.equalToSuperview()
@@ -261,7 +257,11 @@ extension SongSearchResultViewController {
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
             SongEntity
-        >(collectionView: collectionView) { ( collectionView: UICollectionView, indexPath: IndexPath,item: SongEntity) -> UICollectionViewCell? in
+        >(collectionView: collectionView) { (
+            collectionView: UICollectionView,
+            indexPath: IndexPath,
+            item: SongEntity
+        ) -> UICollectionViewCell? in
 
             return collectionView.dequeueConfiguredReusableCell(
                 using: cellRegistration,
