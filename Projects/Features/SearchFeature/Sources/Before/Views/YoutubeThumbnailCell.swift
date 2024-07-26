@@ -10,6 +10,7 @@ import Utility
 final class YoutubeThumbnailCell: UICollectionViewCell {
     private let lottieView = LottieAnimationView(name: "Weekly_WM", bundle: DesignSystemResources.bundle).then {
         $0.loopMode = .loop
+        $0.isHidden = true
     }
 
     private let thumbnailView: UIImageView = UIImageView().then {
@@ -59,13 +60,13 @@ extension YoutubeThumbnailCell {
         let url = WMImageAPI.fetchYoutubeThumbnailHD(id: model.id).toURL
         let subUrl = WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL
 
-        thumbnailView.kf.setImage(with: url) { [thumbnailView] result in
+        thumbnailView.kf.setImage(with: url) { [lottieView, thumbnailView] result in
 
             switch result {
             case .failure:
                 thumbnailView.kf.setImage(with: subUrl)
-            default:
-                break
+            case let .success(_):
+                lottieView.isHidden = false
             }
         }
     }
