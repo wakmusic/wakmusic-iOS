@@ -118,11 +118,17 @@ private extension ArtistMusicContentViewController {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] songs, dataSource in
                 guard let self = self else { return }
-                self.songCartOnView.isHidden = songs.isEmpty
+             
                 switch songs.isEmpty {
                 case true:
+                    
+                    UIView.animate(withDuration: 0.5) {
+                        self.songCartOnView.alpha = .zero
+                    }
+                    
                     self.hideSongCart()
                 case false:
+                    self.songCartOnView.alpha = 1.0
                     self.showSongCart(
                         in: self.songCartOnView,
                         type: .artistSong,
@@ -147,7 +153,7 @@ private extension ArtistMusicContentViewController {
         activityIndidator.type = .circleStrokeSpin
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
-        songCartOnView.isHidden = true
+        songCartOnView.alpha = .zero
     }
 }
 

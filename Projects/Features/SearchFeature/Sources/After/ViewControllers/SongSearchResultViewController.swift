@@ -189,7 +189,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
                 
                 if count == .zero {
                     
-                    UIView.animate(withDuration: 1.0) {
+                    UIView.animate(withDuration: 0.5) {
                         owner.songCartContainerView.alpha = .zero
                     }
                     
