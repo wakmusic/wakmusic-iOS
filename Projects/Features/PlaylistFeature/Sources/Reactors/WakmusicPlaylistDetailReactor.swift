@@ -55,7 +55,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
                 songCount: 0
             ),
             dataSource: [],
-            isLoading: false,
+            isLoading: true,
             selectedCount: 0
         )
     }
