@@ -26,7 +26,6 @@ public final class TeamInfoViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[TeamListEntity]> = .init(value: [])
         let teams: BehaviorRelay<[String]> = .init(value: [])
-
     }
 
     public func transform(from input: Input) -> Output {
