@@ -321,7 +321,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
         switch model {
         case let .youtube(model: model):
-            #warning("유튜브 이동")
+            WakmusicYoutubePlayer(id: model.id).play()
             LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
 
