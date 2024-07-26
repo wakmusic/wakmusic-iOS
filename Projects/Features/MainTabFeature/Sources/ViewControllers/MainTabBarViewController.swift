@@ -97,25 +97,32 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 private extension MainTabBarViewController {
     func entryStateBind() {
         appEntryState.moveSceneObservable
+            .debug("moveSceneObservable")
             .filter { !$0.isEmpty }
             .delay(.milliseconds(500), scheduler: MainScheduler.instance)
             .bind(with: self, onNext: { owner, params in
-                LogManager.printDebug(params)
-                let page = params["page"] as? String ?? ""
-                let navigationController = owner.viewControllers[owner.selectedIndex] as? UINavigationController
-
-                switch page {
-                case "playlist":
-                    let key: String = params["key"] as? String ?? ""
-                    let viewController = owner.playlistDetailFactory.makeView(key: key, kind: .unknown)
-                    navigationController?.pushViewController(viewController, animated: true)
-                default:
-                    break
-                }
+                owner.moveScene(params: params)
             })
             .disposed(by: disposeBag)
     }
 
+    func moveScene(params: [String: Any]) {
+        let page = params["page"] as? String ?? ""
+        let navigationController = viewControllers[selectedIndex] as? UINavigationController
+
+        switch page {
+        case "playlist":
+            let key: String = params["key"] as? String ?? ""
+            let viewController = playlistDetailFactory.makeView(key: key, kind: .unknown)
+            navigationController?.pushViewController(viewController, animated: true)
+
+        default:
+            break
+        }
+    }
+}
+
+private extension MainTabBarViewController {
     func inputBind() {
         input.fetchNoticePopup.onNext(())
         input.fetchNoticeIDList.onNext(())
