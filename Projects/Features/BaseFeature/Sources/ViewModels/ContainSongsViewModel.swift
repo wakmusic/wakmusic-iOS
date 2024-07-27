@@ -8,12 +8,14 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import PriceDomainInterface
 
 #warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
     private let createPlaylistUseCase: any CreatePlaylistUseCase
+    private let fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
@@ -29,7 +31,9 @@ public final class ContainSongsViewModel: ViewModelType {
     public struct Output {
         let dataSource: BehaviorRelay<[PlaylistEntity]> = BehaviorRelay(value: [])
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
+        let creationPrice: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 2)
         let onLogout: PublishRelay<Error>
+        
 
         init(onLogout: PublishRelay<Error>) {
             self.onLogout = onLogout
@@ -41,11 +45,13 @@ public final class ContainSongsViewModel: ViewModelType {
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
+        fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase,
         logoutUseCase: LogoutUseCase
     ) {
         self.createPlaylistUseCase = createPlaylistUseCase
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
+        self.fetchPlaylistCreationPriceUsecase = fetchPlaylistCreationPriceUsecase
         self.logoutUseCase = logoutUseCase
         self.songs = songs
     }

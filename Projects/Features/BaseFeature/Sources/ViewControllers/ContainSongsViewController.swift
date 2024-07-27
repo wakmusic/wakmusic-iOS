@@ -17,6 +17,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var subTitleLabel: UILabel!
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    var textPopUpFactory: TextPopUpFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -33,6 +34,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 
     public static func viewController(
         multiPurposePopUpFactory: MultiPurposePopupFactory,
+        textPopUpFactory: TextPopUpFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
@@ -40,6 +42,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
             bundle: Bundle.module
         )
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.textPopUpFactory = textPopUpFactory
         viewController.viewModel = viewModel
         return viewController
     }
