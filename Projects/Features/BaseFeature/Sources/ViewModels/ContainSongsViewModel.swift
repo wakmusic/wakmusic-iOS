@@ -9,6 +9,7 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import PriceDomainInterface
 
 #warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
@@ -38,6 +39,7 @@ public final class ContainSongsViewModel: ViewModelType {
         let showPricePopup: PublishSubject<Void> = PublishSubject()
         let showCreationPopup: PublishSubject<Void> = PublishSubject()
         let onLogout: PublishRelay<Error>
+        
 
         init(onLogout: PublishRelay<Error>) {
             self.onLogout = onLogout
