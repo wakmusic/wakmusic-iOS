@@ -58,7 +58,6 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     }
 
     public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
-        
         remotePlaylistDataSource.requestCustomImageURL(key: key, imageSize: imageSize)
     }
 

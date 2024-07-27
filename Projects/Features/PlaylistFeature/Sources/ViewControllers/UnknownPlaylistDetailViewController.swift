@@ -125,7 +125,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     override func bindAction(reactor: UnknownPlaylistDetailReactor) {
         super.bindAction(reactor: reactor)
 
-    
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
@@ -160,9 +159,9 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showLoginPopup)
-            .filter({$0})
+            .filter { $0 }
             .bind(with: self) { owner, _ in
                 let vc = TextPopupViewController.viewController(
                     text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
@@ -171,7 +170,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                         NotificationCenter.default.post(name: .movedTab, object: 4)
                     }
                 )
-                
+
                 owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)

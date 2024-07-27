@@ -111,7 +111,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
-            
+
         case let .updateLoginPopupState(flag):
             newState.showLoginPopup = flag
 
