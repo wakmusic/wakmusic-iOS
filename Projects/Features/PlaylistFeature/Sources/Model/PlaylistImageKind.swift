@@ -1,6 +1,6 @@
 import Foundation
 
 enum PlaylistImageKind {
-    case `default`(key: String)
+    case `default`(imageName: String)
     case `custom`(data: Data)
 }

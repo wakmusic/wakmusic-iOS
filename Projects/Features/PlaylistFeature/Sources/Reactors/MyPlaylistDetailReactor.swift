@@ -214,26 +214,59 @@ private extension MyPlaylistDetailReactor {
         let state = currentState
         let currentPlaylists = state.playlistModels
 
-        let updatingPlaylistItemModels = currentPlaylists.map {
+        let newPlaylistItemModels = currentPlaylists.map {
             return $0.updateIsSelected(isSelected: false)
         }
-
-        return updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
-            .andThen(
-                .concat([
-                    .just(.updateEditingState(false)),
-                    .just(.updatePlaylist(updatingPlaylistItemModels)),
-                    .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
-                    .just(.updateSelectedCount(0)),
-
-                ])
-            )
-            .catch { error in
-                let wmErorr = error.asWMError
-                return Observable.just(
-                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+        
+        var mutations: [Observable<Mutation>] = []
+        
+        if let imageData = state.imageData {
+        
+            switch imageData {
+                
+            case let .default(imageName):
+                mutations.append(
+                    uploadDefaultPlaylistImageUseCase.execute(key: self.key, model: imageName)
+                        .andThen(.empty())
+                        .catch { error in
+                            let wmErorr = error.asWMError
+                            return Observable.just(
+                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                            )
+                        }
+                )
+                
+            case let .custom(data):
+                mutations.append(
+                    requestCustomImageURLUseCase.execute(key: self.key, data: data)
+                        .andThen(.empty())
+                        .catch { error in
+                            let wmErorr = error.asWMError
+                            return Observable.just(
+                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                            )
+                        }
                 )
             }
+        }
+        if state.backupPlaylistModels == newPlaylistItemModels  {
+            mutations.append(endEditing())
+        } else {
+            mutations.append(
+                updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
+                   .andThen(endEditing())
+                   .catch { error in
+                       let wmErorr = error.asWMError
+                       return Observable.just(
+                           Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                       )
+                   }
+            )
+ 
+        }
+        
+        
+        return .concat(mutations)
     }
 
     func endEditing() -> Observable<Mutation> {
@@ -248,7 +281,8 @@ private extension MyPlaylistDetailReactor {
             .just(.updateEditingState(false)),
             .just(.updatePlaylist(updatingPlaylistItemModels)),
             .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
-            .just(.updateSelectedCount(0))
+            .just(.updateSelectedCount(0)),
+            .just(.updateImageData(nil))
         ])
     }
 

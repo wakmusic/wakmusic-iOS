@@ -648,8 +648,8 @@ extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
-    func receive(url: String) {
-        reactor?.action.onNext(.changeImageData(.default(key: url)))
+    func receive(url: String, imageName: String) {
+        reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
         headerView.updateThumbnailByDefault(url)
     }
 }

@@ -63,7 +63,7 @@ extension PlaylistAPI: WMAPI {
         case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
 
-        case let .requestCustomImageURL(key):
+        case let .requestCustomImageURL(key, _):
             return "/\(key)/image/upload"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
