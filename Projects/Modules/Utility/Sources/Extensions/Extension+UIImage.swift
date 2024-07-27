@@ -45,24 +45,21 @@ public extension UIImage {
     func resizeImage(targetSize: CGSize) -> UIImage? {
         let image = self
 
-        var imageHeight = image.size.height
-        var imageWidth = image.size.width
+        let imageHeight = image.size.height
+        let imageWidth = image.size.width
 
-        if imageHeight > imageWidth {
-            imageHeight = imageWidth
-        } else {
-            imageWidth = imageHeight
-        }
+        let minLength = min(imageWidth, imageHeight)
 
-        let size = CGSize(width: imageWidth, height: imageHeight)
+        let size = CGSize(width: minLength, height: minLength)
 
-        let refWidth: CGFloat = CGFloat(image.cgImage!.width)
-        let refHeight: CGFloat = CGFloat(image.cgImage!.height)
+        let refWidth: CGFloat = CGFloat(image.cgImage?.width ?? .zero)
+        let refHeight: CGFloat = CGFloat(image.cgImage?.height ?? .zero)
 
         let x = (refWidth - size.width) / 2
         let y = (refHeight - size.height) / 2
 
         let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
+
         guard let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
             return nil
         }
@@ -71,11 +68,11 @@ public extension UIImage {
 
         let cropImage = UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
 
-        UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
-        cropImage.draw(in: rect)
+        let render = UIGraphicsImageRenderer()
 
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
+        let newImage = render.image { _ in
+            cropImage.draw(in: rect)
+        }
 
         return newImage
     }
