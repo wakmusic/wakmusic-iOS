@@ -130,6 +130,8 @@
 		<string>$(WMDOMAIN_TEAM)</string>
 		<key>WMDOMAIN_USER</key>
 		<string>$(WMDOMAIN_USER)</string>
+		<key>WMDOMAIN_PRICE</key>
+		<string>$(WMDOMAIN_PRICE)</string>
 		<key>WM_APP_ID</key>
 		<string>$(WM_APP_ID)</string>
 		<key>WM_URI_SCHEME</key>
