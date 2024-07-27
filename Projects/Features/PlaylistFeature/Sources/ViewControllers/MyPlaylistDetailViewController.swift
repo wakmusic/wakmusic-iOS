@@ -12,7 +12,7 @@ import Then
 import UIKit
 import Utility
 
-#warning("공유하기, 이미지 업로드")
+#warning("공유하기")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
@@ -606,7 +606,8 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  var imageData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
+                                  let resizeImage = image.resizeImage(targetSize: CGSize(width: 500, height: 500)),
+                                  var imageData = resizeImage.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
 
                             let sizeMB: Double = Double(imageData.count).megabytes
 
