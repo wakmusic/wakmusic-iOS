@@ -1,72 +1,41 @@
-//
-//  Extension+UIImage.swift
-//  Utility
-//
-//  Created by KTH on 2023/01/02.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 import UIKit
 
 public extension UIImage {
-    /// 메인 탭바의 상단에 들어갈 라인을 이미지로 그리고 반환합니다.
-    /// - Parameter color: 컬러 값
-    /// - Returns: 라인 이미지
-    static func tabBarTopLine(color: UIColor) -> UIImage {
-        let rect = CGRect(x: 0.0, y: 0.0, width: APP_WIDTH(), height: 1.0)
-
-        // 화면에 바로 나타나지 않는 offscreen 이미지를 생성하고 싶을 때는 반드시 bitmap image context를 생성해야 한다.
-        // https://soulpark.wordpress.com/tag/uigraphicsbeginimagecontext
-
-        // 그림을 그리기 위한 콘텍스트 생성
-        UIGraphicsBeginImageContext(rect.size)
-
-        // context: 코어 이미지의 모든 과정은 CIContext내에서 수행합니다.
-        // 렌더링 과정과 렌더링에 필요한 리소스를 더 정밀하게 컨트롤 할수 있게 해주는 객체
-        // 생성된 콘텍스트 정보 획득
-        guard let context = UIGraphicsGetCurrentContext() else { return Self() }
-
-        // 채우기 색상 설정
-        context.setFillColor(color.cgColor)
-
-        // 사각형 채우기
-        context.fill(rect)
-
-        // 현재 콘텍스트에 그려진 이미지를 가져옵니다.
-        guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return Self() }
-
-        // 그림 그리기 종료
-        UIGraphicsEndImageContext()
-
-        return image
-    }
-
     func resizeImage(targetSize: CGSize) -> UIImage? {
-        let image = self
+        let imageWidth = self.size.width
+        let imageHeight = self.size.height
 
-        let imageHeight = image.size.height
-        let imageWidth = image.size.width
+        guard imageWidth != imageHeight else {
+            guard imageWidth > targetSize.width else {
+                return self
+            }
+            return self.performResize(targetSize: targetSize)
+        }
 
         let minLength = min(imageWidth, imageHeight)
+        let cropSize = CGSize(width: minLength, height: minLength)
 
-        let size = CGSize(width: minLength, height: minLength)
+        let x = (imageWidth - cropSize.width) / 2
+        let y = (imageHeight - cropSize.height) / 2
+        let cropRect = CGRect(x: x, y: y, width: cropSize.width, height: cropSize.height)
 
-        let refWidth: CGFloat = CGFloat(image.cgImage?.width ?? .zero)
-        let refHeight: CGFloat = CGFloat(image.cgImage?.height ?? .zero)
-
-        let x = (refWidth - size.width) / 2
-        let y = (refHeight - size.height) / 2
-
-        let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
-
-        guard let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
+        guard let cropCgImage = self.cgImage?.cropping(to: cropRect) else {
             return nil
         }
-        // 실제 리사이즈 수행
+
+        guard cropRect.width > targetSize.width else {
+            return UIImage(cgImage: cropCgImage)
+        }
+
+        return UIImage(cgImage: cropCgImage).performResize(targetSize: targetSize)
+    }
+
+    func performResize(targetSize: CGSize) -> UIImage? {
         let rect = CGRect(origin: .zero, size: targetSize)
 
-        let cropImage = UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
+        guard let cgImage = self.cgImage else { return nil }
+        let image = UIImage(cgImage: cgImage, scale: 0, orientation: self.imageOrientation)
 
         let foramt = UIGraphicsImageRendererFormat.default()
         foramt.scale = 1.0
@@ -74,8 +43,7 @@ public extension UIImage {
         let render = UIGraphicsImageRenderer(size: targetSize, format: foramt)
 
         let newImage = render.image { _ in
-
-            cropImage.draw(in: rect)
+            image.draw(in: rect)
         }
 
         return newImage
