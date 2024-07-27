@@ -57,9 +57,9 @@ public extension UIImage {
 
         let x = (refWidth - size.width) / 2
         let y = (refHeight - size.height) / 2
-
+        
         let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
-
+        
         guard let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
             return nil
         }
@@ -68,9 +68,14 @@ public extension UIImage {
 
         let cropImage = UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
 
-        let render = UIGraphicsImageRenderer()
+        let foramt = UIGraphicsImageRendererFormat.default()
+        foramt.scale = 1.0
+        
+        
+        let render = UIGraphicsImageRenderer(size: targetSize, format: foramt)
 
         let newImage = render.image { _ in
+            
             cropImage.draw(in: rect)
         }
 
