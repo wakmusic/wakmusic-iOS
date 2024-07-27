@@ -43,37 +43,34 @@ public extension UIImage {
     }
 
     func resizeImage(targetSize: CGSize) -> UIImage? {
-        
-          let image = self
-        
-          var imageHeight = image.size.height
-          var imageWidth = image.size.width
+        let image = self
 
-          if imageHeight > imageWidth {
-              imageHeight = imageWidth
-          }
-          else {
-              imageWidth = imageHeight
-          }
-        
+        var imageHeight = image.size.height
+        var imageWidth = image.size.width
 
-          let size = CGSize(width: imageWidth, height: imageHeight)
+        if imageHeight > imageWidth {
+            imageHeight = imageWidth
+        } else {
+            imageWidth = imageHeight
+        }
 
-          let refWidth: CGFloat = CGFloat(image.cgImage!.width)
-          let refHeight : CGFloat = CGFloat(image.cgImage!.height)
+        let size = CGSize(width: imageWidth, height: imageHeight)
 
-          let x = (refWidth - size.width) / 2
-          let y = (refHeight - size.height) / 2
+        let refWidth: CGFloat = CGFloat(image.cgImage!.width)
+        let refHeight: CGFloat = CGFloat(image.cgImage!.height)
 
-          let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
-          guard  let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
-              return nil
-          }
+        let x = (refWidth - size.width) / 2
+        let y = (refHeight - size.height) / 2
+
+        let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
+        guard let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
+            return nil
+        }
         // 실제 리사이즈 수행
         let rect = CGRect(origin: .zero, size: targetSize)
 
-        let cropImage =  UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
-        
+        let cropImage = UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
+
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         cropImage.draw(in: rect)
 
