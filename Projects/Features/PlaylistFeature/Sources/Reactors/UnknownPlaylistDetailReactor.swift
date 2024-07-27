@@ -217,11 +217,10 @@ private extension UnknownPlaylistDetailReactor {
         let currentState = currentState
 
         let prev = currentState.isSubscribing
-        
+
         if PreferenceManager.userInfo == nil {
             return .just(.showToast("구독 기능은 로그인 후 이용할 수 있습니다."))
-        }
-        else {
+        } else {
             return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
                 .andThen(
                     .concat([
@@ -234,7 +233,6 @@ private extension UnknownPlaylistDetailReactor {
                     return .just(.showToast(wmError.errorDescription!))
                 }
         }
-
     }
 
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
