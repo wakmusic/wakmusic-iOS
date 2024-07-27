@@ -60,7 +60,7 @@ public enum WMDomain: String {
 
 extension WMDomain {
     var asURLString: String {
-        "/\(self.asDomainString)"
+        return "/\(self.asDomainString)"
     }
 }
 

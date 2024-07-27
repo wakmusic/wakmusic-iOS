@@ -125,8 +125,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     override func bindAction(reactor: UnknownPlaylistDetailReactor) {
         super.bindAction(reactor: reactor)
 
-        let sharedState = reactor.state.share()
-
         dismissButton.rx
             .tap
             .bind(with: self) { owner, _ in
@@ -158,7 +156,22 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     return
                 }
 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, options: [.tabBar])
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$showLoginPopup)
+            .filter { $0 }
+            .bind(with: self) { owner, _ in
+                let vc = TextPopupViewController.viewController(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    completion: { () in
+                        NotificationCenter.default.post(name: .movedTab, object: 4)
+                    }
+                )
+
+                owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)
 
@@ -198,7 +211,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 )
 
                 if model.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 3)
                 } else {
                     owner.tableView.restore()
                 }
@@ -382,9 +395,7 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
             showToast(
                 text: Localization.LocalizationStrings.addList,
-
-                font: .setFont(.t6(weight: .light)),
-                verticalOffset: 56 + 10
+                options: [.songCart, .tabBar]
             )
 
         case .play:

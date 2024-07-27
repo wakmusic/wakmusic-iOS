@@ -41,4 +41,43 @@ public extension UIImage {
 
         return image
     }
+
+    func resizeImage(targetSize: CGSize) -> UIImage? {
+        let image = self
+
+        let imageHeight = image.size.height
+        let imageWidth = image.size.width
+
+        let minLength = min(imageWidth, imageHeight)
+
+        let size = CGSize(width: minLength, height: minLength)
+
+        let refWidth: CGFloat = CGFloat(image.cgImage?.width ?? .zero)
+        let refHeight: CGFloat = CGFloat(image.cgImage?.height ?? .zero)
+
+        let x = (refWidth - size.width) / 2
+        let y = (refHeight - size.height) / 2
+
+        let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
+
+        guard let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
+            return nil
+        }
+        // 실제 리사이즈 수행
+        let rect = CGRect(origin: .zero, size: targetSize)
+
+        let cropImage = UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
+
+        let foramt = UIGraphicsImageRendererFormat.default()
+        foramt.scale = 1.0
+
+        let render = UIGraphicsImageRenderer(size: targetSize, format: foramt)
+
+        let newImage = render.image { _ in
+
+            cropImage.draw(in: rect)
+        }
+
+        return newImage
+    }
 }

@@ -12,7 +12,7 @@ import Then
 import UIKit
 import Utility
 
-#warning("공유하기, 이미지 업로드")
+#warning("공유하기")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
@@ -254,7 +254,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     return
                 }
 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
 
@@ -295,7 +295,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 )
 
                 if model.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 3)
                 } else {
                     owner.tableView.restore()
                 }
@@ -528,9 +528,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
             showToast(
                 text: Localization.LocalizationStrings.addList,
-
-                font: .setFont(.t6(weight: .light)),
-                verticalOffset: 56 + 10
+                options: [.songCart, .tabBar]
             )
 
         case .play:
@@ -608,7 +606,9 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  var imageData = image.jpegData(compressionQuality: 1.0) else { return } // 80% 압축
+                                  let resizeImage = image.resizeImage(targetSize: CGSize(width: 500, height: 500)),
+                                  var imageData = resizeImage.jpegData(compressionQuality: 1.0)
+                            else { return } // 80% 압축
 
                             let sizeMB: Double = Double(imageData.count).megabytes
 
@@ -644,14 +644,14 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
-        #warning("State에 저장")
+        reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
         headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
-    func receive(_ name: String, _ url: String) {
-        #warning("State에 저장")
+    func receive(url: String, imageName: String) {
+        reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
         headerView.updateThumbnailByDefault(url)
     }
 }

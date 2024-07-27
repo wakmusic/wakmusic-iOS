@@ -19,22 +19,11 @@ public enum PlaylistAPI {
     case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case checkSubscription(key: String)
     case fetchRecommendPlaylist // 추천 플리 불러오기
-    case uploadCustomImage(url: String, data: Data)
 }
 
 extension PlaylistAPI: WMAPI {
-    public var baseURL: URL {
-        switch self {
-        case let .uploadCustomImage(url, _):
-            return URL(string: url)!
-
-        default:
-            return URL(string: BASE_URL())!
-        }
-    }
-
     public var domain: WMDomain {
-        .playlist
+        return .playlist
     }
 
     public var urlPath: String {
@@ -63,14 +52,11 @@ extension PlaylistAPI: WMAPI {
         case let .uploadDefaultImage(key: key, _):
             return "/\(key)/image"
 
-        case let .requestCustomImageURL(key):
+        case let .requestCustomImageURL(key, _):
             return "/\(key)/image/upload"
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
-
-        default:
-            return ""
         }
     }
 
@@ -87,9 +73,6 @@ extension PlaylistAPI: WMAPI {
 
         case .removeSongs:
             return .delete
-
-        case .uploadCustomImage:
-            return .put
 
         case .updatePlaylist, .updateTitleAndPrivate, .uploadDefaultImage:
             return .patch
@@ -127,9 +110,6 @@ extension PlaylistAPI: WMAPI {
                 parameters: ["key": key, "contentLength": imageSize],
                 encoding: URLEncoding.queryString
             )
-
-        case let .uploadCustomImage(_, data: data):
-            return .requestData(data)
         }
     }
 
@@ -139,7 +119,7 @@ extension PlaylistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistSongs, .uploadCustomImage:
+        case .fetchRecommendPlaylist, .fetchPlaylistSongs:
             return .none
 
         case let .fetchPlaylistDetail(_, type):

@@ -1,12 +1,15 @@
 import BaseDomain
 import BaseDomainInterface
 import Foundation
+import Moya
 import PlaylistDomainInterface
 import RxSwift
 import SongsDomain
 import SongsDomainInterface
 
 public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAPI>, RemotePlaylistDataSource {
+    private let provider = MoyaProvider<CustomPlaylistImageAPI>()
+
     public func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]> {
         request(.fetchRecommendPlaylist)
             .map([SingleRecommendPlayListResponseDTO].self)
@@ -75,7 +78,8 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
     }
 
     public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
-        request(.uploadCustomImage(url: presignedURL, data: data))
+        return provider.rx
+            .request(CustomPlaylistImageAPI.uploadCustomImage(url: presignedURL, data: data))
             .asCompletable()
     }
 }
