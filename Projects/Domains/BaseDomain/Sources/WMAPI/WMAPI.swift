@@ -61,15 +61,12 @@ public enum WMDomain: String {
 
 extension WMDomain {
     var asURLString: String {
-        
         switch self {
         case .empty:
             return ""
         default:
-            return  "/\(self.asDomainString)"
+            return "/\(self.asDomainString)"
         }
-        
-       
     }
 }
 

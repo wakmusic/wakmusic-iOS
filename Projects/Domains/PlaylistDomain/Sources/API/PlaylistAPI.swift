@@ -34,7 +34,6 @@ extension PlaylistAPI: WMAPI {
     }
 
     public var domain: WMDomain {
-        
         switch self {
         case .uploadCustomImage:
             return .empty
@@ -42,8 +41,6 @@ extension PlaylistAPI: WMAPI {
         default:
             return .playlist
         }
-        
-       
     }
 
     public var urlPath: String {
@@ -143,14 +140,12 @@ extension PlaylistAPI: WMAPI {
     }
 
     public var headers: [String: String]? {
-        
         switch self {
         case let .uploadCustomImage(_, data: data):
             return ["Content-Type": "image/jpeg", " Contnet-Length": "\(data.count)"]
         default:
             return ["Content-Type": "application/json"]
         }
-
     }
 
     public var jwtTokenType: JwtTokenType {
