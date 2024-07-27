@@ -83,3 +83,11 @@ public func GOOGLE_CLIENT_ID() -> String {
 public func WM_APP_ID() -> String {
     return config(key: "WM_APP_ID")
 }
+
+public func WM_URI_SCHEME() -> String {
+    return config(key: "WM_URI_SCHEME")
+}
+
+public func WM_UNIVERSALLINK_DOMAIN() -> String {
+    return config(key: "WM_UNIVERSALLINK_DOMAIN")
+}
