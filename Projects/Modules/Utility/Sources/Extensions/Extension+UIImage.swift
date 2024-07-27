@@ -43,26 +43,39 @@ public extension UIImage {
     }
 
     func resizeImage(targetSize: CGSize) -> UIImage? {
-        let image = self
+        
+          let image = self
+        
+          var imageHeight = image.size.height
+          var imageWidth = image.size.width
 
-        let size = image.size
+          if imageHeight > imageWidth {
+              imageHeight = imageWidth
+          }
+          else {
+              imageWidth = imageHeight
+          }
+        
 
-//        let widthRatio  = targetSize.width  / size.width
-//        let heightRatio = targetSize.height / size.height
-//
-//        // aspectRatio를 유지하여 리사이즈하는 경우
-//        let newSize: CGSize
-//        if(widthRatio > heightRatio) {
-//            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-//        } else {
-//            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
-//        }
+          let size = CGSize(width: imageWidth, height: imageHeight)
 
+          let refWidth: CGFloat = CGFloat(image.cgImage!.width)
+          let refHeight : CGFloat = CGFloat(image.cgImage!.height)
+
+          let x = (refWidth - size.width) / 2
+          let y = (refHeight - size.height) / 2
+
+          let cropRect = CGRect(x: x, y: y, width: size.height, height: size.width)
+          guard  let cropCgImage = image.cgImage!.cropping(to: cropRect) else {
+              return nil
+          }
         // 실제 리사이즈 수행
         let rect = CGRect(origin: .zero, size: targetSize)
 
+        let cropImage =  UIImage(cgImage: cropCgImage, scale: 0, orientation: image.imageOrientation)
+        
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
-        image.draw(in: rect)
+        cropImage.draw(in: rect)
 
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
