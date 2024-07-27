@@ -78,7 +78,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             return updateDataSource()
 
         case .subscriptionButtonDidTap:
-            return askUpdateSubscribeUsecase()
+            return askUpdateSubscribing()
 
         case .selectAll:
             return selectAll()
@@ -122,6 +122,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
 private extension UnknownPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
+
         return .concat([
             .just(.updateLoadingState(true)),
             fetchPlaylistDetailUseCase.execute(id: key, type: .unknown)
@@ -147,20 +148,20 @@ private extension UnknownPlaylistDetailReactor {
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
-
             // 로그인 전이면 USECASE 안보냄
-            checkSubscriptionUseCase.execute(key: key)
-                .asObservable()
-                .flatMap { flag -> Observable<Mutation> in
-                    return .just(.updateSubscribeState(flag))
-                }
-                .catch { error in
-                    let wmErorr = error.asWMError
-                    return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
-                    )
-                },
-            .just(.updateLoadingState(false))
+            PreferenceManager.userInfo == nil ?  .just(.updateSubscribeState(false))  :
+                 checkSubscriptionUseCase.execute(key: key)
+                    .asObservable()
+                    .flatMap { flag -> Observable<Mutation> in
+                        return .just(.updateSubscribeState(flag))
+                    }
+                    .catch { error in
+                        let wmErorr = error.asWMError
+                        return Observable.just(
+                            Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        )
+                    },
+                .just(.updateLoadingState(false))
         ])
     }
 }
@@ -213,7 +214,7 @@ private extension UnknownPlaylistDetailReactor {
         ])
     }
 
-    func askUpdateSubscribeUsecase() -> Observable<Mutation> {
+    func askUpdateSubscribing() -> Observable<Mutation> {
         let currentState = currentState
 
         let prev = currentState.isSubscribing

@@ -342,8 +342,10 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
             case .youtube:
                 break
             case .recommend:
-                LogManager.analytics(SearchAnalyticsLog.clickRecommendPlaylistMore)
-                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+//                LogManager.analytics(SearchAnalyticsLog.clickRecommendPlaylistMore)
+//                self.navigationController?.pushViewController(wakmusicRecommendComponent.makeView(), animated: true)
+                #warning("추후 업데이트 시 사용")
+                break
             case .popularList:
                 #warning("추후 업데이트 시 사용")
                 break

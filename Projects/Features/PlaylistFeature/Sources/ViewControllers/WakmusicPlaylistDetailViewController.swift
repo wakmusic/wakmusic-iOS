@@ -132,7 +132,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                     return
                 }
 
-                owner.showToast(text: message, options: .tabBar)
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
 

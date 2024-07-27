@@ -158,7 +158,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     return
                 }
 
-                owner.showToast(text: message, options: .tabBar)
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
 
