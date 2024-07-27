@@ -52,11 +52,9 @@ private extension MainContainerViewController {
     func setLayout() {
         view.addSubview(playlistFloatingActionButton)
 
-        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
-
         playlistFloatingActionButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(bottomContainerView.snp.top).offset(startPage == 3 ? -80 : -20)
+            $0.bottom.equalTo(bottomContainerView.snp.top).offset(-20)
             $0.size.equalTo(56)
         }
     }
@@ -124,18 +122,6 @@ private extension MainContainerViewController {
                     content: playlistViewController,
                     size: .fixed(APP_HEIGHT())
                 )
-            }
-            .disposed(by: disposeBag)
-
-        Utility.PreferenceManager.$startPage
-            .skip(1)
-            .compactMap { $0 }
-            .bind(with: self) { owner, page in
-                owner.playlistFloatingActionButton.snp.remakeConstraints {
-                    $0.trailing.equalToSuperview().inset(20)
-                    $0.bottom.equalTo(owner.bottomContainerView.snp.top).offset(page == 3 ? -80 : -20)
-                    $0.size.equalTo(56)
-                }
             }
             .disposed(by: disposeBag)
     }
