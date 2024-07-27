@@ -19,6 +19,7 @@ let project = Project.module(
                     .domain(target: .PlaylistDomain, type: .interface),
                     .domain(target: .UserDomain, type: .interface),
                     .domain(target: .NoticeDomain, type: .interface),
+                    .domain(target: .PriceDomain, type: .interface),
                     .module(target: .ErrorModule),
                     .Project.Module.FeatureThirdPartyLib,
                     .Project.UserInterfaces.DesignSystem,
