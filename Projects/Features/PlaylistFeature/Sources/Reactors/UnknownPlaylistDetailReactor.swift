@@ -25,6 +25,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateSelectingStateByIndex([SongEntity])
         case updateSubscribeState(Bool)
         case showToast(String)
+        case updateLoginPopupState(Bool)
     }
 
     struct State {
@@ -34,6 +35,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var isSubscribing: Bool
         @Pulse var toastMessage: String?
+        @Pulse var showLoginPopup: Bool
     }
 
     var initialState: State
@@ -68,7 +70,8 @@ final class UnknownPlaylistDetailReactor: Reactor {
             dataSource: [],
             isLoading: true,
             selectedCount: 0,
-            isSubscribing: false
+            isSubscribing: false,
+            showLoginPopup: false
         )
     }
 
@@ -108,6 +111,9 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
+            
+        case let .updateLoginPopupState(flag):
+            newState.showLoginPopup = flag
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
@@ -219,7 +225,7 @@ private extension UnknownPlaylistDetailReactor {
         let prev = currentState.isSubscribing
 
         if PreferenceManager.userInfo == nil {
-            return .just(.showToast("구독 기능은 로그인 후 이용할 수 있습니다."))
+            return .just(.updateLoginPopupState(true))
         } else {
             return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
                 .andThen(
