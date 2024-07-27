@@ -55,7 +55,8 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
         configureUI()
         configureHeader()
         configureContent()
-        bind()
+        outputBind()
+        inputBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -88,9 +89,13 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 }
 
 private extension ArtistDetailViewController {
-    func bind() {
+    func outputBind() {
         output.isSubscription
-            .bind(to: subscriptionButton.rx.isSelected)
+            .skip(1)
+            .bind { [subscriptionButton] isSubscription in
+                subscriptionButton?.isHidden = false
+                subscriptionButton?.isSelected = isSubscription
+            }
             .disposed(by: disposeBag)
 
         output.showLogin
@@ -113,14 +118,12 @@ private extension ArtistDetailViewController {
 
         output.showToast
             .bind(with: self) { owner, message in
-                owner.showToast(
-                    text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 10
-                )
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
+    }
 
+    func inputBind() {
         input.fetchArtistSubscriptionStatus.onNext(())
 
         subscriptionButton.rx.tap
@@ -133,6 +136,7 @@ private extension ArtistDetailViewController {
         backButton.setImage(DesignSystemAsset.Navigation.back.image, for: .normal)
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOff.image, for: .normal)
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOn.image, for: .selected)
+        subscriptionButton.isHidden = true
 
         let model = viewModel.model
         let flatColor: String = model.personalColor
