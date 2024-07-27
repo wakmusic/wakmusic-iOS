@@ -21,9 +21,7 @@ public enum PlaylistAPI {
     case fetchRecommendPlaylist // 추천 플리 불러오기
 }
 
-
 extension PlaylistAPI: WMAPI {
-    
     public var domain: WMDomain {
         return .playlist
     }
@@ -59,7 +57,6 @@ extension PlaylistAPI: WMAPI {
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
-
         }
     }
 
