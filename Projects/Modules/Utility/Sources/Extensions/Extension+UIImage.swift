@@ -27,7 +27,7 @@ public extension UIImage {
     func performSquareCrop() -> UIImage? {
         let imageWidth = self.size.width
         let imageHeight = self.size.height
-        
+
         guard imageWidth != imageHeight else {
             return self
         }

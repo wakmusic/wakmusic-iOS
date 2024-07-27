@@ -607,7 +607,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
                                   let resizeImage = image.customizeForPlaylistCover(
-                                    targetSize: CGSize(width: 500, height: 500)
+                                      targetSize: CGSize(width: 500, height: 500)
                                   ),
                                   var imageData = resizeImage.jpegData(compressionQuality: 1.0)
                             else { return } // 80% 압축
