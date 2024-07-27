@@ -76,8 +76,9 @@ public final class ArtistDetailViewModel: ViewModelType {
             .subscribe(onNext: { _ in
                 let isSubscribe: Bool = !output.isSubscription.value
                 output.isSubscription.accept(isSubscribe)
-                output.showToast.onNext(isSubscribe ?
-                    "신곡 알림이 등록되었습니다.": "신곡 알림이 해제되었습니다"
+                output.showToast.onNext(
+                    isSubscribe ?
+                        "신곡 알림이 등록되었습니다." : "신곡 알림이 해제되었습니다"
                 )
             })
             .disposed(by: disposeBag)
