@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 public extension UIImage {
-    func resizeImage(targetSize: CGSize) -> UIImage? {
+    func customizeForPlaylistCover(targetSize: CGSize) -> UIImage? {
         let imageWidth = self.size.width
         let imageHeight = self.size.height
 
@@ -10,7 +10,26 @@ public extension UIImage {
             guard imageWidth > targetSize.width else {
                 return self
             }
-            return self.performResize(targetSize: targetSize)
+            return performResize(targetSize: targetSize)
+        }
+
+        guard let cropImage = performSquareCrop() else {
+            return nil
+        }
+
+        guard cropImage.size.width > targetSize.width else {
+            return cropImage
+        }
+
+        return cropImage.performResize(targetSize: targetSize)
+    }
+
+    func performSquareCrop() -> UIImage? {
+        let imageWidth = self.size.width
+        let imageHeight = self.size.height
+        
+        guard imageWidth != imageHeight else {
+            return self
         }
 
         let minLength = min(imageWidth, imageHeight)
@@ -24,11 +43,7 @@ public extension UIImage {
             return nil
         }
 
-        guard cropRect.width > targetSize.width else {
-            return UIImage(cgImage: cropCgImage)
-        }
-
-        return UIImage(cgImage: cropCgImage).performResize(targetSize: targetSize)
+        return UIImage(cgImage: cropCgImage)
     }
 
     func performResize(targetSize: CGSize) -> UIImage? {
