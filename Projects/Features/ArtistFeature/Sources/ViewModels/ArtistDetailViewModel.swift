@@ -65,20 +65,19 @@ public final class ArtistDetailViewModel: ViewModelType {
                 return true
             }
             .withLatestFrom(output.isSubscription)
-            .flatMap { [subscriptionArtistUseCase] status -> Observable<Void> in
+            .flatMap { [subscriptionArtistUseCase] status -> Observable<Bool> in
                 return subscriptionArtistUseCase.execute(id: id, on: !status)
-                    .andThen(Observable.just(()))
+                    .andThen(Observable.just(!status))
                     .catch { error in
                         output.showToast.onNext(error.asWMError.errorDescription ?? error.localizedDescription)
                         return Observable.empty()
                     }
             }
-            .subscribe(onNext: { _ in
-                let isSubscribe: Bool = !output.isSubscription.value
+            .subscribe(onNext: { isSubscribe in
                 output.isSubscription.accept(isSubscribe)
                 output.showToast.onNext(
                     isSubscribe ?
-                        "신곡 알림이 등록되었습니다." : "신곡 알림이 해제되었습니다"
+                        "신곡 알림이 등록되었습니다." : "신곡 알림이 해제되었습니다."
                 )
             })
             .disposed(by: disposeBag)
