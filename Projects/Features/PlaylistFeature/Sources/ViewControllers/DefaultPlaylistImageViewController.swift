@@ -137,10 +137,10 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
 
                 let (dataSource, index) = (info.0, info.1)
 
-                let (name, url) = (dataSource[index].name, dataSource[index].url)
+                let url = dataSource[index].url
 
                 owner.dismiss(animated: true) {
-                    owner.delegate?.receive(name, url)
+                    owner.delegate?.receive(url: url)
                 }
             }
             .disposed(by: disposeBag)

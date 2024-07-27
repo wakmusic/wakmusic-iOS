@@ -642,14 +642,14 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
 
 extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
     func receive(_ imageData: Data) {
-        #warning("State에 저장")
+        reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
         headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
-    func receive(_ name: String, _ url: String) {
-        #warning("State에 저장")
+    func receive(url: String) {
+        reactor?.action.onNext(.changeImageData(.default(key: url)))
         headerView.updateThumbnailByDefault(url)
     }
 }

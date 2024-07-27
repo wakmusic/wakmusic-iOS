@@ -21,6 +21,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case removeSongs
+        case changeImageData(PlaylistImageKind)
     }
 
     enum Mutation {
@@ -30,6 +31,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateBackUpPlaylist([PlaylistItemModel])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
+        case updateImageData(PlaylistImageKind?)
         case showToast(String)
     }
 
@@ -40,7 +42,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var backupPlaylistModels: [PlaylistItemModel]
         var isLoading: Bool
         var selectedCount: Int
-        var replaceThumnbnailData: Data?
+        var imageData: PlaylistImageKind?
         @Pulse var toastMessage: String?
     }
 
@@ -88,8 +90,7 @@ final class MyPlaylistDetailReactor: Reactor {
             playlistModels: [],
             backupPlaylistModels: [],
             isLoading: true,
-            selectedCount: 0,
-            replaceThumnbnailData: nil
+            selectedCount: 0
         )
     }
 
@@ -129,6 +130,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
+            
+        case let .changeImageData(imageData):
+            return updateImageData(imageData: imageData)
         }
     }
 
@@ -156,6 +160,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
+        case let .updateImageData(imageData):
+            newState.imageData = imageData
         }
 
         return newState
@@ -361,7 +367,8 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updatePlaylist(updatingPlaylistItemModels)),
-            .just(.updateSelectedCount(0))
+            .just(.updateSelectedCount(0)),
+            .just(.updateImageData(nil))
         ])
     }
 
@@ -381,7 +388,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateEditingState(false)),
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
-                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다."))
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -389,5 +396,9 @@ private extension MyPlaylistDetailReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                 )
             }
+    }
+    
+    func updateImageData(imageData: PlaylistImageKind?) -> Observable<Mutation> {
+        return .just(.updateImageData(imageData))
     }
 }

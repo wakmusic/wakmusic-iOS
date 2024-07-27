@@ -1,7 +1,7 @@
 import UIKit
 
 public protocol DefaultPlaylistImageDelegate: AnyObject {
-    func receive(_ name: String, _ url: String)
+    func receive(url: String)
 }
 
 public protocol DefaultPlaylistImageFactory {
