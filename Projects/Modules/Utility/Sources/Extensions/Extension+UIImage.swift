@@ -41,17 +41,15 @@ public extension UIImage {
 
         return image
     }
-    
+
     func resizeImage(targetSize: CGSize) -> UIImage? {
-        
-        
         let image = self
-        
+
         let size = image.size
-        
+
 //        let widthRatio  = targetSize.width  / size.width
 //        let heightRatio = targetSize.height / size.height
-//        
+//
 //        // aspectRatio를 유지하여 리사이즈하는 경우
 //        let newSize: CGSize
 //        if(widthRatio > heightRatio) {
@@ -59,18 +57,16 @@ public extension UIImage {
 //        } else {
 //            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
 //        }
-        
+
         // 실제 리사이즈 수행
         let rect = CGRect(origin: .zero, size: targetSize)
-        
+
         UIGraphicsBeginImageContextWithOptions(targetSize, true, 1.0)
         image.draw(in: rect)
-        
+
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
+
         return newImage
     }
-    
-    
 }
