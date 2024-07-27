@@ -1,6 +1,6 @@
 import Foundation
-import RxSwift
 import PriceDomainInterface
+import RxSwift
 
 public struct FetchPlaylistCreationPriceUsecaseImpl: FetchPlaylistCreationPriceUsecase {
     private let priceRepository: any PriceRepository

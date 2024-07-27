@@ -4,11 +4,11 @@ import ErrorModule
 import Foundation
 import Localization
 import PlaylistDomainInterface
+import PriceDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
-import PriceDomainInterface
 
 #warning("커스텀 에러 리스폰스 후추..")
 public final class ContainSongsViewModel: ViewModelType {
@@ -33,7 +33,6 @@ public final class ContainSongsViewModel: ViewModelType {
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
         let creationPrice: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 2)
         let onLogout: PublishRelay<Error>
-        
 
         init(onLogout: PublishRelay<Error>) {
             self.onLogout = onLogout

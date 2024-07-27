@@ -1,9 +1,9 @@
 import Foundation
 import PriceDomainInterface
 
-struct PriceResponseDTO : Decodable {
+struct PriceResponseDTO: Decodable {
     let price: Int
-    
+
     public init(price: Int) {
         self.price = price
     }

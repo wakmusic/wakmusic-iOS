@@ -25,9 +25,7 @@ extension PriceAPI: WMAPI {
     }
 
     public var method: Moya.Method {
-
-            return .get
-        
+        return .get
     }
 
     public var task: Moya.Task {
