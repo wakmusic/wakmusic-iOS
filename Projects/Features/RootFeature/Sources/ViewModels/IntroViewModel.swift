@@ -128,20 +128,30 @@ public final class IntroViewModel: ViewModelType {
                     .asObservable()
             }
             .debug("✅ Intro > fetchUserInfoUseCase")
-            .subscribe(onNext: { _ in
-                output.userInfoResult.onNext(.success(""))
-            }, onError: { [logoutUseCase, disposeBag] error in
-                let asWMError = error.asWMError
-                if asWMError == .tokenExpired || asWMError == .notFound {
-                    logoutUseCase.execute()
-                        .andThen(Observable.just(()))
-                        .bind {
-                            Utility.PreferenceManager.startPage = 4
-                        }
-                        .disposed(by: disposeBag)
-                }
-                output.userInfoResult.onNext(.failure(error))
-            }).disposed(by: disposeBag)
+            .subscribe(
+                onNext: { entity in
+                    PreferenceManager.shared.setUserInfo(
+                        ID: entity.id,
+                        platform: entity.platform,
+                        profile: entity.profile,
+                        name: entity.name,
+                        itemCount: entity.itemCount
+                    )
+                    output.userInfoResult.onNext(.success(""))
+                },
+                onError: { [logoutUseCase, disposeBag] error in
+                    let asWMError = error.asWMError
+                    if asWMError == .tokenExpired || asWMError == .notFound {
+                        logoutUseCase.execute()
+                            .andThen(Observable.just(()))
+                            .bind {
+                                Utility.PreferenceManager.startPage = 4
+                            }
+                            .disposed(by: disposeBag)
+                    }
+                    output.userInfoResult.onNext(.failure(error))
+                })
+                .disposed(by: disposeBag)
 
         return output
     }
