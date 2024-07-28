@@ -1,10 +1,10 @@
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
+import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
-import MusicDetailFeatureInterface
 import UIKit
 
 public protocol UnknownPlaylistDetailDependency: Dependency {
@@ -19,7 +19,7 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
-    
+
     var musicDetailFactory: any MusicDetailFactory { get }
 }
 

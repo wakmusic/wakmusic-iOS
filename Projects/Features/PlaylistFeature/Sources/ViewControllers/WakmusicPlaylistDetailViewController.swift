@@ -3,13 +3,13 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
-import MusicDetailFeatureInterface
 import Utility
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
@@ -21,7 +21,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
-    
+
     private let musicDetailFactory: any MusicDetailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -279,14 +279,13 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 }
 
-extension WakmusicPlaylistDetailViewController : PlaylistDateTableViewCellDelegate {
+extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
         let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
         vc.modalPresentationStyle = .fullScreen
 
         self.present(vc, animated: true)
     }
-    
 }
 
 /// 전체재생 , 랜덤 재생 델리게이트

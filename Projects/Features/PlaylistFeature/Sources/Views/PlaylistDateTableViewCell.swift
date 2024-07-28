@@ -16,14 +16,14 @@ final class PlaylistDateTableViewCell: UITableViewCell {
 
     private var model: SongEntity?
     weak var delegate: PlaylistDateTableViewCellDelegate?
-    
+
     private lazy var thumbnailImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-    
+
     private lazy var thumbnailButton = UIButton()
 
     private lazy var titleArtistStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
@@ -77,7 +77,12 @@ final class PlaylistDateTableViewCell: UITableViewCell {
     }
 
     private func addViews() {
-        self.contentView.addSubviews(self.thumbnailImageView,self.thumbnailButton,self.titleArtistStackView, self.dateLabel)
+        self.contentView.addSubviews(
+            self.thumbnailImageView,
+            self.thumbnailButton,
+            self.titleArtistStackView,
+            self.dateLabel
+        )
     }
 
     private func setLayout() {
@@ -89,7 +94,7 @@ final class PlaylistDateTableViewCell: UITableViewCell {
             $0.width.equalTo(width)
             $0.height.equalTo(height)
         }
-        
+
         thumbnailButton.snp.makeConstraints {
             $0.centerY.equalTo(thumbnailImageView)
             $0.left.equalTo(thumbnailImageView)
@@ -110,12 +115,12 @@ final class PlaylistDateTableViewCell: UITableViewCell {
             $0.trailing.equalToSuperview().inset(20)
         }
     }
-    
+
     private func addAction() {
         thumbnailButton.addAction { [weak self] in
-            
+
             guard let model = self?.model else { return }
-            
+
             self?.delegate?.thumbnailDidTap(key: model.id)
         }
     }
@@ -123,9 +128,8 @@ final class PlaylistDateTableViewCell: UITableViewCell {
 
 extension PlaylistDateTableViewCell {
     func update(_ model: SongEntity) {
-        
         self.model = model
-        
+
         self.thumbnailImageView.kf.setImage(
             with: URL(string: Utility.WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,

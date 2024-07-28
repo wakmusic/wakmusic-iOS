@@ -1,10 +1,10 @@
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
+import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
-import MusicDetailFeatureInterface
 import UIKit
 
 public protocol WakmusicPlaylistDetailDependency: Dependency {
@@ -13,7 +13,7 @@ public protocol WakmusicPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
-    
+
     var musicDetailFactory: any MusicDetailFactory { get }
 }
 
