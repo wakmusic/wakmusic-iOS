@@ -28,7 +28,7 @@ public final class ContainSongsViewModel: ViewModelType {
         let itemDidTap: PublishSubject<PlaylistEntity> = PublishSubject()
         let createPlaylist: PublishSubject<String> = PublishSubject()
         let creationButtonDidTap: PublishSubject<Void> = PublishSubject()
-        let payButtonDIdTap: PublishSubject<Void> = PublishSubject()
+        let payButtonDidTap: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
@@ -179,7 +179,7 @@ public final class ContainSongsViewModel: ViewModelType {
             .bind(to: output.showPricePopup)
             .disposed(by: disposeBag)
 
-        input.payButtonDIdTap
+        input.payButtonDidTap
             .bind(to: output.showCreationPopup)
             .disposed(by: disposeBag)
 

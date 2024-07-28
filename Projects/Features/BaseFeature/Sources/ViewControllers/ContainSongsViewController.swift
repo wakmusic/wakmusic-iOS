@@ -142,7 +142,7 @@ extension ContainSongsViewController {
 
                 let (user, price) = (info.0, info.1)
 
-                if 3 < price {
+                if user.itemCount < price {
                     owner.showToast(text: "음표열매가 부족합니다.")
                     return
                 }
@@ -153,7 +153,7 @@ extension ContainSongsViewController {
                     confirmButtonText: "\(price)개 사용",
                     cancelButtonText: "취소",
                     completion: {
-                        owner.input.payButtonDIdTap.onNext(())
+                        owner.input.payButtonDidTap.onNext(())
                     }, cancelCompletion: nil
                 )
 
@@ -163,15 +163,13 @@ extension ContainSongsViewController {
 
         output.showCreationPopup
             .bind(with: self) { owner, _ in
-                guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+               let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
                     type: .creation,
                     key: "",
                     completion: { text in
                         owner.input.createPlaylist.onNext(text)
                     }
-                ) as? MultiPurposePopupViewController else {
-                    return
-                }
+                )
                 owner.showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
             }
             .disposed(by: disposeBag)
