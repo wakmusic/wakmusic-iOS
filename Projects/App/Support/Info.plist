@@ -138,6 +138,8 @@
 		<string>$(WM_URI_SCHEME)</string>
 		<key>WM_UNIVERSALLINK_DOMAIN</key>
 		<string>$(WM_UNIVERSALLINK_DOMAIN)</string>
+		<key>WM_UNIVERSALLINK_TEST_DOMAIN</key>
+		<string>$(WM_UNIVERSALLINK_TEST_DOMAIN)</string>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

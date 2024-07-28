@@ -65,7 +65,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         LogManager.printDebug("URL: \(webpageURL.absoluteString)")
 
-        guard webpageURL.host == WM_UNIVERSALLINK_DOMAIN() else {
+        guard webpageURL.host == WM_UNIVERSALLINK_DOMAIN() ||
+            webpageURL.host == WM_UNIVERSALLINK_TEST_DOMAIN() else {
             return
         }
         handleUniversalLink(url: webpageURL)
