@@ -1,11 +1,3 @@
-//
-//  HomeComponent.swift
-//  HomeFeatureTests
-//
-//  Created by KTH on 2023/02/20.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import ChartDomainInterface
 import ChartFeatureInterface
@@ -16,6 +8,7 @@ import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit
+import HomeFeatureInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
@@ -27,8 +20,8 @@ public protocol HomeDependency: Dependency {
     var musicDetailFactory: any MusicDetailFactory { get }
 }
 
-public final class HomeComponent: Component<HomeDependency> {
-    public func makeView() -> HomeViewController {
+public final class HomeComponent: Component<HomeDependency>, HomeFactory {
+    public func makeView() -> UIViewController {
         return HomeViewController.viewController(
             viewModel: .init(
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,

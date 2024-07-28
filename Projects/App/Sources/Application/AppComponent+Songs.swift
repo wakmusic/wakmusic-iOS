@@ -1,5 +1,6 @@
 import BaseFeature
 import HomeFeature
+import HomeFeatureInterface
 import LyricHighlightingFeature
 import LyricHighlightingFeatureInterface
 import MusicDetailFeature
@@ -8,7 +9,7 @@ import SongsDomain
 import SongsDomainInterface
 
 public extension AppComponent {
-    var homeComponent: HomeComponent {
+    var homeFactory: any HomeFactory {
         HomeComponent(parent: self)
     }
 

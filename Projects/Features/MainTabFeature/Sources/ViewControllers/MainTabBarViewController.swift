@@ -1,19 +1,16 @@
-import ArtistFeature
+import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
-import HomeFeature
+import HomeFeatureInterface
 import LogManager
-import MyInfoFeature
 import MyInfoFeatureInterface
 import NoticeDomainInterface
 import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SafariServices
-import SearchFeature
 import SearchFeatureInterface
 import SnapKit
-import StorageFeature
 import StorageFeatureInterface
 import UIKit
 import Utility
@@ -25,9 +22,9 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     private lazy var viewControllers: [UIViewController] = {
         return [
-            homeComponent.makeView().wrapNavigationController,
+            homeFactory.makeView().wrapNavigationController,
             searchFactory.makeView().wrapNavigationController,
-            artistComponent.makeView().wrapNavigationController,
+            artistFactory.makeView().wrapNavigationController,
             storageFactory.makeView().wrapNavigationController,
             myInfoFactory.makeView().wrapNavigationController
         ]
@@ -39,9 +36,9 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private let disposeBag: DisposeBag = DisposeBag()
 
     private var appEntryState: AppEntryStateHandleable!
-    private var homeComponent: HomeComponent!
+    private var homeFactory: HomeFactory!
     private var searchFactory: SearchFactory!
-    private var artistComponent: ArtistComponent!
+    private var artistFactory: ArtistFactory!
     private var storageFactory: StorageFactory!
     private var myInfoFactory: MyInfoFactory!
     private var noticePopupComponent: NoticePopupComponent!
@@ -69,9 +66,9 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     public static func viewController(
         viewModel: MainTabBarViewModel,
         appEntryState: AppEntryStateHandleable,
-        homeComponent: HomeComponent,
+        homeFactory: HomeFactory,
         searchFactory: SearchFactory,
-        artistComponent: ArtistComponent,
+        artistFactory: ArtistFactory,
         storageFactory: StorageFactory,
         myInfoFactory: MyInfoFactory,
         noticePopupComponent: NoticePopupComponent,
@@ -81,9 +78,9 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.appEntryState = appEntryState
-        viewController.homeComponent = homeComponent
+        viewController.homeFactory = homeFactory
         viewController.searchFactory = searchFactory
-        viewController.artistComponent = artistComponent
+        viewController.artistFactory = artistFactory
         viewController.storageFactory = storageFactory
         viewController.myInfoFactory = myInfoFactory
         viewController.noticePopupComponent = noticePopupComponent
