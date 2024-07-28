@@ -181,7 +181,6 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                 }
             }
             .disposed(by: disposeBag)
-
     }
 }
 

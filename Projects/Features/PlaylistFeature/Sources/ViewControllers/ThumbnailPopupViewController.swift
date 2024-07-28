@@ -70,19 +70,17 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
 
         sharedState.map(\.isLoading)
             .bind(with: self) { owner, isLoading in
-                
+
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
                     owner.indicator.stopAnimating()
                 }
-                
+
                 owner.tableView.isHidden = isLoading
-                
-               
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
 

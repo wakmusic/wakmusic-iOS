@@ -15,6 +15,7 @@ public final class ThumbnailPopupComponent: Component<ThumbnailPopupDependency>,
     public func makeView(delegate: any ThumbnailPopupDelegate) -> UIViewController {
         ThumbnailPopupViewController(
             reactor: ThumbnailPopupReactor(fetchPlaylistImagePriceUsecase: dependency.fetchPlaylistImagePriceUsecase),
-            delegate: delegate)
+            delegate: delegate
+        )
     }
 }
