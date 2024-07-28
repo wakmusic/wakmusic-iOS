@@ -4,6 +4,7 @@ import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
+import ArtistFeatureInterface
 import UIKit
 
 public protocol ArtistDetailDependency: Dependency {
