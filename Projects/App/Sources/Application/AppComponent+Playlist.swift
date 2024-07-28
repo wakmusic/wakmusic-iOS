@@ -42,8 +42,8 @@ public extension AppComponent {
         PlaylistCoverOptionPopupComponent(parent: self)
     }
 
-    var checkThumbnailFactory: any CheckThumbnailFactory {
-        CheckThumbnailComponent(parent: self)
+    var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory {
+        CheckPlaylistCoverComponent(parent: self)
     }
 
     var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {

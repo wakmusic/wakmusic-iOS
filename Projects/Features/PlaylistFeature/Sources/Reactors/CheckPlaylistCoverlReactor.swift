@@ -1,7 +1,7 @@
 import Foundation
 import ReactorKit
 
-final class CheckThumbnailReactor: Reactor {
+final class CheckPlaylistCoverlReactor: Reactor {
     enum Action {
         case viewDidLoad
     }
@@ -23,4 +23,4 @@ final class CheckThumbnailReactor: Reactor {
     }
 }
 
-extension CheckThumbnailReactor {}
+extension CheckPlaylistCoverlReactor {}
