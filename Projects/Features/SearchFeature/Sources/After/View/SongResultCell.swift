@@ -5,13 +5,25 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
+public protocol SongResultCellDelegate: AnyObject {
+    func tapThumbnail(key: String)
+}
+
 final class SongResultCell: UICollectionViewCell {
+    
+    public weak var  delegate: SongResultCellDelegate?
+    
+    private var model: SongEntity?
+    
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
     }
+    
+    private let thumnailButton: UIButton = UIButton()
 
+    
     private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
@@ -49,6 +61,7 @@ final class SongResultCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubview()
         setLayout()
+        addEvent()
     }
 
     @available(*, unavailable)
@@ -59,7 +72,7 @@ final class SongResultCell: UICollectionViewCell {
 
 extension SongResultCell {
     private func addSubview() {
-        self.contentView.addSubviews(thumbnailView, titleLabel, artistLabel, dateLabel)
+        self.contentView.addSubviews(thumbnailView,thumnailButton, titleLabel, artistLabel, dateLabel)
     }
 
     private func setLayout() {
@@ -68,6 +81,13 @@ extension SongResultCell {
             $0.height.equalTo(40)
             $0.top.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(20)
+        }
+        
+        thumnailButton.snp.makeConstraints {
+            $0.width.equalTo(72)
+            $0.height.equalTo(40)
+            $0.horizontalEdges.equalTo(thumbnailView.snp.horizontalEdges)
+            $0.leading.equalTo(thumbnailView.snp.leading)
         }
 
         titleLabel.snp.makeConstraints {
@@ -89,8 +109,20 @@ extension SongResultCell {
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
         }
     }
+    
+    public func addEvent() {
+        thumnailButton.addAction { [weak self]  in
+            
+            guard let model = self?.model else {
+                return
+            }
+            
+            self?.delegate?.tapThumbnail(key: model.id)
+        }
+    }
 
     public func update(_ model: SongEntity) {
+        self.model = model
         thumbnailView.kf.setImage(
             with: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderMedium.image,

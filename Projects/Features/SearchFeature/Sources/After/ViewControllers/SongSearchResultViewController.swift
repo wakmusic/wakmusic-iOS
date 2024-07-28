@@ -11,12 +11,14 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import MusicDetailFeatureInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
 
+    private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
 
     private let searchSortOptionComponent: SearchSortOptionComponent
@@ -43,11 +45,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     init(
         _ reactor: SongSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
+        musicDetailFactory: any MusicDetailFactory,
         containSongsFactory: any ContainSongsFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
+        self.musicDetailFactory = musicDetailFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -246,7 +250,11 @@ extension SongSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
-        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
+        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { [weak self] cell, _, item in
+            
+            guard let self  else { return }
+            
+            cell.delegate = self
             cell.update(item)
         }
 
@@ -296,6 +304,15 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
         if reactor?.currentState.sortType != type {
             reactor?.action.onNext(.changeSortType(type))
         }
+    }
+}
+
+extension SongSearchResultViewController: SongResultCellDelegate {
+    func tapThumbnail(key: String) {
+        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
+        vc.modalPresentationStyle = .fullScreen
+        
+        self.present(vc, animated: true)
     }
 }
 
