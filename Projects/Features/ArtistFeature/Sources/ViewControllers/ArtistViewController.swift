@@ -1,3 +1,4 @@
+import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
 import LogManager
@@ -19,7 +20,7 @@ public final class ArtistViewController:
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
-    var artistDetailComponent: ArtistDetailComponent!
+    var artistDetailFactory: ArtistDetailFactory!
     public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
@@ -57,7 +58,7 @@ public final class ArtistViewController:
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
                 LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                let viewController = owner.artistDetailComponent.makeView(model: entity)
+                let viewController = owner.artistDetailFactory.makeView(model: entity)
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
@@ -86,11 +87,11 @@ public final class ArtistViewController:
 
     public static func viewController(
         reactor: ArtistReactor,
-        artistDetailComponent: ArtistDetailComponent
+        artistDetailFactory: ArtistDetailFactory
     ) -> ArtistViewController {
         let viewController = ArtistViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
         viewController.reactor = reactor
-        viewController.artistDetailComponent = artistDetailComponent
+        viewController.artistDetailFactory = artistDetailFactory
         return viewController
     }
 }

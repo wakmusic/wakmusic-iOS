@@ -1,8 +1,10 @@
 import ArtistDomainInterface
+import ArtistFeatureInterface
 import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
 import SignInFeatureInterface
+import UIKit
 
 public protocol ArtistDetailDependency: Dependency {
     var artistMusicComponent: ArtistMusicComponent { get }
@@ -12,8 +14,8 @@ public protocol ArtistDetailDependency: Dependency {
     var signInFactory: any SignInFactory { get }
 }
 
-public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
-    public func makeView(model: ArtistListEntity) -> ArtistDetailViewController {
+public final class ArtistDetailComponent: Component<ArtistDetailDependency>, ArtistDetailFactory {
+    public func makeView(model: ArtistListEntity) -> UIViewController {
         return ArtistDetailViewController.viewController(
             viewModel: .init(
                 model: model,

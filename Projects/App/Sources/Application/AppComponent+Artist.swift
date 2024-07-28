@@ -1,18 +1,11 @@
-//
-//  AppComponent+Artist.swift
-//  WaktaverseMusic
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomain
 import ArtistDomainInterface
 import ArtistFeature
+import ArtistFeatureInterface
 
 public extension AppComponent {
     // MARK: Artist
-    var artistComponent: ArtistComponent {
+    var artistFactory: any ArtistFactory {
         ArtistComponent(parent: self)
     }
 
@@ -35,7 +28,7 @@ public extension AppComponent {
     }
 
     // MARK: Artist Detail
-    var artistDetailComponent: ArtistDetailComponent {
+    var artistDetailFactory: any ArtistDetailFactory {
         ArtistDetailComponent(parent: self)
     }
 
