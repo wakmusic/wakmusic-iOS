@@ -628,14 +628,12 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 
 extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
-        
         guard let reactor = reactor else {
             return
         }
-        
+
         let state = reactor.currentState
-        
-        
+
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
             let vc = defaultPlaylistCoverFactory.makeView(self)
@@ -653,7 +651,10 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
             }
 
             if user.itemCount < cost {
-                showToast(text: "음표열매가 부족합니다.", options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart])
+                showToast(
+                    text: "음표열매가 부족합니다.",
+                    options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
             } else {
                 requestPhotoLibraryPermission()
             }

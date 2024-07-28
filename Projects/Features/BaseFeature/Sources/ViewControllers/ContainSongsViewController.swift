@@ -163,7 +163,7 @@ extension ContainSongsViewController {
 
         output.showCreationPopup
             .bind(with: self) { owner, _ in
-               let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+                let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
                     type: .creation,
                     key: "",
                     completion: { text in
