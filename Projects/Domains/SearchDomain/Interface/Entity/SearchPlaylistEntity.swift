@@ -21,7 +21,7 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
         self.date = date
         self.count = count
         self.shareCount = shareCount
-        
+
         self.isPrivate = isPrivate
     }
 

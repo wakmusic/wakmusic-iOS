@@ -255,13 +255,16 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$shareLink)
             .bind(with: self) { owner, link in
                 guard let link = link else { return }
-                
-                let activityViewController = UIActivityViewController(activityItems: [link], applicationActivities: [PlaylistActivity()])
-                
+
+                let activityViewController = UIActivityViewController(
+                    activityItems: [link],
+                    applicationActivities: [PlaylistActivity()]
+                )
+
                 owner.present(activityViewController, animated: true)
             }
 
@@ -569,7 +572,7 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
         case .share:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
             reactor?.action.onNext(.shareButtonDidTap)
-            
+
             break
         }
 

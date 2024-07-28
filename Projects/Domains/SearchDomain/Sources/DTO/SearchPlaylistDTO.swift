@@ -27,13 +27,13 @@ public struct SearchPlaylistDTO: Decodable {
         let handle: String
         let name: String
     }
-    
+
     public let key, title, imageUrl: String
     public let user: User
     public let `private`: Bool
     public let songCount, shareCount: Int
     public let createdAt: Double
-    
+
     enum CodingKeys: String, CodingKey {
         case shareCount = "subscribeCount"
         case key = "key"
@@ -43,9 +43,7 @@ public struct SearchPlaylistDTO: Decodable {
         case `private` = "private"
         case songCount = "songCount"
         case createdAt = "createdAt"
-        
     }
-    
 }
 
 public extension SearchPlaylistDTO {

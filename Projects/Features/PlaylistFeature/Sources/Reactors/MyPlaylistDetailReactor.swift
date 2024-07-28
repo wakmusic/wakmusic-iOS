@@ -167,7 +167,7 @@ final class MyPlaylistDetailReactor: Reactor {
             newState.toastMessage = message
         case let .updateImageData(imageData):
             newState.imageData = imageData
-        
+
         case let .showShareLink(link):
             newState.shareLink = link
         }
