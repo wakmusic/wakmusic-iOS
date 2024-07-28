@@ -1,9 +1,8 @@
 import Foundation
-import PriceDomainInterface
 import PriceDomain
+import PriceDomainInterface
 
 extension AppComponent {
-
     var remotePriceDataSource: any RemotePriceDataSource {
         shared {
             RemotePriceDataSourceImpl(keychain: keychain)
@@ -15,19 +14,16 @@ extension AppComponent {
             PriceRepositoryImpl(remotePriceDataSource: remotePriceDataSource)
         }
     }
-    
+
     var fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase {
         shared {
             FetchPlaylistCreationPriceUsecaseImpl(priceRepository: priceRepository)
         }
     }
-    
+
     var fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase {
         shared {
             FetchPlaylistImagePriceUsecaseImpl(priceRepository: priceRepository)
         }
     }
-
-
-    
 }
