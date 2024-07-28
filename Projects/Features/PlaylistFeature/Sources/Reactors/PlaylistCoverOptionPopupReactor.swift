@@ -1,18 +1,18 @@
 import PriceDomainInterface
 import ReactorKit
 
-final class ThumbnailPopupReactor: Reactor {
+final class PlaylistCoverOptionPopupReactor: Reactor {
     enum Action {
         case viewDidLoad
     }
 
     enum Mutation {
-        case updateDataSource([ThumbnailOptionModel])
+        case updateDataSource([PlaylistCoverOptionModel])
         case updateLoadingState(Bool)
     }
 
     struct State {
-        var dataSource: [ThumbnailOptionModel]
+        var dataSource: [PlaylistCoverOptionModel]
         var isLoading: Bool
     }
 
@@ -49,7 +49,7 @@ final class ThumbnailPopupReactor: Reactor {
     }
 }
 
-extension ThumbnailPopupReactor {
+extension PlaylistCoverOptionPopupReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
@@ -60,8 +60,8 @@ extension ThumbnailPopupReactor {
                 .flatMap { entity -> Observable<Mutation> in
                     return Observable.just(
                         Mutation.updateDataSource([
-                            ThumbnailOptionModel(title: "이미지 선택", cost: 0),
-                            ThumbnailOptionModel(title: "앨범에서 고르기", cost: entity.price)
+                            PlaylistCoverOptionModel(title: "이미지 선택", cost: 0),
+                            PlaylistCoverOptionModel(title: "앨범에서 고르기", cost: entity.price)
                         ])
                     )
                 },

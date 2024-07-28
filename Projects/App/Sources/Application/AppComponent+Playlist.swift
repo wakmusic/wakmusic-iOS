@@ -38,8 +38,8 @@ public extension AppComponent {
         WakmusicPlaylistDetailComponent(parent: self)
     }
 
-    var thumbnailPopupFactory: any ThumbnailPopupFactory {
-        ThumbnailPopupComponent(parent: self)
+    var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory {
+        PlaylistCoverOptionPopupComponent(parent: self)
     }
 
     var checkThumbnailFactory: any CheckThumbnailFactory {

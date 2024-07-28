@@ -32,7 +32,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let textPopUpFactory: any TextPopUpFactory
 
-    private let thumbnailPopupFactory: any ThumbnailPopupFactory
+    private let playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory
 
     private let checkThumbnailFactory: any CheckThumbnailFactory
 
@@ -85,14 +85,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        thumbnailPopupFactory: any ThumbnailPopupFactory,
+        playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkThumbnailFactory: any CheckThumbnailFactory,
         defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
-        self.thumbnailPopupFactory = thumbnailPopupFactory
+        self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
         self.checkThumbnailFactory = checkThumbnailFactory
         self.defaultPlaylistImageFactory = defaultPlaylistImageFactory
 
@@ -235,7 +235,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, _ in
 
                 LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCameraButton)
-                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
+                let vc = owner.playlistCoverOptionPopupFactory.makeView(delegate: owner)
 
                 owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
@@ -624,7 +624,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     }
 }
 
-extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
+extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))

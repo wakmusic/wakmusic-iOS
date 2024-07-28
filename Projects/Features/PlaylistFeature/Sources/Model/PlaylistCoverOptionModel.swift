@@ -1,6 +1,6 @@
 import Foundation
 
-struct ThumbnailOptionModel: Hashable {
+struct PlaylistCoverOptionModel: Hashable {
     var title: String
     var cost: Int
 
