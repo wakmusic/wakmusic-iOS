@@ -150,8 +150,9 @@ public final class IntroViewModel: ViewModelType {
                             .disposed(by: disposeBag)
                     }
                     output.userInfoResult.onNext(.failure(error))
-                })
-                .disposed(by: disposeBag)
+                }
+            )
+            .disposed(by: disposeBag)
 
         return output
     }
