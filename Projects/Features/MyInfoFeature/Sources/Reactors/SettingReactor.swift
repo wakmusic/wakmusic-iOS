@@ -165,17 +165,18 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        logoutUseCase.execute()
-            .subscribe(with: self, onCompleted: { owner in
-                owner.action.onNext(.updateIsHiddenLogoutButton(true))
-                owner.action.onNext(.updateIsHiddenWithDrawButton(true))
-                owner.action.onNext(.showToast("로그아웃 되었습니다."))
-            }, onError: { owner, error in
+        return logoutUseCase.execute()
+            .andThen(
+                .concat(
+                    .just(.updateIsHiddenLogoutButton(true)),
+                    .just(.updateIsHiddenWithDrawButton(true)),
+                    .just(.showToast("로그아웃 되었습니다."))
+                )
+            )
+            .catch { error in
                 let description = error.asWMError.errorDescription ?? ""
-                owner.action.onNext(.showToast(description))
-            })
-            .disposed(by: disposeBag)
-        return .empty()
+                return Observable.just(Mutation.showToast(description))
+            }
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
@@ -186,25 +187,21 @@ private extension SettingReactor {
     }
 
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {
-        // TODO: 회원탈퇴 처리
         return withDrawUserInfoUseCase.execute()
+            .andThen(
+                .concat(
+                    handleThirdPartyWithDraw(),
+                    clearUserInfo()
+                )
+            )
             .catch { error in
-                let baseEntity = BaseEntity(status: 0, description: error.asWMError.errorDescription ?? "")
-                return Single<BaseEntity>.just(baseEntity)
+                let baseEntity = BaseEntity(
+                    status: 0,
+                    description: error.asWMError.errorDescription ?? ""
+                )
+                return Observable.just(baseEntity)
             }
-            .asObservable()
-            .flatMap { [naverLoginInstance, logoutUseCase] entity in
-                let platform = Utility.PreferenceManager.userInfo?.platform
-                if platform == "naver" {
-                    naverLoginInstance?.requestDeleteToken()
-                }
-                return logoutUseCase.execute()
-                    .andThen(Single.just(entity))
-                    .map { entity in
-                        return Mutation.withDrawResult(entity)
-                    }
-                    .asObservable()
-            }
+            .map { Mutation.withDrawResult($0) }
     }
 
     func appPushSettingNavigationDidTap() -> Observable<Mutation> {
@@ -224,8 +221,11 @@ private extension SettingReactor {
     }
 
     func removeCacheButtonDidTap() -> Observable<Mutation> {
-        let cacheSize = calculateCacheSize()
-        return .just(.removeCacheButtonDidTap(cacheSize: cacheSize))
+        calculateCacheSize()
+            .asObservable()
+            .map { cacheSize in
+                Mutation.removeCacheButtonDidTap(cacheSize: cacheSize)
+            }
     }
 
     func confirmRemoveCacheButtonDidTap() -> Observable<Mutation> {
@@ -234,18 +234,24 @@ private extension SettingReactor {
         return .just(.confirmRemoveCacheButtonDidTap)
     }
 
-    func calculateCacheSize() -> String {
-        var str = ""
-        ImageCache.default.calculateDiskStorageSize { result in
-            switch result {
-            case let .success(size):
-                let sizeString = ByteCountFormatter.string(fromByteCount: Int64(size), countStyle: .file)
-                str = sizeString
-            case let .failure(error):
-                str = ""
+    func calculateCacheSize() -> Single<String> {
+        return Single.create { single in
+            ImageCache.default.calculateDiskStorageSize { result in
+                switch result {
+                case let .success(size):
+                    let formatter = ByteCountFormatter()
+                    formatter.allowedUnits = .useAll
+                    formatter.countStyle = .decimal
+
+                    let sizeString = formatter.string(fromByteCount: Int64(size))
+                    single(.success(sizeString))
+                case let .failure(error):
+                    let description = error.asWMError.errorDescription ?? ""
+                    single(.success(description))
+                }
             }
+            return Disposables.create()
         }
-        return str
     }
 
     func versionInfoButtonDidTap() -> Observable<Mutation> {
@@ -254,5 +260,27 @@ private extension SettingReactor {
 
     func showToast(message: String) -> Observable<Mutation> {
         return .just(.showToast(message))
+    }
+}
+
+private extension SettingReactor {
+    func handleThirdPartyWithDraw() -> Observable<BaseEntity> {
+        let platform = Utility.PreferenceManager.userInfo?.platform
+        if platform == "naver" {
+            naverLoginInstance?.requestDeleteToken()
+        }
+        return .empty()
+    }
+
+    func clearUserInfo() -> Observable<BaseEntity> {
+        PreferenceManager.clearUserInfo()
+        return Observable.create { observable in
+            observable.onNext(BaseEntity(
+                status: 200,
+                description: ""
+            ))
+            observable.onCompleted()
+            return Disposables.create {}
+        }
     }
 }

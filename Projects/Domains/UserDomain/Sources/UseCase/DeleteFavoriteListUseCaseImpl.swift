@@ -1,11 +1,3 @@
-//
-//  DeleteLikeListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/04/03.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import Foundation
 import RxSwift
@@ -20,7 +12,7 @@ public struct DeleteFavoriteListUseCaseImpl: DeleteFavoriteListUseCase {
         self.userRepository = userRepository
     }
 
-    public func execute(ids: [String]) -> Single<BaseEntity> {
+    public func execute(ids: [String]) -> Completable {
         userRepository.deleteFavoriteList(ids: ids)
     }
 }

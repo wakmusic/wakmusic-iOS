@@ -1,11 +1,3 @@
-//
-//  FetchArtistListUseCaseImpl.swift
-//  DataModule
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import Foundation
 import RxSwift
@@ -20,7 +12,7 @@ public struct SetProfileUseCaseImpl: SetProfileUseCase {
         self.userRepository = userRepository
     }
 
-    public func execute(image: String) -> Single<BaseEntity> {
+    public func execute(image: String) -> Completable {
         userRepository.setProfile(image: image)
     }
 }
