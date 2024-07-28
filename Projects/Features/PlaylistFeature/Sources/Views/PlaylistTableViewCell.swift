@@ -21,7 +21,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-    
+
     internal lazy var thumbnailButton = UIButton()
 
     internal lazy var titleArtistStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
@@ -97,7 +97,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.width.equalTo(width)
             $0.height.equalTo(height)
         }
-        
+
         thumbnailButton.snp.makeConstraints {
             $0.centerY.equalTo(thumbnailImageView)
             $0.left.equalTo(thumbnailButton)
@@ -146,22 +146,20 @@ extension PlaylistTableViewCell {
         self.updateButtonHidden(isEditing: isEditing)
         self.updateConstraintPlayImageView(isEditing: isEditing)
     }
-    
+
     func bindAction() {
         thumbnailButton.addAction { [weak self] in
-            
+
             guard let song = self?.model.model else {
                 return
             }
-            
+
             self?.delegate?.thumbnailDidTap(key: song.id)
         }
-        
+
         superButton.addAction { [weak self] in
             self?.delegate?.superButtonTapped(index: self?.model.index ?? 0)
         }
-        
-     
     }
 
     private func updateButtonHidden(isEditing: Bool) {

@@ -1,10 +1,10 @@
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
+import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
-import MusicDetailFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
@@ -44,7 +44,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
             textPopUpFactory: dependency.textPopUpFactory,
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
             checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
-            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory, 
+            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory,
             musicDetailFactory: dependency.musicDetailFactory
         )
     }

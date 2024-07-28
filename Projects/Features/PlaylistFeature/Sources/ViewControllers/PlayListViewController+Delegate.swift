@@ -78,7 +78,7 @@ extension PlaylistViewController: PlaylistTableViewCellDelegate {
         #warning("백튼님 여기 나중에 musicDetail 연결하시면됩니다.")
         //
     }
-    
+
     func superButtonTapped(index: Int) {
         tappedCellIndex.onNext(index)
     }

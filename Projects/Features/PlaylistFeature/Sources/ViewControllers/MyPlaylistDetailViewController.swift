@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import PhotosUI
 import PlaylistFeatureInterface
 import ReactorKit
@@ -11,7 +12,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import MusicDetailFeatureInterface
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
@@ -36,7 +36,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let checkPlaylistCoverFactory: any CheckPlaylistCoverFactory
 
     private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
-    
+
     private let musicDetailFactory: any MusicDetailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -89,7 +89,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
         defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory,
-        musicDetailFactory: any  MusicDetailFactory
+        musicDetailFactory: any MusicDetailFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
@@ -112,8 +112,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
-
-
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -462,7 +460,6 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-
 }
 
 /// 전체재생 , 랜덤 재생 델리게이트
@@ -496,7 +493,7 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
 
         self.present(vc, animated: true)
     }
-    
+
     func superButtonTapped(index: Int) {
         tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
         reactor?.action.onNext(.itemDidTap(index))
@@ -578,7 +575,6 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
         case .share:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
             reactor?.action.onNext(.shareButtonDidTap)
-
         }
 
         self.hideplaylistEditSheet()
