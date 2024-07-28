@@ -17,6 +17,7 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
+        case completedFruitDraw(Int)
         case changedUserInfo(UserInfo?)
         case changedReadNoticeIDs([Int])
         case requiredLogin
@@ -30,6 +31,7 @@ final class MyInfoReactor: Reactor {
         case updateProfileImage(String)
         case updateNickname(String)
         case updatePlatform(String)
+        case updateFruitCount(Int)
         case updateIsAllNoticesRead(Bool)
     }
 
@@ -49,6 +51,7 @@ final class MyInfoReactor: Reactor {
         var profileImage: String
         var nickname: String
         var platform: String
+        var fruitCount: Int
         var isAllNoticesRead: Bool
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var profileImageDidTap: Bool?
@@ -67,7 +70,8 @@ final class MyInfoReactor: Reactor {
             isLoggedIn: false,
             profileImage: "",
             nickname: "",
-            platform: "",
+            platform: "", 
+            fruitCount: 0,
             isAllNoticesRead: false
         )
         observeUserInfoChanges()
@@ -99,12 +103,15 @@ final class MyInfoReactor: Reactor {
                 updateIsLoggedIn(userInfo),
                 updateProfileImage(userInfo),
                 updateNickname(userInfo),
-                updatePlatform(userInfo)
+                updatePlatform(userInfo),
+                updateFruitCount(userInfo)
             )
         case let .changedReadNoticeIDs(readIDs):
             return updateIsAllNoticesRead(readIDs)
         case .requiredLogin:
             return navigateLogin()
+        case let .completedFruitDraw(count):
+            return .just(.updateFruitCount(count))
         }
     }
 
@@ -134,6 +141,9 @@ final class MyInfoReactor: Reactor {
 
         case let .updateIsAllNoticesRead(isAllNoticesRead):
             newState.isAllNoticesRead = isAllNoticesRead
+        
+        case let .updateFruitCount(count):
+            newState.fruitCount = count
         }
         return newState
     }
@@ -186,6 +196,11 @@ private extension MyInfoReactor {
     func updatePlatform(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let platform = userInfo?.platform else { return .empty() }
         return .just(.updatePlatform(platform))
+    }
+    
+    func updateFruitCount(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        guard let count = userInfo?.itemCount else { return .empty() }
+        return .just(.updateFruitCount(count))
     }
 
     func loginButtonDidTap() -> Observable<Mutation> {

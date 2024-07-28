@@ -113,6 +113,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.profileView.updatePlatform(platform: platform)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map(\.fruitCount)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, count in
+                owner.myInfoView.updateFruitCount(count: count)
+            }
+            .disposed(by: disposeBag)
 
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
@@ -275,7 +282,6 @@ extension MyInfoViewController: EqualHandleTappedType {
 
 extension MyInfoViewController: FruitDrawViewControllerDelegate {
     func completedFruitDraw(itemCount: Int) {
-        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
-        LogManager.printDebug("itemCount: \(itemCount)")
+        reactor?.action.onNext(.completedFruitDraw(itemCount))
     }
 }

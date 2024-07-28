@@ -10,6 +10,7 @@ import Utility
 
 private protocol MyInfoStateProtocol {
     func updateIsHiddenLoginWarningView(isLoggedIn: Bool)
+    func updateFruitCount(count: Int)
 }
 
 private protocol MyInfoActionProtocol {
@@ -35,7 +36,7 @@ final class MyInfoView: UIView {
         $0.isHidden = true
     }
 
-    let drawButtonView = DrawButtonView()
+    let fruitDrawButtonView = FruitDrawButtonView()
 
     let vStackView = UIStackView().then {
         $0.axis = .vertical
@@ -103,7 +104,7 @@ private extension MyInfoView {
         contentView.addSubviews(
             loginWarningView,
             profileView,
-            drawButtonView,
+            fruitDrawButtonView,
             vStackView,
             newNotiIndicator
         )
@@ -147,7 +148,7 @@ private extension MyInfoView {
             $0.height.equalTo(162)
         }
 
-        drawButtonView.snp.makeConstraints {
+        fruitDrawButtonView.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(52)
             $0.top.equalTo(loginWarningView.snp.bottom).offset(52)
@@ -156,7 +157,7 @@ private extension MyInfoView {
         vStackView.snp.makeConstraints {
             $0.height.equalTo(200)
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.top.equalTo(drawButtonView.snp.bottom).offset(16)
+            $0.top.equalTo(fruitDrawButtonView.snp.bottom).offset(16)
             $0.bottom.equalToSuperview()
         }
 
@@ -186,6 +187,10 @@ extension MyInfoView: MyInfoStateProtocol {
             loginWarningView.isHidden = false
         }
     }
+    
+    func updateFruitCount(count: Int) {
+        fruitDrawButtonView.updateFruitCount(count: count)
+    }
 }
 
 extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
@@ -198,7 +203,7 @@ extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
 
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
-    var drawButtonDidTap: Observable<Void> { base.drawButtonView.rx.drawButtonDidTap }
+    var drawButtonDidTap: Observable<Void> { base.fruitDrawButtonView.rx.drawButtonDidTap }
     var fruitNavigationButtonDidTap: Observable<Void> { base.fruitNavigationButton.rx.tap.asObservable() }
     var qnaNavigationButtonDidTap: Observable<Void> { base.qnaNavigationButton.rx.tap.asObservable() }
     var notiNavigationButtonDidTap: Observable<Void> { base.notiNavigationButton.rx.tap.asObservable() }
