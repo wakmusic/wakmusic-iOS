@@ -15,6 +15,7 @@ private protocol SettingStateProtocol {
 
 private protocol SettingActionProtocol {
     var dismissButtonDidTap: Observable<Void> { get }
+    var withDrawButtonDidTap: Observable<Void> { get }
 }
 
 final class SettingView: UIView {
@@ -119,5 +120,6 @@ extension SettingView: SettingStateProtocol {
 }
 
 extension Reactive: SettingActionProtocol where Base: SettingView {
+    var withDrawButtonDidTap: Observable<Void> { base.withDrawLabel.rx.didTap }
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
 }

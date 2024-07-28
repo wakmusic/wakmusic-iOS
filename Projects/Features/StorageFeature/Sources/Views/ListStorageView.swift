@@ -138,6 +138,7 @@ final class ListStorageView: UIView {
 
 extension ListStorageView: ListStorageStateProtocol {
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
+        if tableView.frame.size == .zero { return }
         let isLoggedIn = loginWarningView.isHidden
 
         let warningView = WMWarningView(

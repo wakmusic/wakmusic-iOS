@@ -343,11 +343,11 @@ extension LikeStorageReactor {
 private extension LikeStorageReactor {
     func mutateDeleteSongsUseCase(_ ids: [String]) -> Observable<Mutation> {
         deleteFavoriteListUseCase.execute(ids: ids)
-            .asObservable()
-            .withUnretained(self)
-            .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.fetchDataSource()
-            }
+            .andThen(
+                .concat(
+                    fetchDataSource()
+                )
+            )
             .catch { error in
                 let error = error.asWMError
                 return .concat(
@@ -361,12 +361,11 @@ private extension LikeStorageReactor {
         let currentDataSource = currentState.dataSource
         let songsOrder = currentDataSource.flatMap { $0.items.map { $0.song.id } }
         return editFavoriteSongsOrderUseCase.execute(ids: songsOrder)
-            .asObservable()
-            .flatMap { _ -> Observable<Mutation> in
-                return .concat(
-                    .just(.updateBackupDataSource(currentDataSource))
+            .andThen(
+                .concat(
+                    .just(Mutation.updateBackupDataSource(currentDataSource))
                 )
-            }
+            )
             .catch { error in
                 let error = error.asWMError
                 return Observable.concat([

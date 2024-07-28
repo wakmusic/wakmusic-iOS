@@ -1,11 +1,3 @@
-//
-//  WithdrawUserInfoUseCaseImpl.swift
-//  DataModule
-//
-//  Created by yongbeomkwak on 12/8/23.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseDomainInterface
 import Foundation
 import RxSwift
@@ -20,7 +12,7 @@ public struct WithdrawUserInfoUseCaseImpl: WithdrawUserInfoUseCase {
         self.userRepository = userRepository
     }
 
-    public func execute() -> Single<BaseEntity> {
+    public func execute() -> Completable {
         userRepository.withdrawUserInfo()
     }
 }

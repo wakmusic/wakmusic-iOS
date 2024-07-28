@@ -16,11 +16,11 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.fetchUserInfo()
     }
 
-    public func setProfile(image: String) -> Single<BaseEntity> {
+    public func setProfile(image: String) -> Completable {
         remoteUserDataSource.setProfile(image: image)
     }
 
-    public func setUserName(name: String) -> Single<BaseEntity> {
+    public func setUserName(name: String) -> Completable {
         remoteUserDataSource.setUserName(name: name)
     }
 
@@ -32,23 +32,23 @@ public final class UserRepositoryImpl: UserRepository {
         remoteUserDataSource.fetchFavoriteSong()
     }
 
-    public func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity> {
+    public func editFavoriteSongsOrder(ids: [String]) -> Completable {
         remoteUserDataSource.editFavoriteSongsOrder(ids: ids)
     }
 
-    public func editPlaylistOrder(ids: [String]) -> Single<BaseEntity> {
+    public func editPlaylistOrder(ids: [String]) -> Completable {
         remoteUserDataSource.editPlaylistOrder(ids: ids)
     }
 
-    public func deletePlaylist(ids: [String]) -> Single<BaseEntity> {
+    public func deletePlaylist(ids: [String]) -> Completable {
         remoteUserDataSource.deletePlaylist(ids: ids)
     }
 
-    public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {
+    public func deleteFavoriteList(ids: [String]) -> Completable {
         remoteUserDataSource.deleteFavoriteList(ids: ids)
     }
 
-    public func withdrawUserInfo() -> Single<BaseEntity> {
+    public func withdrawUserInfo() -> Completable {
         remoteUserDataSource.withdrawUserInfo()
     }
 
