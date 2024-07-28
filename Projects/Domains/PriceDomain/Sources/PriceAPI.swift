@@ -12,7 +12,7 @@ public enum PriceAPI {
 extension PriceAPI: WMAPI {
     public var domain: WMDomain {
         #warning("추후")
-        return .team
+        return .price
     }
 
     public var urlPath: String {

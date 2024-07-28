@@ -7,6 +7,10 @@ struct PriceResponseDTO: Decodable {
     public init(price: Int) {
         self.price = price
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case price = "data"
+    }
 }
 
 extension PriceResponseDTO {

@@ -80,3 +80,7 @@ public func WMDOMAIN_NOTIFICATION() -> String {
 public func WMDOMAIN_TEAM() -> String {
     return config(key: "WMDOMAIN_TEAM")
 }
+
+public func WMDOMAIN_PRICE() -> String {
+    return config(key: "WMDOMAIN_PRICE")
+}
