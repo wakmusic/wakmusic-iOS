@@ -138,7 +138,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .changeImageData(imageData):
             return updateImageData(imageData: imageData)
         case .shareButtonDidTap:
-            return .just(.showShareLink())
+            return .just(.showShareLink(deepLinkGenerator.generatePlaylistDeepLink(key: key)))
         }
     }
 
