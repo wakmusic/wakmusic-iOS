@@ -84,4 +84,3 @@ public func WMDOMAIN_TEAM() -> String {
 public func WMDOMAIN_PRICE() -> String {
     return config(key: "WMDOMAIN_PRICE")
 }
-
