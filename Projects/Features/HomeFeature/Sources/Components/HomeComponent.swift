@@ -2,13 +2,13 @@ import BaseFeature
 import ChartDomainInterface
 import ChartFeatureInterface
 import Foundation
+import HomeFeatureInterface
 import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit
-import HomeFeatureInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
