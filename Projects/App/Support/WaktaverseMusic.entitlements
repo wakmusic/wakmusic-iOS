@@ -10,6 +10,7 @@
 	<array>
 		<string>applinks:wakmusic.xyz</string>
 		<string>applinks:deeplink.wakmusic.xyz</string>
+		<string>applinks:deeplink.eatcocoa.xyz</string>
 	</array>
 </dict>
 </plist>

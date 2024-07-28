@@ -91,3 +91,7 @@ public func WM_URI_SCHEME() -> String {
 public func WM_UNIVERSALLINK_DOMAIN() -> String {
     return config(key: "WM_UNIVERSALLINK_DOMAIN")
 }
+
+public func WM_UNIVERSALLINK_TEST_DOMAIN() -> String {
+    return config(key: "WM_UNIVERSALLINK_TEST_DOMAIN")
+}
