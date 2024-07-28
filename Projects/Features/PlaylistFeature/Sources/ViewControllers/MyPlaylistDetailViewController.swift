@@ -12,8 +12,6 @@ import Then
 import UIKit
 import Utility
 
-#warning("공유하기")
-
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
     private enum Limit {
@@ -257,6 +255,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$shareLink)
+            .bind(with: self) { owner, link in
+                guard let link = link else { return }
+                
+                let activityViewController = UIActivityViewController(activityItems: [link], applicationActivities: [PlaylistActivity()])
+                
+                owner.present(activityViewController, animated: true)
+            }
 
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
@@ -561,7 +568,8 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
             reactor?.action.onNext(.editButtonDidTap)
         case .share:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
-            #warning("공유 작업")
+            reactor?.action.onNext(.shareButtonDidTap)
+            
             break
         }
 
