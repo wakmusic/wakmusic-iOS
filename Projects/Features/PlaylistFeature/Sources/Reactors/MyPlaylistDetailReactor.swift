@@ -59,6 +59,7 @@ final class MyPlaylistDetailReactor: Reactor {
     private let requestCustomImageURLUseCase: any RequestCustomImageURLUseCase
 
     private let logoutUseCase: any LogoutUseCase
+    private let deepLinkGenerator = DeepLinkGenerator()
 
     init(
         key: String,
@@ -137,7 +138,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .changeImageData(imageData):
             return updateImageData(imageData: imageData)
         case .shareButtonDidTap:
-            return .just(.showShareLink("https://\(WM_UNIVERSALLINK_DOMAIN())/playlist/\(key)"))
+            return .just(.showShareLink())
         }
     }
 

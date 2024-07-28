@@ -257,11 +257,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$shareLink)
+            .compactMap({ $0 })
             .bind(with: self) { owner, link in
-                guard let link = link else { return }
 
                 let activityViewController = UIActivityViewController(
-                    activityItems: [link],
+                    activityItems: [URL(string: link)],
                     applicationActivities: [PlaylistActivity()]
                 )
 
