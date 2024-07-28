@@ -637,19 +637,16 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
             LogManager.analytics(
                 PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
-            
-            guard let user =  PreferenceManager.userInfo else {
+
+            guard let user = PreferenceManager.userInfo else {
                 return
             }
-            
-            
+
             if user.itemCount < cost {
                 showToast(text: "음표열매가 부족합니다.", options: [.tabBar, .songCart])
             } else {
                 requestPhotoLibraryPermission()
             }
-            
-           
         }
     }
 }

@@ -66,7 +66,11 @@ final class CheckPlaylistCoverViewController: BaseReactorViewController<CheckPla
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(reactor: CheckPlaylistCoverlReactor, textPopUpFactory: any TextPopUpFactory, delegate: any CheckPlaylistCoverDelegate) {
+    init(
+        reactor: CheckPlaylistCoverlReactor,
+        textPopUpFactory: any TextPopUpFactory,
+        delegate: any CheckPlaylistCoverDelegate
+    ) {
         self.delegate = delegate
         self.textPopUpFactory = textPopUpFactory
 

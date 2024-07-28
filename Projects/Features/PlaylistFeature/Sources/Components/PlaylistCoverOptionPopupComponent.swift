@@ -11,10 +11,14 @@ public protocol PlaylistCoverOptionPopupDependency: Dependency {
     var fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase { get }
 }
 
-public final class PlaylistCoverOptionPopupComponent: Component<PlaylistCoverOptionPopupDependency>, PlaylistCoverOptionPopupFactory {
+public final class PlaylistCoverOptionPopupComponent: Component<PlaylistCoverOptionPopupDependency>,
+    PlaylistCoverOptionPopupFactory {
     public func makeView(delegate: any PlaylistCoverOptionPopupDelegate) -> UIViewController {
         PlaylistCoverOptionPopupViewController(
-            reactor: PlaylistCoverOptionPopupReactor(fetchPlaylistImagePriceUsecase: dependency.fetchPlaylistImagePriceUsecase),
+            reactor: PlaylistCoverOptionPopupReactor(
+                fetchPlaylistImagePriceUsecase: dependency
+                    .fetchPlaylistImagePriceUsecase
+            ),
             delegate: delegate
         )
     }

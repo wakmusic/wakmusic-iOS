@@ -19,7 +19,10 @@ final class PlaylistCoverOptionPopupViewController: BaseReactorViewController<Pl
 
     private let tableView: UITableView = UITableView().then {
         $0.isScrollEnabled = false
-        $0.register(PlaylistCoverOptionTableViewCell.self, forCellReuseIdentifier: PlaylistCoverOptionTableViewCell.identifier)
+        $0.register(
+            PlaylistCoverOptionTableViewCell.self,
+            forCellReuseIdentifier: PlaylistCoverOptionTableViewCell.identifier
+        )
         $0.separatorStyle = .none
         $0.isHidden = true
     }
