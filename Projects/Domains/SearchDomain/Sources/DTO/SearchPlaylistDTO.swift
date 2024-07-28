@@ -9,6 +9,7 @@ public struct SearchPlaylistDTO: Decodable {
         user: User,
         imageUrl: String,
         songCount: Int,
+        shareCount: Int,
         createdAt: Double,
         `private`: Bool
     ) {
@@ -17,6 +18,7 @@ public struct SearchPlaylistDTO: Decodable {
         self.user = user
         self.imageUrl = imageUrl
         self.songCount = songCount
+        self.shareCount = shareCount
         self.createdAt = createdAt
         self.private = `private`
     }
@@ -25,12 +27,25 @@ public struct SearchPlaylistDTO: Decodable {
         let handle: String
         let name: String
     }
-
+    
     public let key, title, imageUrl: String
     public let user: User
     public let `private`: Bool
-    public let songCount: Int
+    public let songCount, shareCount: Int
     public let createdAt: Double
+    
+    enum CodingKeys: String, CodingKey {
+        case shareCount = "subscribeCount"
+        case key = "key"
+        case title = "title"
+        case imageUrl = "imageUrl"
+        case user = "user"
+        case `private` = "private"
+        case songCount = "songCount"
+        case createdAt = "createdAt"
+        
+    }
+    
 }
 
 public extension SearchPlaylistDTO {
@@ -43,6 +58,7 @@ public extension SearchPlaylistDTO {
             image: imageUrl,
             date: (createdAt / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),
             count: songCount,
+            shareCount: shareCount,
             isPrivate: self.`private`
         )
     }
