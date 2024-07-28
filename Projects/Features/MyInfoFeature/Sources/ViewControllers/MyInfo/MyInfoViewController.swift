@@ -145,6 +145,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$dismissEditSheet)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                owner.hideEditSheet()
+            })
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
@@ -291,6 +298,6 @@ extension MyInfoViewController: EqualHandleTappedType {
 
 extension MyInfoViewController: FruitDrawViewControllerDelegate {
     func completedFruitDraw(itemCount: Int) {
-        reactor?.action.onNext(.completedFruitDraw(itemCount))
+        reactor?.action.onNext(.completedFruitDraw)
     }
 }

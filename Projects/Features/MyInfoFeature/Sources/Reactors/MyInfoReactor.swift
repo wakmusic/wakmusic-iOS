@@ -17,7 +17,7 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
-        case completedFruitDraw(Int)
+        case completedFruitDraw
         case changeNicknameButtonDidTap(String)
         case changedUserInfo(UserInfo?)
         case changedReadNoticeIDs([Int])
@@ -35,6 +35,7 @@ final class MyInfoReactor: Reactor {
         case updateFruitCount(Int)
         case updateIsAllNoticesRead(Bool)
         case showToast(String)
+        case dismissEditSheet
     }
 
     enum NavigateType {
@@ -59,19 +60,23 @@ final class MyInfoReactor: Reactor {
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
         @Pulse var showToast: String?
+        @Pulse var dismissEditSheet: Bool?
     }
 
     var initialState: State
     private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     private let setUsernameUseCase: any SetUserNameUseCase
+    private let fetchUserInfoUseCase: any FetchUserInfoUseCase
     private var disposeBag = DisposeBag()
 
     init(
         fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
-        setUserNameUseCase: any SetUserNameUseCase
+        setUserNameUseCase: any SetUserNameUseCase,
+        fetchUserInfoUseCase: any FetchUserInfoUseCase
     ) {
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
         self.setUsernameUseCase = setUserNameUseCase
+        self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
@@ -116,10 +121,10 @@ final class MyInfoReactor: Reactor {
             return updateIsAllNoticesRead(readIDs)
         case .requiredLogin:
             return navigateLogin()
-        case let .completedFruitDraw(count):
-            return .just(.updateFruitCount(count))
+        case .completedFruitDraw:
+            return fetchUserInfo()
         case let .changeNicknameButtonDidTap(newNickname):
-            return .empty()
+            return updateRemoteNickname(newNickname)
         }
     }
 
@@ -154,6 +159,8 @@ final class MyInfoReactor: Reactor {
             newState.fruitCount = count
         case let .showToast(message):
             newState.showToast = message
+        case .dismissEditSheet:
+            newState.dismissEditSheet = true
         }
         return newState
     }
@@ -175,6 +182,26 @@ private extension MyInfoReactor {
                 owner.action.onNext(.changedReadNoticeIDs(readIDs))
             }
             .disposed(by: disposeBag)
+    }
+    
+    func fetchUserInfo() -> Observable<Mutation> {
+        return fetchUserInfoUseCase.execute()
+                .asObservable()
+                .flatMap { entity -> Observable<Mutation> in
+                    PreferenceManager.shared.setUserInfo(
+                        ID: entity.id,
+                        platform: entity.platform,
+                        profile: entity.profile,
+                        name: entity.name,
+                        itemCount: entity.itemCount
+                    )
+                    return .empty()
+                }
+                .catch { error in
+                    let error = error.asWMError
+                    return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                }
+
     }
 
     func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
@@ -200,10 +227,18 @@ private extension MyInfoReactor {
     
     func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
         setUsernameUseCase.execute(name: newNickname)
-            .andThen(.just(.updateNickname(newNickname)))
+            .andThen(
+                .concat(
+                    .just(.updateNickname(newNickname)),
+                    .just(.dismissEditSheet)
+                )
+            )
             .catch { error in
                 let error = error.asWMError
-                return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                return .concat(
+                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")),
+                    .just(.dismissEditSheet)
+                )
             }
     }
     
