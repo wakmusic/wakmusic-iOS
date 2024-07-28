@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
 
-public protocol HomeFactory{
+public protocol HomeFactory {
     func makeView() -> UIViewController
 }

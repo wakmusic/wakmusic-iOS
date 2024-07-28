@@ -6,7 +6,6 @@ import PlaylistDomainInterface
 import PriceDomainInterface
 import UIKit
 import UserDomainInterface
-import PriceDomainInterface
 
 public protocol ContainSongsDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }

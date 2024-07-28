@@ -9,7 +9,6 @@ import PlaylistDomainInterface
 import PlaylistFeatureInterface
 import SongsDomainInterface
 import UIKit
-import HomeFeatureInterface
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
