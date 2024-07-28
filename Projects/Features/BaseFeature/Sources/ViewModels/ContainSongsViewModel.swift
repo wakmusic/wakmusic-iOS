@@ -4,6 +4,7 @@ import ErrorModule
 import Foundation
 import Localization
 import PlaylistDomainInterface
+import PriceDomainInterface
 import RxRelay
 import RxSwift
 import UserDomainInterface
@@ -14,21 +15,28 @@ public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
     private let createPlaylistUseCase: any CreatePlaylistUseCase
+    private let fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
     let limit: Int = 50
 
     public struct Input {
+        let viewDidLoad: PublishSubject<Void> = PublishSubject<Void>()
         let newPlayListTap: PublishSubject<Void> = PublishSubject()
         let playListLoad: BehaviorRelay<Void> = BehaviorRelay(value: ())
         let itemDidTap: PublishSubject<PlaylistEntity> = PublishSubject()
         let createPlaylist: PublishSubject<String> = PublishSubject()
+        let creationButtonDidTap: PublishSubject<Void> = PublishSubject()
+        let payButtonDidTap: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         let dataSource: BehaviorRelay<[PlaylistEntity]> = BehaviorRelay(value: [])
         let showToastMessage: PublishSubject<BaseEntity> = PublishSubject()
+        let creationPrice: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 2)
+        let showPricePopup: PublishSubject<Void> = PublishSubject()
+        let showCreationPopup: PublishSubject<Void> = PublishSubject()
         let onLogout: PublishRelay<Error>
 
         init(onLogout: PublishRelay<Error>) {
@@ -41,11 +49,13 @@ public final class ContainSongsViewModel: ViewModelType {
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
+        fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase,
         logoutUseCase: LogoutUseCase
     ) {
         self.createPlaylistUseCase = createPlaylistUseCase
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.addSongIntoPlaylistUseCase = addSongIntoPlaylistUseCase
+        self.fetchPlaylistCreationPriceUsecase = fetchPlaylistCreationPriceUsecase
         self.logoutUseCase = logoutUseCase
         self.songs = songs
     }
@@ -54,6 +64,18 @@ public final class ContainSongsViewModel: ViewModelType {
         let logoutRelay = PublishRelay<Error>()
 
         let output = Output(onLogout: logoutRelay)
+
+        input.viewDidLoad
+            .withUnretained(self)
+            .flatMap { owner, _ -> Observable<Int> in
+
+                owner.fetchPlaylistCreationPriceUsecase
+                    .execute()
+                    .asObservable()
+                    .map(\.price)
+            }
+            .bind(to: output.creationPrice)
+            .disposed(by: disposeBag)
 
         input.playListLoad
             .flatMap { [weak self] () -> Observable<[PlaylistEntity]> in
@@ -151,6 +173,14 @@ public final class ContainSongsViewModel: ViewModelType {
                 }
             }
             .bind(to: output.showToastMessage)
+            .disposed(by: disposeBag)
+
+        input.creationButtonDidTap
+            .bind(to: output.showPricePopup)
+            .disposed(by: disposeBag)
+
+        input.payButtonDidTap
+            .bind(to: output.showCreationPopup)
             .disposed(by: disposeBag)
 
         input.createPlaylist

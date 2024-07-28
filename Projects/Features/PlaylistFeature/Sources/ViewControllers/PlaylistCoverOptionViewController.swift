@@ -7,8 +7,8 @@ import Then
 import UIKit
 import Utility
 
-final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPopupReactor> {
-    weak var delegate: ThumbnailPopupDelegate?
+final class PlaylistCoverOptionPopupViewController: BaseReactorViewController<PlaylistCoverOptionPopupReactor> {
+    weak var delegate: PlaylistCoverOptionPopupDelegate?
 
     private let titleLabel: WMLabel = WMLabel(
         text: "표지",
@@ -19,13 +19,17 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
 
     private let tableView: UITableView = UITableView().then {
         $0.isScrollEnabled = false
-        $0.register(ThumbnailOptionTableViewCell.self, forCellReuseIdentifier: ThumbnailOptionTableViewCell.identifier)
+        $0.register(
+            PlaylistCoverOptionTableViewCell.self,
+            forCellReuseIdentifier: PlaylistCoverOptionTableViewCell.identifier
+        )
         $0.separatorStyle = .none
+        $0.isHidden = true
     }
 
-    private lazy var dataSource: UITableViewDiffableDataSource<Int, ThumbnailOptionModel> = createDataSoruce()
+    private lazy var dataSource: UITableViewDiffableDataSource<Int, PlaylistCoverOptionModel> = createDataSoruce()
 
-    init(reactor: ThumbnailPopupReactor, delegate: ThumbnailPopupDelegate) {
+    init(reactor: PlaylistCoverOptionPopupReactor, delegate: PlaylistCoverOptionPopupDelegate) {
         self.delegate = delegate
         super.init(reactor: reactor)
     }
@@ -58,19 +62,32 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
         }
     }
 
-    override func bindAction(reactor: ThumbnailPopupReactor) {
+    override func bindAction(reactor: PlaylistCoverOptionPopupReactor) {
         super.bindAction(reactor: reactor)
     }
 
-    override func bindState(reactor: ThumbnailPopupReactor) {
+    override func bindState(reactor: PlaylistCoverOptionPopupReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.isLoading)
+            .bind(with: self) { owner, isLoading in
+
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+
+                owner.tableView.isHidden = isLoading
+            }
+            .disposed(by: disposeBag)
+
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
 
-                var snapShot = NSDiffableDataSourceSnapshot<Int, ThumbnailOptionModel>()
+                var snapShot = NSDiffableDataSourceSnapshot<Int, PlaylistCoverOptionModel>()
                 snapShot.appendSections([0])
 
                 snapShot.appendItems(dataSource, toSection: 0)
@@ -81,16 +98,16 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
     }
 }
 
-extension ThumbnailPopupViewController {
-    func createDataSoruce() -> UITableViewDiffableDataSource<Int, ThumbnailOptionModel> {
+extension PlaylistCoverOptionPopupViewController {
+    func createDataSoruce() -> UITableViewDiffableDataSource<Int, PlaylistCoverOptionModel> {
         return UITableViewDiffableDataSource<
             Int,
-            ThumbnailOptionModel
+            PlaylistCoverOptionModel
         >(tableView: tableView) { tableView, indexPath, itemIdentifier in
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: ThumbnailOptionTableViewCell.identifier,
+                withIdentifier: PlaylistCoverOptionTableViewCell.identifier,
                 for: indexPath
-            ) as? ThumbnailOptionTableViewCell else {
+            ) as? PlaylistCoverOptionTableViewCell else {
                 return UITableViewCell()
             }
 
@@ -101,7 +118,7 @@ extension ThumbnailPopupViewController {
     }
 }
 
-extension ThumbnailPopupViewController: UITableViewDelegate {
+extension PlaylistCoverOptionPopupViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80.0
     }

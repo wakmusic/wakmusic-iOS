@@ -38,16 +38,16 @@ public extension AppComponent {
         WakmusicPlaylistDetailComponent(parent: self)
     }
 
-    var thumbnailPopupFactory: any ThumbnailPopupFactory {
-        ThumbnailPopupComponent(parent: self)
+    var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory {
+        PlaylistCoverOptionPopupComponent(parent: self)
     }
 
-    var checkThumbnailFactory: any CheckThumbnailFactory {
-        CheckThumbnailComponent(parent: self)
+    var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory {
+        CheckPlaylistCoverComponent(parent: self)
     }
 
-    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
-        DefaultPlaylistImageComponent(parent: self)
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory {
+        DefaultPlaylistCoverComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {

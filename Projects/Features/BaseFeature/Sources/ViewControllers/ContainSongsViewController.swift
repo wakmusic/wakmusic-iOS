@@ -17,6 +17,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var subTitleLabel: UILabel!
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    var textPopUpFactory: TextPopUpFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -28,11 +29,14 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindRx()
+        inputBind()
+        outputBind()
+        input.viewDidLoad.onNext(())
     }
 
     public static func viewController(
         multiPurposePopUpFactory: MultiPurposePopupFactory,
+        textPopUpFactory: TextPopUpFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
@@ -40,20 +44,40 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
             bundle: Bundle.module
         )
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.textPopUpFactory = textPopUpFactory
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
 extension ContainSongsViewController {
-    private func bindRx() {
+    private func inputBind() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
-        closeButton.rx.tap.subscribe(onNext: { [weak self] _ in
-            self?.dismiss(animated: true)
-        })
-        .disposed(by: disposeBag)
+        closeButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.dismiss(animated: true)
+            }
+            .disposed(by: disposeBag)
 
+        tableView.rx.itemSelected
+            .withLatestFrom(output.dataSource) { ($0, $1) }
+            .do(onNext: { [weak self] indexPath, _ in
+                self?.tableView.deselectRow(at: indexPath, animated: true)
+            })
+            .map { indexPath, model -> PlaylistEntity in
+                return model[indexPath.row]
+            }
+            .bind(to: input.itemDidTap)
+            .disposed(by: disposeBag)
+
+        NotificationCenter.default.rx.notification(.playListRefresh)
+            .map { _ in () }
+            .bind(to: input.playListLoad)
+            .disposed(by: disposeBag)
+    }
+
+    private func outputBind() {
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
@@ -79,17 +103,6 @@ extension ContainSongsViewController {
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
-
-        tableView.rx.itemSelected
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .do(onNext: { [weak self] indexPath, _ in
-                self?.tableView.deselectRow(at: indexPath, animated: true)
-            })
-            .map { indexPath, model -> PlaylistEntity in
-                return model[indexPath.row]
-            }
-            .bind(to: input.itemDidTap)
-            .disposed(by: disposeBag)
 
         output.showToastMessage
             .observe(on: MainScheduler.instance)
@@ -121,9 +134,44 @@ extension ContainSongsViewController {
             }
             .disposed(by: disposeBag)
 
-        NotificationCenter.default.rx.notification(.playListRefresh)
-            .map { _ in () }
-            .bind(to: input.playListLoad)
+        output.showPricePopup
+            .withLatestFrom(PreferenceManager.$userInfo) { $1 }
+            .compactMap { $0 }
+            .withLatestFrom(output.creationPrice) { ($0, $1) }
+            .bind(with: self) { owner, info in
+
+                let (user, price) = (info.0, info.1)
+
+                if user.itemCount < price {
+                    owner.showToast(text: "음표열매가 부족합니다.")
+                    return
+                }
+
+                let text = owner.textPopUpFactory.makeView(
+                    text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: "\(price)개 사용",
+                    cancelButtonText: "취소",
+                    completion: {
+                        owner.input.payButtonDidTap.onNext(())
+                    }, cancelCompletion: nil
+                )
+
+                owner.showBottomSheet(content: text)
+            }
+            .disposed(by: disposeBag)
+
+        output.showCreationPopup
+            .bind(with: self) { owner, _ in
+                let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+                    type: .creation,
+                    key: "",
+                    completion: { text in
+                        owner.input.createPlaylist.onNext(text)
+                    }
+                )
+                owner.showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
+            }
             .disposed(by: disposeBag)
     }
 
@@ -169,16 +217,6 @@ extension ContainSongsViewController: UITableViewDelegate {
 
 extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     public func action() {
-        guard let multiPurposePopVc = multiPurposePopUpFactory.makeView(
-            type: .creation,
-            key: "",
-            completion: { [weak self] text in
-                guard let self else { return }
-                self.input.createPlaylist.onNext(text)
-            }
-        ) as? MultiPurposePopupViewController else {
-            return
-        }
-        showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
+        input.creationButtonDidTap.onNext(())
     }
 }

@@ -3,8 +3,8 @@ import SnapKit
 import Then
 import UIKit
 
-final class ThumbnailOptionTableViewCell: UITableViewCell {
-    static let identifier: String = "ThumbnailOptionTableViewCell"
+final class PlaylistCoverOptionTableViewCell: UITableViewCell {
+    static let identifier: String = "PlaylistCoverOptionTableViewCell"
 
     private let superView: UIView = UIView().then {
         $0.layer.cornerRadius = 12
@@ -106,8 +106,8 @@ final class ThumbnailOptionTableViewCell: UITableViewCell {
     }
 }
 
-extension ThumbnailOptionTableViewCell {
-    public func update(_ model: ThumbnailOptionModel) {
+extension PlaylistCoverOptionTableViewCell {
+    public func update(_ model: PlaylistCoverOptionModel) {
         titleLabel.text = model.title
         costLabel.text = "\(model.cost)"
         productTypeLabel.text = model.cost == .zero ? "무료" : "구매"

@@ -10,8 +10,8 @@ import Then
 import UIKit
 import Utility
 
-final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbnailReactor> {
-    weak var delegate: CheckThumbnailDelegate?
+final class CheckPlaylistCoverViewController: BaseReactorViewController<CheckPlaylistCoverlReactor> {
+    weak var delegate: CheckPlaylistCoverDelegate?
 
     private let textPopUpFactory: any TextPopUpFactory
 
@@ -66,7 +66,11 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         LogManager.printDebug("❌:: \(Self.self) deinit")
     }
 
-    init(reactor: CheckThumbnailReactor, textPopUpFactory: any TextPopUpFactory, delegate: any CheckThumbnailDelegate) {
+    init(
+        reactor: CheckPlaylistCoverlReactor,
+        textPopUpFactory: any TextPopUpFactory,
+        delegate: any CheckPlaylistCoverDelegate
+    ) {
         self.delegate = delegate
         self.textPopUpFactory = textPopUpFactory
 
@@ -146,7 +150,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
         }
     }
 
-    override func bindState(reactor: CheckThumbnailReactor) {
+    override func bindState(reactor: CheckPlaylistCoverlReactor) {
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
@@ -158,7 +162,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: CheckThumbnailReactor) {
+    override func bindAction(reactor: CheckPlaylistCoverlReactor) {
         super.bindAction(reactor: reactor)
 
         backButton.rx
@@ -179,7 +183,7 @@ final class CheckThumbnailViewController: BaseReactorViewController<CheckThumbna
     }
 }
 
-extension CheckThumbnailViewController {
+extension CheckPlaylistCoverViewController {
     func generateGuideView(guideLines: [String]) -> [UIView] {
         var views: [UIView] = []
 
@@ -216,7 +220,7 @@ extension CheckThumbnailViewController {
     }
 }
 
-extension CheckThumbnailViewController: UIGestureRecognizerDelegate {
+extension CheckPlaylistCoverViewController: UIGestureRecognizerDelegate {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }

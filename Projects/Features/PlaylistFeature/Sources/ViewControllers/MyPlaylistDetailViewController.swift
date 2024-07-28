@@ -32,11 +32,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let textPopUpFactory: any TextPopUpFactory
 
-    private let thumbnailPopupFactory: any ThumbnailPopupFactory
+    private let playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory
 
-    private let checkThumbnailFactory: any CheckThumbnailFactory
+    private let checkPlaylistCoverFactory: any CheckPlaylistCoverFactory
 
-    private let defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+    private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -85,16 +85,16 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        thumbnailPopupFactory: any ThumbnailPopupFactory,
-        checkThumbnailFactory: any CheckThumbnailFactory,
-        defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+        playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
+        checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
+        defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
-        self.thumbnailPopupFactory = thumbnailPopupFactory
-        self.checkThumbnailFactory = checkThumbnailFactory
-        self.defaultPlaylistImageFactory = defaultPlaylistImageFactory
+        self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
+        self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
+        self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
 
         super.init(reactor: reactor)
     }
@@ -235,7 +235,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, _ in
 
                 LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCameraButton)
-                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
+                let vc = owner.playlistCoverOptionPopupFactory.makeView(delegate: owner)
 
                 owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
@@ -386,7 +386,7 @@ extension MyPlaylistDetailViewController {
         reactor?.action.onNext(.restore)
     }
 
-    func navigateToCheckThumbnail(imageData: Data) {
+    func navigateToCheckPlaylistCover(imageData: Data) {
         if let navigationController = self.presentedViewController as? UINavigationController {
             if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
                 let textPopupVC = self.textPopUpFactory.makeView(
@@ -402,7 +402,7 @@ extension MyPlaylistDetailViewController {
                 return
             }
             navigationController.pushViewController(
-                self.checkThumbnailFactory.makeView(delegate: self, imageData: imageData),
+                self.checkPlaylistCoverFactory.makeView(delegate: self, imageData: imageData),
                 animated: true
             )
         }
@@ -617,7 +617,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                             if sizeMB > Limit.imageSizeLimitPerMB {
                                 imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                             }
-                            self.navigateToCheckThumbnail(imageData: imageData)
+                            self.navigateToCheckPlaylistCover(imageData: imageData)
                         }
                     }
                 }
@@ -626,11 +626,17 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     }
 }
 
-extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
+extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
+        guard let reactor = reactor else {
+            return
+        }
+
+        let state = reactor.currentState
+
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
-            let vc = defaultPlaylistImageFactory.makeView(self)
+            let vc = defaultPlaylistCoverFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
@@ -639,19 +645,31 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
             LogManager.analytics(
                 PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
-            requestPhotoLibraryPermission()
+
+            guard let user = PreferenceManager.userInfo else {
+                return
+            }
+
+            if user.itemCount < cost {
+                showToast(
+                    text: "음표열매가 부족합니다.",
+                    options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
+            } else {
+                requestPhotoLibraryPermission()
+            }
         }
     }
 }
 
-extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
+extension MyPlaylistDetailViewController: CheckPlaylistCoverDelegate {
     func receive(_ imageData: Data) {
         reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
         headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
-extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
+extension MyPlaylistDetailViewController: DefaultPlaylistCoverDelegate {
     func receive(url: String, imageName: String) {
         reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
         headerView.updateThumbnailByDefault(url)

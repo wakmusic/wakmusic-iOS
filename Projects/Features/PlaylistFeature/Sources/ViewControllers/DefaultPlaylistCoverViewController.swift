@@ -6,8 +6,8 @@ import SnapKit
 import Then
 import UIKit
 
-final class DefaultPlaylistImageViewController: BaseReactorViewController<DefaultPlaylistImageReactor> {
-    weak var delegate: DefaultPlaylistImageDelegate?
+final class DefaultPlaylistCoverViewController: BaseReactorViewController<DefaultPlaylistCoverReactor> {
+    weak var delegate: DefaultPlaylistCoverDelegate?
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("이미지 선택")
@@ -56,7 +56,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         return cell
     }
 
-    init(delegate: DefaultPlaylistImageDelegate? = nil, reactor: DefaultPlaylistImageReactor) {
+    init(delegate: DefaultPlaylistCoverDelegate? = nil, reactor: DefaultPlaylistCoverReactor) {
         self.delegate = delegate
         super.init(reactor: reactor)
     }
@@ -109,7 +109,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
         }
     }
 
-    override func bind(reactor: DefaultPlaylistImageReactor) {
+    override func bind(reactor: DefaultPlaylistCoverReactor) {
         super.bind(reactor: reactor)
 
         collectionView.rx
@@ -117,7 +117,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .disposed(by: disposeBag)
     }
 
-    override func bindAction(reactor: DefaultPlaylistImageReactor) {
+    override func bindAction(reactor: DefaultPlaylistCoverReactor) {
         super.bindAction(reactor: reactor)
 
         let sharedState = reactor.state.share()
@@ -146,7 +146,7 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             .disposed(by: disposeBag)
     }
 
-    override func bindState(reactor: DefaultPlaylistImageReactor) {
+    override func bindState(reactor: DefaultPlaylistCoverReactor) {
         let sharedState = reactor.state.share()
 
         sharedState.map(\.dataSource)
@@ -181,18 +181,10 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
                 }
             }
             .disposed(by: disposeBag)
-
-        sharedState.map(\.selectedIndex)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, index in
-
-                print("Item: \(index)")
-            }
-            .disposed(by: disposeBag)
     }
 }
 
-extension DefaultPlaylistImageViewController {
+extension DefaultPlaylistCoverViewController {
     private func createCollectionView() -> UICollectionView {
         return UICollectionView(frame: .zero, collectionViewLayout: createLayout())
     }
@@ -228,7 +220,7 @@ extension DefaultPlaylistImageViewController {
     }
 }
 
-extension DefaultPlaylistImageViewController: UICollectionViewDelegate {
+extension DefaultPlaylistCoverViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         reactor?.action.onNext(.selectedIndex(indexPath.row))
     }
