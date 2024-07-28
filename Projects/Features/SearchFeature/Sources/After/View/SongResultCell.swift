@@ -6,7 +6,7 @@ import UIKit
 import Utility
 
 public protocol SongResultCellDelegate: AnyObject {
-    func tapThumbnail(key: String)
+    func thumbnailDidTap(key: String)
 }
 
 final class SongResultCell: UICollectionViewCell {
@@ -115,7 +115,7 @@ extension SongResultCell {
                 return
             }
 
-            self?.delegate?.tapThumbnail(key: model.id)
+            self?.delegate?.thumbnailDidTap(key: model.id)
         }
     }
 

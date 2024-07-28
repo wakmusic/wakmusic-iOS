@@ -309,7 +309,7 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 }
 
 extension SongSearchResultViewController: SongResultCellDelegate {
-    func tapThumbnail(key: String) {
+    func thumbnailDidTap(key: String) {
         let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
         vc.modalPresentationStyle = .fullScreen
 

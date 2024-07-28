@@ -4,6 +4,7 @@ import BaseFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import MusicDetailFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
@@ -21,7 +22,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
     var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory { get }
     var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
-
+    var musicDetailFactory: any MusicDetailFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
@@ -43,7 +44,8 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
             textPopUpFactory: dependency.textPopUpFactory,
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
             checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
-            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory
+            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory, 
+            musicDetailFactory: dependency.musicDetailFactory
         )
     }
 }
