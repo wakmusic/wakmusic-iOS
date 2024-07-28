@@ -36,7 +36,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let checkPlaylistCoverFactory: any CheckPlaylistCoverFactory
 
-    private let defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+    private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -87,14 +87,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         textPopUpFactory: any TextPopUpFactory,
         playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
-        defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+        defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
         self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
         self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
-        self.defaultPlaylistImageFactory = defaultPlaylistImageFactory
+        self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
 
         super.init(reactor: reactor)
     }
@@ -628,7 +628,7 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
-            let vc = defaultPlaylistImageFactory.makeView(self)
+            let vc = defaultPlaylistCoverFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
@@ -661,7 +661,7 @@ extension MyPlaylistDetailViewController: CheckPlaylistCoverDelegate {
     }
 }
 
-extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
+extension MyPlaylistDetailViewController: DefaultPlaylistCoverDelegate {
     func receive(url: String, imageName: String) {
         reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
         headerView.updateThumbnailByDefault(url)

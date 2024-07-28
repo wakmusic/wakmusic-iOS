@@ -5,14 +5,14 @@ import NeedleFoundation
 import PlaylistFeatureInterface
 import UIKit
 
-public protocol DefaultPlaylistImageDependency: Dependency {
+public protocol DefaultPlaylistCoverDependency: Dependency {
     var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase { get }
 }
 
-public final class DefaultPlaylistImageComponent: Component<DefaultPlaylistImageDependency>,
-    DefaultPlaylistImageFactory {
-    public func makeView(_ delegate: any DefaultPlaylistImageDelegate) -> UIViewController {
-        DefaultPlaylistImageViewController(delegate: delegate, reactor: DefaultPlaylistImageReactor(
+public final class DefaultPlaylistCoverComponent: Component<DefaultPlaylistCoverDependency>,
+    DefaultPlaylistCoverFactory {
+    public func makeView(_ delegate: any DefaultPlaylistCoverDelegate) -> UIViewController {
+        DefaultPlaylistCoverViewController(delegate: delegate, reactor: DefaultPlaylistCoverReactor(
             fetchDefaultPlaylistImageUseCase: dependency.fetchDefaultPlaylistImageUseCase
 
         ))

@@ -1,9 +1,9 @@
 import UIKit
 
-public protocol DefaultPlaylistImageDelegate: AnyObject {
+public protocol DefaultPlaylistCoverDelegate: AnyObject {
     func receive(url: String, imageName: String)
 }
 
-public protocol DefaultPlaylistImageFactory {
-    func makeView(_ delegate: any DefaultPlaylistImageDelegate) -> UIViewController
+public protocol DefaultPlaylistCoverFactory {
+    func makeView(_ delegate: any DefaultPlaylistCoverDelegate) -> UIViewController
 }

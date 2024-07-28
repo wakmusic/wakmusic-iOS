@@ -5,7 +5,7 @@ import ReactorKit
 import RxSwift
 
 #warning("디폴트 이미지 가져오기")
-final class DefaultPlaylistImageReactor: Reactor {
+final class DefaultPlaylistCoverReactor: Reactor {
     enum Action {
         case viewDidload
         case selectedIndex(Int)
@@ -62,7 +62,7 @@ final class DefaultPlaylistImageReactor: Reactor {
     }
 }
 
-extension DefaultPlaylistImageReactor {
+extension DefaultPlaylistCoverReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),

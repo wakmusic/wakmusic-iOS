@@ -19,7 +19,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory { get }
     var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
-    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory { get }
     var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
@@ -43,7 +43,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
             textPopUpFactory: dependency.textPopUpFactory,
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
             checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
-            defaultPlaylistImageFactory: dependency.defaultPlaylistImageFactory
+            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory
         )
     }
 }

@@ -46,8 +46,8 @@ public extension AppComponent {
         CheckPlaylistCoverComponent(parent: self)
     }
 
-    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
-        DefaultPlaylistImageComponent(parent: self)
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory {
+        DefaultPlaylistCoverComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
