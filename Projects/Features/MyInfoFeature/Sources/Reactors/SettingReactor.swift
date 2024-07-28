@@ -239,8 +239,11 @@ private extension SettingReactor {
             ImageCache.default.calculateDiskStorageSize { result in
                 switch result {
                 case let .success(size):
-                    let mbSize = (Double(size) / 1024 / 1024)
-                    let sizeString = String(format: "%.2f MB", mbSize)
+                    let formatter = ByteCountFormatter()
+                    formatter.allowedUnits = .useAll
+                    formatter.countStyle = .decimal
+
+                    let sizeString = formatter.string(fromByteCount: Int64(size))
                     single(.success(sizeString))
                 case let .failure(error):
                     let description = error.asWMError.errorDescription ?? ""

@@ -121,11 +121,6 @@ private extension ProfilePopViewModel {
                 }
             )
             .catch(handleSetProfileError)
-
-//            .catch { [weak self, output, logoutUseCase] error -> Observable<BaseEntity> in
-//                guard let self else { return Observable.empty() }
-//                return self.handleSetProfileError(error: error, logoutUseCase: logoutUseCase)
-//            }
     }
 
     func handleSetProfileError(error: Error) -> Observable<BaseEntity> {
@@ -140,30 +135,12 @@ private extension ProfilePopViewModel {
                         status: 0,
                         description: error.asWMError.errorDescription ?? ""
                     ))
-
-//                    return Observable<BaseEntity>.create { observable in
-//                        observable.onNext(BaseEntity(
-//                            status: 0,
-//                            description: error.asWMError.errorDescription ?? ""
-//                        ))
-//                        observable.onCompleted()
-//                        return Disposables.create {}
-//                    }
                 }
         } else {
             return Observable.just(BaseEntity(
                 status: 0,
                 description: error.asWMError.errorDescription ?? ""
             ))
-
-//            return Observable<BaseEntity>.create { observable in
-//                observable.onNext(BaseEntity(
-//                    status: 0,
-//                    description: error.asWMError.errorDescription ?? ""
-//                ))
-//                observable.onCompleted()
-//                return Disposables.create {}
-//            }
         }
     }
 
