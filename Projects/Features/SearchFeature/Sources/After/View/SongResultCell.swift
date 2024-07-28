@@ -10,20 +10,18 @@ public protocol SongResultCellDelegate: AnyObject {
 }
 
 final class SongResultCell: UICollectionViewCell {
-    
-    public weak var  delegate: SongResultCellDelegate?
-    
+    public weak var delegate: SongResultCellDelegate?
+
     private var model: SongEntity?
-    
+
     private let thumbnailView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 4
     }
-    
+
     private let thumnailButton: UIButton = UIButton()
 
-    
     private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.NewGrayColor.gray900.color,
@@ -72,7 +70,7 @@ final class SongResultCell: UICollectionViewCell {
 
 extension SongResultCell {
     private func addSubview() {
-        self.contentView.addSubviews(thumbnailView,thumnailButton, titleLabel, artistLabel, dateLabel)
+        self.contentView.addSubviews(thumbnailView, thumnailButton, titleLabel, artistLabel, dateLabel)
     }
 
     private func setLayout() {
@@ -82,7 +80,7 @@ extension SongResultCell {
             $0.top.bottom.equalToSuperview().inset(10)
             $0.leading.equalToSuperview().inset(20)
         }
-        
+
         thumnailButton.snp.makeConstraints {
             $0.width.equalTo(72)
             $0.height.equalTo(40)
@@ -109,14 +107,14 @@ extension SongResultCell {
             $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
         }
     }
-    
+
     public func addEvent() {
-        thumnailButton.addAction { [weak self]  in
-            
+        thumnailButton.addAction { [weak self] in
+
             guard let model = self?.model else {
                 return
             }
-            
+
             self?.delegate?.tapThumbnail(key: model.id)
         }
     }

@@ -1,10 +1,10 @@
 import BaseFeature
 import BaseFeatureInterface
 import Foundation
+import MusicDetailFeatureInterface
 import NeedleFoundation
 import SearchDomainInterface
 import SearchFeatureInterface
-import MusicDetailFeatureInterface
 import UIKit
 
 public protocol SongSearchResultDependency: Dependency {

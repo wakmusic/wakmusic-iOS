@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -11,7 +12,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import MusicDetailFeatureInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
@@ -250,13 +250,14 @@ extension SongSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
-        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { [weak self] cell, _, item in
-            
-            guard let self  else { return }
-            
-            cell.delegate = self
-            cell.update(item)
-        }
+        let cellRegistration = UICollectionView
+            .CellRegistration<SongResultCell, SongEntity> { [weak self] cell, _, item in
+
+                guard let self else { return }
+
+                cell.delegate = self
+                cell.update(item)
+            }
 
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
@@ -311,7 +312,7 @@ extension SongSearchResultViewController: SongResultCellDelegate {
     func tapThumbnail(key: String) {
         let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
         vc.modalPresentationStyle = .fullScreen
-        
+
         self.present(vc, animated: true)
     }
 }

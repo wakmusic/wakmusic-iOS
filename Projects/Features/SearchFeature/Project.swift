@@ -20,7 +20,6 @@ let project = Project.module(
                     .feature(target: .MusicDetailFeature, type: .interface),
                     .domain(target: .SearchDomain, type: .interface),
                     .domain(target: .ChartDomain, type: .interface)
-                    
                 ]
             )
         ),
