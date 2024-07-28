@@ -182,13 +182,6 @@ final class DefaultPlaylistImageViewController: BaseReactorViewController<Defaul
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.selectedIndex)
-            .distinctUntilChanged()
-            .bind(with: self) { owner, index in
-
-                print("Item: \(index)")
-            }
-            .disposed(by: disposeBag)
     }
 }
 

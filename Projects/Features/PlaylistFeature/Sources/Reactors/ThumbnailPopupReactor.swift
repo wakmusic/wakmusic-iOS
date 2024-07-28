@@ -1,24 +1,31 @@
 import ReactorKit
+import PriceDomainInterface
 
 final class ThumbnailPopupReactor: Reactor {
+    
+    
     enum Action {
         case viewDidLoad
     }
 
     enum Mutation {
         case updateDataSource([ThumbnailOptionModel])
+        case updateLoadingState(Bool)
     }
 
     struct State {
         var dataSource: [ThumbnailOptionModel]
+        var isLoading: Bool
     }
 
+    private let fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase
     var initialState: State
 
-    #warning("가격 UseCase")
-    init() {
+    init(fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase) {
+        self.fetchPlaylistImagePriceUsecase = fetchPlaylistImagePriceUsecase
         initialState = State(
-            dataSource: []
+            dataSource: [],
+            isLoading:  true
         )
     }
 
@@ -35,6 +42,9 @@ final class ThumbnailPopupReactor: Reactor {
         switch mutation {
         case let .updateDataSource(dataSource):
             newState.dataSource = dataSource
+            
+        case let .updateLoadingState(flag):
+            newState.isLoading = flag
         }
 
         return newState
@@ -43,9 +53,23 @@ final class ThumbnailPopupReactor: Reactor {
 
 extension ThumbnailPopupReactor {
     func updateDataSource() -> Observable<Mutation> {
-        return .just(.updateDataSource([
-            ThumbnailOptionModel(title: "이미지 선택", cost: 0),
-            ThumbnailOptionModel(title: "앨범에서 고르기", cost: 3)
-        ]))
+        
+        return .concat([
+            .just(.updateLoadingState(true)),
+            
+            fetchPlaylistImagePriceUsecase
+                .execute()
+                .asObservable()
+                .flatMap({ entity  -> Observable<Mutation> in
+                    return Observable.just(
+                        Mutation.updateDataSource([
+                           ThumbnailOptionModel(title: "이미지 선택", cost: 0),
+                           ThumbnailOptionModel(title: "앨범에서 고르기", cost: entity.price)
+                       ])
+                    )
+                }),
+            .just(.updateLoadingState(false))
+        ])
+
     }
 }

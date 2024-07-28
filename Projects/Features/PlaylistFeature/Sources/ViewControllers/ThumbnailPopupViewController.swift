@@ -21,6 +21,7 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
         $0.isScrollEnabled = false
         $0.register(ThumbnailOptionTableViewCell.self, forCellReuseIdentifier: ThumbnailOptionTableViewCell.identifier)
         $0.separatorStyle = .none
+        $0.isHidden = true
     }
 
     private lazy var dataSource: UITableViewDiffableDataSource<Int, ThumbnailOptionModel> = createDataSoruce()
@@ -67,6 +68,21 @@ final class ThumbnailPopupViewController: BaseReactorViewController<ThumbnailPop
 
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.isLoading)
+            .bind(with: self) { owner, isLoading in
+                
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+                
+                owner.tableView.isHidden = isLoading
+                
+               
+            }
+            .disposed(by: disposeBag)
+        
         sharedState.map(\.dataSource)
             .bind(with: self) { owner, dataSource in
 
