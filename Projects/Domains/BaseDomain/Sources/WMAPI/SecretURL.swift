@@ -85,6 +85,3 @@ public func WMDOMAIN_PRICE() -> String {
     return config(key: "WMDOMAIN_PRICE")
 }
 
-public func WM_UNIVERSALLINK_DOMAIN() -> String {
-    return config(key: "WM_UNIVERSALLINK_DOMAIN")
-}
