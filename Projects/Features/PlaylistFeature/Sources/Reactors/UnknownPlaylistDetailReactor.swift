@@ -25,6 +25,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateSelectingStateByIndex([SongEntity])
         case updateSubscribeState(Bool)
         case showToast(String)
+        case updateLoginPopupState(Bool)
     }
 
     struct State {
@@ -34,6 +35,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var isSubscribing: Bool
         @Pulse var toastMessage: String?
+        @Pulse var showLoginPopup: Bool
     }
 
     var initialState: State
@@ -66,9 +68,10 @@ final class UnknownPlaylistDetailReactor: Reactor {
                 songCount: 0
             ),
             dataSource: [],
-            isLoading: false,
+            isLoading: true,
             selectedCount: 0,
-            isSubscribing: false
+            isSubscribing: false,
+            showLoginPopup: false
         )
     }
 
@@ -78,7 +81,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             return updateDataSource()
 
         case .subscriptionButtonDidTap:
-            return askUpdateSubscribeUsecase()
+            return askUpdateSubscribing()
 
         case .selectAll:
             return selectAll()
@@ -108,6 +111,9 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
+
+        case let .updateLoginPopupState(flag):
+            newState.showLoginPopup = flag
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
@@ -147,8 +153,9 @@ private extension UnknownPlaylistDetailReactor {
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
-
-            checkSubscriptionUseCase.execute(key: key)
+            // 로그인 전이면 USECASE 안보냄
+            PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) :
+                checkSubscriptionUseCase.execute(key: key)
                 .asObservable()
                 .flatMap { flag -> Observable<Mutation> in
                     return .just(.updateSubscribeState(flag))
@@ -212,22 +219,26 @@ private extension UnknownPlaylistDetailReactor {
         ])
     }
 
-    func askUpdateSubscribeUsecase() -> Observable<Mutation> {
+    func askUpdateSubscribing() -> Observable<Mutation> {
         let currentState = currentState
 
         let prev = currentState.isSubscribing
 
-        return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
-            .andThen(
-                .concat([
-                    .just(Mutation.updateSubscribeState(!prev)),
-                    .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
-                ])
-            )
-            .catch { error in
-                let wmError = error.asWMError
-                return .just(.showToast(wmError.errorDescription!))
-            }
+        if PreferenceManager.userInfo == nil {
+            return .just(.updateLoginPopupState(true))
+        } else {
+            return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
+                .andThen(
+                    .concat([
+                        .just(Mutation.updateSubscribeState(!prev)),
+                        .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
+                    ])
+                )
+                .catch { error in
+                    let wmError = error.asWMError
+                    return .just(.showToast(wmError.errorDescription!))
+                }
+        }
     }
 
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {

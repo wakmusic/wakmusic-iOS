@@ -7,20 +7,20 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol MyPlaylistDetailDependency: Dependency {
-    #warning("추후 주입")
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
     var updatePlaylistUseCase: any UpdatePlaylistUseCase { get }
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
 
     var logoutUseCase: any LogoutUseCase { get }
 
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
-    var thumbnailPopupFactory: any ThumbnailPopupFactory { get }
-    var checkThumbnailFactory: any CheckThumbnailFactory { get }
-    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory { get }
+    var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory { get }
+    var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory { get }
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
 
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -34,15 +34,16 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 updatePlaylistUseCase: dependency.updatePlaylistUseCase,
                 updateTitleAndPrivateUseCase: dependency.updateTitleAndPrivateUseCase,
                 removeSongsUseCase: dependency.removeSongsUseCase,
-                uploadPlaylistImageUseCase: dependency.uploadPlaylistImageUseCase,
+                uploadDefaultPlaylistImageUseCase: dependency.uploadDefaultPlaylistImageUseCase,
+                requestCustomImageURLUseCase: dependency.requestCustomImageURLUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
             multiPurposePopupFactory: dependency.multiPurposePopUpFactory,
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
-            thumbnailPopupFactory: dependency.thumbnailPopupFactory,
-            checkThumbnailFactory: dependency.checkThumbnailFactory,
-            defaultPlaylistImageFactory: dependency.defaultPlaylistImageFactory
+            playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
+            checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
+            defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory
         )
     }
 }

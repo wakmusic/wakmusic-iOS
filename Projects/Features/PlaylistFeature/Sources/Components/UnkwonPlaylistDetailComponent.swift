@@ -9,8 +9,6 @@ import UIKit
 public protocol UnknownPlaylistDetailDependency: Dependency {
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
 
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase { get }
-
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
 
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase { get }

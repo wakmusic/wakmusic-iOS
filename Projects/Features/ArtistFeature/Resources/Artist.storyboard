@@ -523,6 +523,12 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0md-99-Zae">
+                                <rect key="frame" x="0.0" y="796" width="393" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="icd-GC-lhw"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DKc-qh-4Cf" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
                                 <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
                                 <constraints>
@@ -533,8 +539,10 @@
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="RGe-5H-GnI"/>
                         <constraints>
+                            <constraint firstItem="0md-99-Zae" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="2im-Jl-zJj"/>
                             <constraint firstItem="Qxv-p6-EAI" firstAttribute="trailing" secondItem="RGe-5H-GnI" secondAttribute="trailing" id="34b-CB-Rjc"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="top" secondItem="Qxv-p6-EAI" secondAttribute="bottom" id="JRv-Au-ZWH"/>
+                            <constraint firstAttribute="bottom" secondItem="0md-99-Zae" secondAttribute="bottom" id="NPI-11-Fym"/>
                             <constraint firstItem="DKc-qh-4Cf" firstAttribute="centerY" secondItem="kkC-zN-Leg" secondAttribute="centerY" id="W8J-8G-n0P"/>
                             <constraint firstItem="MPq-Ds-wcF" firstAttribute="leading" secondItem="RGe-5H-GnI" secondAttribute="leading" id="Xon-1C-d7p"/>
                             <constraint firstAttribute="bottom" secondItem="MPq-Ds-wcF" secondAttribute="bottom" id="kbB-VZ-iff"/>
@@ -542,10 +550,12 @@
                             <constraint firstItem="Qxv-p6-EAI" firstAttribute="top" secondItem="RGe-5H-GnI" secondAttribute="top" id="oV7-U6-rkF"/>
                             <constraint firstAttribute="trailing" secondItem="MPq-Ds-wcF" secondAttribute="trailing" id="t7q-ao-ZbT"/>
                             <constraint firstItem="DKc-qh-4Cf" firstAttribute="centerX" secondItem="kkC-zN-Leg" secondAttribute="centerX" id="wUh-ra-SEK"/>
+                            <constraint firstItem="RGe-5H-GnI" firstAttribute="trailing" secondItem="0md-99-Zae" secondAttribute="trailing" id="xzY-X2-t0R"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="activityIndidator" destination="DKc-qh-4Cf" id="uq2-Qu-Xfa"/>
+                        <outlet property="songCartOnView" destination="0md-99-Zae" id="Rpk-qA-g16"/>
                         <outlet property="tableView" destination="MPq-Ds-wcF" id="xt0-Bw-pl3"/>
                     </connections>
                 </viewController>

@@ -38,11 +38,14 @@ public final class ArtistDetailViewModel: ViewModelType {
         let id = model.id
 
         input.fetchArtistSubscriptionStatus
-            .filter { PreferenceManager.userInfo != nil }
             .flatMap { [fetchArtistSubscriptionStatusUseCase] _ -> Observable<ArtistSubscriptionStatusEntity> in
-                fetchArtistSubscriptionStatusUseCase.execute(id: id)
-                    .asObservable()
-                    .catchAndReturn(.init(isSubscription: false))
+                if PreferenceManager.userInfo == nil {
+                    return Observable.just(ArtistSubscriptionStatusEntity(isSubscription: false))
+                } else {
+                    return fetchArtistSubscriptionStatusUseCase.execute(id: id)
+                        .asObservable()
+                        .catchAndReturn(.init(isSubscription: false))
+                }
             }
             .map { $0.isSubscription }
             .bind(to: output.isSubscription)
@@ -62,16 +65,20 @@ public final class ArtistDetailViewModel: ViewModelType {
                 return true
             }
             .withLatestFrom(output.isSubscription)
-            .flatMap { [subscriptionArtistUseCase] status -> Completable in
-                subscriptionArtistUseCase.execute(id: id, on: !status)
+            .flatMap { [subscriptionArtistUseCase] status -> Observable<Bool> in
+                return subscriptionArtistUseCase.execute(id: id, on: !status)
+                    .andThen(Observable.just(!status))
                     .catch { error in
                         output.showToast.onNext(error.asWMError.errorDescription ?? error.localizedDescription)
-                        return Completable.never()
+                        return Observable.empty()
                     }
             }
-            .debug()
-            .subscribe(onCompleted: {
-                output.isSubscription.accept(!output.isSubscription.value)
+            .subscribe(onNext: { isSubscribe in
+                output.isSubscription.accept(isSubscribe)
+                output.showToast.onNext(
+                    isSubscribe ?
+                        "신곡 알림이 등록되었습니다." : "신곡 알림이 해제되었습니다."
+                )
             })
             .disposed(by: disposeBag)
 

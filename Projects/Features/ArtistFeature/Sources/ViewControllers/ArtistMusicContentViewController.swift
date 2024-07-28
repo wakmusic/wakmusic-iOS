@@ -14,6 +14,7 @@ import Utility
 public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
+    @IBOutlet weak var songCartOnView: UIView!
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
@@ -117,12 +118,17 @@ private extension ArtistMusicContentViewController {
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .subscribe(onNext: { [weak self] songs, dataSource in
                 guard let self = self else { return }
+
                 switch songs.isEmpty {
                 case true:
+                    UIView.animate(withDuration: 0.5) {
+                        self.songCartOnView.alpha = .zero
+                    }
                     self.hideSongCart()
                 case false:
+                    self.songCartOnView.alpha = 1.0
                     self.showSongCart(
-                        in: self.view,
+                        in: self.songCartOnView,
                         type: .artistSong,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSource.count,
@@ -135,11 +141,7 @@ private extension ArtistMusicContentViewController {
 
         output.showToast
             .bind(with: self) { owner, message in
-                owner.showToast(
-                    text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 56 + 40
-                )
+                owner.showToast(text: message, options: [.tabBar, .songCart])
             }
             .disposed(by: disposeBag)
     }
@@ -149,6 +151,7 @@ private extension ArtistMusicContentViewController {
         activityIndidator.type = .circleStrokeSpin
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
+        songCartOnView.alpha = .zero
     }
 }
 
@@ -163,7 +166,6 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
 
         case .addSong:
             guard songs.count <= limit else {
-                DEBUG_LOG("\(songs.count)")
                 output.showToast.onNext(LocalizationStrings.overFlowContainWarning(songs.count - limit))
                 return
             }

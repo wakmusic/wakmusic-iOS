@@ -38,16 +38,16 @@ public extension AppComponent {
         WakmusicPlaylistDetailComponent(parent: self)
     }
 
-    var thumbnailPopupFactory: any ThumbnailPopupFactory {
-        ThumbnailPopupComponent(parent: self)
+    var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory {
+        PlaylistCoverOptionPopupComponent(parent: self)
     }
 
-    var checkThumbnailFactory: any CheckThumbnailFactory {
-        CheckThumbnailComponent(parent: self)
+    var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory {
+        CheckPlaylistCoverComponent(parent: self)
     }
 
-    var defaultPlaylistImageFactory: any DefaultPlaylistImageFactory {
-        DefaultPlaylistImageComponent(parent: self)
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory {
+        DefaultPlaylistCoverComponent(parent: self)
     }
 
     var remotePlaylistDataSource: any RemotePlaylistDataSource {
@@ -104,12 +104,6 @@ public extension AppComponent {
         }
     }
 
-    var uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase {
-        shared {
-            UploadPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
-        }
-    }
-
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
         shared {
             SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
@@ -122,9 +116,15 @@ public extension AppComponent {
         }
     }
 
-    var fetchDefaultPlaylistImageUseCase: any FetchDefaultPlaylistImageUseCase {
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
         shared {
-            FetchDefaultPlaylistImageUseCaseImpl(imageRepository: imageRepository)
+            UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase {
+        shared {
+            RequestCustomImageURLUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

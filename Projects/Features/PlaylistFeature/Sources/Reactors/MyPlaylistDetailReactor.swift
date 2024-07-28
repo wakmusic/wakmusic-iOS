@@ -21,7 +21,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case removeSongs
-        case changeThumnail(Data?)
+        case changeImageData(PlaylistImageKind)
     }
 
     enum Mutation {
@@ -31,7 +31,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateBackUpPlaylist([PlaylistItemModel])
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
-        case updateThumbnail(Data?)
+        case updateImageData(PlaylistImageKind?)
         case showToast(String)
     }
 
@@ -42,7 +42,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var backupPlaylistModels: [PlaylistItemModel]
         var isLoading: Bool
         var selectedCount: Int
-        var replaceThumnbnailData: Data?
+        var imageData: PlaylistImageKind?
         @Pulse var toastMessage: String?
     }
 
@@ -52,7 +52,8 @@ final class MyPlaylistDetailReactor: Reactor {
     private let updatePlaylistUseCase: any UpdatePlaylistUseCase
     private let updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase
     private let removeSongsUseCase: any RemoveSongsUseCase
-    private let uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase
+    private let uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase
+    private let requestCustomImageURLUseCase: any RequestCustomImageURLUseCase
 
     private let logoutUseCase: any LogoutUseCase
 
@@ -62,7 +63,8 @@ final class MyPlaylistDetailReactor: Reactor {
         updatePlaylistUseCase: any UpdatePlaylistUseCase,
         updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase,
         removeSongsUseCase: any RemoveSongsUseCase,
-        uploadPlaylistImageUseCase: any UploadPlaylistImageUseCase,
+        uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase,
+        requestCustomImageURLUseCase: any RequestCustomImageURLUseCase,
         logoutUseCase: any LogoutUseCase
 
     ) {
@@ -71,7 +73,8 @@ final class MyPlaylistDetailReactor: Reactor {
         self.updatePlaylistUseCase = updatePlaylistUseCase
         self.updateTitleAndPrivateUseCase = updateTitleAndPrivateUseCase
         self.removeSongsUseCase = removeSongsUseCase
-        self.uploadPlaylistImageUseCase = uploadPlaylistImageUseCase
+        self.uploadDefaultPlaylistImageUseCase = uploadDefaultPlaylistImageUseCase
+        self.requestCustomImageURLUseCase = requestCustomImageURLUseCase
         self.logoutUseCase = logoutUseCase
 
         self.initialState = State(
@@ -86,9 +89,8 @@ final class MyPlaylistDetailReactor: Reactor {
             ),
             playlistModels: [],
             backupPlaylistModels: [],
-            isLoading: false,
-            selectedCount: 0,
-            replaceThumnbnailData: nil
+            isLoading: true,
+            selectedCount: 0
         )
     }
 
@@ -128,8 +130,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs()
-        case let .changeThumnail(data):
-            return updateThumbnail(data)
+
+        case let .changeImageData(imageData):
+            return updateImageData(imageData: imageData)
         }
     }
 
@@ -157,9 +160,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showToast(message):
             newState.toastMessage = message
-
-        case let .updateThumbnail(data):
-            newState.replaceThumnbnailData = data
+        case let .updateImageData(imageData):
+            newState.imageData = imageData
         }
 
         return newState
@@ -212,26 +214,55 @@ private extension MyPlaylistDetailReactor {
         let state = currentState
         let currentPlaylists = state.playlistModels
 
-        let updatingPlaylistItemModels = currentPlaylists.map {
+        let newPlaylistItemModels = currentPlaylists.map {
             return $0.updateIsSelected(isSelected: false)
         }
 
-        return updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
-            .andThen(
-                .concat([
-                    .just(.updateEditingState(false)),
-                    .just(.updatePlaylist(updatingPlaylistItemModels)),
-                    .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
-                    .just(.updateSelectedCount(0)),
+        var mutations: [Observable<Mutation>] = []
 
-                ])
-            )
-            .catch { error in
-                let wmErorr = error.asWMError
-                return Observable.just(
-                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+        if let imageData = state.imageData {
+            switch imageData {
+            case let .default(imageName):
+                mutations.append(
+                    uploadDefaultPlaylistImageUseCase.execute(key: self.key, model: imageName)
+                        .andThen(.empty())
+                        .catch { error in
+                            let wmErorr = error.asWMError
+                            return Observable.just(
+                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                            )
+                        }
+                )
+
+            case let .custom(data):
+                mutations.append(
+                    requestCustomImageURLUseCase.execute(key: self.key, data: data)
+                        .andThen(.empty())
+                        .catch { error in
+                            let wmErorr = error.asWMError
+                            return Observable.just(
+                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                            )
+                        }
                 )
             }
+        }
+        if state.backupPlaylistModels == newPlaylistItemModels {
+            mutations.append(endEditing())
+        } else {
+            mutations.append(
+                updatePlaylistUseCase.execute(key: key, songs: currentPlaylists.map { $0.id })
+                    .andThen(endEditing())
+                    .catch { error in
+                        let wmErorr = error.asWMError
+                        return Observable.just(
+                            Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        )
+                    }
+            )
+        }
+
+        return .concat(mutations)
     }
 
     func endEditing() -> Observable<Mutation> {
@@ -246,7 +277,8 @@ private extension MyPlaylistDetailReactor {
             .just(.updateEditingState(false)),
             .just(.updatePlaylist(updatingPlaylistItemModels)),
             .just(.updateBackUpPlaylist(updatingPlaylistItemModels)),
-            .just(.updateSelectedCount(0))
+            .just(.updateSelectedCount(0)),
+            .just(.updateImageData(nil))
         ])
     }
 
@@ -261,7 +293,7 @@ private extension MyPlaylistDetailReactor {
         return updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
             .andThen(.concat([
                 .just(.updateHeader(prev)),
-                .just(.showToast(message)),
+                .just(.showToast(message))
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -365,7 +397,8 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updatePlaylist(updatingPlaylistItemModels)),
-            .just(.updateSelectedCount(0))
+            .just(.updateSelectedCount(0)),
+            .just(.updateImageData(nil))
         ])
     }
 
@@ -385,7 +418,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateEditingState(false)),
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
-                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다."))
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -395,7 +428,7 @@ private extension MyPlaylistDetailReactor {
             }
     }
 
-    func updateThumbnail(_ data: Data?) -> Observable<Mutation> {
-        return .just(.updateThumbnail(data))
+    func updateImageData(imageData: PlaylistImageKind?) -> Observable<Mutation> {
+        return .just(.updateImageData(imageData))
     }
 }

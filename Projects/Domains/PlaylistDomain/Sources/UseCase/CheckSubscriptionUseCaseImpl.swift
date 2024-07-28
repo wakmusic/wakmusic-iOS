@@ -13,6 +13,6 @@ public struct CheckSubscriptionUseCaseImpl: CheckSubscriptionUseCase {
     }
 
     public func execute(key: String) -> Single<Bool> {
-        playlistRepository.checkSubscriptionUseCase(key: key)
+        playlistRepository.checkSubscription(key: key)
     }
 }

@@ -56,11 +56,12 @@ public enum WMDomain: String {
     case image
     case notification
     case team
+    case price
 }
 
 extension WMDomain {
     var asURLString: String {
-        "/\(self.asDomainString)"
+        return "/\(self.asDomainString)"
     }
 }
 
@@ -97,6 +98,8 @@ extension WMDomain {
             return WMDOMAIN_NOTIFICATION()
         case .team:
             return WMDOMAIN_TEAM()
+        case .price:
+            return WMDOMAIN_PRICE()
         }
     }
 }

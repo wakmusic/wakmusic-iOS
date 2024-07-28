@@ -5,6 +5,10 @@ import ProjectDescriptionHelpers
 let project = Project.module(
     name: ModulePaths.Feature.HomeFeature.rawValue,
     targets: [
+        .interface(
+            module: .feature(.HomeFeature),
+            dependencies: []
+        ),
         .implements(
             module: .feature(.HomeFeature),
             product: .staticFramework,
@@ -12,6 +16,7 @@ let project = Project.module(
                 resources: ["Resources/**"],
                 dependencies: [
                     .feature(target: .BaseFeature),
+                    .feature(target: .HomeFeature, type: .interface),
                     .feature(target: .ChartFeature, type: .interface),
                     .feature(target: .PlaylistFeature, type: .interface),
                     .feature(target: .MusicDetailFeature, type: .interface),

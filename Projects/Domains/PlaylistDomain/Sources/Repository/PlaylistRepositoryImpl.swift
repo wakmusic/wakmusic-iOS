@@ -1,4 +1,5 @@
 import BaseDomainInterface
+import Foundation
 import PlaylistDomainInterface
 import RxSwift
 import SongsDomainInterface
@@ -44,15 +45,23 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.removeSongs(key: key, songs: songs)
     }
 
-    public func uploadImage(key: String, model: UploadImageType) -> Single<BaseImageEntity> {
-        remotePlaylistDataSource.uploadImage(key: key, model: model)
+    public func uploadDefaultImage(key: String, model: String) -> Completable {
+        remotePlaylistDataSource.uploadDefaultImage(key: key, model: model)
     }
 
     public func subscribePlaylist(key: String, isSubscribing: Bool) -> Completable {
         remotePlaylistDataSource.subscribePlaylist(key: key, isSubscribing: isSubscribing)
     }
 
-    public func checkSubscriptionUseCase(key: String) -> Single<Bool> {
-        remotePlaylistDataSource.checkSubscriptionUseCase(key: key)
+    public func checkSubscription(key: String) -> Single<Bool> {
+        remotePlaylistDataSource.checkSubscription(key: key)
+    }
+
+    public func requestCustomImageURL(key: String, imageSize: Int) -> Single<CustomImageURLEntity> {
+        remotePlaylistDataSource.requestCustomImageURL(key: key, imageSize: imageSize)
+    }
+
+    public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
+        remotePlaylistDataSource.uploadCustomImage(presignedURL: presignedURL, data: data)
     }
 }

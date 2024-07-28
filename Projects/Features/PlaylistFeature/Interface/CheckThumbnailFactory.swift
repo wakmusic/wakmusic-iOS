@@ -1,9 +1,9 @@
 import UIKit
 
-public protocol CheckThumbnailDelegate: AnyObject {
+public protocol CheckPlaylistCoverDelegate: AnyObject {
     func receive(_ imageData: Data)
 }
 
-public protocol CheckThumbnailFactory {
-    func makeView(delegate: any CheckThumbnailDelegate, imageData: Data) -> UIViewController
+public protocol CheckPlaylistCoverFactory {
+    func makeView(delegate: any CheckPlaylistCoverDelegate, imageData: Data) -> UIViewController
 }

@@ -12,11 +12,14 @@ import Then
 import UIKit
 import Utility
 
-#warning("송카트, 공유하기, 이미지 업로드")
-#warning("다운 샘플링")
+#warning("공유하기")
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
+    private enum Limit {
+        static let imageSizeLimitPerMB: Double = 10.0
+    }
+
     var playlisteditSheetView: PlaylistEditSheetView!
 
     var songCartView: SongCartView!
@@ -29,11 +32,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let textPopUpFactory: any TextPopUpFactory
 
-    private let thumbnailPopupFactory: any ThumbnailPopupFactory
+    private let playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory
 
-    private let checkThumbnailFactory: any CheckThumbnailFactory
+    private let checkPlaylistCoverFactory: any CheckPlaylistCoverFactory
 
-    private let defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+    private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -82,16 +85,16 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        thumbnailPopupFactory: any ThumbnailPopupFactory,
-        checkThumbnailFactory: any CheckThumbnailFactory,
-        defaultPlaylistImageFactory: any DefaultPlaylistImageFactory
+        playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
+        checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
+        defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
-        self.thumbnailPopupFactory = thumbnailPopupFactory
-        self.checkThumbnailFactory = checkThumbnailFactory
-        self.defaultPlaylistImageFactory = defaultPlaylistImageFactory
+        self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
+        self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
+        self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
 
         super.init(reactor: reactor)
     }
@@ -232,7 +235,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, _ in
 
                 LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistCameraButton)
-                let vc = owner.thumbnailPopupFactory.makeView(delegate: owner)
+                let vc = owner.playlistCoverOptionPopupFactory.makeView(delegate: owner)
 
                 owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
@@ -251,7 +254,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     return
                 }
 
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
 
@@ -292,7 +295,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 )
 
                 if model.isEmpty {
-                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 2.5)
+                    owner.tableView.setBackgroundView(warningView, APP_HEIGHT() / 3)
                 } else {
                     owner.tableView.restore()
                 }
@@ -309,8 +312,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
                 if isLoading {
                     owner.indicator.startAnimating()
+                    owner.tableView.isHidden = true
                 } else {
                     owner.indicator.stopAnimating()
+                    owner.tableView.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -333,17 +338,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                         useBottomSpace: false
                     )
                     owner.songCartView.delegate = owner
-                }
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.replaceThumnbnailData)
-            .compactMap { $0 }
-            .bind(with: self) { owner, data in
-                if let navigationController = owner.presentedViewController as? UINavigationController {
-                    navigationController.pushViewController(
-                        owner.checkThumbnailFactory.makeView(delegate: owner, imageData: data), animated: true
-                    )
                 }
             }
             .disposed(by: disposeBag)
@@ -390,6 +384,28 @@ extension MyPlaylistDetailViewController {
         hideplaylistEditSheet()
         hideSongCart()
         reactor?.action.onNext(.restore)
+    }
+
+    func navigateToCheckPlaylistCover(imageData: Data) {
+        if let navigationController = self.presentedViewController as? UINavigationController {
+            if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
+                let textPopupVC = self.textPopUpFactory.makeView(
+                    text: "사진의 용량은 \(Int(Limit.imageSizeLimitPerMB))MB를 초과할 수 없습니다.\n다른 사진을 선택해 주세요.",
+                    cancelButtonIsHidden: true,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: nil,
+                    cancelCompletion: nil
+                )
+
+                navigationController.showBottomSheet(content: textPopupVC)
+                return
+            }
+            navigationController.pushViewController(
+                self.checkPlaylistCoverFactory.makeView(delegate: self, imageData: imageData),
+                animated: true
+            )
+        }
     }
 }
 
@@ -512,9 +528,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
             showToast(
                 text: Localization.LocalizationStrings.addList,
-
-                font: .setFont(.t6(weight: .light)),
-                verticalOffset: 56 + 10
+                options: [.songCart, .tabBar]
             )
 
         case .play:
@@ -576,7 +590,6 @@ extension MyPlaylistDetailViewController: RequestPermissionable {
 extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         if results.isEmpty {
-            reactor?.action.onNext(.changeThumnail(nil))
             picker.dismiss(animated: true)
             return
         }
@@ -593,11 +606,18 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         DispatchQueue.main.async {
                             guard let image = image as? UIImage,
-                                  let imageToData = image.pngData() else { return }
+                                  let resizeImage = image.customizeForPlaylistCover(
+                                      targetSize: CGSize(width: 500, height: 500)
+                                  ),
+                                  var imageData = resizeImage.jpegData(compressionQuality: 1.0)
+                            else { return } // 80% 압축
 
-                            let sizeMB: Double = Double(imageToData.count).megabytes
-                            DEBUG_LOG("Image: \(imageToData) > \(sizeMB)")
-                            self.reactor?.action.onNext(.changeThumnail(imageToData))
+                            let sizeMB: Double = Double(imageData.count).megabytes
+
+                            if sizeMB > Limit.imageSizeLimitPerMB {
+                                imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
+                            }
+                            self.navigateToCheckPlaylistCover(imageData: imageData)
                         }
                     }
                 }
@@ -606,11 +626,17 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
     }
 }
 
-extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
+extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
     func didTap(_ index: Int, _ cost: Int) {
+        guard let reactor = reactor else {
+            return
+        }
+
+        let state = reactor.currentState
+
         if index == 0 {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistImageButton(type: "default"))
-            let vc = defaultPlaylistImageFactory.makeView(self)
+            let vc = defaultPlaylistCoverFactory.makeView(self)
             vc.modalPresentationStyle = .overFullScreen
 
             self.present(vc, animated: true)
@@ -619,19 +645,33 @@ extension MyPlaylistDetailViewController: ThumbnailPopupDelegate {
             LogManager.analytics(
                 PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
-            requestPhotoLibraryPermission()
+
+            guard let user = PreferenceManager.userInfo else {
+                return
+            }
+
+            if user.itemCount < cost {
+                showToast(
+                    text: "음표열매가 부족합니다.",
+                    options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
+            } else {
+                requestPhotoLibraryPermission()
+            }
         }
     }
 }
 
-extension MyPlaylistDetailViewController: CheckThumbnailDelegate {
+extension MyPlaylistDetailViewController: CheckPlaylistCoverDelegate {
     func receive(_ imageData: Data) {
-        headerView.updateThumbnailByAlbum(imageData)
+        reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
+        headerView.updateThumbnailFromGallery(imageData)
     }
 }
 
-extension MyPlaylistDetailViewController: DefaultPlaylistImageDelegate {
-    func receive(_ name: String, _ url: String) {
+extension MyPlaylistDetailViewController: DefaultPlaylistCoverDelegate {
+    func receive(url: String, imageName: String) {
+        reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
         headerView.updateThumbnailByDefault(url)
     }
 }

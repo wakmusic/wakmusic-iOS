@@ -1,17 +1,16 @@
-import ArtistFeature
+import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
-import HomeFeature
-import MyInfoFeature
+import HomeFeatureInterface
+import LogManager
 import MyInfoFeatureInterface
 import NoticeDomainInterface
+import PlaylistFeatureInterface
 import RxCocoa
 import RxSwift
 import SafariServices
-import SearchFeature
 import SearchFeatureInterface
 import SnapKit
-import StorageFeature
 import StorageFeatureInterface
 import UIKit
 import Utility
@@ -19,11 +18,13 @@ import Utility
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
 
+    private var previousIndex: Int?
+    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
     private lazy var viewControllers: [UIViewController] = {
         return [
-            homeComponent.makeView().wrapNavigationController,
+            homeFactory.makeView().wrapNavigationController,
             searchFactory.makeView().wrapNavigationController,
-            artistComponent.makeView().wrapNavigationController,
+            artistFactory.makeView().wrapNavigationController,
             storageFactory.makeView().wrapNavigationController,
             myInfoFactory.makeView().wrapNavigationController
         ]
@@ -34,23 +35,22 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private lazy var output = viewModel.transform(from: input)
     private let disposeBag: DisposeBag = DisposeBag()
 
-    private var previousIndex: Int?
-    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
-
-    private var homeComponent: HomeComponent!
+    private var appEntryState: AppEntryStateHandleable!
+    private var homeFactory: HomeFactory!
     private var searchFactory: SearchFactory!
-    private var artistComponent: ArtistComponent!
+    private var artistFactory: ArtistFactory!
     private var storageFactory: StorageFactory!
     private var myInfoFactory: MyInfoFactory!
     private var noticePopupComponent: NoticePopupComponent!
-    private var noticeFactory: NoticeFactory!
     private var noticeDetailFactory: NoticeDetailFactory!
+    private var playlistDetailFactory: PlaylistDetailFactory!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         outputBind()
         inputBind()
+        entryStateBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -65,26 +65,56 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 
     public static func viewController(
         viewModel: MainTabBarViewModel,
-        homeComponent: HomeComponent,
+        appEntryState: AppEntryStateHandleable,
+        homeFactory: HomeFactory,
         searchFactory: SearchFactory,
-        artistComponent: ArtistComponent,
+        artistFactory: ArtistFactory,
         storageFactory: StorageFactory,
         myInfoFactory: MyInfoFactory,
         noticePopupComponent: NoticePopupComponent,
-        noticeFactory: NoticeFactory,
-        noticeDetailFactory: NoticeDetailFactory
+        noticeDetailFactory: NoticeDetailFactory,
+        playlistDetailFactory: PlaylistDetailFactory
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.homeComponent = homeComponent
+        viewController.appEntryState = appEntryState
+        viewController.homeFactory = homeFactory
         viewController.searchFactory = searchFactory
-        viewController.artistComponent = artistComponent
+        viewController.artistFactory = artistFactory
         viewController.storageFactory = storageFactory
         viewController.myInfoFactory = myInfoFactory
         viewController.noticePopupComponent = noticePopupComponent
-        viewController.noticeFactory = noticeFactory
         viewController.noticeDetailFactory = noticeDetailFactory
+        viewController.playlistDetailFactory = playlistDetailFactory
         return viewController
+    }
+}
+
+private extension MainTabBarViewController {
+    func entryStateBind() {
+        appEntryState.moveSceneObservable
+            .debug("moveSceneObservable")
+            .filter { !$0.isEmpty }
+            .delay(.milliseconds(500), scheduler: MainScheduler.instance)
+            .bind(with: self, onNext: { owner, params in
+                owner.moveScene(params: params)
+            })
+            .disposed(by: disposeBag)
+    }
+
+    func moveScene(params: [String: Any]) {
+        let page = params["page"] as? String ?? ""
+        let navigationController = viewControllers[selectedIndex] as? UINavigationController
+
+        switch page {
+        case "playlist":
+            let key: String = params["key"] as? String ?? ""
+            let viewController = playlistDetailFactory.makeView(key: key, kind: .unknown)
+            navigationController?.pushViewController(viewController, animated: true)
+
+        default:
+            break
+        }
     }
 }
 
@@ -119,18 +149,6 @@ extension MainTabBarViewController {
 
         self.previousIndex = previous
         self.selectedIndex = current
-    }
-
-    func forceUpdateContent(for index: Int) {
-        Utility.PreferenceManager.startPage = index
-
-        if let previous = self.previousIndex {
-            remove(asChildViewController: viewControllers[previous])
-        }
-        add(asChildViewController: viewControllers[index])
-
-        self.previousIndex = self.selectedIndex
-        self.selectedIndex = index
     }
 
     func equalHandleTapped(for index: Int) {
