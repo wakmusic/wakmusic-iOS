@@ -64,11 +64,11 @@ public final class ContainSongsViewModel: ViewModelType {
         let logoutRelay = PublishRelay<Error>()
 
         let output = Output(onLogout: logoutRelay)
-        
+
         input.viewDidLoad
             .withUnretained(self)
-            .flatMap { (owner, _) -> Observable<Int> in
-                
+            .flatMap { owner, _ -> Observable<Int> in
+
                 owner.fetchPlaylistCreationPriceUsecase
                     .execute()
                     .asObservable()
@@ -76,7 +76,6 @@ public final class ContainSongsViewModel: ViewModelType {
             }
             .bind(to: output.creationPrice)
             .disposed(by: disposeBag)
-        
 
         input.playListLoad
             .flatMap { [weak self] () -> Observable<[PlaylistEntity]> in
@@ -175,16 +174,14 @@ public final class ContainSongsViewModel: ViewModelType {
             }
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)
-        
+
         input.creationButtonDidTap
             .bind(to: output.showPricePopup)
             .disposed(by: disposeBag)
-        
-        
+
         input.payButtonDIdTap
             .bind(to: output.showCreationPopup)
             .disposed(by: disposeBag)
-        
 
         input.createPlaylist
             .withUnretained(self) { ($0, $1) }

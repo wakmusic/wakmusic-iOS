@@ -51,17 +51,15 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 }
 
 extension ContainSongsViewController {
-     
     private func inputBind() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
-        
+
         closeButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
-        
-        
+
         tableView.rx.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .do(onNext: { [weak self] indexPath, _ in
@@ -72,19 +70,14 @@ extension ContainSongsViewController {
             }
             .bind(to: input.itemDidTap)
             .disposed(by: disposeBag)
-        
-        
+
         NotificationCenter.default.rx.notification(.playListRefresh)
             .map { _ in () }
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
-
-
-        
     }
-    
+
     private func outputBind() {
-        
         output.dataSource
             .skip(1)
             .do(onNext: { [weak self] model in
@@ -110,9 +103,7 @@ extension ContainSongsViewController {
                 cell.update(model: model)
                 return cell
             }.disposed(by: disposeBag)
-        
-        
-        
+
         output.showToastMessage
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
@@ -132,8 +123,7 @@ extension ContainSongsViewController {
 
             })
             .disposed(by: disposeBag)
-        
-        
+
         output.onLogout
             .bind(with: self) { owner, error in
                 let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
@@ -143,21 +133,20 @@ extension ContainSongsViewController {
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
-        
-        
+
         output.showPricePopup
             .withLatestFrom(PreferenceManager.$userInfo) { $1 }
             .compactMap { $0 }
             .withLatestFrom(output.creationPrice) { ($0, $1) }
             .bind(with: self) { owner, info in
-                
+
                 let (user, price) = (info.0, info.1)
-                
+
                 if 3 < price {
                     owner.showToast(text: "음표 열매가 부족합니다.")
                     return
                 }
-                
+
                 let text = owner.textPopUpFactory.makeView(
                     text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
                     cancelButtonIsHidden: false,
@@ -165,15 +154,13 @@ extension ContainSongsViewController {
                     cancelButtonText: "취소",
                     completion: {
                         owner.input.payButtonDIdTap.onNext(())
-                    }, cancelCompletion: nil)
-                
+                    }, cancelCompletion: nil
+                )
+
                 owner.showBottomSheet(content: text)
-                
-                
             }
             .disposed(by: disposeBag)
-        
-        
+
         output.showCreationPopup
             .bind(with: self) { owner, _ in
                 guard let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
@@ -188,12 +175,7 @@ extension ContainSongsViewController {
                 owner.showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
             }
             .disposed(by: disposeBag)
-        
-        
-        
-        
     }
-    
 
     private func configureUI() {
         closeButton.setImage(DesignSystemAsset.Navigation.close.image, for: .normal)
@@ -237,8 +219,6 @@ extension ContainSongsViewController: UITableViewDelegate {
 
 extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     public func action() {
-        
         input.creationButtonDidTap.onNext(())
-        
     }
 }
