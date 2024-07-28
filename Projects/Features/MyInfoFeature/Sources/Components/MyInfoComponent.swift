@@ -5,6 +5,7 @@ import NeedleFoundation
 import NoticeDomainInterface
 import SignInFeatureInterface
 import TeamFeatureInterface
+import UserDomainInterface
 import UIKit
 
 public protocol MyInfoDependency: Dependency {
@@ -20,13 +21,15 @@ public protocol MyInfoDependency: Dependency {
     var fruitDrawFactory: any FruitDrawFactory { get }
     var fruitStorageFactory: any FruitStorageFactory { get }
     var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
+    var setUserNameUseCase: any SetUserNameUseCase { get }
 }
 
 public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
     public func makeView() -> UIViewController {
         return MyInfoViewController.viewController(
             reactor: MyInfoReactor(
-                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase
+                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase,
+                setUserNameUseCase: dependency.setUserNameUseCase
             ),
             profilePopUpComponent: dependency.profilePopComponent,
             textPopUpFactory: dependency.textPopUpFactory,

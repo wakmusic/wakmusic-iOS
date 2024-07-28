@@ -79,6 +79,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.pulse(\.$showToast)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            })
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.isAllNoticesRead)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
@@ -264,7 +271,9 @@ extension MyInfoViewController: EditSheetViewDelegate {
             showBottomSheet(content: vc, size: .fixed(352 + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
             guard let vc = multiPurposePopUpFactory
-                .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
+                .makeView(type: .nickname, key: "", completion: { [weak self] text in
+                    self?.reactor?.action.onNext(.changeNicknameButtonDidTap(text))
+                }) as? MultiPurposePopupViewController
             else { return }
             showBottomSheet(content: vc, size: .fixed(296))
         }

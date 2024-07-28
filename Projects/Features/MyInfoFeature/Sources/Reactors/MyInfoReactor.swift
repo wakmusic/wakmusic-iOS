@@ -18,6 +18,7 @@ final class MyInfoReactor: Reactor {
         case teamNavigationDidTap
         case settingNavigationDidTap
         case completedFruitDraw(Int)
+        case changeNicknameButtonDidTap(String)
         case changedUserInfo(UserInfo?)
         case changedReadNoticeIDs([Int])
         case requiredLogin
@@ -33,6 +34,7 @@ final class MyInfoReactor: Reactor {
         case updatePlatform(String)
         case updateFruitCount(Int)
         case updateIsAllNoticesRead(Bool)
+        case showToast(String)
     }
 
     enum NavigateType {
@@ -56,16 +58,20 @@ final class MyInfoReactor: Reactor {
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
+        @Pulse var showToast: String?
     }
 
     var initialState: State
     private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+    private let setUsernameUseCase: any SetUserNameUseCase
     private var disposeBag = DisposeBag()
 
     init(
-        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
+        setUserNameUseCase: any SetUserNameUseCase
     ) {
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
+        self.setUsernameUseCase = setUserNameUseCase
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
@@ -112,6 +118,8 @@ final class MyInfoReactor: Reactor {
             return navigateLogin()
         case let .completedFruitDraw(count):
             return .just(.updateFruitCount(count))
+        case let .changeNicknameButtonDidTap(newNickname):
+            return .empty()
         }
     }
 
@@ -144,6 +152,8 @@ final class MyInfoReactor: Reactor {
         
         case let .updateFruitCount(count):
             newState.fruitCount = count
+        case let .showToast(message):
+            newState.showToast = message
         }
         return newState
     }
@@ -187,7 +197,16 @@ private extension MyInfoReactor {
         guard let profile = userInfo?.profile else { return .empty() }
         return .just(.updateProfileImage(profile))
     }
-
+    
+    func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
+        setUsernameUseCase.execute(name: newNickname)
+            .andThen(.just(.updateNickname(newNickname)))
+            .catch { error in
+                let error = error.asWMError
+                return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            }
+    }
+    
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let userInfo = userInfo else { return .empty() }
         return .just(.updateNickname(userInfo.decryptedName))
