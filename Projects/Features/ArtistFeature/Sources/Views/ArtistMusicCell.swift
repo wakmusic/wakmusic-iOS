@@ -1,35 +1,33 @@
-//
-//  ArtistMusicCell.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/01/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import ArtistDomainInterface
 import BaseFeature
 import DesignSystem
 import SongsDomainInterface
 import UIKit
 import Utility
+import Kingfisher
 
-class ArtistMusicCell: UITableViewCell {
-    @IBOutlet weak var albumImageView: UIImageView!
+protocol ArtistMusicCellDelegate: AnyObject {
+    func tappedThumbnail(id: String)
+}
+
+final class ArtistMusicCell: UITableViewCell {
+    @IBOutlet weak var albumImageButton: UIButton!
     @IBOutlet weak var titleStringLabel: UILabel!
     @IBOutlet weak var groupStringLabel: UILabel!
     @IBOutlet weak var releaseDateLabel: UILabel!
-    @IBOutlet weak var thumbnailToPlayButton: UIButton!
 
     private var model: ArtistSongListEntity?
+    weak var delegate: ArtistMusicCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
 
-        albumImageView.layer.cornerRadius = 4
-        albumImageView.contentMode = .scaleAspectFill
+        albumImageButton.layer.cornerRadius = 4
+        albumImageButton.contentMode = .scaleAspectFill
+        albumImageButton.clipsToBounds = true
 
         titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
@@ -38,29 +36,15 @@ class ArtistMusicCell: UITableViewCell {
 
     @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
-        let songEntity: SongEntity = SongEntity(
-            id: song.songID,
-            title: song.title,
-            artist: song.artist,
-            views: 0,
-            date: song.date
-        )
-        PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
+        delegate?.tappedThumbnail(id: song.songID)
     }
 }
 
 extension ArtistMusicCell {
-    static func getCellHeight() -> CGFloat {
-        let base: CGFloat = 10 + 10
-        let width: CGFloat = (72.0 * APP_WIDTH()) / 375.0
-        let height: CGFloat = (width * 40.0) / 72.0
-        return base + height
-    }
-
     func update(model: ArtistSongListEntity) {
         self.model = model
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : UIColor
-            .clear
+        contentView.backgroundColor = model.isSelected ?
+        DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
 
         titleStringLabel.attributedText = getAttributedString(
             text: model.title,
@@ -77,14 +61,18 @@ extension ArtistMusicCell {
             font: DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
         )
 
-        albumImageView.kf.setImage(
+        let modifier = AnyImageModifier { return $0.withRenderingMode(.alwaysOriginal) }
+        albumImageButton.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.songID).toString),
+            for: .normal,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
-            options: [.transition(.fade(0.2))]
+            options: [.imageModifier(modifier), .transition(.fade(0.2))]
         )
     }
+}
 
-    private func getAttributedString(
+private extension ArtistMusicCell {
+    func getAttributedString(
         text: String,
         font: UIFont
     ) -> NSMutableAttributedString {

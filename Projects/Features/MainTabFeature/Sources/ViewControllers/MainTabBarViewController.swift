@@ -3,6 +3,7 @@ import BaseFeature
 import DesignSystem
 import HomeFeatureInterface
 import LogManager
+import MusicDetailFeatureInterface
 import MyInfoFeatureInterface
 import NoticeDomainInterface
 import PlaylistFeatureInterface
@@ -44,13 +45,15 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     private var noticePopupComponent: NoticePopupComponent!
     private var noticeDetailFactory: NoticeDetailFactory!
     private var playlistDetailFactory: PlaylistDetailFactory!
+    private var musicDetailFactory: MusicDetailFactory!
+    private var songDetailPresenter: SongDetailPresentable!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         outputBind()
         inputBind()
-        entryStateBind()
+        entryBind()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -73,7 +76,9 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         myInfoFactory: MyInfoFactory,
         noticePopupComponent: NoticePopupComponent,
         noticeDetailFactory: NoticeDetailFactory,
-        playlistDetailFactory: PlaylistDetailFactory
+        playlistDetailFactory: PlaylistDetailFactory,
+        musicDetailFactory: MusicDetailFactory,
+        songDetailPresenter: SongDetailPresentable
     ) -> MainTabBarViewController {
         let viewController = MainTabBarViewController.viewController(storyBoardName: "Main", bundle: Bundle.module)
         viewController.viewModel = viewModel
@@ -86,18 +91,28 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
         viewController.noticePopupComponent = noticePopupComponent
         viewController.noticeDetailFactory = noticeDetailFactory
         viewController.playlistDetailFactory = playlistDetailFactory
+        viewController.musicDetailFactory = musicDetailFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 }
 
 private extension MainTabBarViewController {
-    func entryStateBind() {
+    func entryBind() {
         appEntryState.moveSceneObservable
             .debug("moveSceneObservable")
             .filter { !$0.isEmpty }
             .delay(.milliseconds(500), scheduler: MainScheduler.instance)
             .bind(with: self, onNext: { owner, params in
                 owner.moveScene(params: params)
+            })
+            .disposed(by: disposeBag)
+
+        songDetailPresenter.presentSongDetailObservable
+            .bind(with: self, onNext: { owner, id in
+                let viewController = owner.musicDetailFactory.makeViewController(songIDs: [id], selectedID: id)
+                viewController.modalPresentationStyle = .fullScreen
+                owner.present(viewController, animated: true)
             })
             .disposed(by: disposeBag)
     }

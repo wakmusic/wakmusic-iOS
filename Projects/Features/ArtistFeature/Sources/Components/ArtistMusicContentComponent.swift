@@ -7,6 +7,7 @@ import NeedleFoundation
 public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class ArtistMusicContentComponent: Component<ArtistMusicContentDependency> {
@@ -20,7 +21,8 @@ public final class ArtistMusicContentComponent: Component<ArtistMusicContentDepe
                 model: model,
                 fetchArtistSongListUseCase: dependency.fetchArtistSongListUseCase
             ),
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

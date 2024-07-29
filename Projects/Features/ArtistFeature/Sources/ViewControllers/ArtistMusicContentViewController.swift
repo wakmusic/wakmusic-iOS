@@ -11,19 +11,21 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-public class ArtistMusicContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+public final class ArtistMusicContentViewController: 
+    BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     @IBOutlet weak var songCartOnView: UIView!
 
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
-    var containSongsFactory: ContainSongsFactory!
+    private var containSongsFactory: ContainSongsFactory!
+    private var songDetailPresenter: SongDetailPresentable!
 
     private var viewModel: ArtistMusicContentViewModel!
     lazy var input = ArtistMusicContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     deinit {
         LogManager.printDebug("\(Self.self) Deinit")
@@ -43,7 +45,8 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
 
     public static func viewController(
         viewModel: ArtistMusicContentViewModel,
-        containSongsFactory: ContainSongsFactory
+        containSongsFactory: ContainSongsFactory,
+        songDetailPresenter: SongDetailPresentable
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(
             storyBoardName: "Artist",
@@ -51,6 +54,7 @@ public class ArtistMusicContentViewController: BaseViewController, ViewControlle
         )
         viewController.viewModel = viewModel
         viewController.containSongsFactory = containSongsFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 }
@@ -100,14 +104,15 @@ private extension ArtistMusicContentViewController {
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
             })
             .map { $0.0 }
-            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
-                let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(
+            .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
+                guard let self = self,
+                      let cell = tableView.dequeueReusableCell(
                     withIdentifier: "ArtistMusicCell",
-                    for: indexPath
+                    for: IndexPath(row: index, section: 0)
                 ) as? ArtistMusicCell else {
                     return UITableViewCell()
                 }
+                cell.delegate = self
                 cell.update(model: model)
                 return cell
             }
@@ -152,6 +157,12 @@ private extension ArtistMusicContentViewController {
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
         songCartOnView.alpha = .zero
+    }
+}
+
+extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
+    func tappedThumbnail(id: String) {
+        songDetailPresenter.present(id: id)
     }
 }
 
