@@ -1,4 +1,3 @@
-
 import BaseFeature
 import BaseFeatureInterface
 import ChartDomainInterface
@@ -9,6 +8,7 @@ import SongsDomainInterface
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class NewSongsContentComponent: Component<NewSongsContentDependency> {
@@ -18,7 +18,8 @@ public final class NewSongsContentComponent: Component<NewSongsContentDependency
                 type: type,
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase
             ),
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }
