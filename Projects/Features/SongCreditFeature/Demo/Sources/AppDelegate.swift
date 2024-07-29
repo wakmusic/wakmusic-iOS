@@ -1,6 +1,6 @@
 import CreditSongListFeatureInterface
-@testable import SongCreditFeature
 import RxSwift
+@testable import SongCreditFeature
 import SongsDomainInterface
 import SongsDomainTesting
 import UIKit
