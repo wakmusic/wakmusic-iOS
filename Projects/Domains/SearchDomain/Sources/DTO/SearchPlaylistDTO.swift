@@ -33,8 +33,6 @@ public struct SearchPlaylistDTO: Decodable {
     public let `private`: Bool
     public let songCount, subscribeCount: Int
     public let createdAt: Double
-
-   
 }
 
 public extension SearchPlaylistDTO {
