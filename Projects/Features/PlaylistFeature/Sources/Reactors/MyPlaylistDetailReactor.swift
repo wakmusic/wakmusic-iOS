@@ -22,6 +22,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case deselectAll
         case removeSongs
         case changeImageData(PlaylistImageKind)
+        case shareButtonDidTap
     }
 
     enum Mutation {
@@ -33,6 +34,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateSelectedCount(Int)
         case updateImageData(PlaylistImageKind?)
         case showToast(String)
+        case showShareLink(String)
     }
 
     struct State {
@@ -44,6 +46,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var imageData: PlaylistImageKind?
         @Pulse var toastMessage: String?
+        @Pulse var shareLink: String?
     }
 
     internal let key: String
@@ -56,6 +59,7 @@ final class MyPlaylistDetailReactor: Reactor {
     private let requestCustomImageURLUseCase: any RequestCustomImageURLUseCase
 
     private let logoutUseCase: any LogoutUseCase
+    private let deepLinkGenerator = WMDeepLinkGenerator()
 
     init(
         key: String,
@@ -133,6 +137,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .changeImageData(imageData):
             return updateImageData(imageData: imageData)
+        case .shareButtonDidTap:
+            return .just(.showShareLink(deepLinkGenerator.generatePlaylistDeepLink(key: key)))
         }
     }
 
@@ -162,6 +168,9 @@ final class MyPlaylistDetailReactor: Reactor {
             newState.toastMessage = message
         case let .updateImageData(imageData):
             newState.imageData = imageData
+
+        case let .showShareLink(link):
+            newState.shareLink = link
         }
 
         return newState
