@@ -19,6 +19,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
+    private var songDetailPresenter: SongDetailPresentable!
+
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var refreshControl = UIRefreshControl()
@@ -39,7 +41,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
 
     public static func viewController(
         viewModel: NewSongsContentViewModel,
-        containSongsFactory: ContainSongsFactory
+        containSongsFactory: ContainSongsFactory,
+        songDetailPresenter: SongDetailPresentable
     ) -> NewSongsContentViewController {
         let viewController = NewSongsContentViewController.viewController(
             storyBoardName: "Home",
@@ -47,6 +50,7 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
         )
         viewController.viewModel = viewModel
         viewController.containSongsFactory = containSongsFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 }
@@ -113,14 +117,15 @@ private extension NewSongsContentViewController {
                 }
             })
             .map { $0.0 }
-            .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
-                let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "NewSongsCell",
-                    for: indexPath
-                ) as? NewSongsCell else {
+            .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
+                guard let self = self,
+                      let cell = tableView.dequeueReusableCell(
+                          withIdentifier: "NewSongsCell",
+                          for: IndexPath(row: index, section: 0)
+                      ) as? NewSongsCell else {
                     return UITableViewCell()
                 }
+                cell.delegate = self
                 cell.update(model: model)
                 return cell
             }
@@ -171,6 +176,12 @@ private extension NewSongsContentViewController {
         tableView.backgroundColor = .clear
         tableView.refreshControl = refreshControl
         tableView.sectionHeaderTopPadding = 0
+    }
+}
+
+extension NewSongsContentViewController: NewSongsCellDelegate {
+    func tappedThumbnail(id: String) {
+        songDetailPresenter.present(id: id)
     }
 }
 
