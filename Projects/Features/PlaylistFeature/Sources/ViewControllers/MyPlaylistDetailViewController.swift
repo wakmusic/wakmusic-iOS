@@ -266,10 +266,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 )
                 activityViewController.popoverPresentationController?.sourceView = owner.view
                 activityViewController.popoverPresentationController?.sourceRect = CGRect(
-                                    x: owner.view.bounds.midX,
-                                    y: owner.view.bounds.midY,
-                                    width: 0,
-                                    height: 0
+                    x: owner.view.bounds.midX,
+                    y: owner.view.bounds.midY,
+                    width: 0,
+                    height: 0
                 )
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
                 owner.present(activityViewController, animated: true)
