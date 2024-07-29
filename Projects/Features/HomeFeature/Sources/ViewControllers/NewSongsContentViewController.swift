@@ -120,9 +120,9 @@ private extension NewSongsContentViewController {
             .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
                 guard let self = self,
                       let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "NewSongsCell",
-                    for: IndexPath(row: index, section: 0)
-                ) as? NewSongsCell else {
+                          withIdentifier: "NewSongsCell",
+                          for: IndexPath(row: index, section: 0)
+                      ) as? NewSongsCell else {
                     return UITableViewCell()
                 }
                 cell.delegate = self
