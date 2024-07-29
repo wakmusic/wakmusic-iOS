@@ -1,16 +1,12 @@
-//
-//  NewSongsCell.swift
-//  CommonFeature
-//
-//  Created by KTH on 2023/11/16.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import DesignSystem
 import SongsDomainInterface
 import UIKit
 import Utility
+
+protocol NewSongsCellDelegate: AnyObject {
+    func tappedThumbnail(id: String)
+}
 
 class NewSongsCell: UITableViewCell {
     @IBOutlet weak var albumImageView: UIImageView!
@@ -18,13 +14,13 @@ class NewSongsCell: UITableViewCell {
     @IBOutlet weak var artistLabel: UILabel!
     @IBOutlet weak var viewsLabel: UILabel!
 
-    var model: NewSongsEntity?
+    private var model: NewSongsEntity?
+    weak var delegate: NewSongsCellDelegate?
 
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
+        contentView.backgroundColor = .clear
         albumImageView.clipsToBounds = true
         albumImageView.layer.cornerRadius = 4
         albumImageView.contentMode = .scaleAspectFill
@@ -32,21 +28,14 @@ class NewSongsCell: UITableViewCell {
 
     @IBAction func playButtonAction(_ sender: Any) {
         guard let song = self.model else { return }
-        let songEntity: SongEntity = SongEntity(
-            id: song.id,
-            title: song.title,
-            artist: song.artist,
-            views: song.views,
-            date: "\(song.date)"
-        )
-        PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
+        delegate?.tappedThumbnail(id: song.id)
     }
 }
 
 extension NewSongsCell {
     func update(model: NewSongsEntity) {
         self.model = model
-        self.contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200
+        contentView.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200
             .color : DesignSystemAsset.BlueGrayColor.gray100.color
 
         titleStringLabel.text = model.title
