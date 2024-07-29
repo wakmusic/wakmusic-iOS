@@ -4,6 +4,7 @@ import Inject
 import LyricHighlightingFeatureInterface
 @testable import MusicDetailFeature
 import RxSwift
+import SongCreditFeatureInterface
 import SongsDomainTesting
 import UIKit
 import Utility
@@ -48,6 +49,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 rootViewController: MusicDetailViewController(
                     reactor: reactor,
                     lyricHighlightingFactory: DummyLyricHighlightingFactory(),
+                    songCreditFactory: DummySongCreditFactory(),
                     containSongsFactory: DummyContainSongsFactory(),
                     playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
                 )
@@ -68,6 +70,12 @@ final class DummyLyricHighlightingFactory: LyricHighlightingFactory {
 
 final class DummyContainSongsFactory: ContainSongsFactory {
     func makeView(songs: [String]) -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummySongCreditFactory: SongCreditFactory {
+    func makeViewController(songID: String) -> UIViewController {
         return UIViewController()
     }
 }

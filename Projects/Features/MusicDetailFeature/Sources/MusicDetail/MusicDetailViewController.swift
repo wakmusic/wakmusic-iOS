@@ -5,6 +5,7 @@ import LogManager
 import LyricHighlightingFeatureInterface
 import RxSwift
 import SnapKit
+import SongCreditFeatureInterface
 import Then
 import UIKit
 import Utility
@@ -12,16 +13,19 @@ import Utility
 final class MusicDetailViewController: BaseReactorViewController<MusicDetailReactor> {
     private let musicDetailView = MusicDetailView()
     private let lyricHighlightingFactory: any LyricHighlightingFactory
+    private let songCreditFactory: any SongCreditFactory
     private let containSongsFactory: any ContainSongsFactory
     private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
     init(
         reactor: MusicDetailReactor,
         lyricHighlightingFactory: any LyricHighlightingFactory,
+        songCreditFactory: any SongCreditFactory,
         containSongsFactory: any ContainSongsFactory,
         playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
+        self.songCreditFactory = songCreditFactory
         self.containSongsFactory = containSongsFactory
         self.playlistPresenterGlobalState = playlistPresenterGlobalState
         super.init(reactor: reactor)
@@ -178,7 +182,8 @@ private extension MusicDetailViewController {
     }
 
     func navigateCredits(id: String) {
-        LogManager.printDebug("Navigate Music Credit : id=\(id)")
+        let viewController = songCreditFactory.makeViewController(songID: id)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 
     func navigateLyricsHighlighing(model: LyricHighlightingRequiredModel) {
