@@ -29,7 +29,7 @@ public final class WMLabel: UILabel {
         self.font = .setFont(font)
         self.textAlignment = alignment
         attributes = self.getTextWithAttributes(
-            lineHeight: lineHeight,
+            lineHeight: lineHeight ?? font.lineHeight,
             kernValue: kernValue,
             lineSpacing: lineSpacing,
             lineHeightMultiple: lineHeightMultiple,
