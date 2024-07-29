@@ -59,7 +59,7 @@ final class MyPlaylistDetailReactor: Reactor {
     private let requestCustomImageURLUseCase: any RequestCustomImageURLUseCase
 
     private let logoutUseCase: any LogoutUseCase
-    private let deepLinkGenerator = DeepLinkGenerator()
+    private let deepLinkGenerator = WMDeepLinkGenerator()
 
     init(
         key: String,

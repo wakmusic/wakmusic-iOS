@@ -9,7 +9,7 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
         image: String,
         date: String,
         count: Int,
-        shareCount: Int,
+        subscribeCount: Int,
         isPrivate: Bool
 
     ) {
@@ -20,13 +20,13 @@ public struct SearchPlaylistEntity: Hashable, Equatable {
         self.image = image
         self.date = date
         self.count = count
-        self.shareCount = shareCount
+        self.subscribeCount = subscribeCount
 
         self.isPrivate = isPrivate
     }
 
     public let key, title, ownerId, image, date, userName: String
-    public let count, shareCount: Int
+    public let count, subscribeCount: Int
     public let isPrivate: Bool
 
     public func hash(into hasher: inout Hasher) {
