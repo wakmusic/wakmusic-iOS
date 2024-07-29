@@ -77,8 +77,9 @@ private extension SceneDelegate {
     func handleAppEntry(with connectionOptions: UIScene.ConnectionOptions) {
         if let url = connectionOptions.urlContexts.first?.url {
             handleDeeplink(url: url)
-        } else if connectionOptions.userActivities.first?.activityType == NSUserActivityTypeBrowsingWeb,
-                  let webpageURL = userActivity?.webpageURL {
+        } else if let userActivity = connectionOptions.userActivities.first,
+                  userActivity.activityType == NSUserActivityTypeBrowsingWeb,
+                  let webpageURL = userActivity.webpageURL {
             handleUniversalLink(url: webpageURL)
         } else if let _ = connectionOptions.notificationResponse?.notification {
             #warning("TO-DO:: Push Notification")
