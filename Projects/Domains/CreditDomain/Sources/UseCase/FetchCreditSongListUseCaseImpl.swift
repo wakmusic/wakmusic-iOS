@@ -3,7 +3,13 @@ import RxSwift
 import SongsDomainInterface
 
 public final class FetchCreditSongListUseCaseImpl: FetchCreditSongListUseCase {
-    public init() {}
+    private let creditRepository: any CreditRepository
+
+    public init(
+        creditRepository: any CreditRepository
+    ) {
+        self.creditRepository = creditRepository
+    }
 
     public func execute(
         name: String,
@@ -11,7 +17,6 @@ public final class FetchCreditSongListUseCaseImpl: FetchCreditSongListUseCase {
         page: Int,
         limit: Int
     ) -> Single<[SongEntity]> {
-        #warning("구현")
-        return .never()
+        creditRepository.fetchCreditSongList(name: name, order: order, page: page, limit: limit)
     }
 }

@@ -57,6 +57,7 @@ public enum WMDomain: String {
     case notification
     case team
     case price
+    case credit
 }
 
 extension WMDomain {
@@ -100,6 +101,8 @@ extension WMDomain {
             return WMDOMAIN_TEAM()
         case .price:
             return WMDOMAIN_PRICE()
+        case .credit:
+            return WMDOMAIN_CREDIT()
         }
     }
 }

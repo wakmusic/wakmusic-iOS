@@ -2,12 +2,6 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public enum CreditSongOrderType: String {
-    case latest
-    case popular
-    case oldest
-}
-
 public protocol FetchCreditSongListUseCase {
     func execute(
         name: String,

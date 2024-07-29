@@ -4,8 +4,22 @@ import SongCreditFeature
 import SongCreditFeatureInterface
 
 public extension AppComponent {
+    var remoteCreditDataSource: any RemoteCreditDataSource {
+        shared {
+            RemoteCreditDataSourceImpl(keychain: keychain)
+        }
+    }
+
+    var creditRepository: any CreditRepository {
+        shared {
+            CreditRepositoryImpl(remoteCreditDataSource: remoteCreditDataSource)
+        }
+    }
+
     var fetchCreditSongListUseCase: any FetchCreditSongListUseCase {
-        FetchCreditSongListUseCaseImpl()
+        shared {
+            FetchCreditSongListUseCaseImpl(creditRepository: creditRepository)
+        }
     }
 
     var songCreditFactory: any SongCreditFactory {
