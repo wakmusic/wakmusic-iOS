@@ -94,6 +94,7 @@ final class LikeStorageView: UIView {
 
 extension LikeStorageView: LikeStorageStateProtocol {
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
+        if tableView.frame.size == .zero { return }
         let isLoggedIn = loginWarningView.isHidden
 
         let warningView = WMWarningView(

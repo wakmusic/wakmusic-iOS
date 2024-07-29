@@ -16,10 +16,6 @@ public extension AppComponent {
         SignInComponent(parent: self)
     }
 
-    var requestComponent: RequestComponent {
-        RequestComponent(parent: self)
-    }
-
     var localAuthDataSource: any LocalAuthDataSource {
         shared {
             LocalAuthDataSourceImpl(keychain: keychain)

@@ -1,10 +1,10 @@
 import Foundation
 
-public protocol DeepLinkGeneratable {
+public protocol WMDeepLinkGeneratable {
     func generatePlaylistDeepLink(key: String) -> String
 }
 
-public final class DeepLinkGenerator: DeepLinkGeneratable {
+public final class WMDeepLinkGenerator: WMDeepLinkGeneratable {
     public init() {}
 
     public func generatePlaylistDeepLink(key: String) -> String {
