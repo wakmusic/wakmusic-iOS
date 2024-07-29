@@ -11,16 +11,14 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.toDomain() }
     }
 
-    public func setProfile(image: String) -> Single<BaseEntity> {
+    public func setProfile(image: String) -> Completable {
         return request(.setProfile(image: image))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
-    public func setUserName(name: String) -> Single<BaseEntity> {
+    public func setUserName(name: String) -> Completable {
         return request(.setUserName(name: name))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
     public func fetchPlaylist() -> Single<[PlaylistEntity]> {
@@ -35,34 +33,29 @@ public final class RemoteUserDataSourceImpl: BaseRemoteDataSource<UserAPI>, Remo
             .map { $0.map { $0.toDomain() } }
     }
 
-    public func editFavoriteSongsOrder(ids: [String]) -> Single<BaseEntity> {
+    public func editFavoriteSongsOrder(ids: [String]) -> Completable {
         return request(.editFavoriteSongsOrder(ids: ids))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
-    public func editPlaylistOrder(ids: [String]) -> Single<BaseEntity> {
+    public func editPlaylistOrder(ids: [String]) -> Completable {
         request(.editPlaylistOrder(ids: ids))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
-    public func deletePlaylist(ids: [String]) -> Single<BaseEntity> {
+    public func deletePlaylist(ids: [String]) -> Completable {
         request(.deletePlaylist(ids: ids))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
-    public func deleteFavoriteList(ids: [String]) -> Single<BaseEntity> {
+    public func deleteFavoriteList(ids: [String]) -> Completable {
         request(.deleteFavoriteList(ids: ids))
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
-    public func withdrawUserInfo() -> Single<BaseEntity> {
+    public func withdrawUserInfo() -> Completable {
         request(.withdrawUserInfo)
-            .map(BaseResponseDTO.self)
-            .map { $0.toDomain() }
+            .asCompletable()
     }
 
     public func fetchFruitList() -> Single<[FruitEntity]> {

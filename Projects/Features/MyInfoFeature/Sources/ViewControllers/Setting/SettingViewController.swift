@@ -173,7 +173,12 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
 
     override func bindAction(reactor: SettingReactor) {
         settingView.rx.dismissButtonDidTap
-            .map { SettingReactor.Action.dismissButtonDidTap }
+            .map { Reactor.Action.dismissButtonDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        settingView.rx.withDrawButtonDidTap
+            .map { Reactor.Action.withDrawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }

@@ -12,7 +12,7 @@ public struct DeletePlaylistUseCaseImpl: DeletePlaylistUseCase {
         self.userRepository = userRepository
     }
 
-    public func execute(ids: [String]) -> Single<BaseEntity> {
+    public func execute(ids: [String]) -> Completable {
         userRepository.deletePlaylist(ids: ids)
     }
 }

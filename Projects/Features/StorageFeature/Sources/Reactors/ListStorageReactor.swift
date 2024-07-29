@@ -366,11 +366,11 @@ private extension ListStorageReactor {
 
     func mutateDeletePlaylistUseCase(_ ids: [String]) -> Observable<Mutation> {
         deletePlayListUseCase.execute(ids: ids)
-            .asObservable()
-            .withUnretained(self)
-            .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.fetchDataSource()
-            }
+            .andThen(
+                .concat(
+                    fetchDataSource()
+                )
+            )
             .catch { error in
                 let error = error.asWMError
                 return .concat(
@@ -384,12 +384,11 @@ private extension ListStorageReactor {
         let currentDataSource = currentState.dataSource
         let playlistOrder = currentDataSource.flatMap { $0.items.map { $0.key } }
         return editPlayListOrderUseCase.execute(ids: playlistOrder)
-            .asObservable()
-            .flatMap { _ -> Observable<Mutation> in
-                return .concat(
-                    .just(.updateBackupDataSource(currentDataSource))
+            .andThen(
+                .concat(
+                    .just(Mutation.updateBackupDataSource(currentDataSource))
                 )
-            }
+            )
             .catch { error in
                 let error = error.asWMError
                 return Observable.concat([
