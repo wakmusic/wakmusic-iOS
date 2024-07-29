@@ -264,7 +264,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     activityItems: [URL(string: link)],
                     applicationActivities: [PlaylistActivity()]
                 )
-                
                 activityViewController.popoverPresentationController?.sourceView = owner.view
                 activityViewController.popoverPresentationController?.sourceRect = CGRect(
                                     x: owner.view.bounds.midX,
@@ -273,10 +272,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                                     height: 0
                 )
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
-                
-              
-               
-
                 owner.present(activityViewController, animated: true)
             }
 
