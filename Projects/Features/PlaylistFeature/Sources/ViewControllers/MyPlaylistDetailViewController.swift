@@ -264,6 +264,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     activityItems: [URL(string: link)],
                     applicationActivities: [PlaylistActivity()]
                 )
+                
+                activityViewController.popoverPresentationController?.sourceView = owner.view
+                ctivityViewController.popoverPresentationController?.sourceRect = owner.moreButton.frame
 
                 owner.present(activityViewController, animated: true)
             }
