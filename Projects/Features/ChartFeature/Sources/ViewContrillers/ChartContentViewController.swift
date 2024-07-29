@@ -25,6 +25,7 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
+    private var songDetailPresenter: SongDetailPresentable!
 
     deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
@@ -42,11 +43,13 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
 
     public static func viewController(
         viewModel: ChartContentViewModel,
-        containSongsFactory: ContainSongsFactory
+        containSongsFactory: ContainSongsFactory,
+        songDetailPresenter: SongDetailPresentable
     ) -> ChartContentViewController {
         let viewController = ChartContentViewController.viewController(storyBoardName: "Chart", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.containSongsFactory = containSongsFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 }
@@ -90,14 +93,14 @@ private extension ChartContentViewController {
                 ))
             })
             .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
-                guard let self else { return UITableViewCell() }
-                let indexPath: IndexPath = IndexPath(row: index, section: 0)
-                guard let cell = tableView.dequeueReusableCell(
+                guard let self,
+                      let cell = tableView.dequeueReusableCell(
                     withIdentifier: "\(ChartContentTableViewCell.self)",
-                    for: indexPath
+                    for: IndexPath(row: index, section: 0)
                 ) as? ChartContentTableViewCell else {
                     return UITableViewCell()
                 }
+                cell.delegate = self
                 cell.update(model: model, index: index, type: self.viewModel.type)
                 return cell
             }
@@ -157,6 +160,12 @@ private extension ChartContentViewController {
         activityIncidator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIncidator.startAnimating()
         tableView.refreshControl = refreshControl
+    }
+}
+
+extension ChartContentViewController: ChartContentTableViewCellDelegate {
+    func tappedThumbnail(id: String) {
+        songDetailPresenter.present(id: id)
     }
 }
 

@@ -8,6 +8,10 @@ import Then
 import UIKit
 import Utility
 
+protocol ChartContentTableViewCellDelegate: AnyObject {
+    func tappedThumbnail(id: String)
+}
+
 public final class ChartContentTableViewCell: UITableViewCell {
     // MARK: - UI
     private let rankingLabel = WMLabel(
@@ -89,6 +93,7 @@ public final class ChartContentTableViewCell: UITableViewCell {
 
     // MARK: - Property
     private var model: ChartRankingEntity?
+    weak var delegate: ChartContentTableViewCellDelegate?
 
     // MARK: - Life Cycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -119,8 +124,8 @@ public final class ChartContentTableViewCell: UITableViewCell {
 }
 
 // MARK: - Layout
-extension ChartContentTableViewCell {
-    private func addView() {
+private extension ChartContentTableViewCell {
+    func addView() {
         [
             rankingLabel,
             blowUpImageView,
@@ -139,7 +144,7 @@ extension ChartContentTableViewCell {
         }
     }
 
-    private func setRankingLayout() {
+    func setRankingLayout() {
         rankingLabel.snp.makeConstraints {
             $0.top.equalTo(10)
             $0.left.equalTo(20)
@@ -185,7 +190,7 @@ extension ChartContentTableViewCell {
         }
     }
 
-    private func setLayout() {
+    func setLayout() {
         titleStringLabel.snp.makeConstraints {
             $0.height.equalTo(24)
             $0.top.equalTo(9)
@@ -203,14 +208,14 @@ extension ChartContentTableViewCell {
         }
     }
 
-    private func addTarget() {
+    func addTarget() {
         thumbnailToPlayButton.addTarget(self, action: #selector(thumbnailToPlayButtonAction), for: .touchUpInside)
     }
 }
 
 // MARK: - Chart 등락률 화살표
-extension ChartContentTableViewCell {
-    private func newThenBefore() {
+private extension ChartContentTableViewCell {
+    func newThenBefore() {
         newRateLabel.isHidden = false
         nonImageView.isHidden = true
         blowUpImageView.isHidden = true
@@ -219,7 +224,7 @@ extension ChartContentTableViewCell {
         rateLabel.isHidden = true
     }
 
-    private func higherThanBefore(ranking: Int) {
+    func higherThanBefore(ranking: Int) {
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.increase.color
         rateLabel.text = "\(ranking)"
         rateLabel.isHidden = false
@@ -230,7 +235,7 @@ extension ChartContentTableViewCell {
         decreaseRateImageView.isHidden = true
     }
 
-    private func lowerThanBefore(ranking: Int) {
+    func lowerThanBefore(ranking: Int) {
         let minusBeforeRanking = "\(ranking)"
         rateLabel.textColor = DesignSystemAsset.PrimaryColor.decrease.color
         rateLabel.text = minusBeforeRanking.trimmingCharacters(in: ["-"])
@@ -242,7 +247,7 @@ extension ChartContentTableViewCell {
         decreaseRateImageView.isHidden = false
     }
 
-    private func sameAsBefore() {
+    func sameAsBefore() {
         rateLabel.isHidden = true
         newRateLabel.isHidden = true
         nonImageView.isHidden = false
@@ -252,7 +257,7 @@ extension ChartContentTableViewCell {
         decreaseRateImageView.isHidden = true
     }
 
-    private func blowThenBefore() {
+    func blowThenBefore() {
         rateLabel.isHidden = true
         newRateLabel.isHidden = true
         nonImageView.isHidden = true
@@ -264,11 +269,11 @@ extension ChartContentTableViewCell {
 }
 
 // MARK: - Update
-extension ChartContentTableViewCell {
-    public func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
+public extension ChartContentTableViewCell {
+    func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
         self.model = model
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : .clear
-
+        
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
@@ -298,7 +303,7 @@ extension ChartContentTableViewCell {
             text: "\(index + 1)",
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         )
-
+        
         if model.last == 0 {
             newThenBefore()
             return()
@@ -316,8 +321,10 @@ extension ChartContentTableViewCell {
             return()
         }
     }
+}
 
-    private func getAttributedString(
+private extension ChartContentTableViewCell {
+    func getAttributedString(
         text: String,
         font: UIFont
     ) -> NSMutableAttributedString {
@@ -332,15 +339,8 @@ extension ChartContentTableViewCell {
         return attributedString
     }
 
-    @objc private func thumbnailToPlayButtonAction() {
+    @objc func thumbnailToPlayButtonAction() {
         guard let song = self.model else { return }
-        let songEntity: SongEntity = SongEntity(
-            id: song.id,
-            title: song.title,
-            artist: song.artist,
-            views: song.views,
-            date: song.date
-        )
-        PlayState.shared.loadAndAppendSongsToPlaylist([songEntity])
+        delegate?.tappedThumbnail(id: song.id)
     }
 }
