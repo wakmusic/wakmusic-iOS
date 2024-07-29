@@ -1,10 +1,10 @@
 import ArtistDomainInterface
 import BaseFeature
 import DesignSystem
+import Kingfisher
 import SongsDomainInterface
 import UIKit
 import Utility
-import Kingfisher
 
 protocol ArtistMusicCellDelegate: AnyObject {
     func tappedThumbnail(id: String)
@@ -44,7 +44,7 @@ extension ArtistMusicCell {
     func update(model: ArtistSongListEntity) {
         self.model = model
         contentView.backgroundColor = model.isSelected ?
-        DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
+            DesignSystemAsset.BlueGrayColor.gray200.color : UIColor.clear
 
         titleStringLabel.attributedText = getAttributedString(
             text: model.title,

@@ -11,8 +11,10 @@ public final class SongDetailPresenter: SongDetailPresentable {
     public var presentSongDetailObservable: Observable<String> {
         presentSongDetailSubject
     }
+
     public func present(id: String) {
         presentSongDetailSubject.onNext(id)
     }
+
     public init() {}
 }

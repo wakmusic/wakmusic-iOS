@@ -11,7 +11,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-public final class ArtistMusicContentViewController: 
+public final class ArtistMusicContentViewController:
     BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
@@ -107,9 +107,9 @@ private extension ArtistMusicContentViewController {
             .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
                 guard let self = self,
                       let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "ArtistMusicCell",
-                    for: IndexPath(row: index, section: 0)
-                ) as? ArtistMusicCell else {
+                          withIdentifier: "ArtistMusicCell",
+                          for: IndexPath(row: index, section: 0)
+                      ) as? ArtistMusicCell else {
                     return UITableViewCell()
                 }
                 cell.delegate = self
