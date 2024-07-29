@@ -273,7 +273,7 @@ public extension ChartContentTableViewCell {
     func update(model: ChartRankingEntity, index: Int, type: ChartDateType) {
         self.model = model
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.gray200.color : .clear
-        
+
         let lastRanking = model.last - (index + 1)
         albumImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnail(id: model.id).toString),
@@ -303,7 +303,7 @@ public extension ChartContentTableViewCell {
             text: "\(index + 1)",
             font: DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         )
-        
+
         if model.last == 0 {
             newThenBefore()
             return()

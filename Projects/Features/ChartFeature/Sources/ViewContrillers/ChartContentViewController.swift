@@ -95,9 +95,9 @@ private extension ChartContentViewController {
             .bind(to: tableView.rx.items) { [weak self] tableView, index, model -> UITableViewCell in
                 guard let self,
                       let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "\(ChartContentTableViewCell.self)",
-                    for: IndexPath(row: index, section: 0)
-                ) as? ChartContentTableViewCell else {
+                          withIdentifier: "\(ChartContentTableViewCell.self)",
+                          for: IndexPath(row: index, section: 0)
+                      ) as? ChartContentTableViewCell else {
                     return UITableViewCell()
                 }
                 cell.delegate = self
