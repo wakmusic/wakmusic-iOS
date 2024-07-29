@@ -26,6 +26,7 @@ public enum SongCartType {
     case playlistStorage // 보관함 > 내 리스트 (함프)
     case myPlaylist // 보관함 > 플레이 리스트 상세 (함프)
     case WMPlaylist // 추천 플레이 리스트 상세 (함프)
+    case creditSong // 크레딧 작업자 노래 리스트 (백튼)
 }
 
 public extension SongCartViewType where Self: UIViewController {

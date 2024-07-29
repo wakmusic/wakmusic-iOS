@@ -1,10 +1,18 @@
 import BaseFeature
+import BaseFeatureInterface
 import CreditSongListFeatureInterface
 import DesignSystem
+import RxSwift
+import Then
 import UIKit
 import Utility
 
-final class CreditSongListTabItemViewController: BaseReactorViewController<CreditSongListTabItemReactor> {
+final class CreditSongListTabItemViewController:
+    BaseReactorViewController<CreditSongListTabItemReactor>,
+    SongCartViewType {
+    var songCartView: SongCartView!
+    var bottomSheetView: BottomSheetView!
+
     private typealias SectionType = Int
     private typealias ItemType = CreditSongModel
 
@@ -16,24 +24,48 @@ final class CreditSongListTabItemViewController: BaseReactorViewController<Credi
     ).then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         $0.delegate = self
-        $0.contentInset = .init(top: 12, left: 0, bottom: 0, right: 0)
+        $0.contentInset = .init(top: 12, left: 0, bottom: .songCartHeight, right: 0)
+        $0.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: .songCartHeight, right: 0)
+    }
+
+    private let songCartContainerView = UIView().then {
+        $0.backgroundColor = .clear
     }
 
     private lazy var creditSongCellRegistration = UICollectionView.CellRegistration<
         CreditSongCollectionViewCell,
         CreditSongModel
-    > { cell, _, model in
-        cell.update(model, isSelected: false)
+    > { [reactor] cell, _, model in
+        let isSelected = reactor?.currentState.selectedSongs.contains(model.id) ?? false
+        cell.update(model, isSelected: isSelected)
     }
 
     private lazy var creditSongHeaderRegistration = UICollectionView
         .SupplementaryRegistration<CreditSongCollectionHeaderView>(
             elementKind: UICollectionView.elementKindSectionHeader
-        ) { headerView, elementKind, indexPath in
+        ) { [reactor] headerView, _, _ in
+            headerView.setPlayButtonHandler {
+                reactor?.action.onNext(.randomPlayButtonDidTap)
+            }
         }
 
+    private let containSongsFactory: any ContainSongsFactory
+
+    init(
+        reactor: Reactor,
+        containSongsFactory: any ContainSongsFactory
+    ) {
+        self.containSongsFactory = containSongsFactory
+        super.init(reactor: reactor)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        reactor?.action.onNext(.viewDidLoad)
+    }
+
     override func addView() {
-        view.addSubviews(creditSongListCollectionView)
+        view.addSubviews(creditSongListCollectionView, songCartContainerView)
     }
 
     override func setLayout() {
@@ -41,11 +73,31 @@ final class CreditSongListTabItemViewController: BaseReactorViewController<Credi
             $0.horizontalEdges.bottom.equalToSuperview()
             $0.top.equalToSuperview().offset(CGFloat.offsetForTabbarHeight)
         }
+
+        songCartContainerView.snp.makeConstraints {
+            $0.horizontalEdges.bottom.equalToSuperview()
+            $0.height.equalTo(CGFloat.songCartHeight + SAFEAREA_BOTTOM_HEIGHT())
+        }
     }
 
     override func bindAction(reactor: CreditSongListTabItemReactor) {
-        self.rx.methodInvoked(#selector(viewDidLoad))
-            .map { _ in Reactor.Action.viewDidLoad }
+        creditSongListCollectionView.rx.itemSelected
+            .compactMap { [reactor] in
+                reactor.currentState.songs[safe: $0.row]
+            }
+            .map { Reactor.Action.songDidTap(id: $0.id) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        creditSongListCollectionView.rx.prefetchItems
+            .compactMap(\.last)
+            .map(\.row)
+            .filter { lastPrefetchedIndex in
+                reactor.currentState.songs.count - 1 == lastPrefetchedIndex
+            }
+            .filter { _ in reactor.currentState.isLoading == false }
+            .throttle(.seconds(1), scheduler: MainScheduler.asyncInstance)
+            .map { _ in Reactor.Action.reachedBottom }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
@@ -62,14 +114,101 @@ final class CreditSongListTabItemViewController: BaseReactorViewController<Credi
                 owner.dataSource.apply(snapshot, animatingDifferences: true)
             }
             .disposed(by: disposeBag)
+
+        sharedState.map(\.selectedSongs)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, selectedSongs in
+                if selectedSongs.count == .zero {
+                    owner.hideSongCart()
+                } else {
+                    owner.showSongCart(
+                        in: owner.songCartContainerView,
+                        type: .creditSong,
+                        selectedSongCount: selectedSongs.count,
+                        totalSongCount: owner.reactor?.currentState.songs.count ?? selectedSongs.count,
+                        useBottomSpace: true
+                    )
+                    owner.songCartView.delegate = owner
+                }
+                var snapshot = owner.dataSource.snapshot()
+                snapshot.reconfigureItems(snapshot.itemIdentifiers)
+                owner.dataSource.apply(snapshot)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$navigateType)
+            .compactMap { $0 }
+            .bind(with: self) { owner, navigate in
+                switch navigate {
+                case let .playYoutube(ids):
+                    owner.playYoutube(ids: ids)
+                case let .containSongs(ids):
+                    owner.showContainSongs(ids: ids)
+                }
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$isLoading)
+            .bind(with: self) { owner, isLoading in
+                if isLoading {
+                    owner.indicator.startAnimating()
+                } else {
+                    owner.indicator.stopAnimating()
+                }
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$toastMessage)
+            .compactMap { $0 }
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, options: [.songCart])
+            }
+            .disposed(by: disposeBag)
     }
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension CreditSongListTabItemViewController: UICollectionViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         CreditSongListScopedState.shared.didScroll(scrollView: scrollView)
     }
 }
+
+// MARK: - SongCartViewDelegate
+
+extension CreditSongListTabItemViewController: SongCartViewDelegate {
+    func buttonTapped(type: SongCartSelectType) {
+        guard let reactor = reactor else { return }
+
+        let currentState = reactor.currentState
+
+        let songs = currentState.songs
+            .filter { currentState.selectedSongs.contains($0.id) }
+
+        switch type {
+        case let .allSelect(isAll):
+            if isAll {
+                reactor.action.onNext(.allSelectButtonDidTap)
+            } else {
+                reactor.action.onNext(.allDeselectButtonDidTap)
+            }
+        case .addSong:
+            reactor.action.onNext(.addSongButtonDidTap)
+
+        case .addPlayList:
+            reactor.action.onNext(.addPlaylistButtonDidTap)
+
+        case .play:
+            reactor.action.onNext(.playButtonDidTap)
+
+        default:
+            break
+        }
+    }
+}
+
+// MARK: - Private Method
 
 extension CreditSongListTabItemViewController {
     private func makeCreditSongListCollectionViewLayout() -> UICollectionViewLayout {
@@ -126,6 +265,16 @@ extension CreditSongListTabItemViewController {
 
         return dataSource
     }
+
+    private func playYoutube(ids: [String]) {
+        WakmusicYoutubePlayer(ids: ids).play()
+    }
+
+    private func showContainSongs(ids: [String]) {
+        let viewController = containSongsFactory.makeView(songs: ids)
+        viewController.modalPresentationStyle = .fullScreen
+        UIApplication.topVisibleViewController()?.present(viewController, animated: true)
+    }
 }
 
 private extension CGFloat {
@@ -133,4 +282,5 @@ private extension CGFloat {
     static let playButtonHeight: CGFloat = 52
     static let playButtonHorizontalMargin: CGFloat = 20
     static let playButtonVerticalMargin: CGFloat = 0
+    static let songCartHeight: CGFloat = 56
 }

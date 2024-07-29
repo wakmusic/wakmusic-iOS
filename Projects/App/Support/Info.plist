@@ -128,6 +128,8 @@
 		<string>$(WMDOMAIN_SONGS)</string>
 		<key>WMDOMAIN_TEAM</key>
 		<string>$(WMDOMAIN_TEAM)</string>
+		<key>WMDOMAIN_CREDIT</key>
+		<string>$(WMDOMAIN_CREDIT)</string>
 		<key>WMDOMAIN_USER</key>
 		<string>$(WMDOMAIN_USER)</string>
 		<key>WMDOMAIN_PRICE</key>

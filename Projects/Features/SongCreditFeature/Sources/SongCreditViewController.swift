@@ -17,7 +17,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     private let songCreditCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let songCreditLayout = CreditCollectionViewLayout()
         $0.collectionViewLayout = songCreditLayout
-        $0.contentInset = .init(top: 20, left: 20, bottom: 20, right: 20)
+        $0.contentInset = .init(top: 40, left: 20, bottom: 20, right: 20)
         $0.backgroundColor = .clear
     }
 

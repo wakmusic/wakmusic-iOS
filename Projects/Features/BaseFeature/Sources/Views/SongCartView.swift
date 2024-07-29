@@ -118,7 +118,7 @@ public extension SongCartView {
             playButton.isHidden = true
             removeButton.isHidden = false
 
-        case .chartSong, .artistSong, .WMPlaylist:
+        case .chartSong, .artistSong, .WMPlaylist, .creditSong:
             allSelectView.isHidden = false
             songAddButton.isHidden = false
             playListAddButton.isHidden = false
