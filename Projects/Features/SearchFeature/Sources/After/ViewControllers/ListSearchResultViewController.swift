@@ -231,11 +231,9 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-        let id = PreferenceManager.userInfo?.decryptedID ?? ""
-        let isMine = model.ownerId == id
 
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
-        navigatePlaylistDetail(key: model.key, kind: isMine ? .my : .unknown)
+        navigatePlaylistDetail(key: model.key, ownerId: model.ownerId)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

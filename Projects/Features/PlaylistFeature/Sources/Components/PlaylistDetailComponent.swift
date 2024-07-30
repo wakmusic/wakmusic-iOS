@@ -9,14 +9,16 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
-    public func makeView(key: String, kind: PlaylistDetailKind) -> UIViewController {
-        switch kind {
-        case .my:
-            return dependency.myPlaylistDetailFactory.makeView(key: key)
-        case .unknown:
-            return dependency.unknownPlaylistDetailFactory.makeView(key: key)
-        case .wakmu:
-            return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
-        }
+    
+    public func makeView(key: String) -> UIViewController {
+        return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
     }
+    
+    public func makeView(key: String, ownerId: String) -> UIViewController {
+        return PlaylistDetailContainerViewController(key: key, ownerId: ownerId,
+                                                     unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory,
+                                                     myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
+    }
+    
+
 }

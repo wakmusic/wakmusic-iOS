@@ -8,5 +8,6 @@ public enum PlaylistDetailKind {
 }
 
 public protocol PlaylistDetailFactory {
-    func makeView(key: String, kind: PlaylistDetailKind) -> UIViewController
+    func makeView(key: String, ownerId: String) -> UIViewController
+    func makeView(key: String) -> UIViewController
 }
