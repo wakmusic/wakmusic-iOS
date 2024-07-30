@@ -36,10 +36,6 @@ public final class HomeViewModel: ViewModelType {
 
     public struct Input {
         let fetchHomeUseCase: PublishSubject<Void> = PublishSubject()
-        @available(*, deprecated, message: "스펙 변경에 따라 all listen 제거")
-        let chartAllListenTapped: PublishSubject<Void> = PublishSubject()
-        @available(*, deprecated, message: "스펙 변경에 따라 all listen 제거")
-        let newSongsAllListenTapped: PublishSubject<Void> = PublishSubject()
         let refreshPulled: PublishSubject<Void> = PublishSubject()
     }
 
@@ -78,39 +74,6 @@ public final class HomeViewModel: ViewModelType {
                 output.chartDataSource.accept(chartRankingEntity)
                 output.newSongDataSource.accept(newSongEntity)
                 output.playListDataSource.accept(recommendPlayListEntity)
-            })
-            .disposed(by: disposeBag)
-
-        input.chartAllListenTapped
-            .withLatestFrom(output.chartDataSource)
-            .subscribe(onNext: { songs in
-                let songEntities: [SongEntity] = songs.map {
-                    return SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        views: $0.views,
-                        date: $0.date
-                    )
-                }
-                LogManager.analytics(HomeAnalyticsLog.clickAllChartTop100MusicsButton)
-                PlayState.shared.loadAndAppendSongsToPlaylist(songEntities)
-            })
-            .disposed(by: disposeBag)
-
-        input.newSongsAllListenTapped
-            .withLatestFrom(output.newSongDataSource)
-            .subscribe(onNext: { newSongs in
-                let songEntities: [SongEntity] = newSongs.map {
-                    return SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        views: $0.views,
-                        date: "\($0.date)"
-                    )
-                }
-                PlayState.shared.loadAndAppendSongsToPlaylist(songEntities)
             })
             .disposed(by: disposeBag)
 
