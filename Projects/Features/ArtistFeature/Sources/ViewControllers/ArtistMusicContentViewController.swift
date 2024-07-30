@@ -202,6 +202,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
 
         default: return
         }
