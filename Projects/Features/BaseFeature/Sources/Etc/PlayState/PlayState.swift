@@ -68,14 +68,23 @@ public final class PlayState {
     }
 
     public func append(item: PlaylistItem) {
+        if let existSongIndexs = self.uniqueIndex(of: item) {
+            self.remove(indexs: [existSongIndexs])
+        }
         playlist.append(item)
     }
 
     public func append(contentsOf items: [PlaylistItem]) {
-        playlist.append(items)
+        let existSongIndexs = items.compactMap { self.uniqueIndex(of: $0) }
+        playlist.remove(indexs: existSongIndexs)
+        let mappedSongs = items.uniqueElements
+        playlist.append(mappedSongs)
     }
 
     public func insert(_ item: PlaylistItem, at index: Int) {
+        if let existSongIndexs = self.uniqueIndex(of: item) {
+            self.remove(indexs: [existSongIndexs])
+        }
         playlist.insert(item, at: index)
     }
 
