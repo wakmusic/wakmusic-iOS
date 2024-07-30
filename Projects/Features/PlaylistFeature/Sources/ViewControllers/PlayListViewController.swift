@@ -23,12 +23,11 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
 
-    internal var containSongsFactory: ContainSongsFactory!
+    private(set) var containSongsFactory: any ContainSongsFactory
+    private(set) var songDetailPresenter: any SongDetailPresentable
 
     public var songCartView: BaseFeature.SongCartView!
     public var bottomSheetView: BaseFeature.BottomSheetView!
-
-    private var panGestureRecognizer: UIPanGestureRecognizer!
 
     lazy var input = PlaylistViewModel.Input(
         viewWillAppearEvent: self.rx.methodInvoked(#selector(UIViewController.viewWillAppear)).map { _ in },
@@ -44,9 +43,14 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     )
     lazy var output = self.viewModel.transform(from: input)
 
-    init(viewModel: PlaylistViewModel, containSongsFactory: ContainSongsFactory) {
-        self.viewModel = viewModel
+    init(
+        viewModel: PlaylistViewModel,
+        containSongsFactory: ContainSongsFactory,
+        songDetailPresenter: any SongDetailPresentable
+    ) {
         self.containSongsFactory = containSongsFactory
+        self.songDetailPresenter = songDetailPresenter
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -68,7 +72,6 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     override public func viewDidLoad() {
         super.viewDidLoad()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
-        bindGesture()
         bindViewModel()
         bindActions()
     }
@@ -84,59 +87,6 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
 }
 
 private extension PlaylistViewController {
-    @objc func handlePanGesture(_ gestureRecognizer: UIPanGestureRecognizer) {
-        let distance = gestureRecognizer.translation(in: self.view)
-        let screenHeight = Utility.APP_HEIGHT()
-
-        switch gestureRecognizer.state {
-        case .began:
-            return
-
-        case .changed:
-            let distanceY = max(distance.y, 0)
-            view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
-            // let opacity = 1 - (distanceY / screenHeight)
-            // updateOpacity(value: Float(opacity))
-
-        case .ended:
-            let velocity = gestureRecognizer.velocity(in: self.view)
-
-            // 빠르게 드래그하거나 화면의 40% 이상 드래그 했을 경우 dismiss
-            if velocity.y > 1000 || view.frame.origin.y > (screenHeight * 0.4) {
-                dismiss(animated: true)
-            } else {
-                UIView.animate(
-                    withDuration: 0.35,
-                    delay: 0.0,
-                    usingSpringWithDamping: 0.8,
-                    initialSpringVelocity: 0.8,
-                    options: [.curveEaseInOut],
-                    animations: {
-                        self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: screenHeight)
-                        self.updateOpacity(value: 1)
-                    }
-                )
-            }
-
-        default:
-            break
-        }
-    }
-
-    func updateOpacity(value: Float) {
-        playlistView.layer.opacity = value
-    }
-}
-
-private extension PlaylistViewController {
-    private func bindGesture() {
-        panGestureRecognizer = UIPanGestureRecognizer(
-            target: self,
-            action: #selector(handlePanGesture(_:))
-        )
-        self.playlistView.titleBarView.addGestureRecognizer(panGestureRecognizer)
-    }
-
     private func bindViewModel() {
         bindCountOfSongs(output: output)
         bindPlaylistTableView(output: output)
@@ -167,14 +117,18 @@ private extension PlaylistViewController {
             .disposed(by: disposeBag)
 
         output.playlists
-            .filter { $0.isEmpty }
-            .subscribe { [weak self] _ in
-                let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
-                let height = space / 3 * 2
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
-                warningView.text = "곡이 없습니다."
-                self?.playlistView.playlistTableView.tableFooterView = warningView
-            }.disposed(by: disposeBag)
+            .bind(with: playlistView) { playlistView, playlists in
+                if playlists.isEmpty {
+                    let space = APP_HEIGHT() - STATUS_BAR_HEGHIT() - 48 - 56 - SAFEAREA_BOTTOM_HEIGHT()
+                    let height = space / 3 * 2
+                    let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+                    warningView.text = "곡이 없습니다."
+                    playlistView.playlistTableView.tableFooterView = warningView
+                } else {
+                    playlistView.playlistTableView.tableFooterView = nil
+                }
+            }
+            .disposed(by: disposeBag)
 
         output.playlists
             .map { $0.isEmpty }
@@ -216,12 +170,7 @@ private extension PlaylistViewController {
 }
 
 private extension PlaylistViewController {
-    private func bindActions() {
-        playlistView.thumbnailImageView.isUserInteractionEnabled = true
-        playlistView.thumbnailImageView.tapPublisher().sink { [weak self] _ in
-            self?.dismiss(animated: true)
-        }.store(in: &subscription)
-    }
+    private func bindActions() {}
 }
 
 extension PlaylistViewController {
