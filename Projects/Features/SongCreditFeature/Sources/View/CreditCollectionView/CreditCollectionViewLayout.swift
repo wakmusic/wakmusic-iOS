@@ -2,8 +2,8 @@ import UIKit
 
 final class CreditCollectionViewLayout: UICollectionViewFlowLayout {
     private enum Metric {
-        static let headerViewWidth: CGFloat = 64
-        static let headerViewHeight: CGFloat = 32
+        static let headerViewWidth: CGFloat = 66
+        static let headerViewHeight: CGFloat = 28
         static let sectionSpacing: CGFloat = 20
     }
 
