@@ -1,3 +1,4 @@
+import BaseFeatureInterface
 import CreditDomainTesting
 @testable import CreditSongListFeature
 import CreditSongListFeatureInterface
@@ -62,6 +63,21 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
             creditSortType: sortType,
             fetchCreditSongListUseCase: fetchCreditSongListUseCase
         )
-        return Inject.ViewControllerHost(CreditSongListTabItemViewController(reactor: reactor))
+        return Inject.ViewControllerHost(
+            CreditSongListTabItemViewController(
+                reactor: reactor,
+                containSongsFactory: DummyContainSongsFactory()
+            )
+        )
+    }
+}
+
+final class DummyContainSongsFactory: ContainSongsFactory {
+    func makeView(songs: [String]) -> UIViewController {
+        let viewController = UIViewController()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            viewController.dismiss(animated: true)
+        }
+        return viewController
     }
 }

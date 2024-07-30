@@ -1,3 +1,4 @@
+import BaseFeatureInterface
 import CreditDomainInterface
 import CreditSongListFeatureInterface
 import NeedleFoundation
@@ -5,6 +6,7 @@ import UIKit
 
 public protocol CreditSongListTabItemDependency: Dependency {
     var fetchCreditSongListUseCase: any FetchCreditSongListUseCase { get }
+    var containSongsFactory: any ContainSongsFactory { get }
 }
 
 public final class CreditSongListTabItemComponent: Component<CreditSongListTabItemDependency>,
@@ -15,7 +17,10 @@ public final class CreditSongListTabItemComponent: Component<CreditSongListTabIt
             creditSortType: sortType,
             fetchCreditSongListUseCase: dependency.fetchCreditSongListUseCase
         )
-        let viewController = CreditSongListTabItemViewController(reactor: reactor)
+        let viewController = CreditSongListTabItemViewController(
+            reactor: reactor,
+            containSongsFactory: dependency.containSongsFactory
+        )
         return viewController
     }
 }
