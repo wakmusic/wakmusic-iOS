@@ -7,7 +7,9 @@ let project = Project.module(
     targets: [
         .interface(module: .feature(.CreditSongListFeature)),
         .implements(module: .feature(.CreditSongListFeature), dependencies: [
-            .feature(target: .CreditSongListFeature, type: .interface)
+            .feature(target: .BaseFeature),
+            .feature(target: .CreditSongListFeature, type: .interface),
+            .domain(target: .CreditDomain, type: .interface)
         ]),
         .testing(module: .feature(.CreditSongListFeature), dependencies: [
             .feature(target: .CreditSongListFeature, type: .interface)
@@ -16,7 +18,8 @@ let project = Project.module(
             .feature(target: .CreditSongListFeature)
         ]),
         .demo(module: .feature(.CreditSongListFeature), dependencies: [
-            .feature(target: .CreditSongListFeature)
+            .feature(target: .CreditSongListFeature),
+            .domain(target: .CreditDomain, type: .testing)
         ])
     ]
 )

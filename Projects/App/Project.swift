@@ -34,6 +34,7 @@ let targets: [Target] = [
             .feature(target: .PlaylistFeature),
             .feature(target: .MusicDetailFeature),
             .feature(target: .SongCreditFeature),
+            .feature(target: .CreditSongListFeature),
             .domain(target: .AppDomain),
             .domain(target: .ArtistDomain),
             .domain(target: .AuthDomain),

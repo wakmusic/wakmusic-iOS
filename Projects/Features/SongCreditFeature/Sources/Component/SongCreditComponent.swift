@@ -1,3 +1,4 @@
+import CreditSongListFeatureInterface
 import NeedleFoundation
 import SongCreditFeatureInterface
 import SongsDomainInterface
@@ -5,6 +6,7 @@ import UIKit
 
 public protocol SongCreditDependency: Dependency {
     var fetchSongCreditsUseCase: any FetchSongCreditsUseCase { get }
+    var creditSongListFactory: any CreditSongListFactory { get }
 }
 
 public final class SongCreditComponent: Component<SongCreditDependency>, SongCreditFactory {
@@ -14,7 +16,8 @@ public final class SongCreditComponent: Component<SongCreditDependency>, SongCre
             fetchSongCreditsUseCase: dependency.fetchSongCreditsUseCase
         )
         let viewController = SongCreditViewController(
-            reactor: reactor
+            reactor: reactor,
+            creditSongListFactory: dependency.creditSongListFactory
         )
         return viewController
     }

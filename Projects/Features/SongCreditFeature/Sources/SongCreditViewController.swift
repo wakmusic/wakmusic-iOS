@@ -1,4 +1,5 @@
 import BaseFeature
+import CreditSongListFeatureInterface
 import DesignSystem
 import Kingfisher
 import Localization
@@ -72,6 +73,16 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     private var dimmedGridentLayer: DimmedGradientLayer?
     private let wmNavigationbarView = WMNavigationBarView()
 
+    private let creditSongListFactory: any CreditSongListFactory
+
+    init(
+        reactor: SongCreditReactor,
+        creditSongListFactory: any CreditSongListFactory
+    ) {
+        self.creditSongListFactory = creditSongListFactory
+        super.init(reactor: reactor)
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedGridentLayer == nil {
@@ -107,7 +118,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
 
     override func configureNavigation() {
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setTitle(LocalizationStrings.titleCreditList)
+        wmNavigationbarView.setTitle(LocalizationStrings.titleCreditList, textColor: .white)
     }
 
     override func bindAction(reactor: SongCreditReactor) {
@@ -121,7 +132,10 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        songCreditCollectionView.rx.modelSelected(CreditModel.CreditWorker.self)
+        songCreditCollectionView.rx.itemSelected
+            .compactMap { [reactor] indexPath in
+                reactor.currentState.credits[safe: indexPath.section]?.names[safe: indexPath.row]
+            }
             .map(Reactor.Action.creditSelected(worker:))
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -177,8 +191,7 @@ private extension SongCreditViewController {
     }
 
     func navigateCreditDetail(name: String) {
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .blue
+        let viewController = creditSongListFactory.makeViewController(workerName: name)
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

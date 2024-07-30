@@ -1,3 +1,4 @@
+import CreditSongListFeatureInterface
 import RxSwift
 @testable import SongCreditFeature
 import SongsDomainInterface
@@ -31,10 +32,20 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             songID: "DPEtmqvaKqY",
             fetchSongCreditsUseCase: fetchSongCreditsUseCase
         )
-        let viewController = SongCreditViewController(reactor: reactor)
+        let viewController = SongCreditViewController(
+            reactor: reactor,
+            creditSongListFactory: DummyCreditSongListFactory()
+        )
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
 
         return true
+    }
+}
+
+final class DummyCreditSongListFactory: CreditSongListFactory {
+    func makeViewController(workerName: String) -> UIViewController {
+        let viewController = UIViewController()
+        return viewController
     }
 }
