@@ -59,12 +59,12 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     private var playlistDetailFactory: PlaylistDetailFactory!
     private var newSongsComponent: NewSongsComponent!
     private var musicDetailFactory: (any MusicDetailFactory)!
-    var recommendViewHeightConstraint: NSLayoutConstraint?
+    private var recommendViewHeightConstraint: NSLayoutConstraint?
 
-    var viewModel: HomeViewModel!
+    private var viewModel: HomeViewModel!
     private lazy var input = HomeViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -123,12 +123,11 @@ extension HomeViewController {
             .disposed(by: disposeBag)
 
         latestSongsMoveButton.rx.tap
-            .withUnretained(self)
-            .subscribe(onNext: { owner, _ in
+            .bind(with: self) { owner, _ in
                 LogManager.analytics(HomeAnalyticsLog.clickRecentMusicsTitleButton)
                 let viewController = owner.newSongsComponent.makeView()
                 owner.navigationController?.pushViewController(viewController, animated: true)
-            })
+            }
             .disposed(by: disposeBag)
 
         latestSongsPlayButton.rx.tap
@@ -305,7 +304,7 @@ extension HomeViewController {
         chartTitleLabel.attributedText = mainTitleLabelAttributedString
 
         let mainTitleAllButtonAttributedString = NSMutableAttributedString(
-            string: "전체듣기",
+            string: "전체보기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                 .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
@@ -327,7 +326,7 @@ extension HomeViewController {
         latestArrowImageView.image = DesignSystemAsset.Home.homeArrowRight.image
 
         let latestSongPlayAttributedString = NSMutableAttributedString(
-            string: "전체듣기",
+            string: "전체보기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
                 .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
@@ -433,9 +432,8 @@ extension HomeViewController: HomeNewSongCellDelegate {
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlaylistEntity) {
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
-        #warning("변경된 플레이리슽 디테일 진입 방법으로 리팩")
-//        let playListDetailVc = playlistDetailFactory.makeView(id: model.key, isCustom: false)
-//        self.navigationController?.pushViewController(playListDetailVc, animated: true)
+        let viewController = playlistDetailFactory.makeView(key: model.key, kind: .wakmu)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
