@@ -2,6 +2,7 @@ import ArtistFeatureInterface
 import BaseFeature
 import Foundation
 import HomeFeatureInterface
+import MusicDetailFeatureInterface
 import MyInfoFeatureInterface
 import NeedleFoundation
 import NoticeDomainInterface
@@ -21,6 +22,8 @@ public protocol MainTabBarDependency: Dependency {
     var noticePopupComponent: NoticePopupComponent { get }
     var noticeDetailFactory: any NoticeDetailFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
+    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
@@ -38,7 +41,9 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
             myInfoFactory: dependency.myInfoFactory,
             noticePopupComponent: dependency.noticePopupComponent,
             noticeDetailFactory: dependency.noticeDetailFactory,
-            playlistDetailFactory: dependency.playlistDetailFactory
+            playlistDetailFactory: dependency.playlistDetailFactory,
+            musicDetailFactory: dependency.musicDetailFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

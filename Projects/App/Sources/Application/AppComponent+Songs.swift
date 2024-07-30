@@ -9,6 +9,12 @@ import SongsDomain
 import SongsDomainInterface
 
 public extension AppComponent {
+    var songDetailPresenter: any SongDetailPresentable {
+        shared {
+            SongDetailPresenter()
+        }
+    }
+
     var homeFactory: any HomeFactory {
         HomeComponent(parent: self)
     }

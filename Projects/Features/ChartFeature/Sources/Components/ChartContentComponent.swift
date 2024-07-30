@@ -7,6 +7,7 @@ import NeedleFoundation
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class ChartContentComponent: Component<ChartContentDependency> {
@@ -16,7 +17,8 @@ public final class ChartContentComponent: Component<ChartContentDependency> {
                 type: type,
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase
             ),
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }
