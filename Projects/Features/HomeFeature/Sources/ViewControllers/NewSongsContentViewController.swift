@@ -245,6 +245,7 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
 
         case .remove:
             return

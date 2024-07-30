@@ -134,12 +134,12 @@ private extension ChartContentViewController {
 
         output.groupPlaySongs
             .bind(with: self, onNext: { owner, source in
-                LogManager.printDebug(source.map { $0.title })
                 guard !source.isEmpty else {
                     owner.output.showToast.onNext("차트 데이터가 없습니다.")
                     return
                 }
                 PlayState.shared.loadAndAppendSongsToPlaylist(source)
+                WakmusicYoutubePlayer(ids: source.map { $0.id }).play()
             })
             .disposed(by: disposeBag)
 
@@ -147,8 +147,7 @@ private extension ChartContentViewController {
             .bind(with: self) { owner, message in
                 owner.showToast(
                     text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 56 + 40
+                    options: [.tabBar, .songCart]
                 )
             }
             .disposed(by: disposeBag)
@@ -246,6 +245,7 @@ extension ChartContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
 
         case .remove:
             return
