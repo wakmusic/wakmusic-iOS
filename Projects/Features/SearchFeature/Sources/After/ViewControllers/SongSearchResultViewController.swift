@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -17,6 +18,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     var bottomSheetView: BottomSheetView!
 
+    private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
 
     private let searchSortOptionComponent: SearchSortOptionComponent
@@ -43,11 +45,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     init(
         _ reactor: SongSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
+        musicDetailFactory: any MusicDetailFactory,
         containSongsFactory: any ContainSongsFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
+        self.musicDetailFactory = musicDetailFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -246,9 +250,14 @@ extension SongSearchResultViewController {
 
     private func createDataSource()
         -> UICollectionViewDiffableDataSource<SongSearchResultSection, SongEntity> {
-        let cellRegistration = UICollectionView.CellRegistration<SongResultCell, SongEntity> { cell, _, item in
-            cell.update(item)
-        }
+        let cellRegistration = UICollectionView
+            .CellRegistration<SongResultCell, SongEntity> { [weak self] cell, _, item in
+
+                guard let self else { return }
+
+                cell.delegate = self
+                cell.update(item)
+            }
 
         let dataSource = UICollectionViewDiffableDataSource<
             SongSearchResultSection,
@@ -296,6 +305,15 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
         if reactor?.currentState.sortType != type {
             reactor?.action.onNext(.changeSortType(type))
         }
+    }
+}
+
+extension SongSearchResultViewController: SongResultCellDelegate {
+    func thumbnailDidTap(key: String) {
+        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
+        vc.modalPresentationStyle = .fullScreen
+
+        self.present(vc, animated: true)
     }
 }
 

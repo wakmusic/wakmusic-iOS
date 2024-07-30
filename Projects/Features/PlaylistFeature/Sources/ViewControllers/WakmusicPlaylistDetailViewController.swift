@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
 import SnapKit
@@ -20,6 +21,8 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
+
+    private let musicDetailFactory: any MusicDetailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -49,10 +52,12 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     init(
         reactor: WakmusicPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory
+        textPopUpFactory: any TextPopUpFactory,
+        musicDetailFactory: any MusicDetailFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
+        self.musicDetailFactory = musicDetailFactory
 
         super.init(reactor: reactor)
     }
@@ -218,6 +223,7 @@ extension WakmusicPlaylistDetailViewController {
                     return UITableViewCell()
                 }
 
+                cell.delegate = self
                 cell.update(itemIdentifier)
                 cell.selectionStyle = .none
 
@@ -270,6 +276,15 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
+    }
+}
+
+extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
+    func thumbnailDidTap(key: String) {
+        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
+        vc.modalPresentationStyle = .fullScreen
+
+        self.present(vc, animated: true)
     }
 }
 

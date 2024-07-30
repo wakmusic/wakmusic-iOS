@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
 import SnapKit
@@ -20,6 +21,8 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let containSongsFactory: any ContainSongsFactory
 
     private let textPopUpFactory: any TextPopUpFactory
+
+    private let musicDetailFactory: any MusicDetailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -58,11 +61,12 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     init(
         reactor: UnknownPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory
+        textPopUpFactory: any TextPopUpFactory,
+        musicDetailFactory: any MusicDetailFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
-
+        self.musicDetailFactory = musicDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -287,7 +291,7 @@ extension UnknownPlaylistDetailViewController {
                 ) as? PlaylistDateTableViewCell else {
                     return UITableViewCell()
                 }
-
+                cell.delegate = self
                 cell.update(itemIdentifier)
                 cell.selectionStyle = .none
 
@@ -340,6 +344,15 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         reactor?.action.onNext(.itemDidTap(indexPath.row))
+    }
+}
+
+extension UnknownPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
+    func thumbnailDidTap(key: String) {
+        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
+        vc.modalPresentationStyle = .fullScreen
+
+        self.present(vc, animated: true)
     }
 }
 

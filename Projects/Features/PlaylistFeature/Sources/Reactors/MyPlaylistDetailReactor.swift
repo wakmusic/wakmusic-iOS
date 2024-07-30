@@ -206,6 +206,18 @@ private extension MyPlaylistDetailReactor {
                                     )
                                 }
                             )
+                        ),
+                        Observable.just(
+                            Mutation.updateBackUpPlaylist(
+                                data.songs.map {
+                                    PlaylistItemModel(
+                                        id: $0.id,
+                                        title: $0.title,
+                                        artist: $0.artist,
+                                        isSelected: false
+                                    )
+                                }
+                            )
                         )
                     ])
                 }

@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import MusicDetailFeatureInterface
 import PhotosUI
 import PlaylistFeatureInterface
 import ReactorKit
@@ -35,6 +36,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private let checkPlaylistCoverFactory: any CheckPlaylistCoverFactory
 
     private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
+
+    private let musicDetailFactory: any MusicDetailFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -85,7 +88,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         textPopUpFactory: any TextPopUpFactory,
         playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
-        defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
+        defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory,
+        musicDetailFactory: any MusicDetailFactory
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
@@ -93,6 +97,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
         self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
         self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
+        self.musicDetailFactory = musicDetailFactory
 
         super.init(reactor: reactor)
     }
@@ -103,19 +108,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPlaylistDetail))
         self.view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         reactor?.action.onNext(.viewDidLoad)
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
-        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPlaylistDetail))
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
         hideAll()
     }
 
@@ -467,10 +467,6 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DEBUG_LOG("HELLo")
-    }
 }
 
 /// 전체재생 , 랜덤 재생 델리게이트
@@ -498,6 +494,13 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
 /// 편집모드 시 셀 선택 이벤트
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
+    func thumbnailDidTap(key: String) {
+        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
+        vc.modalPresentationStyle = .fullScreen
+
+        self.present(vc, animated: true)
+    }
+
     func superButtonTapped(index: Int) {
         tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
         reactor?.action.onNext(.itemDidTap(index))
@@ -579,8 +582,6 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
         case .share:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
             reactor?.action.onNext(.shareButtonDidTap)
-
-            break
         }
 
         self.hideplaylistEditSheet()

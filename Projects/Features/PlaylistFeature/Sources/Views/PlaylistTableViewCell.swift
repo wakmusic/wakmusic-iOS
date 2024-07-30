@@ -9,6 +9,7 @@ import Utility
 
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)
+    func thumbnailDidTap(key: String)
 }
 
 internal class PlaylistTableViewCell: UITableViewCell {
@@ -20,6 +21,8 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
+
+    internal lazy var thumbnailButton = UIButton()
 
     internal lazy var titleArtistStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
         $0.axis = .vertical
@@ -56,10 +59,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.layer.shadowRadius = 5.33
     }
 
-    internal lazy var superButton = UIButton().then {
-        $0.addTarget(self, action: #selector(superButtonSelectedAction), for: .touchUpInside)
-    }
-
+    internal lazy var superButton = UIButton()
     internal weak var delegate: PlaylistTableViewCellDelegate?
 
     internal var model: (index: Int, model: PlaylistItemModel?) = (0, nil)
@@ -69,6 +69,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureContents()
+        bindAction()
     }
 
     @available(*, unavailable)
@@ -85,6 +86,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.thumbnailImageView)
         self.contentView.addSubview(self.titleArtistStackView)
         self.contentView.addSubview(self.playImageView)
+        self.contentView.addSubview(self.thumbnailButton)
         self.contentView.addSubview(self.superButton)
 
         let height = 40
@@ -92,6 +94,13 @@ internal class PlaylistTableViewCell: UITableViewCell {
         thumbnailImageView.snp.makeConstraints {
             $0.centerY.equalTo(contentView.snp.centerY)
             $0.left.equalTo(contentView.snp.left).offset(20)
+            $0.width.equalTo(width)
+            $0.height.equalTo(height)
+        }
+
+        thumbnailButton.snp.makeConstraints {
+            $0.centerY.equalTo(thumbnailImageView)
+            $0.left.equalTo(thumbnailButton)
             $0.width.equalTo(width)
             $0.height.equalTo(height)
         }
@@ -138,8 +147,19 @@ extension PlaylistTableViewCell {
         self.updateConstraintPlayImageView(isEditing: isEditing)
     }
 
-    @objc func superButtonSelectedAction() {
-        delegate?.superButtonTapped(index: model.index)
+    func bindAction() {
+        thumbnailButton.addAction { [weak self] in
+
+            guard let song = self?.model.model else {
+                return
+            }
+
+            self?.delegate?.thumbnailDidTap(key: song.id)
+        }
+
+        superButton.addAction { [weak self] in
+            self?.delegate?.superButtonTapped(index: self?.model.index ?? 0)
+        }
     }
 
     private func updateButtonHidden(isEditing: Bool) {
