@@ -104,10 +104,8 @@ private extension MainContainerViewController {
         let playlistButtonAction = UIAction { [navigationController, playlistFactory] _ in
             guard let playlistFactory else { return }
             let playlistViewController = playlistFactory.makeViewController()
-            navigationController?.topViewController?.showBottomSheet(
-                content: playlistViewController,
-                size: .fixed(APP_HEIGHT())
-            )
+            playlistViewController.modalPresentationStyle = .overFullScreen
+            navigationController?.topViewController?.present(playlistViewController, animated: true)
         }
         playlistFloatingActionButton.addAction(
             playlistButtonAction,
@@ -118,10 +116,8 @@ private extension MainContainerViewController {
             .bind { [navigationController, playlistFactory] _ in
                 guard let playlistFactory else { return }
                 let playlistViewController = playlistFactory.makeViewController()
-                navigationController?.topViewController?.showBottomSheet(
-                    content: playlistViewController,
-                    size: .fixed(APP_HEIGHT())
-                )
+                playlistViewController.modalPresentationStyle = .overFullScreen
+                navigationController?.topViewController?.present(playlistViewController, animated: true)
             }
             .disposed(by: disposeBag)
     }
