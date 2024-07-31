@@ -1,8 +1,10 @@
 import BaseFeature
 import BaseFeatureInterface
 import Inject
-import LyricHighlightingFeatureInterface
+import LikeDomainInterface
 @testable import MusicDetailFeature
+import LikeDomainTesting
+import LyricHighlightingFeatureInterface
 import RxSwift
 import SongCreditFeatureInterface
 import SongsDomainTesting
@@ -33,6 +35,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 )
             )
         }
+        let checkIsLikedSongUseCase = CheckIsLikedSongUseCaseSpy()
+        checkIsLikedSongUseCase.handler = { _ in
+            Single.just(true)
+        }
+
+        let addLikeSongUseCase = AddLikeSongUseCaseSpy()
+        addLikeSongUseCase.handler = { _ in
+            .just(.init(status: "", likes: 0))
+        }
+        let cancelLikeSongUseCase = CancelLikeSongUseCaseSpy()
+        cancelLikeSongUseCase.handler = { _ in
+            .just(.init(status: "", likes: 0))
+        }
 
         let reactor = MusicDetailReactor(
             songIDs: [
@@ -42,7 +57,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 "qZi1Xh0_8q4"
             ],
             selectedID: "DPEtmqvaKqY",
-            fetchSongUseCase: fetchSongUseCase
+            fetchSongUseCase: fetchSongUseCase,
+            checkIsLikedSongUseCase: checkIsLikedSongUseCase,
+            addLikeSongUseCase: addLikeSongUseCase,
+            cancelLikeSongUseCase: cancelLikeSongUseCase
         )
         let viewController = Inject.ViewControllerHost(
             UINavigationController(

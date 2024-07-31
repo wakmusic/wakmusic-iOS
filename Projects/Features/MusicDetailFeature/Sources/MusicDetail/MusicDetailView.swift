@@ -17,7 +17,8 @@ private protocol MusicDetailStateProtocol {
     func updateIsDisabledSingingRoom(isDisabled: Bool)
     func updateIsDisabledPrevButton(isDisabled: Bool)
     func updateIsDisabledNextButton(isDisabled: Bool)
-    func updateIsLike(isLike: Bool)
+    func updateViews(views: Int)
+    func updateIsLike(likes: Int, isLike: Bool)
 }
 
 private protocol MusicDetailActionProtocol {
@@ -223,8 +224,12 @@ extension MusicDetailView: MusicDetailStateProtocol {
         musicControlView.updateIsDisabledNextButton(isDisabled: isDisabled)
     }
 
-    func updateIsLike(isLike: Bool) {
-        musicToolbarView.updateIsLike(isLike: isLike)
+    func updateViews(views: Int) {
+        musicToolbarView.updateViews(views: views)
+    }
+
+    func updateIsLike(likes: Int, isLike: Bool) {
+        musicToolbarView.updateIsLike(likes: likes, isLike: isLike)
     }
 }
 

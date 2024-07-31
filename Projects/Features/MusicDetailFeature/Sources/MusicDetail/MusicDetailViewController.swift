@@ -74,9 +74,18 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .bind(with: self) { owner, song in
                 owner.musicDetailView.updateTitle(title: song.title)
                 owner.musicDetailView.updateArtist(artist: song.artistString)
+                owner.musicDetailView.updateViews(views: song.views)
+                owner.musicDetailView.updateIsLike(likes: song.likes, isLike: song.isLiked)
+            }
+            .disposed(by: disposeBag)
 
+        sharedState
+            .compactMap(\.selectedSong)
+            .map(\.videoID)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, songID in
                 owner.musicDetailView.updateBackgroundImage(
-                    imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: song.videoID)
+                    imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: songID)
                 )
             }
             .disposed(by: disposeBag)

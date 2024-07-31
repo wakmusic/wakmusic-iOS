@@ -7,6 +7,7 @@ struct SongModel: Equatable {
     let title: String
     let artistString: String
     let date: String
+    let views: Int
     let likes: Int
     let isLiked: Bool
     let karaokeNumber: KaraokeNumber
@@ -14,6 +15,19 @@ struct SongModel: Equatable {
     struct KaraokeNumber: Equatable {
         let tj: Int?
         let ky: Int?
+    }
+
+    func updateIsLiked(likes: Int, isLiked: Bool) -> SongModel {
+        SongModel(
+            videoID: self.videoID,
+            title: self.title,
+            artistString: self.artistString,
+            date: self.date,
+            views: self.views,
+            likes: likes,
+            isLiked: isLiked,
+            karaokeNumber: self.karaokeNumber
+        )
     }
 }
 
@@ -24,6 +38,7 @@ extension SongEntity {
             title: self.title,
             artistString: self.artist,
             date: self.date,
+            views: self.views,
             likes: self.likes,
             isLiked: isLiked,
             karaokeNumber: SongModel.KaraokeNumber(
