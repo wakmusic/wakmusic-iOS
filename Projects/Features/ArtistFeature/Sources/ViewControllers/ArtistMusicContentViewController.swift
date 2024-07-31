@@ -149,8 +149,8 @@ private extension ArtistMusicContentViewController {
                 owner.showToast(
                     text: message,
                     options: owner.output.songEntityOfSelectedSongs.value.isEmpty ?
-                    [.tabBar] :
-                    [.tabBar, .songCart]
+                        [.tabBar] :
+                        [.tabBar, .songCart]
                 )
             }
             .disposed(by: disposeBag)
