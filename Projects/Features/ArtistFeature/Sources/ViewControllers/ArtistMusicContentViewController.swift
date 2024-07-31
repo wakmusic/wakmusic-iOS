@@ -146,7 +146,12 @@ private extension ArtistMusicContentViewController {
 
         output.showToast
             .bind(with: self) { owner, message in
-                owner.showToast(text: message, options: [.tabBar, .songCart])
+                owner.showToast(
+                    text: message,
+                    options: owner.output.songEntityOfSelectedSongs.value.isEmpty ?
+                    [.tabBar] :
+                    [.tabBar, .songCart]
+                )
             }
             .disposed(by: disposeBag)
     }
@@ -233,6 +238,7 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
                 artist: viewModel.model?.id ?? ""
             )
         )
+
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
                 id: $0.songID,
@@ -242,12 +248,27 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
                 date: $0.date
             )
         }
+
         switch event {
         case .allPlay:
+            var urlString: String = ""
+            switch viewModel.type {
+            case .new:
+                urlString = viewModel.model?.playlist.latest ?? ""
+            case .popular:
+                urlString = viewModel.model?.playlist.popular ?? ""
+            case .old:
+                urlString = viewModel.model?.playlist.oldest ?? ""
+            }
+            guard !urlString.isEmpty, let url = URL(string: urlString) else {
+                output.showToast.onNext("해당 기능은 준비 중입니다.")
+                return
+            }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+            UIApplication.shared.open(url)
 
-        case .shufflePlay:
-            PlayState.shared.loadAndAppendSongsToPlaylist(songs.shuffled())
+        case .shufflePlay: // 미사용
+            break
         }
         input.allSongSelected.onNext(false)
     }
