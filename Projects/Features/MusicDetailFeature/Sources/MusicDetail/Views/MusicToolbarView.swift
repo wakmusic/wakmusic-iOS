@@ -59,11 +59,11 @@ final class MusicToolbarView: UIStackView {
 
 extension MusicToolbarView: MusicToolbarStateProtocol {
     func updateViews(views: Int) {
-        viewsButton.setTitle("\(views)", for: .normal)
+        viewsButton.setTitle("\(views.toUnitNumber)", for: .normal)
     }
 
     func updateIsLike(likes: Int, isLike: Bool) {
-        heartButton.setTitle("\(likes)", for: .normal)
+        heartButton.setTitle("\(likes.toUnitNumber)", for: .normal)
         heartButton.setIsLike(isLike: isLike)
     }
 }
