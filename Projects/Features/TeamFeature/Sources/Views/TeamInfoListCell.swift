@@ -102,6 +102,12 @@ extension TeamInfoListCell {
                 bottomSpacingView.isHidden = true
             }
         }
+
+        profileImageView.kf.setImage(
+            with: URL(string: entity.profile),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
 }
 
@@ -162,6 +168,5 @@ private extension TeamInfoListCell {
     func configureUI() {
         backgroundColor = UIColor.clear
         contentView.backgroundColor = colorFromRGB(0xE4E7EC).withAlphaComponent(0.5)
-        profileImageView.backgroundColor = UIColor.random()
     }
 }

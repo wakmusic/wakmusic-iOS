@@ -2,6 +2,7 @@ import DesignSystem
 import Foundation
 import UIKit
 import Utility
+import TeamDomainInterface
 
 final class TeamInfoHeaderView: UIView {
     private let profileImageView = UIImageView().then {
@@ -34,9 +35,9 @@ final class TeamInfoHeaderView: UIView {
 }
 
 extension TeamInfoHeaderView {
-    func update(name: String) {
+    func update(entity: TeamListEntity?) {
         let target = "총괄"
-        let descriptionString = "\(target) · \(name)"
+        let descriptionString = "\(target) · \(entity?.name ?? "")"
         let attributedString = NSMutableAttributedString(
             string: descriptionString,
             attributes: [
@@ -55,6 +56,12 @@ extension TeamInfoHeaderView {
             range: NSRange(location: 0, length: target.count)
         )
         descriptionLabel.attributedText = attributedString
+
+        profileImageView.kf.setImage(
+            with: URL(string: entity?.profile ?? ""),
+            placeholder: nil,
+            options: [.transition(.fade(0.2))]
+        )
     }
 }
 
@@ -85,6 +92,5 @@ private extension TeamInfoHeaderView {
 
     func configureUI() {
         backgroundColor = colorFromRGB(0xE4E7EC).withAlphaComponent(0.5)
-        profileImageView.backgroundColor = UIColor.random()
     }
 }
