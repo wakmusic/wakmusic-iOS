@@ -16,7 +16,10 @@ public extension AppComponent {
 
     var userRepository: any UserRepository {
         shared {
-            UserRepositoryImpl(remoteUserDataSource: remoteUserDataSource)
+            UserRepositoryImpl(
+                remoteUserDataSource: remoteUserDataSource,
+                localLikeDataSource: localLikeDataSource
+            )
         }
     }
 

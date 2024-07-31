@@ -12,6 +12,7 @@ import BaseFeature
 import ErrorModule
 import Foundation
 import KeychainModule
+import LogManager
 import RxCocoa
 import RxSwift
 import UserDomainInterface
@@ -22,10 +23,12 @@ public final class IntroViewModel: ViewModelType {
     var fetchAppCheckUseCase: FetchAppCheckUseCase
     private let logoutUseCase: any LogoutUseCase
     private let checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
+    private let fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase
     var disposeBag = DisposeBag()
 
     public struct Input {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
+        var fetchLikedSongsCheck: PublishSubject<Void> = PublishSubject()
         var fetchAppCheck: PublishSubject<Void> = PublishSubject()
         var fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
         var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
@@ -42,13 +45,15 @@ public final class IntroViewModel: ViewModelType {
         fetchUserInfoUseCase: FetchUserInfoUseCase,
         fetchAppCheckUseCase: FetchAppCheckUseCase,
         logoutUseCase: any LogoutUseCase,
-        checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
+        checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase,
+        fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
         self.logoutUseCase = logoutUseCase
         self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
-        DEBUG_LOG("✅ \(Self.self) 생성")
+        self.fetchFavoriteSongsUseCase = fetchFavoriteSongsUseCase
+        LogManager.printDebug("\(Self.self) 생성")
     }
 
     public func transform(from input: Input) -> Output {
@@ -62,6 +67,20 @@ public final class IntroViewModel: ViewModelType {
         }
         .bind(to: output.permissionResult)
         .disposed(by: disposeBag)
+
+        input.fetchLikedSongsCheck
+            .flatMap { [fetchFavoriteSongsUseCase] in
+                fetchFavoriteSongsUseCase.execute()
+            }
+            .subscribe(
+                onNext: { songs in
+                    LogManager.printDebug("좋아요 목록 갱신 완료 [ \(songs.count)개 ]")
+                },
+                onError: { error in
+                    LogManager.printError(error.localizedDescription)
+                }
+            )
+            .disposed(by: disposeBag)
 
         input.endedLottieAnimation
             .bind(to: output.endedLottieAnimation)

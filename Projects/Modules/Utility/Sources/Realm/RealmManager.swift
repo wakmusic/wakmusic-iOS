@@ -11,18 +11,34 @@ import LogManager
 import Realm
 import RealmSwift
 
+/*
+ schemaVersion 업데이트 기록
+ v1
+ - PlayedLists 엔티티 추가
+    - 재생목록 저장을 위한 엔티티
+ 
+ v2
+ - PlaylistLocalEntity 엔티티 추가
+    - 재생목록 저장을 위한 엔티티 (리팩토링 버전)
+ - 기존 PlayedList는 레거시로 판정하여 migration 과정에서 데이터 모두 제거
+ 
+ v3
+ - LocalLikeEntity 엔티티 추가
+    - 사용자가 좋아요를 클릭한 노래들의 ID를 저장하는 엔티티
+ */
 public class RealmManager: NSObject {
     public static let shared = RealmManager()
     private var realm: Realm!
 
     override init() {
         let config = Realm.Configuration(
-            schemaVersion: 2,
+            schemaVersion: 3,
             migrationBlock: { database, oldSchemaVersion in
                 if oldSchemaVersion < 1 {}
                 if oldSchemaVersion < 2 {
                     database.deleteData(forType: PlayedLists.className())
                 }
+                if oldSchemaVersion < 3 {}
             }
         )
         Realm.Configuration.defaultConfiguration = config
@@ -63,6 +79,10 @@ public extension RealmManager {
 
     func fetchRealmDB<T: Object>(_ type: T.Type) -> Results<T> {
         self.realm.objects(type)
+    }
+
+    func fetchRealmDB<T: Object, KeyType>(_ type: T.Type, primaryKey: KeyType) -> T?{
+        self.realm.object(ofType: type, forPrimaryKey: primaryKey)
     }
 
     func deleteRealmDB<T: Object>(model: Results<T>) {

@@ -14,9 +14,18 @@ public extension AppComponent {
         }
     }
 
+    var localLikeDataSource: any LocalLikeDataSource {
+        shared {
+            LocalLikeDataSourceImpl()
+        }
+    }
+
     var likeRepository: any LikeRepository {
         shared {
-            LikeRepositoryImpl(remoteLikeDataSource: remoteLikeDataSource)
+            LikeRepositoryImpl(
+                remoteLikeDataSource: remoteLikeDataSource,
+                localLikeDataSource: localLikeDataSource
+            )
         }
     }
 
@@ -29,6 +38,12 @@ public extension AppComponent {
     var cancelLikeSongUseCase: any CancelLikeSongUseCase {
         shared {
             CancelLikeSongUseCaseImpl(likeRepository: likeRepository)
+        }
+    }
+
+    var checkIsLikedSongUseCase: any CheckIsLikedSongUseCase {
+        shared {
+            CheckIsLikedSongUseCaseImpl(likeRepository: likeRepository)
         }
     }
 }
