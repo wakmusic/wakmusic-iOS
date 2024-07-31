@@ -1,8 +1,8 @@
 import DesignSystem
 import Foundation
+import TeamDomainInterface
 import UIKit
 import Utility
-import TeamDomainInterface
 
 final class TeamInfoHeaderView: UIView {
     private let profileImageView = UIImageView().then {
