@@ -5,6 +5,7 @@ import RxSwift
 import SongsDomainInterface
 
 public final class PlaylistRepositoryImpl: PlaylistRepository {
+ 
     private let remotePlaylistDataSource: any RemotePlaylistDataSource
 
     public init(
@@ -63,5 +64,9 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
 
     public func uploadCustomImage(presignedURL: String, data: Data) -> Completable {
         remotePlaylistDataSource.uploadCustomImage(presignedURL: presignedURL, data: data)
+    }
+    
+    public func requestPlaylistOwnerId(key: String) -> Single<PlaylistOwnerIdEntity> {
+        remotePlaylistDataSource.requestPlaylistOwnerId(key: key)
     }
 }

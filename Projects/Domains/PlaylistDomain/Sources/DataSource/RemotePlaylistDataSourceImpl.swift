@@ -82,4 +82,11 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .request(CustomPlaylistImageAPI.uploadCustomImage(url: presignedURL, data: data))
             .asCompletable()
     }
+    
+    
+    public func requestPlaylistOwnerId(key: String) -> Single<PlaylistOwnerIdEntity> {
+        return request(.requestPlaylistOwner(key: key))
+            .map(PlaylistOwnerIdResponseDTO.self)
+            .map{ $0.toDomain() }
+    }
 }
