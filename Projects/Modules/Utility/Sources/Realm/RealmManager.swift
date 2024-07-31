@@ -81,11 +81,21 @@ public extension RealmManager {
         self.realm.objects(type)
     }
 
-    func fetchRealmDB<T: Object, KeyType>(_ type: T.Type, primaryKey: KeyType) -> T?{
+    func fetchRealmDB<T: Object, KeyType>(_ type: T.Type, primaryKey: KeyType) -> T? {
         self.realm.object(ofType: type, forPrimaryKey: primaryKey)
     }
 
     func deleteRealmDB<T: Object>(model: Results<T>) {
+        do {
+            try self.realm.write {
+                self.realm.delete(model)
+            }
+        } catch {
+            LogManager.printError(error.localizedDescription)
+        }
+    }
+
+    func deleteRealmDB<T: Object>(model: [T]) {
         do {
             try self.realm.write {
                 self.realm.delete(model)

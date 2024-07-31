@@ -16,10 +16,11 @@ public final class LocalLikeDataSourceImpl: LocalLikeDataSource {
 
     public func cancelLikeSong(id: String) -> Completable {
         Completable.create { observer in
-            let deletingLocalLikeEntity = RealmManager.shared.fetchRealmDB(LocalLikeEntity.self)
-                .filter("songID == \(id)")
+            let deletingLocalLikeEntity = RealmManager.shared.fetchRealmDB(LocalLikeEntity.self, primaryKey: id)
 
-            RealmManager.shared.deleteRealmDB(model: deletingLocalLikeEntity)
+            if let deletingLocalLikeEntity {
+                RealmManager.shared.deleteRealmDB(model: [deletingLocalLikeEntity])
+            }
 
             observer(.completed)
             return Disposables.create()

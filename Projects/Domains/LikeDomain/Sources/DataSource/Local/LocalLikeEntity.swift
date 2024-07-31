@@ -3,8 +3,8 @@ import RealmSwift
 final class LocalLikeEntity: Object {
     @Persisted(primaryKey: true) var songID: String
 
-    init(songID: String) {
-        super.init()
+    convenience init(songID: String) {
+        self.init()
         self.songID = songID
     }
 }
