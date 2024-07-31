@@ -37,7 +37,7 @@ final class ListStorageReactor: Reactor {
         case showToast(String)
         case showCreateListPopup
         case showDeletePopup(Int)
-        case showDetail(key: String, ownerId: String)
+        case showDetail(key: String)
         case hideSongCart
         case updateSelectedItemCount(Int)
         case showDrawFruitPopup
@@ -55,7 +55,7 @@ final class ListStorageReactor: Reactor {
         @Pulse var hideSongCart: Void?
         @Pulse var showCreateListPopup: Void?
         @Pulse var showDeletePopup: Int?
-        @Pulse var showDetail: (key: String, ownerId: String)?
+        @Pulse var showDetail: String?
         @Pulse var showDrawFruitPopup: Void?
     }
 
@@ -215,8 +215,8 @@ final class ListStorageReactor: Reactor {
             newState.showDeletePopup = itemCount
         case let .updateSelectedItemCount(count):
             newState.selectedItemCount = count
-        case let .showDetail(key, isMine):
-            newState.showDetail = (key, isMine)
+        case let .showDetail(key):
+            newState.showDetail = key
         case .showDrawFruitPopup:
             newState.showDrawFruitPopup = ()
         }
@@ -285,9 +285,9 @@ extension ListStorageReactor {
     func showDetail(_ indexPath: IndexPath) -> Observable<Mutation> {
         let selectedList = currentState.dataSource[indexPath.section].items[indexPath.row]
         let key = selectedList.key
-        let ownerId = selectedList.userId
 
-        return .just(.showDetail(key: key, ownerId: ownerId ))
+
+        return .just(.showDetail(key: key))
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {

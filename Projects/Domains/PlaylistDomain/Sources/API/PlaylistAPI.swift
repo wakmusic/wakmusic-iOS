@@ -122,14 +122,15 @@ extension PlaylistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistSongs, .requestPlaylistOwner:
+        case .fetchRecommendPlaylist, .fetchPlaylistSongs:
             return .none
 
         case let .fetchPlaylistDetail(_, type):
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .requestCustomImageURL,
-             .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist, .checkSubscription:
+                .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist,
+                .checkSubscription, .requestPlaylistOwner:
             return .accessToken
         }
     }

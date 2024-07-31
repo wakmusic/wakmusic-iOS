@@ -1,23 +1,28 @@
 import NeedleFoundation
 import PlaylistFeatureInterface
+import PlaylistDomainInterface
 import UIKit
 
 public protocol PlaylistDetailFactoryDependency: Dependency {
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory { get }
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
+    var requestPlaylistOwnerIdUsecase: any RequestPlaylistOwnerIdUsecase { get }
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
     
     public func makeView(key: String) -> UIViewController {
-        return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
+        
+        let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIdUsecase: dependency.requestPlaylistOwnerIdUsecase)
+        
+        return PlaylistDetailContainerViewController(reactor: reactor,
+                                                     unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
     }
     
-    public func makeView(key: String, ownerId: String) -> UIViewController {
-        return PlaylistDetailContainerViewController(key: key, ownerId: ownerId,
-                                                     unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory,
-                                                     myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
+    
+    public func makeWmView(key: String) -> UIViewController {
+        return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
     }
     
 

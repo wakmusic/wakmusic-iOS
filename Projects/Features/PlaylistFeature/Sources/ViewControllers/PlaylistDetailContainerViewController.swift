@@ -6,29 +6,19 @@ import Utility
 import PlaylistFeatureInterface
 import RxSwift
 
-final class PlaylistDetailContainerViewController: UIViewController ,ContainerViewType {
-    var contentView: UIView!
-    
-    private let key: String
-    private let ownerId: String
+final class PlaylistDetailContainerViewController: BaseReactorViewController<PlaylistDetailContainerReactor>, ContainerViewType {
+    var contentView: UIView! = UIView()
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
-    private let myPlaylistDetailFactory:  any MyPlaylistDetailFactory
-    private var disposeBag = DisposeBag()
-    
-    private lazy var unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: key)
-    private lazy var myPlaylistVC = myPlaylistDetailFactory.makeView(key: key)
-    
-    private let containerView: UIView = UIView()
+    private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
     
     
-    init(key: String, ownerId: String ,unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,  myPlaylistDetailFactory: any MyPlaylistDetailFactory ) {
+    
+    init(reactor: PlaylistDetailContainerReactor, unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,  myPlaylistDetailFactory: any MyPlaylistDetailFactory ) {
         
-        self.key = key
-        self.ownerId = ownerId
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
         self.myPlaylistDetailFactory = myPlaylistDetailFactory
         
-        super.init(nibName: nil, bundle: nil)
+        super.init(reactor: reactor)
     }
     
     required init?(coder: NSCoder) {
@@ -38,42 +28,44 @@ final class PlaylistDetailContainerViewController: UIViewController ,ContainerVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        contentView = containerView
-        addViews()
-        setLayout()
-        configureUI()
-    }
-}
-
-extension PlaylistDetailContainerViewController {
-    
-    private func addViews() {
-        self.view.addSubviews(containerView)
+        reactor?.action.onNext(.viewDidLoad)
     }
     
-    private func setLayout() {
-        containerView.snp.makeConstraints {
+    override func addView() {
+        super.addView()
+        self.view.addSubviews(contentView)
+    }
+    
+    
+    override func setLayout() {
+        super.setLayout()
+        contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
     
-    private func configureUI() {
+    override func bind(reactor: PlaylistDetailContainerReactor) {
+        super.bind(reactor: reactor)
+        
         PreferenceManager.$userInfo
-            .bind(with: self) { owner, userInfo in
-                
-                guard let userInfo = userInfo else {
-                    owner.add(asChildViewController: owner.unknownPlaylistVC)
-                    return
-                }
-                
-                if userInfo.decryptedID == owner.ownerId {
-                    owner.add(asChildViewController: owner.myPlaylistVC)
-                } else {
-                    owner.add(asChildViewController: owner.unknownPlaylistVC)
-                }
-                
+            .bind(with: self) { owner, _ in
+                reactor.action.onNext(.viewDidLoad)
             }
-            .disposed(by: disposeBag)
         
     }
+    
+    
+    override func bindState(reactor: PlaylistDetailContainerReactor) {
+        super.bindState(reactor: reactor)
+        
+        let unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: reactor.key)
+        let myPlaylistVC = myPlaylistDetailFactory.makeView(key: reactor.key)
+        
+        
+        let sharedState = reactor.state.share()
+        
+    
+    
+    }
 }
+

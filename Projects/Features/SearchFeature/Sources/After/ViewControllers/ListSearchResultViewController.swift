@@ -233,7 +233,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
 
 
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
-        navigatePlaylistDetail(key: model.key, ownerId: model.ownerId)
+        navigatePlaylistDetail(key: model.key)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
