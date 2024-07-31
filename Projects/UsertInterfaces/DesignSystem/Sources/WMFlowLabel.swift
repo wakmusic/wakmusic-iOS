@@ -16,7 +16,7 @@ public final class WMFlowLabel: MarqueeLabel {
         font: UIFont.WMFontSystem,
         alignment: NSTextAlignment = .left,
         lineHeight: CGFloat? = nil,
-        kernValue: Double? = nil,
+        kernValue: Double? = -0.5,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
         leadingBuffer: CGFloat = 0,

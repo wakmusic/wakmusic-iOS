@@ -23,12 +23,12 @@ private protocol MusicControlActionProtocol {
 }
 
 final class MusicControlView: UIView {
-    private let titleLabel: WMLabel = WMLabel(
+    private let titleLabel: WMFlowLabel = WMFlowLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.gray25.color,
         font: .t4(weight: .medium)
     )
-    private let artistLabel: WMLabel = WMLabel(
+    private let artistLabel: WMFlowLabel = WMFlowLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6),
         font: .t5(weight: .medium)
@@ -128,6 +128,7 @@ private extension MusicControlView {
         titleStackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
         playStackView.snp.makeConstraints {
