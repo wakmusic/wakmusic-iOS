@@ -19,6 +19,7 @@ public enum PlaylistAPI {
     case subscribePlaylist(key: String, isSubscribing: Bool) // 플레이리스트 구독하기 / 구독 취소하기
     case checkSubscription(key: String)
     case fetchRecommendPlaylist // 추천 플리 불러오기
+    case requestPlaylistOwner(key: String) // playlist ownerId 요청하기
 }
 
 extension PlaylistAPI: WMAPI {
@@ -57,12 +58,14 @@ extension PlaylistAPI: WMAPI {
 
         case let .subscribePlaylist(key, _), let .checkSubscription(key):
             return "/\(key)/subscription"
+        case let .requestPlaylistOwner(key):
+            return "/\(key)/owner"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription, .requestPlaylistOwner:
             return .get
 
         case .createPlaylist, .addSongIntoPlaylist, .requestCustomImageURL:
@@ -81,7 +84,7 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription , .requestPlaylistOwner:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -119,7 +122,7 @@ extension PlaylistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistSongs:
+        case .fetchRecommendPlaylist, .fetchPlaylistSongs, .requestPlaylistOwner:
             return .none
 
         case let .fetchPlaylistDetail(_, type):
