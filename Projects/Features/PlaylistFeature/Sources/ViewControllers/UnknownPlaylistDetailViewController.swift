@@ -158,6 +158,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         let sharedState = reactor.state.share()
 
+        let currentState = reactor.currentState
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
 
@@ -165,7 +166,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     return
                 }
 
-                owner.showToast(text: message, options: [.tabBar])
+                owner.showToast(text: message, options: currentState.selectedCount == .zero  ?  [.tabBar] : [.tabBar, .songCart])
             }
             .disposed(by: disposeBag)
 
@@ -177,7 +178,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     cancelButtonIsHidden: false,
                     completion: { () in
                         let vc = owner.signInFactory.makeView()
-                        vc.modalPresentationStyle = .fullScreen
+                        vc.modalPresentationStyle  = .fullScreen
                         owner.present(vc, animated: true)
                     }
                 )
@@ -405,7 +406,14 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = PreferenceManager.userInfo == nil ? signInFactory.makeView() : containSongsFactory.makeView(songs: songs.map { $0.id })
+            
+            if PreferenceManager.userInfo == nil {
+                reactor.action.onNext(.requestLoginRequiredAction)
+                reactor.action.onNext(.deselectAll)
+                return
+            }
+            
+            let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)
