@@ -40,10 +40,10 @@ public final class NoticeDetailViewModel {
             .flatMap { [weak self] _ -> Observable<[CGSize]> in
                 guard let self = self else { return .never() }
                 return imageURLs.isEmpty ?
-                Observable.just([]) :
-                Observable.zip(
-                    imageURLs.map { self.downloadImageSize(url: $0) }
-                )
+                    Observable.just([]) :
+                    Observable.zip(
+                        imageURLs.map { self.downloadImageSize(url: $0) }
+                    )
             }
             .bind { imageSizes in
                 output.imageSizes.accept(imageSizes)
