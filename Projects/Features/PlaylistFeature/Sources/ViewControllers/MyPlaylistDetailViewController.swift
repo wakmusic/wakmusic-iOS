@@ -503,6 +503,10 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
         self.present(vc, animated: true)
     }
 
+    func playButtonDidTap(key: String) {
+        WakmusicYoutubePlayer(id: key).play()
+    }
+
     func superButtonTapped(index: Int) {
         tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
         reactor?.action.onNext(.itemDidTap(index))

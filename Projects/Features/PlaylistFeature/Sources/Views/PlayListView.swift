@@ -65,68 +65,9 @@ public final class PlaylistView: UIView {
         $0.separatorStyle = .none
         $0.rowHeight = 60
         $0.estimatedRowHeight = 60
+        $0.sectionHeaderTopPadding = 0
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         $0.showsVerticalScrollIndicator = true
-    }
-
-    private lazy var blurEffectView = UIVisualEffectView().then {
-        $0.effect = UIBlurEffect(style: .regular)
-    }
-
-    private lazy var homeIndicatorBackgroundView = UIView().then {
-        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-    }
-
-    internal lazy var miniPlayerView = UIView().then {
-        $0.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.5)
-    }
-
-    internal lazy var miniPlayerContentView = UIView()
-
-    internal lazy var miniPlayerStackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-        $0.spacing = (APP_WIDTH() < 375) ? 10 : 16
-    }
-
-    internal lazy var totalPlayTimeView = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.GrayColor.gray300.color
-    }
-
-    internal lazy var currentPlayTimeView = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-    }
-
-    internal lazy var thumbnailImageView = UIImageView().then {
-        $0.image = DesignSystemAsset.Player.dummyThumbnailSmall.image
-        $0.contentMode = .scaleAspectFill
-        $0.layer.cornerRadius = 4
-        $0.clipsToBounds = true
-    }
-
-    internal lazy var repeatButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.repeatOff.image, for: .normal)
-        $0.tintColor = .systemGray
-    }
-
-    internal lazy var playButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.miniPlay.image, for: .normal)
-        $0.tintColor = .systemGray
-    }
-
-    internal lazy var prevButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.prevOn.image, for: .normal)
-        $0.tintColor = .systemGray
-    }
-
-    internal lazy var nextButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.nextOn.image, for: .normal)
-        $0.tintColor = .systemGray
-    }
-
-    internal lazy var shuffleButton = UIButton().then {
-        $0.setImage(DesignSystemAsset.Player.shuffleOff.image, for: .normal)
-        $0.tintColor = .systemGray
     }
 
     override init(frame: CGRect) {
@@ -147,9 +88,6 @@ private extension PlaylistView {
         self.configureContent()
         self.configureTitleBar()
         self.configurePlaylist()
-        self.configureBlur()
-        self.configureMiniPlayer()
-        self.configreHomeIndicatorBackgroundView()
     }
 
     private func configureSubViews() {
@@ -160,19 +98,6 @@ private extension PlaylistView {
         titleBarView.addSubview(titleCountStackView)
         titleBarView.addSubview(editButton)
         contentView.addSubview(playlistTableView)
-        contentView.addSubview(blurEffectView)
-        contentView.addSubview(miniPlayerView)
-        contentView.addSubview(homeIndicatorBackgroundView)
-        miniPlayerView.addSubview(miniPlayerContentView)
-        miniPlayerContentView.addSubview(thumbnailImageView)
-        miniPlayerContentView.addSubview(miniPlayerStackView)
-        miniPlayerView.addSubview(totalPlayTimeView)
-        totalPlayTimeView.addSubview(currentPlayTimeView)
-        miniPlayerView.addSubview(repeatButton)
-        miniPlayerView.addSubview(prevButton)
-        miniPlayerView.addSubview(playButton)
-        miniPlayerView.addSubview(nextButton)
-        miniPlayerView.addSubview(shuffleButton)
     }
 
     private func configureBackground() {
@@ -216,68 +141,12 @@ private extension PlaylistView {
 
     private func configurePlaylist() {
         playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 72, left: 0, bottom: 56, right: 0)
+        playlistTableView.contentInset = .init(top: 0, left: 0, bottom: 56, right: 0)
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-    }
-
-    private func configureBlur() {
-        blurEffectView.snp.makeConstraints {
-            $0.height.equalTo(56 + SAFEAREA_BOTTOM_HEIGHT())
-            $0.bottom.left.right.equalToSuperview()
-        }
-    }
-
-    private func configureMiniPlayer() {
-        miniPlayerView.snp.makeConstraints {
-            $0.height.equalTo(56)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-SAFEAREA_BOTTOM_HEIGHT())
-        }
-
-        totalPlayTimeView.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.top.left.right.equalToSuperview()
-        }
-
-        currentPlayTimeView.snp.makeConstraints {
-            $0.top.left.bottom.equalToSuperview()
-            $0.width.equalToSuperview().multipliedBy(0)
-        }
-
-        miniPlayerContentView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 20))
-        }
-
-        thumbnailImageView.snp.makeConstraints {
-            let height = 40
-            let width = height * 16 / 9
-            $0.centerY.equalToSuperview()
-            $0.left.equalToSuperview()
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
-        }
-
-        miniPlayerStackView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.right.equalToSuperview()
-        }
-
-        miniPlayerStackView.addArrangedSubview(repeatButton)
-        miniPlayerStackView.addArrangedSubview(prevButton)
-        miniPlayerStackView.addArrangedSubview(playButton)
-        miniPlayerStackView.addArrangedSubview(nextButton)
-        miniPlayerStackView.addArrangedSubview(shuffleButton)
-    }
-
-    private func configreHomeIndicatorBackgroundView() {
-        homeIndicatorBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(SAFEAREA_BOTTOM_HEIGHT())
-            $0.left.right.bottom.equalToSuperview()
         }
     }
 }

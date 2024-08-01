@@ -400,8 +400,8 @@ extension HomeViewController: HomeChartCellDelegate {
     func thumbnailDidTap(model: ChartRankingEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: model.id))
         let musicDetailViewController = musicDetailFactory.makeViewController(
-            songIDs: [model.id],
-            selectedID: model.id
+            songIDs: ["cgjWo9ZNO-o"],
+            selectedID: "cgjWo9ZNO-o"
         )
         musicDetailViewController.modalPresentationStyle = .fullScreen
         self.present(musicDetailViewController, animated: true)
