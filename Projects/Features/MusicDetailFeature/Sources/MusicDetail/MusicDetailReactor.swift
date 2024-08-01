@@ -290,13 +290,13 @@ private extension MusicDetailReactor {
 
 private extension MusicDetailReactor {
     func prefetchThumbnailImage(index: Int) {
-        if let songID = currentState.songIDs[safe: index],
-           let thumbnailPrefetchingSongID = currentState.songDictionary[songID]?.videoID,
-           let thumbnailURL = URL(
-               string: youtubeURLGenerator.generateHDThumbnailURL(id: thumbnailPrefetchingSongID)
-           ) {
-            ImagePrefetcher(urls: [thumbnailURL]).start()
-        }
+        let prefetchingSongImageURLs = [
+            currentState.songIDs[safe: index - 1],
+            currentState.songIDs[safe: index],
+            currentState.songIDs[safe: index + 1]
+        ].compactMap { $0 }
+            .compactMap { URL(string: youtubeURLGenerator.generateHDThumbnailURL(id: $0)) }
+        ImagePrefetcher(urls: prefetchingSongImageURLs).start()
     }
 
     func fetchSongDetailWith(index: Int) -> Observable<Mutation> {

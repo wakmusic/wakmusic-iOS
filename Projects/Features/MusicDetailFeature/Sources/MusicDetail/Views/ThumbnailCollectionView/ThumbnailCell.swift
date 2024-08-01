@@ -51,8 +51,8 @@ private extension ThumbnailCell {
 
     func setLayout() {
         thumbnailImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(24)
+            $0.height.equalTo(thumbnailImageView.snp.width).multipliedBy(9.0 / 16.0)
         }
     }
 }

@@ -37,4 +37,14 @@ open class VerticalAlignButton: UIButton {
         super.awakeFromNib()
         self.contentHorizontalAlignment = .left
     }
+
+    public func setTextColor(color: UIColor) {
+        self.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+            var attribute = $0
+            attribute.font = UIFont.setFont(.t7(weight: .medium))
+            attribute.foregroundColor = color
+            attribute.kern = -0.5
+            return attribute
+        }
+    }
 }

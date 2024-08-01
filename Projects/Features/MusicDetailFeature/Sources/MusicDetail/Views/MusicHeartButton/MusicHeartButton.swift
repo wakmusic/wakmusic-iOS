@@ -46,13 +46,9 @@ final class MusicHeartButton: VerticalAlignButton {
 
     private func setIsLikeTextColor(isLike: Bool) {
         if isLike {
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .normal)
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .selected)
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .highlighted)
+            self.setTextColor(color: DesignSystemAsset.PrimaryColorV2.increase.color)
         } else {
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .normal)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .selected)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .highlighted)
+            self.setTextColor(color: DesignSystemAsset.NewGrayColor.gray400.color)
         }
     }
 }
