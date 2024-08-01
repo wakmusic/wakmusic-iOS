@@ -6,11 +6,11 @@ import LogManager
 import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
+import SignInFeatureInterface
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
-import SignInFeatureInterface
 import Utility
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
@@ -24,7 +24,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let textPopUpFactory: any TextPopUpFactory
 
     private let musicDetailFactory: any MusicDetailFactory
-    
+
     private let signInFactory: any SignInFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
@@ -166,7 +166,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     return
                 }
 
-                owner.showToast(text: message, options: currentState.selectedCount == .zero  ?  [.tabBar] : [.tabBar, .songCart])
+                owner.showToast(
+                    text: message,
+                    options: currentState.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
             }
             .disposed(by: disposeBag)
 
@@ -178,7 +181,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     cancelButtonIsHidden: false,
                     completion: { () in
                         let vc = owner.signInFactory.makeView()
-                        vc.modalPresentationStyle  = .fullScreen
+                        vc.modalPresentationStyle = .fullScreen
                         owner.present(vc, animated: true)
                     }
                 )
@@ -406,12 +409,12 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            
+
             if PreferenceManager.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)
                 return
             }
-            
+
             let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
             vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true)

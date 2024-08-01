@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import LogManager
 import NVActivityIndicatorView
 import PlaylistFeatureInterface
@@ -12,7 +13,6 @@ import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import UserDomainInterface
-import Localization
 import Utility
 
 typealias LikeSectionModel = SectionModel<Int, FavoriteSongEntity>

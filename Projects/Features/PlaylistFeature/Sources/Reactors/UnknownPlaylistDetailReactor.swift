@@ -92,7 +92,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
-            
+
         case let requestLoginRequiredAction:
             return .just(.updateLoginPopupState(true))
         }

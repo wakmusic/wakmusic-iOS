@@ -286,7 +286,6 @@ extension ListStorageReactor {
         let selectedList = currentState.dataSource[indexPath.section].items[indexPath.row]
         let key = selectedList.key
 
-
         return .just(.showDetail(key: key))
     }
 

@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import FruitDrawFeatureInterface
+import Localization
 import LogManager
 import NVActivityIndicatorView
 import PlaylistFeatureInterface
@@ -14,7 +15,6 @@ import SongsDomainInterface
 import UIKit
 import UserDomainInterface
 import Utility
-import Localization
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 

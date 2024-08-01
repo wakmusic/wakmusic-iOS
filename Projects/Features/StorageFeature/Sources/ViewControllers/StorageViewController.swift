@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import Pageboy
 import ReactorKit
 import RxSwift
@@ -8,7 +9,6 @@ import SignInFeatureInterface
 import Tabman
 import UIKit
 import Utility
-import Localization
 
 final class StorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor

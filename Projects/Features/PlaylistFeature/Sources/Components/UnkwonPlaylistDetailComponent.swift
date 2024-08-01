@@ -16,7 +16,7 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var musicDetailFactory: any MusicDetailFactory { get }
-    
+
     var signInFactory: any SignInFactory { get }
 }
 

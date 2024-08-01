@@ -251,7 +251,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 guard let message = message else {
                     return
                 }
-                owner.showToast(text: message, options: currentState.selectedCount == .zero  ?  [.tabBar] : [.tabBar, .songCart])
+                owner.showToast(
+                    text: message,
+                    options: currentState.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
             }
             .disposed(by: disposeBag)
 
@@ -273,7 +276,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
                 owner.present(activityViewController, animated: true)
             }
-        
+
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in

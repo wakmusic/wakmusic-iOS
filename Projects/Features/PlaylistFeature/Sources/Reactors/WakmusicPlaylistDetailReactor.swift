@@ -68,7 +68,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return updateDataSource()
-            
+
         case .requestLoginRequiredAction:
             return .just(.updateLoginPopupState(true))
 
@@ -80,7 +80,6 @@ final class WakmusicPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
-
         }
     }
 

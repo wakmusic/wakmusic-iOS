@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Foundation
 import FruitDrawFeatureInterface
+import Localization
 import LogManager
 import MyInfoFeatureInterface
 import RxSwift
@@ -12,7 +13,6 @@ import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
-import Localization
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
