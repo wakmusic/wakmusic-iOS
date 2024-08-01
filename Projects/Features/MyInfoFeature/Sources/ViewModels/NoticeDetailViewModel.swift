@@ -66,7 +66,9 @@ public final class NoticeDetailViewModel {
 private extension NoticeDetailViewModel {
     func readNotice(ID: Int) {
         var newReadNoticeIDs = PreferenceManager.readNoticeIDs ?? []
-        newReadNoticeIDs.append(ID)
+        if newReadNoticeIDs.contains(ID) == false {
+            newReadNoticeIDs.append(ID)
+        }
         PreferenceManager.readNoticeIDs = newReadNoticeIDs
     }
 
