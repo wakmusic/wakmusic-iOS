@@ -1,6 +1,6 @@
 import NeedleFoundation
-import PlaylistFeatureInterface
 import PlaylistDomainInterface
+import PlaylistFeatureInterface
 import UIKit
 
 public protocol PlaylistDetailFactoryDependency: Dependency {
@@ -11,20 +11,22 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
-    
     public func makeView(key: String) -> UIViewController {
-        
-        let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIDUsecase: dependency.requestPlaylistOwnerIDUsecase)
-        
-        return PlaylistDetailContainerViewController(reactor: reactor,
-                                                     key: key,
-                                                     unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
+        let reactor = PlaylistDetailContainerReactor(
+            key: key,
+            requestPlaylistOwnerIDUsecase: dependency.requestPlaylistOwnerIDUsecase
+        )
+
+        return PlaylistDetailContainerViewController(
+            reactor: reactor,
+            key: key,
+            unknownPlaylistDetailFactory: dependency
+                .unknownPlaylistDetailFactory,
+            myPlaylistDetailFactory: dependency.myPlaylistDetailFactory
+        )
     }
-    
-    
+
     public func makeWmView(key: String) -> UIViewController {
         return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
     }
-    
-
 }

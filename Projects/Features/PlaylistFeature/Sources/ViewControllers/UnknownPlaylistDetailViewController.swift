@@ -6,11 +6,11 @@ import LogManager
 import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
+import SignInFeatureInterface
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
-import SignInFeatureInterface
 import Utility
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
@@ -24,7 +24,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let textPopUpFactory: any TextPopUpFactory
 
     private let musicDetailFactory: any MusicDetailFactory
-    
+
     private let signInFactory: any SignInFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()

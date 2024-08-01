@@ -22,7 +22,7 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 
     var musicDetailFactory: any MusicDetailFactory { get }
-    
+
     var signInFactory: any SignInFactory { get }
 }
 

@@ -231,7 +231,6 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
         navigatePlaylistDetail(key: model.key)
     }

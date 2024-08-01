@@ -127,7 +127,7 @@ public extension AppComponent {
             RequestCustomImageURLUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase {
         shared {
             RequestPlaylistOwnerIDUsecaseImpl(playlistRepository: playlistRepository)

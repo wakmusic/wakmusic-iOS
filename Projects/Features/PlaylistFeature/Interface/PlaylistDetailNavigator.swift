@@ -5,7 +5,7 @@ public protocol PlaylistDetailNavigator {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
 
     func navigateWmPlaylistDetail(key: String)
-    
+
     func navigatePlaylistDetail(key: String)
 }
 
@@ -15,7 +15,7 @@ public extension PlaylistDetailNavigator where Self: UIViewController {
 
         self.navigationController?.pushViewController(dest, animated: true)
     }
-    
+
     func navigatePlaylistDetail(key: String) {
         let dest = playlistDetailFactory.makeView(key: key)
 

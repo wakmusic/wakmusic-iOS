@@ -137,12 +137,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         reactor.pulse(\.$toastMessage)
             .compactMap { $0 }
-            .withLatestFrom(sharedState.map(\.selectedCount)){($0, $1)}
+            .withLatestFrom(sharedState.map(\.selectedCount)) { ($0, $1) }
             .bind(with: self) { owner, info in
-                
+
                 let(message, count) = (info.0, info.1)
-                
-                owner.showToast(text: message,options: count == .zero ?  [.tabBar] : [.tabBar, .songCart])
+
+                owner.showToast(text: message, options: count == .zero ? [.tabBar] : [.tabBar, .songCart])
             }
             .disposed(by: disposeBag)
 
