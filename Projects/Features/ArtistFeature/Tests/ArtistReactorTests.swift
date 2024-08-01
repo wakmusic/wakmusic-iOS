@@ -69,6 +69,7 @@ final class ArtistReactorTests: XCTestCase {
                 roundImage: "",
                 squareImage: "",
                 graduated: false,
+                playlist: .init(latest: "", popular: "", oldest: ""),
                 isHiddenItem: false
             ),
             ArtistListEntity(
@@ -82,6 +83,7 @@ final class ArtistReactorTests: XCTestCase {
                 roundImage: "",
                 squareImage: "",
                 graduated: false,
+                playlist: .init(latest: "", popular: "", oldest: ""),
                 isHiddenItem: false
             )
         ]

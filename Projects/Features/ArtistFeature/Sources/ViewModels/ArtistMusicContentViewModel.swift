@@ -16,10 +16,10 @@ import SongsDomainInterface
 import Utility
 
 public final class ArtistMusicContentViewModel: ViewModelType {
-    var fetchArtistSongListUseCase: FetchArtistSongListUseCase
+    private let fetchArtistSongListUseCase: FetchArtistSongListUseCase
     var type: ArtistSongSortType
     var model: ArtistListEntity?
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     public init(
         type: ArtistSongSortType,
@@ -47,7 +47,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let ID: String = model?.id ?? ""
+        let ID: String = self.model?.id ?? ""
         let type: ArtistSongSortType = self.type
         let fetchArtistSongListUseCase: FetchArtistSongListUseCase = self.fetchArtistSongListUseCase
 

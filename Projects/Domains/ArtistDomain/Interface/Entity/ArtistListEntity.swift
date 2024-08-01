@@ -12,6 +12,7 @@ public struct ArtistListEntity: Equatable {
         roundImage: String,
         squareImage: String,
         graduated: Bool,
+        playlist: ArtistListEntity.Playlist,
         isHiddenItem: Bool
     ) {
         self.id = id
@@ -24,6 +25,7 @@ public struct ArtistListEntity: Equatable {
         self.roundImage = roundImage
         self.squareImage = squareImage
         self.graduated = graduated
+        self.playlist = playlist
         self.isHiddenItem = isHiddenItem
     }
 
@@ -36,5 +38,18 @@ public struct ArtistListEntity: Equatable {
     public let personalColor: String
     public let roundImage, squareImage: String
     public let graduated: Bool
+    public let playlist: ArtistListEntity.Playlist
     public var isHiddenItem: Bool = false
+}
+
+public extension ArtistListEntity {
+    struct Playlist: Decodable {
+        public let latest, popular, oldest: String
+
+        public init(latest: String, popular: String, oldest: String) {
+            self.latest = latest
+            self.popular = popular
+            self.oldest = oldest
+        }
+    }
 }
