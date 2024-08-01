@@ -109,8 +109,11 @@ private extension MainTabBarViewController {
             .disposed(by: disposeBag)
 
         songDetailPresenter.presentSongDetailObservable
-            .bind(with: self, onNext: { owner, id in
-                let viewController = owner.musicDetailFactory.makeViewController(songIDs: [id], selectedID: id)
+            .bind(with: self, onNext: { owner, selection in
+                let viewController = owner.musicDetailFactory.makeViewController(
+                    songIDs: selection.ids,
+                    selectedID: selection.selectedID
+                )
                 viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)
             })

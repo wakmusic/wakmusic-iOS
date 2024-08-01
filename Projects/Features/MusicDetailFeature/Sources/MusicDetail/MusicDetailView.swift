@@ -131,7 +131,7 @@ private extension MusicDetailView {
             $0.top.lessThanOrEqualTo(self.safeAreaLayoutGuide.snp.top).offset(52)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(thumbnailCollectionView.snp.width).multipliedBy(0.561)
+            $0.height.equalTo(thumbnailCollectionView.snp.width).multipliedBy(9.0 / 16.0)
         }
 
         backgroundImageView.snp.makeConstraints {
