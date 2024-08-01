@@ -87,6 +87,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .disposed(by: disposeBag)
 
         reactor.state.map(\.isAllNoticesRead)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
                 owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
