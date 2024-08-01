@@ -39,7 +39,9 @@ public final class NoticeDetailViewModel {
         input.fetchNoticeDetail
             .flatMap { [weak self] _ -> Observable<[CGSize]> in
                 guard let self = self else { return .never() }
-                return Observable.zip(
+                return imageURLs.isEmpty ?
+                Observable.just([]) :
+                Observable.zip(
                     imageURLs.map { self.downloadImageSize(url: $0) }
                 )
             }
