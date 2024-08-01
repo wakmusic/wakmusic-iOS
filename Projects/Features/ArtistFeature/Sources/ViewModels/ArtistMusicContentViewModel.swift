@@ -43,6 +43,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishSubject<String> = .init()
+        let showLogin: PublishSubject<Void> = .init()
     }
 
     public func transform(from input: Input) -> Output {
