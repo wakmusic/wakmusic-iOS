@@ -132,7 +132,6 @@ public final class LyricHighlightingViewController: UIViewController {
         LogManager.analytics(
             LyricHighlightingAnalyticsLog.viewPage(pageName: "lyric_highlighting")
         )
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -270,11 +269,5 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.item])
-    }
-}
-
-extension LyricHighlightingViewController: UIGestureRecognizerDelegate {
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }

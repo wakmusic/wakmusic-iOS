@@ -38,6 +38,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .musicDetail))
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override func configureNavigation() {
@@ -215,5 +217,11 @@ private extension MusicDetailViewController {
 
     func dismiss() {
         self.dismiss(animated: true)
+    }
+}
+
+extension MusicDetailViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return navigationController?.viewControllers.count ?? 0 > 1
     }
 }
