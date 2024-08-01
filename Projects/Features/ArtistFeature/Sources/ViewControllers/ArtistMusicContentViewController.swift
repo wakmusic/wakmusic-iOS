@@ -8,6 +8,7 @@ import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
+import SignInFeatureInterface
 import UIKit
 import Utility
 
@@ -20,6 +21,8 @@ public final class ArtistMusicContentViewController:
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var containSongsFactory: ContainSongsFactory!
+    private var signInFactory: SignInFactory!
+    private var textPopupFactory: TextPopUpFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
     private var viewModel: ArtistMusicContentViewModel!
@@ -46,6 +49,8 @@ public final class ArtistMusicContentViewController:
     public static func viewController(
         viewModel: ArtistMusicContentViewModel,
         containSongsFactory: ContainSongsFactory,
+        signInFactory: SignInFactory,
+        textPopupFactory: TextPopUpFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(
@@ -54,6 +59,8 @@ public final class ArtistMusicContentViewController:
         )
         viewController.viewModel = viewModel
         viewController.containSongsFactory = containSongsFactory
+        viewController.signInFactory = signInFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
@@ -154,6 +161,24 @@ private extension ArtistMusicContentViewController {
                 )
             }
             .disposed(by: disposeBag)
+
+        output.showLogin
+            .bind(with: self) { owner, _ in
+                let viewController = owner.textPopupFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .overFullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                )
+                owner.showBottomSheet(content: viewController)
+            }
+            .disposed(by: disposeBag)
     }
 
     func configureUI() {
@@ -181,6 +206,10 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            if PreferenceManager.userInfo == nil {
+                output.showLogin.onNext(())
+                return
+            }
             guard songs.count <= limit else {
                 output.showToast.onNext(LocalizationStrings.overFlowContainWarning(songs.count - limit))
                 return
