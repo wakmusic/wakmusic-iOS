@@ -12,6 +12,7 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
+import SignInFeatureInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
@@ -20,6 +21,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
+    private let signInFactory: any SignInFactory
 
     private let searchSortOptionComponent: SearchSortOptionComponent
 
@@ -47,11 +49,13 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         searchSortOptionComponent: SearchSortOptionComponent,
         musicDetailFactory: any MusicDetailFactory,
         containSongsFactory: any ContainSongsFactory,
+        signInFactory: any SignInFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         self.musicDetailFactory = musicDetailFactory
+        self.signInFactory = signInFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
