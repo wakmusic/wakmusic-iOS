@@ -228,10 +228,22 @@ private extension MyInfoReactor {
     func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
         setUsernameUseCase.execute(name: newNickname)
             .andThen(
-                .concat(
-                    .just(.updateNickname(newNickname)),
-                    .just(.dismissEditSheet)
-                )
+                fetchUserInfoUseCase.execute()
+                    .asObservable()
+                    .flatMap { entity -> Observable<Mutation> in
+                        PreferenceManager.shared.setUserInfo(
+                            ID: entity.id,
+                            platform: entity.platform,
+                            profile: entity.profile,
+                            name: entity.name,
+                            itemCount: entity.itemCount
+                        )
+                        return .concat(
+                            .just(.showToast("닉네임이 변경되었습니다.")),
+                            .just(.dismissEditSheet)
+                        )
+                            
+                    }
             )
             .catch { error in
                 let error = error.asWMError
