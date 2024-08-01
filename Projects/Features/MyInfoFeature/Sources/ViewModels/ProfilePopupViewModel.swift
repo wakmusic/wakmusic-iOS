@@ -48,7 +48,7 @@ public final class ProfilePopupViewModel: ViewModelType {
 
         input.itemSelected
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { (indexPath, dataSource) -> [ProfileListEntity] in
+            .map { indexPath, dataSource -> [ProfileListEntity] in
                 var newModel = dataSource
                 if let i = newModel.firstIndex(where: { $0.isSelected }) {
                     newModel[i].isSelected = false

@@ -25,8 +25,8 @@ public extension ProfileCollectionViewCell {
 
         outerView.layer.cornerRadius = imageView.layer.cornerRadius + 2
         outerView.layer.borderColor = model.isSelected ?
-        DesignSystemAsset.PrimaryColor.point.color.cgColor :
-        UIColor.clear.cgColor
+            DesignSystemAsset.PrimaryColor.point.color.cgColor :
+            UIColor.clear.cgColor
         outerView.layer.borderWidth = 2
         outerView.clipsToBounds = false
     }

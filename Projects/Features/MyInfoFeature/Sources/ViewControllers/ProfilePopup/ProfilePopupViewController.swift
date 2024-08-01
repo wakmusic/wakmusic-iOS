@@ -1,13 +1,13 @@
 import DesignSystem
 import ImageDomainInterface
+import LogManager
+import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import RxCocoa
 import RxRelay
 import RxSwift
 import UIKit
 import Utility
-import MyInfoFeatureInterface
-import LogManager
 
 public final class ProfilePopupViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var titleLabel: UILabel!

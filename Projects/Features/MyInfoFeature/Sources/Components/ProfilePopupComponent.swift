@@ -1,10 +1,10 @@
 import AuthDomainInterface
 import Foundation
 import ImageDomainInterface
-import NeedleFoundation
-import UserDomainInterface
 import MyInfoFeatureInterface
+import NeedleFoundation
 import UIKit
+import UserDomainInterface
 
 public protocol ProfilePopupDependency: Dependency {
     var fetchProfileListUseCase: any FetchProfileListUseCase { get }

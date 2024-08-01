@@ -97,8 +97,6 @@ extension FruitDrawButtonView: FruitDrawStateProtocol {
     func updateFruitCount(count: Int) {
         countLabel.text = String(count)
     }
-    
-    
 }
 
 extension Reactive: FruitDrawActionProtocol where Base: FruitDrawButtonView {
