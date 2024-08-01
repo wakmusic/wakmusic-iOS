@@ -20,7 +20,8 @@ private protocol ProfileActionProtocol {
 final class ProfileView: UIView {
     fileprivate let imageView: UIImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
-        $0.image = DesignSystemAsset.MyInfo.iconColor.image
+        $0.layer.cornerRadius = 92 / 2.0
+        $0.clipsToBounds = true
     }
 
     private let nameLabel = WMLabel(
@@ -108,7 +109,7 @@ extension ProfileView: ProfileStateProtocol {
     func updateProfileImage(image: String) {
         imageView.kf.setImage(
             with: URL(string: image),
-            placeholder: DesignSystemAsset.MyInfo.iconColor.image,
+            placeholder: nil,
             options: [
                 .transition(.fade(0.5)),
                 .processor(DownsamplingImageProcessor(size: CGSize(width: 300, height: 300)))

@@ -3,36 +3,31 @@ import ImageDomainInterface
 import UIKit
 import Utility
 
-public enum FanType: String {
-    case panchi
-    case ifari
-    case dulgi
-    case bat
-    case segyun
-    case gorani
-    case jupock
-    case ddong
-}
-
 public class ProfileCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var outerView: UIView!
 
     override public func awakeFromNib() {
         super.awakeFromNib()
+        clipsToBounds = false
+        contentView.clipsToBounds = false
     }
 }
 
 public extension ProfileCollectionViewCell {
     func update(_ model: ProfileListEntity) {
-        self.imageView.layer.cornerRadius = ((APP_WIDTH() - 70) / 4) / 2
-        self.imageView.layer.borderColor = model.isSelected ? DesignSystemAsset.PrimaryColor.point.color
-            .cgColor : UIColor.clear.cgColor
-        self.imageView.layer.borderWidth = 3
-
-        self.imageView.kf.setImage(
+        imageView.layer.cornerRadius = ((APP_WIDTH() - 70) / 4) / 2
+        imageView.kf.setImage(
             with: URL(string: model.url),
             placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
+
+        outerView.layer.cornerRadius = imageView.layer.cornerRadius + 2
+        outerView.layer.borderColor = model.isSelected ?
+        DesignSystemAsset.PrimaryColor.point.color.cgColor :
+        UIColor.clear.cgColor
+        outerView.layer.borderWidth = 2
+        outerView.clipsToBounds = false
     }
 }

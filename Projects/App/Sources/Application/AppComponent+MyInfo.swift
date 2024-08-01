@@ -31,7 +31,7 @@ extension AppComponent {
         ServiceInfoComponent(parent: self)
     }
 
-    var profilePopComponent: ProfilePopComponent {
-        ProfilePopComponent(parent: self)
+    var profilePopupFactory: any ProfilePopupFactory {
+        ProfilePopupComponent(parent: self)
     }
 }
