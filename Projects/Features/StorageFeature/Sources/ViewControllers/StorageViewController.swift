@@ -94,7 +94,7 @@ extension StorageViewController {
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 guard let vc = owner.textPopUpFactory.makeView(
-                    text: LocalizationStrings.needLoginWarning",
+                    text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
