@@ -12,6 +12,7 @@ import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import UserDomainInterface
+import Localization
 import Utility
 
 typealias LikeSectionModel = SectionModel<Int, FavoriteSongEntity>
@@ -126,7 +127,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 guard let vc = owner.textPopUpFactory.makeView(
-                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,

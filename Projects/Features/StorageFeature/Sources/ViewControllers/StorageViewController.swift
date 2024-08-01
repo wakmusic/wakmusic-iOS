@@ -8,6 +8,7 @@ import SignInFeatureInterface
 import Tabman
 import UIKit
 import Utility
+import Localization
 
 final class StorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor
@@ -93,7 +94,7 @@ extension StorageViewController {
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 guard let vc = owner.textPopUpFactory.makeView(
-                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    text: LocalizationStrings.needLoginWarning",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
