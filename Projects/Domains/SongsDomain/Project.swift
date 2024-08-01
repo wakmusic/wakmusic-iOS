@@ -15,7 +15,9 @@ let project = Project.module(
             module: .domain(.SongsDomain),
             dependencies: [
                 .domain(target: .BaseDomain),
-                .domain(target: .SongsDomain, type: .interface)
+                .domain(target: .SongsDomain, type: .interface),
+                .domain(target: .AuthDomain, type: .interface),
+                .domain(target: .LikeDomain, type: .interface)
             ]
         ),
         .testing(
