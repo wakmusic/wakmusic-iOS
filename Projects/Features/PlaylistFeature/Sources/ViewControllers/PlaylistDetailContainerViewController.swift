@@ -5,9 +5,12 @@ import BaseFeature
 import Utility
 import PlaylistFeatureInterface
 import RxSwift
+import DesignSystem
 
 final class PlaylistDetailContainerViewController: BaseReactorViewController<PlaylistDetailContainerReactor>, ContainerViewType {
-    var contentView: UIView! = UIView()
+    var contentView: UIView! = UIView().then {
+        $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+    }
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
     private let key: String
@@ -90,14 +93,6 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
             }
             .disposed(by: disposeBag)
         
-//        sharedState.map(\.isLoading)
-//            .distinctUntilChanged()
-//            .bind(with: self) { owner, isLoading in
-//                owner.contentView.isHidden = isLoading
-//            }
-//            .disposed(by: disposeBag)
-        
-    
     
     }
 }
