@@ -5,6 +5,7 @@ import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import SignInFeatureInterface
 import UIKit
 
 public protocol WakmusicPlaylistDetailDependency: Dependency {
@@ -15,6 +16,8 @@ public protocol WakmusicPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 
     var musicDetailFactory: any MusicDetailFactory { get }
+    
+    var signInFactory: any SignInFactory { get }
 }
 
 public final class WakmusicPlaylistDetailComponent: Component<WakmusicPlaylistDetailDependency>,
@@ -27,7 +30,8 @@ public final class WakmusicPlaylistDetailComponent: Component<WakmusicPlaylistDe
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
-            musicDetailFactory: dependency.musicDetailFactory
+            musicDetailFactory: dependency.musicDetailFactory,
+            signInFactory: dependency.signInFactory
         )
     }
 }

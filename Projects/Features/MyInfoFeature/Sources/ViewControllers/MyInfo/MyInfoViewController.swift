@@ -12,6 +12,7 @@ import TeamFeatureInterface
 import Then
 import UIKit
 import Utility
+import Localization
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()

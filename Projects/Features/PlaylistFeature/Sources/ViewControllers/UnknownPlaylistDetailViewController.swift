@@ -174,7 +174,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .filter { $0 }
             .bind(with: self) { owner, _ in
                 let vc = TextPopupViewController.viewController(
-                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { () in
                         let vc = owner.signInFactory.makeView()
@@ -409,7 +409,6 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             
             if PreferenceManager.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)
-                reactor.action.onNext(.deselectAll)
                 return
             }
             
