@@ -65,7 +65,8 @@ extension PlaylistAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription, .requestPlaylistOwnerID:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription,
+             .requestPlaylistOwnerID:
             return .get
 
         case .createPlaylist, .addSongIntoPlaylist, .requestCustomImageURL:
@@ -84,7 +85,8 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription , .requestPlaylistOwnerID:
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription,
+             .requestPlaylistOwnerID:
             return .requestPlain
 
         case let .updateTitleAndPrivate(_, title: title, isPrivate: isPrivate):
@@ -129,8 +131,8 @@ extension PlaylistAPI: WMAPI {
             return type == .my ? .accessToken : .none
 
         case .createPlaylist, .updatePlaylist, .addSongIntoPlaylist, .requestCustomImageURL,
-                .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist,
-                .checkSubscription, .requestPlaylistOwnerID:
+             .removeSongs, .updateTitleAndPrivate, .uploadDefaultImage, .subscribePlaylist,
+             .checkSubscription, .requestPlaylistOwnerID:
             return .accessToken
         }
     }

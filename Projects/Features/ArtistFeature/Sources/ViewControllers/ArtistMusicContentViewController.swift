@@ -7,8 +7,8 @@ import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
-import SongsDomainInterface
 import SignInFeatureInterface
+import SongsDomainInterface
 import UIKit
 import Utility
 
