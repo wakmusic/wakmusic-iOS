@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -26,7 +26,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tup-mo-jxt">
-                                        <rect key="frame" x="341" y="8" width="32" height="32"/>
+                                        <rect key="frame" x="20" y="8" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="DrT-RV-7sg"/>
                                             <constraint firstAttribute="width" constant="32" id="UHv-Ft-UDR"/>
@@ -38,7 +38,7 @@
                                     <constraint firstItem="jOQ-7X-YkZ" firstAttribute="centerX" secondItem="UNY-WU-BPW" secondAttribute="centerX" id="83C-LZ-gAx"/>
                                     <constraint firstItem="jOQ-7X-YkZ" firstAttribute="centerY" secondItem="UNY-WU-BPW" secondAttribute="centerY" id="8se-eV-Xe2"/>
                                     <constraint firstItem="Tup-mo-jxt" firstAttribute="centerY" secondItem="UNY-WU-BPW" secondAttribute="centerY" id="Iih-A8-5by"/>
-                                    <constraint firstAttribute="trailing" secondItem="Tup-mo-jxt" secondAttribute="trailing" constant="20" id="eok-vE-VpI"/>
+                                    <constraint firstItem="Tup-mo-jxt" firstAttribute="leading" secondItem="UNY-WU-BPW" secondAttribute="leading" constant="20" id="ShL-M7-YSB"/>
                                     <constraint firstAttribute="height" constant="48" id="yOe-eO-fmd"/>
                                 </constraints>
                             </view>
