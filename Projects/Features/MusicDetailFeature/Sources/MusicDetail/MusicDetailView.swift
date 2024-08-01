@@ -12,8 +12,8 @@ private protocol MusicDetailStateProtocol {
     func updateArtist(artist: String)
     func updateSelectedIndex(index: Int)
     func updateInitialSelectedIndex(index: Int)
-    func updateThumbnails(thumbnailURLs: [String])
-    func updateBackgroundImage(imageURL: String)
+    func updateThumbnails(thumbnailModels: [ThumbnailModel])
+    func updateBackgroundImage(thumbnailModel: ThumbnailModel)
     func updateIsDisabledSingingRoom(isDisabled: Bool)
     func updateIsDisabledPrevButton(isDisabled: Bool)
     func updateIsDisabledNextButton(isDisabled: Bool)
@@ -34,13 +34,16 @@ private protocol MusicDetailActionProtocol {
 }
 
 final class MusicDetailView: UIView {
+    private typealias SectionType = Int
+    private typealias ItemType = ThumbnailModel
+
     private let thumbnailCellRegistration = UICollectionView.CellRegistration<
-        ThumbnailCell, String
+        ThumbnailCell, ItemType
     > { cell, _, itemIdentifier in
-        cell.configure(thumbnailImageURL: itemIdentifier)
+        cell.configure(thumbnailModel: itemIdentifier)
     }
 
-    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<Int, String>(
+    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<SectionType, ItemType>(
         collectionView: thumbnailCollectionView
     ) { [thumbnailCellRegistration] collectionView, indexPath, itemIdentifier in
         let cell = collectionView.dequeueConfiguredReusableCell(
@@ -187,16 +190,20 @@ extension MusicDetailView: MusicDetailStateProtocol {
         )
     }
 
-    func updateThumbnails(thumbnailURLs: [String]) {
+    func updateThumbnails(thumbnailModels: [ThumbnailModel]) {
         var snapshot = thumbnailDiffableDataSource.snapshot()
         snapshot.appendSections([0])
-        snapshot.appendItems(thumbnailURLs, toSection: 0)
+        snapshot.appendItems(thumbnailModels, toSection: 0)
         thumbnailDiffableDataSource.apply(snapshot)
     }
 
-    func updateBackgroundImage(imageURL: String) {
+    func updateBackgroundImage(thumbnailModel: ThumbnailModel) {
+        let alternativeSources = [thumbnailModel.alternativeImageURL]
+            .compactMap { URL(string: $0) }
+            .map { Source.network($0) }
+
         backgroundImageView.kf.setImage(
-            with: URL(string: imageURL),
+            with: URL(string: thumbnailModel.imageURL),
             options: [
                 .waitForCache,
                 .transition(.fade(0.5)),
@@ -205,7 +212,8 @@ extension MusicDetailView: MusicDetailStateProtocol {
                     DownsamplingImageProcessor(
                         size: .init(width: 10, height: 10)
                     )
-                )
+                ),
+                .alternativeSources(alternativeSources)
             ]
         )
     }

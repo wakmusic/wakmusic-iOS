@@ -53,9 +53,14 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState.map(\.songIDs)
             .distinctUntilChanged()
             .map { songs in
-                songs.map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
+                songs.map {
+                    ThumbnailModel(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: $0),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: $0)
+                    )
+                }
             }
-            .bind(onNext: musicDetailView.updateThumbnails(thumbnailURLs:))
+            .bind(onNext: musicDetailView.updateThumbnails(thumbnailModels:))
             .disposed(by: disposeBag)
 
         sharedState.map(\.isFirstSong)
@@ -76,7 +81,10 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                 owner.musicDetailView.updateArtist(artist: song.artistString)
 
                 owner.musicDetailView.updateBackgroundImage(
-                    imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: song.videoID)
+                    thumbnailModel: .init(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: song.videoID),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: song.videoID)
+                    )
                 )
             }
             .disposed(by: disposeBag)
