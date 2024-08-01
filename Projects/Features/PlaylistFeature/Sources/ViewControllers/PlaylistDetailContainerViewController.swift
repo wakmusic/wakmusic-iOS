@@ -56,11 +56,12 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                 
                 owner.remove(asChildViewController: owner.children.first)
                 
-                guard let userInfo else {
+                if userInfo == nil {
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
-                    return
+                } else {
+                    reactor.action.onNext(.requestOwnerID)
                 }
-                reactor.action.onNext(.requestOwnerID)
+                 
               
             }
             .disposed(by: disposeBag)
