@@ -56,7 +56,6 @@ final class MusicDetailReactor: Reactor {
     var initialState: State
     private let youtubeURLGenerator = YoutubeURLGenerator()
     private let fetchSongUseCase: any FetchSongUseCase
-    private let checkIsLikedSongUseCase: any CheckIsLikedSongUseCase
     private let addLikeSongUseCase: any AddLikeSongUseCase
     private let cancelLikeSongUseCase: any CancelLikeSongUseCase
 
@@ -64,7 +63,6 @@ final class MusicDetailReactor: Reactor {
         songIDs: [String],
         selectedID: String,
         fetchSongUseCase: any FetchSongUseCase,
-        checkIsLikedSongUseCase: any CheckIsLikedSongUseCase,
         addLikeSongUseCase: any AddLikeSongUseCase,
         cancelLikeSongUseCase: any CancelLikeSongUseCase
     ) {
@@ -75,7 +73,6 @@ final class MusicDetailReactor: Reactor {
         )
 
         self.fetchSongUseCase = fetchSongUseCase
-        self.checkIsLikedSongUseCase = checkIsLikedSongUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
 
@@ -144,19 +141,13 @@ private extension MusicDetailReactor {
         ].compactMap { $0 }
             .map { index in
                 fetchSongUseCase.execute(id: index)
-                    .flatMap { [checkIsLikedSongUseCase] song in
-                        checkIsLikedSongUseCase.execute(id: song.id)
-                            .map { song.toModel(isLiked: $0) }
-                    }
+                    .map { $0.toModel() }
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
 
         let songMutationObservable = fetchSongUseCase.execute(id: selectedSongID)
-            .flatMap { [checkIsLikedSongUseCase] song in
-                checkIsLikedSongUseCase.execute(id: song.id)
-                    .map { song.toModel(isLiked: $0) }
-            }
+            .map { $0.toModel() }
             .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0) }
             .asObservable()
 
@@ -316,10 +307,7 @@ private extension MusicDetailReactor {
             .filter { currentState.songDictionary[$0] == nil }
             .map { index in
                 fetchSongUseCase.execute(id: index)
-                    .flatMap { [checkIsLikedSongUseCase] song in
-                        checkIsLikedSongUseCase.execute(id: song.id)
-                            .map { song.toModel(isLiked: $0) }
-                    }
+                    .map { $0.toModel() }
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
@@ -337,10 +325,7 @@ private extension MusicDetailReactor {
         }
 
         let currentSongMutationObservable = fetchSongUseCase.execute(id: songID)
-            .flatMap { [checkIsLikedSongUseCase] song in
-                checkIsLikedSongUseCase.execute(id: song.id)
-                    .map { song.toModel(isLiked: $0) }
-            }
+            .map { $0.toModel() }
             .map { Mutation.updateSongDictionary(key: songID, value: $0) }
             .asObservable()
 

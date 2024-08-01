@@ -14,7 +14,6 @@ public protocol MusicDetailDependency: Dependency {
     var songCreditFactory: any SongCreditFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
-    var checkIsLikedSongUseCase: any CheckIsLikedSongUseCase { get }
     var addLikeSongUseCase: any AddLikeSongUseCase { get }
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
 }
@@ -25,7 +24,6 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
             songIDs: songIDs,
             selectedID: selectedID,
             fetchSongUseCase: dependency.fetchSongUseCase,
-            checkIsLikedSongUseCase: dependency.checkIsLikedSongUseCase,
             addLikeSongUseCase: dependency.addLikeSongUseCase,
             cancelLikeSongUseCase: dependency.cancelLikeSongUseCase
         )

@@ -14,7 +14,6 @@ public protocol RootDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
     var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    var fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase { get }
 }
 
 public final class RootComponent: Component<RootDependency> {
@@ -27,8 +26,7 @@ public final class RootComponent: Component<RootDependency> {
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase,
                 fetchAppCheckUseCase: dependency.fetchAppCheckUseCase,
                 logoutUseCase: dependency.logoutUseCase,
-                checkIsExistAccessTokenUseCase: dependency.checkIsExistAccessTokenUseCase,
-                fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase
+                checkIsExistAccessTokenUseCase: dependency.checkIsExistAccessTokenUseCase
             )
         )
     }

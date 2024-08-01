@@ -12,27 +12,20 @@ import RxSwift
 
 public final class LikeRepositoryImpl: LikeRepository {
     private let remoteLikeDataSource: any RemoteLikeDataSource
-    private let localLikeDataSource: any LocalLikeDataSource
 
-    public init(
-        remoteLikeDataSource: any RemoteLikeDataSource,
-        localLikeDataSource: any LocalLikeDataSource
-    ) {
+    public init(remoteLikeDataSource: any RemoteLikeDataSource) {
         self.remoteLikeDataSource = remoteLikeDataSource
-        self.localLikeDataSource = localLikeDataSource
     }
 
     public func addLikeSong(id: String) -> Single<LikeEntity> {
-        localLikeDataSource.addLikeSong(id: id)
-            .andThen(remoteLikeDataSource.addLikeSong(id: id))
+        remoteLikeDataSource.addLikeSong(id: id)
     }
 
     public func cancelLikeSong(id: String) -> Single<LikeEntity> {
-        localLikeDataSource.cancelLikeSong(id: id)
-            .andThen(remoteLikeDataSource.cancelLikeSong(id: id))
+        remoteLikeDataSource.cancelLikeSong(id: id)
     }
 
     public func checkIsLikedSong(id: String) -> Single<Bool> {
-        localLikeDataSource.checkIsLikedSong(id: id)
+        remoteLikeDataSource.checkIsLikedSong(id: id)
     }
 }

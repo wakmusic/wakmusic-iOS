@@ -31,13 +31,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     views: 120,
                     date: "2024.03.11",
                     likes: 120,
-                    karaokeNumber: .init(TJ: 36, KY: nil)
+                    isLiked: false,
+                    karaokeNumber: .init(tj: 36, ky: nil)
                 )
             )
-        }
-        let checkIsLikedSongUseCase = CheckIsLikedSongUseCaseSpy()
-        checkIsLikedSongUseCase.handler = { _ in
-            Single.just(true)
         }
 
         let addLikeSongUseCase = AddLikeSongUseCaseSpy()
@@ -58,7 +55,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             ],
             selectedID: "DPEtmqvaKqY",
             fetchSongUseCase: fetchSongUseCase,
-            checkIsLikedSongUseCase: checkIsLikedSongUseCase,
             addLikeSongUseCase: addLikeSongUseCase,
             cancelLikeSongUseCase: cancelLikeSongUseCase
         )

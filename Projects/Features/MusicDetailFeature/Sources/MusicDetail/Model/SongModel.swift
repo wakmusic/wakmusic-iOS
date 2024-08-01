@@ -31,8 +31,8 @@ struct SongModel: Equatable {
     }
 }
 
-extension SongEntity {
-    func toModel(isLiked: Bool) -> SongModel {
+extension SongDetailEntity {
+    func toModel() -> SongModel {
         SongModel(
             videoID: self.id,
             title: self.title,
@@ -40,10 +40,10 @@ extension SongEntity {
             date: self.date,
             views: self.views,
             likes: self.likes,
-            isLiked: isLiked,
+            isLiked: self.isLiked,
             karaokeNumber: SongModel.KaraokeNumber(
-                tj: self.karaokeNumber.TJ,
-                ky: self.karaokeNumber.KY
+                tj: self.karaokeNumber.tj,
+                ky: self.karaokeNumber.tj
             )
         )
     }

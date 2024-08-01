@@ -6,14 +6,9 @@ import UserDomainInterface
 
 public final class UserRepositoryImpl: UserRepository {
     private let remoteUserDataSource: any RemoteUserDataSource
-    private let localLikeDataSource: any LocalLikeDataSource
 
-    public init(
-        remoteUserDataSource: any RemoteUserDataSource,
-        localLikeDataSource: any LocalLikeDataSource
-    ) {
+    public init(remoteUserDataSource: any RemoteUserDataSource) {
         self.remoteUserDataSource = remoteUserDataSource
-        self.localLikeDataSource = localLikeDataSource
     }
 
     public func fetchUserInfo() -> Single<UserInfoEntity> {
@@ -34,10 +29,6 @@ public final class UserRepositoryImpl: UserRepository {
 
     public func fetchFavoriteSongs() -> Single<[FavoriteSongEntity]> {
         remoteUserDataSource.fetchFavoriteSong()
-            .flatMap { [localLikeDataSource] songEntities in
-                localLikeDataSource.updateLikedSongs(ids: songEntities.map(\.songID))
-                    .andThen(.just(songEntities))
-            }
     }
 
     public func editFavoriteSongsOrder(ids: [String]) -> Completable {

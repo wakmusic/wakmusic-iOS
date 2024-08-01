@@ -49,7 +49,6 @@ open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
 private extension IntroViewController {
     func inputBind() {
         input.fetchPermissionCheck.onNext(())
-        input.fetchLikedSongsCheck.onNext(())
     }
 
     func outputBind() {
