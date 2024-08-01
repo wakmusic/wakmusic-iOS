@@ -79,6 +79,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.pulse(\.$showToast)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+            })
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.isAllNoticesRead)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
@@ -113,6 +120,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.profileView.updatePlatform(platform: platform)
             }
             .disposed(by: disposeBag)
+        
+        reactor.state.map(\.fruitCount)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, count in
+                owner.myInfoView.updateFruitCount(count: count)
+            }
+            .disposed(by: disposeBag)
 
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
@@ -131,6 +145,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$dismissEditSheet)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                owner.hideEditSheet()
+            })
+            .disposed(by: disposeBag)
+        
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
@@ -257,7 +278,9 @@ extension MyInfoViewController: EditSheetViewDelegate {
             showBottomSheet(content: vc, size: .fixed(352 + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
             guard let vc = multiPurposePopUpFactory
-                .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
+                .makeView(type: .nickname, key: "", completion: { [weak self] text in
+                    self?.reactor?.action.onNext(.changeNicknameButtonDidTap(text))
+                }) as? MultiPurposePopupViewController
             else { return }
             showBottomSheet(content: vc, size: .fixed(296))
         }
@@ -275,7 +298,6 @@ extension MyInfoViewController: EqualHandleTappedType {
 
 extension MyInfoViewController: FruitDrawViewControllerDelegate {
     func completedFruitDraw(itemCount: Int) {
-        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
-        LogManager.printDebug("itemCount: \(itemCount)")
+        reactor?.action.onNext(.completedFruitDraw)
     }
 }
