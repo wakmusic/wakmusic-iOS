@@ -240,6 +240,11 @@ private extension LyricHighlightingViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
         collectionView.register(LyricHighlightingCell.self, forCellWithReuseIdentifier: "\(LyricHighlightingCell.self)")
+
+        let alternativeSources = [
+            WMImageAPI.fetchYoutubeThumbnail(id: output.updateInfo.value.songID).toURL
+        ].compactMap { $0 }
+            .map { Source.network($0) }
         thumbnailImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnailHD(id: output.updateInfo.value.songID).toString),
             options: [
@@ -250,7 +255,8 @@ private extension LyricHighlightingViewController {
                     DownsamplingImageProcessor(
                         size: .init(width: 10, height: 10)
                     )
-                )
+                ),
+                .alternativeSources(alternativeSources)
             ]
         )
         indicator.startAnimating()
