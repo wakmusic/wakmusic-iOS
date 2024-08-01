@@ -405,8 +405,8 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-            let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
-            vc.modalPresentationStyle = .overFullScreen
+            let vc = PreferenceManager.userInfo == nil ? signInFactory.makeView() : containSongsFactory.makeView(songs: songs.map { $0.id })
+            vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)
 
