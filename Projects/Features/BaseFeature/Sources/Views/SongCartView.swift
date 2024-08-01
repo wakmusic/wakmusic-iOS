@@ -80,11 +80,7 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .play)
 
         } else if button == removeButton { // 삭제
-            if self.type == .playlist {
-                delegate?.buttonTapped(type: .remove)
-            } else {
-                delegate?.buttonTapped(type: .remove)
-            }
+            delegate?.buttonTapped(type: .remove)
         }
     }
 }
