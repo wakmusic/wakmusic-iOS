@@ -72,7 +72,7 @@ public class SongCartView: UIView {
 
         } else if button == songAddButton { // 노래담기
             guard Utility.PreferenceManager.userInfo != nil else {
-                showLoginPopup()
+               showLoginPopup()
                 return
             }
             delegate?.buttonTapped(type: .addSong)

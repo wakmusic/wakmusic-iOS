@@ -124,7 +124,7 @@ private extension MainTabBarViewController {
         switch page {
         case "playlist":
             let key: String = params["key"] as? String ?? ""
-            let viewController = playlistDetailFactory.makeView(key: key, kind: .unknown)
+            let viewController = playlistDetailFactory.makeView(key: key)
             navigationController?.pushViewController(viewController, animated: true)
 
         default:

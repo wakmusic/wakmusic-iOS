@@ -10,6 +10,7 @@ import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
+import SignInFeatureInterface
 import Utility
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
@@ -23,6 +24,8 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private let textPopUpFactory: any TextPopUpFactory
 
     private let musicDetailFactory: any MusicDetailFactory
+    
+    private let signInFactory: any SignInFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -62,11 +65,13 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
         reactor: UnknownPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        musicDetailFactory: any MusicDetailFactory
+        musicDetailFactory: any MusicDetailFactory,
+        signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
         self.musicDetailFactory = musicDetailFactory
+        self.signInFactory = signInFactory
         super.init(reactor: reactor)
     }
 
@@ -171,7 +176,9 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
                     cancelButtonIsHidden: false,
                     completion: { () in
-                        NotificationCenter.default.post(name: .movedTab, object: 4)
+                        let vc = owner.signInFactory.makeView()
+                        vc.modalPresentationStyle = .fullScreen
+                        owner.present(vc, animated: true)
                     }
                 )
 

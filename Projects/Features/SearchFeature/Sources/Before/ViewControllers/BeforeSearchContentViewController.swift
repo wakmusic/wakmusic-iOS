@@ -324,8 +324,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             WakmusicYoutubePlayer(id: model.id).play()
             LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
-
-            navigatePlaylistDetail(key: model.key, kind: .wakmu)
+            navigateWmPlaylistDetail(key: model.key)
 
             #warning("추후 업데이트 시 사용")
 //        case let .popularList(model: model):

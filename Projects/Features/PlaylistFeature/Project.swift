@@ -14,6 +14,7 @@ let project = Project.module(
                 .feature(target: .BaseFeature),
                 .feature(target: .PlaylistFeature, type: .interface),
                 .feature(target: .MusicDetailFeature, type: .interface),
+                .feature(target: .SignInFeature, type: .interface),
                 .domain(target: .AuthDomain, type: .interface),
                 .domain(target: .PlaylistDomain, type: .interface),
                 .domain(target: .ImageDomain, type: .interface)

@@ -274,7 +274,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
                 owner.present(activityViewController, animated: true)
             }
-
+        
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
             .bind(with: self) { owner, isEditing in

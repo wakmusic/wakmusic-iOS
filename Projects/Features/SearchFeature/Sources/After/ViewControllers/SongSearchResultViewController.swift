@@ -137,8 +137,12 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
         reactor.pulse(\.$toastMessage)
             .compactMap { $0 }
-            .bind(with: self) { owner, message in
-                owner.showToast(text: message, font: .setFont(.t6(weight: .light)))
+            .withLatestFrom(sharedState.map(\.selectedCount)){($0, $1)}
+            .bind(with: self) { owner, info in
+                
+                let(message, count) = (info.0, info.1)
+                
+                owner.showToast(text: message,options: count == .zero ?  [.tabBar] : [.tabBar, .songCart])
             }
             .disposed(by: disposeBag)
 
@@ -335,10 +339,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-
-                    font: .setFont(.t6(weight: .light)),
-
-                    verticalOffset: 56 + 10
+                    options: [.tabBar]
                 )
                 return
             }
@@ -353,10 +354,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-
-                    font: .setFont(.t6(weight: .light)),
-
-                    verticalOffset: 56 + 10
+                    options: [.tabBar]
                 )
                 return
             }
@@ -369,10 +367,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
-
-                    font: .setFont(.t6(weight: .light)),
-
-                    verticalOffset: 56 + 10
+                    options: [.tabBar]
                 )
                 return
             }
