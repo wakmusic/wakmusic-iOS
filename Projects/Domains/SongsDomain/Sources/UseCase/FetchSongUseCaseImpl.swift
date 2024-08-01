@@ -22,23 +22,35 @@ public struct FetchSongUseCaseImpl: FetchSongUseCase {
         authRepository.checkIsExistAccessToken()
             .flatMap { isLoggedIn in
                 let fetchSong = songsRepository.fetchSong(id: id)
+                guard isLoggedIn else {
+                    return fetchSong.map {
+                        $0.toDetailEntity(isLiked: false)
+                    }
+                }
+
                 let fetchIsLiked = likeRepository.checkIsLikedSong(id: id)
                 return Single.zip(fetchSong, fetchIsLiked)
                     .map { song, isLiked in
-                        SongDetailEntity(
-                            id: song.id,
-                            title: song.title,
-                            artist: song.artist,
-                            views: song.views,
-                            date: song.date,
-                            likes: song.likes,
-                            isLiked: isLiked,
-                            karaokeNumber: .init(
-                                tj: song.karaokeNumber.TJ,
-                                ky: song.karaokeNumber.KY
-                            )
-                        )
+                        song.toDetailEntity(isLiked: isLiked)
                     }
             }
+    }
+}
+
+private extension SongEntity {
+    func toDetailEntity(isLiked: Bool) -> SongDetailEntity {
+        SongDetailEntity(
+            id: self.id,
+            title: self.title,
+            artist: self.artist,
+            views: self.views,
+            date: self.date,
+            likes: self.likes,
+            isLiked: isLiked,
+            karaokeNumber: .init(
+                tj: self.karaokeNumber.TJ,
+                ky: self.karaokeNumber.KY
+            )
+        )
     }
 }
