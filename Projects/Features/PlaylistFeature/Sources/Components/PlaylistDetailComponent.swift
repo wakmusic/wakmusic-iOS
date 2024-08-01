@@ -17,11 +17,7 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
         return PlaylistDetailContainerViewController(reactor: reactor,key: key,
                                                      unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
     }
-    
-    
     public func makeWmView(key: String) -> UIViewController {
         return dependency.wakmusicPlaylistDetailFactory.makeView(key: key)
     }
-    
-
 }
