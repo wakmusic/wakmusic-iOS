@@ -5,6 +5,10 @@ import Utility
 
 final class CreditSongCollectionHeaderView: UICollectionReusableView {
     private let randomPlayButton = RandomPlayButton()
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+    }
     private var playButtonHandler: (() -> Void)?
 
     override init(frame: CGRect) {
@@ -28,7 +32,11 @@ final class CreditSongCollectionHeaderView: UICollectionReusableView {
     }
 
     private func setupViews() {
-        addSubview(randomPlayButton)
+        addSubviews(blurEffectView, randomPlayButton)
+        blurEffectView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
         randomPlayButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

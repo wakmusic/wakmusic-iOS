@@ -151,7 +151,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
                 var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
                 snapshot.appendSections(credits.map(\.position))
                 credits.forEach { snapshot.appendItems($0.names, toSection: $0.position) }
-                creditDiffableDataSource.apply(snapshot)
+                creditDiffableDataSource.apply(snapshot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
 
