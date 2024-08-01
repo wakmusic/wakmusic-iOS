@@ -71,10 +71,6 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .allSelect(flag: allSelectButton.isSelected))
 
         } else if button == songAddButton { // 노래담기
-            guard Utility.PreferenceManager.userInfo != nil else {
-               showLoginPopup()
-                return
-            }
             delegate?.buttonTapped(type: .addSong)
 
         } else if button == playListAddButton { // 재생목록추가
@@ -84,16 +80,7 @@ public class SongCartView: UIView {
             delegate?.buttonTapped(type: .play)
 
         } else if button == removeButton { // 삭제
-            if self.type == .playlist {
-                delegate?.buttonTapped(type: .remove)
-
-            } else {
-                guard Utility.PreferenceManager.userInfo != nil else {
-                    showLoginPopup()
-                    return
-                }
-                delegate?.buttonTapped(type: .remove)
-            }
+            delegate?.buttonTapped(type: .remove)
         }
     }
 }
@@ -192,7 +179,7 @@ public extension SongCartView {
                 attributedString.addAttributes(
                     [
                         .font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
-                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                        .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                         .kern: -0.5
                     ],
                     range: NSRange(location: 0, length: attributedString.string.count)
@@ -205,7 +192,7 @@ public extension SongCartView {
                 attributedString.addAttributes(
                     [
                         .font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
-                        .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                        .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                         .kern: -0.5
                     ],
                     range: NSRange(location: 0, length: attributedString.string.count)
@@ -237,19 +224,5 @@ public extension SongCartView {
 
     func updateBottomSpace(isUse: Bool) {
         self.bottomSpaceView.isHidden = isUse ? false : true
-    }
-}
-
-extension SongCartView {
-    private func showLoginPopup() {
-        let viewController = TextPopupViewController.viewController(
-            text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
-            cancelButtonIsHidden: false,
-            completion: { () in
-                NotificationCenter.default.post(name: .movedTab, object: 4)
-            }
-        )
-        guard let parent = self.parentViewController() else { return }
-        parent.showBottomSheet(content: viewController)
     }
 }
