@@ -2,10 +2,10 @@ import Foundation
 
 public struct PlaylistOwnerIdEntity {
     public init(
-        ownerId: String
+        ownerID: String
     ) {
-        self.ownerId = ownerId
+        self.ownerID = ownerID
     }
 
-    public let ownerId: String
+    public let ownerID: String
 }

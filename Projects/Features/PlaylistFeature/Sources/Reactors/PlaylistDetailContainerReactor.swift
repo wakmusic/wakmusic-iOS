@@ -17,7 +17,7 @@ final class PlaylistDetailContainerReactor: Reactor {
      
     struct State {
         var isLoading: Bool
-        var ownerId: String?
+        var ownerID: String?
         @Pulse var toastMessgae: String?
     }
     
@@ -45,8 +45,8 @@ final class PlaylistDetailContainerReactor: Reactor {
         
         switch mutation {
             
-        case let .updateOwnerId(ownerId):
-            newState.ownerId = ownerId
+        case let .updateOwnerId(ownerID):
+            newState.ownerID = ownerID
         case let .showToastMessagae(message):
             newState.toastMessgae = message
         case let .updateLoadingState(flag):
@@ -64,9 +64,9 @@ extension PlaylistDetailContainerReactor{
         return requestPlaylistOwnerIdUsecase
             .execute(key: key)
             .asObservable()
-            .catchAndReturn(PlaylistOwnerIdEntity(ownerId: "__"))
+            .catchAndReturn(PlaylistOwnerIdEntity(ownerID: "__"))
             .flatMap({ entitiy -> Observable<Mutation> in
-                return .just(Mutation.updateOwnerId(entitiy.ownerId))
+                return .just(Mutation.updateOwnerId(entitiy.ownerID))
             })
         
     }

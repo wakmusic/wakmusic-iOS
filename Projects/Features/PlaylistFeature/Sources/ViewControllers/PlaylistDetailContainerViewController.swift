@@ -74,20 +74,20 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         let sharedState = reactor.state.share()
         
         
-        sharedState.map(\.ownerId)
+        sharedState.map(\.ownerID)
             .compactMap({ $0 })
             .distinctUntilChanged()
             .withLatestFrom(PreferenceManager.$userInfo){ ($0, $1) }
             .bind(with: self) { owner, info in
                 
-                let (ownerId, userInfo) = info
+                let (ownerID, userInfo) = info
                 
                 guard let userInfo else { return }
                 
                 
                 owner.remove(asChildViewController: owner.children.first)
                 
-                if ownerId == userInfo.decryptedID {
+                if ownerID == userInfo.decryptedID {
                     owner.add(asChildViewController: owner.myPlaylistVC)
                 } else {
                     owner.add(asChildViewController: owner.unknownPlaylistVC)

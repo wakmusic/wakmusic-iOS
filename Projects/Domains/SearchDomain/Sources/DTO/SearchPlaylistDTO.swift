@@ -40,7 +40,7 @@ public extension SearchPlaylistDTO {
         SearchPlaylistEntity(
             key: key,
             title: title,
-            ownerId: user.handle,
+            ownerID: user.handle,
             userName: user.name,
             image: imageUrl,
             date: (createdAt / 1000.0).unixTimeToDate.dateToString(format: "yyyy.MM.dd"),

@@ -124,8 +124,7 @@ private extension MainTabBarViewController {
         switch page {
         case "playlist":
             let key: String = params["key"] as? String ?? ""
-            #warning("함수 매개변수에 ownerId 넘겨주시면되여")
-            let viewController = playlistDetailFactory.makeView(key: key) // makeView(key: key, ownerId: ownerId) 넣어주시는 함수로 변경
+            let viewController = playlistDetailFactory.makeView(key: key)
             navigationController?.pushViewController(viewController, animated: true)
 
         default:
