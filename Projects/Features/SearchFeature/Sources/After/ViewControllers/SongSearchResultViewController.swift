@@ -22,9 +22,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
     private let signInFactory: any SignInFactory
-
+    private let  textPopUpFactory: any TextPopUpFactory
     private let searchSortOptionComponent: SearchSortOptionComponent
-
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
@@ -50,12 +49,14 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         musicDetailFactory: any MusicDetailFactory,
         containSongsFactory: any ContainSongsFactory,
         signInFactory: any SignInFactory,
+        textPopUpFactory: any TextPopUpFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         self.musicDetailFactory = musicDetailFactory
         self.signInFactory = signInFactory
+        self.textPopUpFactory = textPopUpFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -348,6 +349,23 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 return
             }
 
+            if PreferenceManager.userInfo == nil {
+                let vc = self.textPopUpFactory.makeView(
+                    text: LocalizationStrings.needLoginWarning,
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = self.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        self.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                )
+                self.showBottomSheet(content: vc)
+                return
+            }
+            
             let vc = containSongsFactory.makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)

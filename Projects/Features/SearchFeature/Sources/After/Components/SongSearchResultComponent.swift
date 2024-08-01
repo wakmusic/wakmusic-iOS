@@ -15,6 +15,7 @@ public protocol SongSearchResultDependency: Dependency {
     var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
     var musicDetailFactory: any MusicDetailFactory { get }
     var signInFactory: any SignInFactory { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
 }
 
 public final class SongSearchResultComponent: Component<SongSearchResultDependency>, SongSearchResultFactory {
@@ -28,6 +29,7 @@ public final class SongSearchResultComponent: Component<SongSearchResultDependen
             musicDetailFactory: dependency.musicDetailFactory,
             containSongsFactory: dependency.containSongsFactory,
             signInFactory: dependency.signInFactory,
+            textPopUpFactory:  dependency.textPopUpFactory,
             searchGlobalScrollState: dependency.searchGlobalScrollState
         )
     }
