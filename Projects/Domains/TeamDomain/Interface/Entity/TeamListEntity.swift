@@ -7,6 +7,7 @@ public struct TeamListEntity {
     public let position: String
     public let profile: String
     public let isLead: Bool
+    public let isManager: Bool
 
     public init(
         team: String,
@@ -14,7 +15,8 @@ public struct TeamListEntity {
         name: String,
         position: String,
         profile: String,
-        isLead: Bool
+        isLead: Bool,
+        isManager: Bool
     ) {
         self.team = team
         self.part = part
@@ -22,5 +24,6 @@ public struct TeamListEntity {
         self.position = position
         self.profile = profile
         self.isLead = isLead
+        self.isManager = isManager
     }
 }
