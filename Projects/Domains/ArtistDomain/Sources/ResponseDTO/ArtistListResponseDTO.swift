@@ -42,6 +42,7 @@ public extension ArtistListResponseDTO {
         let title: ArtistListResponseDTO.Info.Title
         let description: String
         let color: ArtistListResponseDTO.Info.Color
+        let playlist: ArtistListResponseDTO.Info.Playlist
     }
 
     struct ImageURL: Decodable {
@@ -58,6 +59,10 @@ public extension ArtistListResponseDTO.Info {
     struct Color: Decodable {
         let background: [[String]]
     }
+
+    struct Playlist: Decodable {
+        let latest, popular, oldest: String
+    }
 }
 
 public extension ArtistListResponseDTO {
@@ -73,6 +78,11 @@ public extension ArtistListResponseDTO {
             roundImage: imageURL.round,
             squareImage: imageURL.square,
             graduated: graduated,
+            playlist: ArtistListEntity.Playlist(
+                latest: info.playlist.latest,
+                popular: info.playlist.popular,
+                oldest: info.playlist.oldest
+            ),
             isHiddenItem: false
         )
     }

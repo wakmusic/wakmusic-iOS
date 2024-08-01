@@ -85,6 +85,7 @@ private extension ArtistReactor {
             roundImage: "",
             squareImage: "",
             graduated: false,
+            playlist: .init(latest: "", popular: "", oldest: ""),
             isHiddenItem: false
         )
     }

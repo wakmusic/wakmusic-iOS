@@ -8,6 +8,7 @@ public struct FetchTeamListResponseDTO: Decodable {
     public let position: String
     public let profile: String
     public let isLead: Bool
+    public let isManager: Bool
 }
 
 public extension FetchTeamListResponseDTO {
@@ -18,7 +19,8 @@ public extension FetchTeamListResponseDTO {
             name: name,
             position: position,
             profile: profile,
-            isLead: isLead
+            isLead: isLead,
+            isManager: isManager
         )
     }
 }

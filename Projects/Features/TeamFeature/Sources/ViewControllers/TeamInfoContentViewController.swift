@@ -59,10 +59,13 @@ private extension TeamInfoContentViewController {
             .skip(1)
             .take(1)
             .bind(with: self, onNext: { owner, source in
-                let header = owner.output.type.value == .weeklyWM ?
-                    TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140)) : nil
-                header?.update(name: "은수저")
-                owner.tableView.tableHeaderView = header
+                if owner.output.updateManager.value == nil {
+                    owner.tableView.tableHeaderView = nil
+                } else {
+                    let header = TeamInfoHeaderView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+                    header.update(entity: owner.output.updateManager.value)
+                    owner.tableView.tableHeaderView = header
+                }
 
                 let footer = TeamInfoFooterView(frame: .init(x: 0, y: 0, width: APP_WIDTH(), height: 88))
                 owner.tableView.tableFooterView = footer
@@ -160,11 +163,5 @@ extension TeamInfoContentViewController: UITableViewDelegate, UITableViewDataSou
             totalCount: output.dataSource.value[indexPath.section].model.members.count
         )
         return cell
-    }
-}
-
-extension TeamInfoContentViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        tableView.bounces = scrollView.contentOffset.y > 0
     }
 }

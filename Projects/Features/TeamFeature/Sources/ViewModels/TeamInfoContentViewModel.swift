@@ -26,14 +26,16 @@ public final class TeamInfoContentViewModel: ViewModelType {
 
     public struct Output {
         let dataSource: BehaviorRelay<[TeamInfoSectionModel]> = .init(value: [])
+        let updateManager: BehaviorRelay<TeamListEntity?> = BehaviorRelay(value: nil)
         let type: BehaviorRelay<TeamInfoType> = .init(value: .develop)
     }
 
     public func transform(from input: Input) -> Output {
         let output = Output()
         let entities = self.entities
-        let parts = entities.map { $0.part }.uniqueElements
+        let parts = entities.map { $0.part }.filter { $0 != "총괄" }.uniqueElements
 
+        output.updateManager.accept(entities.filter { $0.isManager }.first)
         output.type.accept(type)
 
         input.combineTeamList
