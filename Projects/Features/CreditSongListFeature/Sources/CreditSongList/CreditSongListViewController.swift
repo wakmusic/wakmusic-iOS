@@ -45,7 +45,7 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
                 DesignSystemAsset.BlueGrayColor.blueGray900.color.cgColor,
                 DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.0).cgColor
             ]
-            profileGradientLayer?.frame = creditProfileGradientContainerView.bounds
+            gradientLayer.frame = creditProfileGradientContainerView.bounds
             creditProfileGradientContainerView.layer.addSublayer(gradientLayer)
             profileGradientLayer = gradientLayer
         }
