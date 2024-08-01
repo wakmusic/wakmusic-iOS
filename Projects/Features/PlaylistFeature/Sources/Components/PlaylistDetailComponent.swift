@@ -11,13 +11,10 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
-    
     public func makeView(key: String) -> UIViewController {
-        
         let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIDUsecase: dependency.requestPlaylistOwnerIDUsecase)
         
-        return PlaylistDetailContainerViewController(reactor: reactor,
-                                                     key: key,
+        return PlaylistDetailContainerViewController(reactor: reactor,key: key,
                                                      unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
     }
     

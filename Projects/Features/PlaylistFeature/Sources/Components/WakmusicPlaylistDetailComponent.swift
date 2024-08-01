@@ -10,13 +10,9 @@ import UIKit
 
 public protocol WakmusicPlaylistDetailDependency: Dependency {
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
-
     var containSongsFactory: any ContainSongsFactory { get }
-
     var textPopUpFactory: any TextPopUpFactory { get }
-
     var musicDetailFactory: any MusicDetailFactory { get }
-    
     var signInFactory: any SignInFactory { get }
 }
 

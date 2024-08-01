@@ -10,17 +10,11 @@ import UIKit
 
 public protocol UnknownPlaylistDetailDependency: Dependency {
     var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
-
     var subscribePlaylistUseCase: any SubscribePlaylistUseCase { get }
-
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase { get }
-
     var logoutUseCase: any LogoutUseCase { get }
-
     var containSongsFactory: any ContainSongsFactory { get }
-
     var textPopUpFactory: any TextPopUpFactory { get }
-
     var musicDetailFactory: any MusicDetailFactory { get }
     
     var signInFactory: any SignInFactory { get }
