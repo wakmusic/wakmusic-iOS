@@ -17,7 +17,7 @@ public final class ProfilePopupViewController: UIViewController, ViewControllerF
     @IBOutlet weak var dataLoadActivityIndicator: NVActivityIndicatorView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
-    var completion: (() -> Void)?
+    private var completion: (() -> Void)?
     private var viewModel: ProfilePopupViewModel!
     private lazy var input = ProfilePopupViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
@@ -133,7 +133,6 @@ private extension ProfilePopupViewController {
         collectionView.rx.setDelegate(self).disposed(by: disposeBag)
         collectionView.clipsToBounds = false
         collectionViewHeightConstraint.constant = (ProfilePopupViewController.rowHeight * 2) + 10
-        LogManager.printDebug("collectionViewHeightConstraint: \(collectionViewHeightConstraint.constant)")
 
         saveButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         saveButton.layer.cornerRadius = 12
