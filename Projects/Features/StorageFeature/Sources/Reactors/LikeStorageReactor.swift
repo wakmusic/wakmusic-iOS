@@ -2,6 +2,7 @@ import AuthDomainInterface
 import BaseDomainInterface
 import BaseFeature
 import Foundation
+import Localization
 import LogManager
 import ReactorKit
 import RxCocoa
@@ -18,7 +19,7 @@ final class LikeStorageReactor: Reactor {
         case itemMoved(ItemMovedEvent)
         case songDidTap(Int)
         case tapAll(isSelecting: Bool)
-        case playDidTap(song: SongEntity)
+        case playDidTap(song: FavoriteSongEntity)
         case addToPlaylistButtonDidTap // 노래담기
         case presentAddToPlaylistPopup
         case addToCurrentPlaylistButtonDidTap // 재생목록추가
@@ -104,7 +105,7 @@ final class LikeStorageReactor: Reactor {
             return changeSelectingState(index)
 
         case let .playDidTap(song):
-            return playWithAddToCurrentPlaylist()
+            return playWithAddToCurrentPlaylist(song: song)
 
         case let .tapAll(isSelecting):
             return tapAll(isSelecting)
@@ -137,8 +138,8 @@ final class LikeStorageReactor: Reactor {
             .flatMap { owner, editingState -> Observable<Mutation> in
                 // 편집이 종료될 때 처리
                 if editingState == false {
-                    let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.song.id }
-                    let original = owner.currentState.backupDataSource.flatMap { $0.items }.map { $0.song.id }
+                    let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.songID }
+                    let original = owner.currentState.backupDataSource.flatMap { $0.items }.map { $0.songID }
                     let isChanged = new != original
                     if isChanged {
                         return .concat(
@@ -245,7 +246,7 @@ extension LikeStorageReactor {
 
     func deleteSongs() -> Observable<Mutation> {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
-            .map { $0.song.id }
+            .map { $0.songID }
         storageCommonService.isEditingState.onNext(false)
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -258,7 +259,7 @@ extension LikeStorageReactor {
 
     func showAddToPlaylistPopup() -> Observable<Mutation> {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
-            .map { $0.song.id }
+            .map { $0.songID }
         return .just(.showAddToPlaylistPopup(selectedItemIDs))
     }
 
@@ -277,13 +278,18 @@ extension LikeStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+        let appendingPlaylisItems = currentState.dataSource
+            .flatMap { $0.items.filter { $0.isSelected == true } }
+            .map { PlaylistItem(id: $0.songID, title: $0.title, artist: $0.artist) }
+        PlayState.shared.append(contentsOf: appendingPlaylisItems)
+        return .just(.showToast(LocalizationStrings.addList))
     }
 
-    func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+    func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
+        let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
+        PlayState.shared.append(item: appendingPlaylisItem)
+        WakmusicYoutubePlayer(id: song.songID).play()
+        return .empty()
     }
 
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
@@ -359,7 +365,7 @@ private extension LikeStorageReactor {
 
     func mutateEditSongsOrderUseCase() -> Observable<Mutation> {
         let currentDataSource = currentState.dataSource
-        let songsOrder = currentDataSource.flatMap { $0.items.map { $0.song.id } }
+        let songsOrder = currentDataSource.flatMap { $0.items.map { $0.songID } }
         return editFavoriteSongsOrderUseCase.execute(ids: songsOrder)
             .andThen(
                 .concat(

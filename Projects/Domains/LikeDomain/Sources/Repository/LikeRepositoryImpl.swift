@@ -13,9 +13,7 @@ import RxSwift
 public final class LikeRepositoryImpl: LikeRepository {
     private let remoteLikeDataSource: any RemoteLikeDataSource
 
-    public init(
-        remoteLikeDataSource: RemoteLikeDataSource
-    ) {
+    public init(remoteLikeDataSource: any RemoteLikeDataSource) {
         self.remoteLikeDataSource = remoteLikeDataSource
     }
 
@@ -25,5 +23,9 @@ public final class LikeRepositoryImpl: LikeRepository {
 
     public func cancelLikeSong(id: String) -> Single<LikeEntity> {
         remoteLikeDataSource.cancelLikeSong(id: id)
+    }
+
+    public func checkIsLikedSong(id: String) -> Single<Bool> {
+        remoteLikeDataSource.checkIsLikedSong(id: id)
     }
 }

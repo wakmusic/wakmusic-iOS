@@ -1,5 +1,6 @@
 import Foundation
 import Kingfisher
+import LikeDomainInterface
 import LogManager
 import LyricHighlightingFeatureInterface
 import ReactorKit
@@ -55,11 +56,15 @@ final class MusicDetailReactor: Reactor {
     var initialState: State
     private let youtubeURLGenerator = YoutubeURLGenerator()
     private let fetchSongUseCase: any FetchSongUseCase
+    private let addLikeSongUseCase: any AddLikeSongUseCase
+    private let cancelLikeSongUseCase: any CancelLikeSongUseCase
 
     init(
         songIDs: [String],
         selectedID: String,
-        fetchSongUseCase: any FetchSongUseCase
+        fetchSongUseCase: any FetchSongUseCase,
+        addLikeSongUseCase: any AddLikeSongUseCase,
+        cancelLikeSongUseCase: any CancelLikeSongUseCase
     ) {
         let selectedIndex = songIDs.firstIndex(of: selectedID) ?? 0
         self.initialState = .init(
@@ -68,6 +73,8 @@ final class MusicDetailReactor: Reactor {
         )
 
         self.fetchSongUseCase = fetchSongUseCase
+        self.addLikeSongUseCase = addLikeSongUseCase
+        self.cancelLikeSongUseCase = cancelLikeSongUseCase
 
         let urls = [
             songIDs[safe: selectedIndex - 1],
@@ -123,6 +130,7 @@ final class MusicDetailReactor: Reactor {
 }
 
 // MARK: - Mutate
+
 private extension MusicDetailReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let selectedIndex = currentState.selectedIndex
@@ -133,12 +141,14 @@ private extension MusicDetailReactor {
         ].compactMap { $0 }
             .map { index in
                 fetchSongUseCase.execute(id: index)
-                    .map { Mutation.updateSongDictionary(key: index, value: $0.toModel(isLiked: false)) }
+                    .map { $0.toModel() }
+                    .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
 
         let songMutationObservable = fetchSongUseCase.execute(id: selectedSongID)
-            .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0.toModel(isLiked: false)) }
+            .map { $0.toModel() }
+            .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0) }
             .asObservable()
 
         return Observable.merge(
@@ -155,7 +165,10 @@ private extension MusicDetailReactor {
         let newIndex = currentState.selectedIndex - 1
         prefetchThumbnailImage(index: newIndex)
 
-        return .just(.updateSelectedIndex(newIndex))
+        return .concat(
+            .just(.updateSelectedIndex(newIndex)),
+            fetchSongDetailWith(index: newIndex)
+        )
     }
 
     func playButtonDidTap() -> Observable<Mutation> {
@@ -183,7 +196,10 @@ private extension MusicDetailReactor {
         let newIndex = currentState.selectedIndex + 1
         prefetchThumbnailImage(index: newIndex)
 
-        return .just(.updateSelectedIndex(newIndex))
+        return .concat(
+            .just(.updateSelectedIndex(newIndex)),
+            fetchSongDetailWith(index: newIndex)
+        )
     }
 
     func singingRoomButtonDiTap() -> Observable<Mutation> {
@@ -223,8 +239,30 @@ private extension MusicDetailReactor {
             id: song.videoID,
             like: isLike
         )
+
+        let newLike = !isLike
+        let newSong = if newLike {
+            song.updateIsLiked(likes: song.likes + 1, isLiked: newLike)
+        } else {
+            song.updateIsLiked(likes: song.likes - 1, isLiked: newLike)
+        }
         LogManager.analytics(log)
-        return .empty()
+
+        return if newLike {
+            .concat(
+                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
+                addLikeSongUseCase.execute(id: newSong.videoID)
+                    .asObservable()
+                    .flatMap { _ in Observable.empty() }
+            )
+        } else {
+            .concat(
+                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
+                cancelLikeSongUseCase.execute(id: newSong.videoID)
+                    .asObservable()
+                    .flatMap { _ in Observable.empty() }
+            )
+        }
     }
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
@@ -248,6 +286,8 @@ private extension MusicDetailReactor {
     }
 }
 
+// MARK: - Private Methods
+
 private extension MusicDetailReactor {
     func prefetchThumbnailImage(index: Int) {
         if let songID = currentState.songIDs[safe: index],
@@ -257,5 +297,40 @@ private extension MusicDetailReactor {
            ) {
             ImagePrefetcher(urls: [thumbnailURL]).start()
         }
+    }
+
+    func fetchSongDetailWith(index: Int) -> Observable<Mutation> {
+        let prefetchingSongMutationObservable = [
+            currentState.songIDs[safe: index - 1],
+            currentState.songIDs[safe: index + 1]
+        ].compactMap { $0 }
+            .filter { currentState.songDictionary[$0] == nil }
+            .map { index in
+                fetchSongUseCase.execute(id: index)
+                    .map { $0.toModel() }
+                    .map { Mutation.updateSongDictionary(key: index, value: $0) }
+                    .asObservable()
+            }
+
+        guard let songID = currentState.songIDs[safe: index] else {
+            return Observable.merge(
+                prefetchingSongMutationObservable
+            )
+        }
+
+        guard currentState.songDictionary[songID] == nil else {
+            return Observable.merge(
+                prefetchingSongMutationObservable
+            )
+        }
+
+        let currentSongMutationObservable = fetchSongUseCase.execute(id: songID)
+            .map { $0.toModel() }
+            .map { Mutation.updateSongDictionary(key: songID, value: $0) }
+            .asObservable()
+
+        return Observable.merge(
+            [currentSongMutationObservable] + prefetchingSongMutationObservable
+        )
     }
 }

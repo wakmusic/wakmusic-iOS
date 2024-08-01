@@ -57,7 +57,11 @@ public extension AppComponent {
 
     var fetchSongUseCase: any FetchSongUseCase {
         shared {
-            FetchSongUseCaseImpl(songsRepository: songsRepository)
+            FetchSongUseCaseImpl(
+                songsRepository: songsRepository,
+                likeRepository: likeRepository,
+                authRepository: authRepository
+            )
         }
     }
 

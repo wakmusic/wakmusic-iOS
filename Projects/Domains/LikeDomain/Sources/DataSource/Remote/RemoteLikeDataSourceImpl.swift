@@ -15,4 +15,10 @@ public final class RemoteLikeDataSourceImpl: BaseRemoteDataSource<LikeAPI>, Remo
             .map(LikeResponseDTO.self)
             .map { $0.toDomain() }
     }
+
+    public func checkIsLikedSong(id: String) -> Single<Bool> {
+        request(.checkIsLikedSong(id: id))
+            .map(CheckIsLikedResponseDTO.self)
+            .map(\.isLiked)
+    }
 }

@@ -7,6 +7,7 @@ import Moya
 public enum LikeAPI {
     case addLikeSong(id: String)
     case cancelLikeSong(id: String)
+    case checkIsLikedSong(id: String)
 }
 
 extension LikeAPI: WMAPI {
@@ -20,6 +21,8 @@ extension LikeAPI: WMAPI {
             return "/\(id)"
         case let .cancelLikeSong(id: id):
             return "/\(id)"
+        case let .checkIsLikedSong(id):
+            return "/\(id)"
         }
     }
 
@@ -29,6 +32,8 @@ extension LikeAPI: WMAPI {
             return .post
         case .cancelLikeSong:
             return .delete
+        case .checkIsLikedSong:
+            return .get
         }
     }
 
@@ -38,7 +43,7 @@ extension LikeAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .addLikeSong, .cancelLikeSong:
+        case .addLikeSong, .cancelLikeSong, .checkIsLikedSong:
             return .accessToken
         }
     }
