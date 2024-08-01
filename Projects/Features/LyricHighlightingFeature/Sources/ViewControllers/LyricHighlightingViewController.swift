@@ -244,7 +244,6 @@ private extension LyricHighlightingViewController {
             with: URL(string: WMImageAPI.fetchYoutubeThumbnailHD(id: output.updateInfo.value.songID).toString),
             options: [
                 .waitForCache,
-                .onlyFromCache,
                 .transition(.fade(0.2)),
                 .forceTransition,
                 .processor(

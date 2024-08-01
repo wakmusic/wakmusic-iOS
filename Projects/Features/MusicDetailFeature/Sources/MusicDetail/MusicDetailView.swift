@@ -199,7 +199,6 @@ extension MusicDetailView: MusicDetailStateProtocol {
             with: URL(string: imageURL),
             options: [
                 .waitForCache,
-                .onlyFromCache,
                 .transition(.fade(0.5)),
                 .forceTransition,
                 .processor(
