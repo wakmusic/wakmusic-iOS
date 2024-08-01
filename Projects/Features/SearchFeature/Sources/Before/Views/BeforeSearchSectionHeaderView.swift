@@ -28,7 +28,7 @@ final class BeforeSearchSectionHeaderView:
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6), for: .normal)
 
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        
+
         #warning("추후 히든 해제")
         $0.isHidden = true
     }

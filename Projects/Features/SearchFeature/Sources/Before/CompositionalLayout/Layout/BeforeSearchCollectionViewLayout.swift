@@ -67,8 +67,8 @@ extension BeforeSearchCollectionViewLayout {
             group.interItemSpacing = .fixed(8)
 
             section = NSCollectionLayoutSection(group: group)
- 
-             section.boundarySupplementaryItems = [header]
+
+            section.boundarySupplementaryItems = [header]
             section.interGroupSpacing = 8.0
             section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 40, trailing: 20)
 
