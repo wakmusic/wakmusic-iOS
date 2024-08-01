@@ -29,7 +29,7 @@ public final class SongSearchResultComponent: Component<SongSearchResultDependen
             musicDetailFactory: dependency.musicDetailFactory,
             containSongsFactory: dependency.containSongsFactory,
             signInFactory: dependency.signInFactory,
-            textPopUpFactory:  dependency.textPopUpFactory,
+            textPopUpFactory: dependency.textPopUpFactory,
             searchGlobalScrollState: dependency.searchGlobalScrollState
         )
     }

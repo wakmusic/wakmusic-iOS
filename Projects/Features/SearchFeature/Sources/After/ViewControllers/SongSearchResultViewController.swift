@@ -7,12 +7,12 @@ import MusicDetailFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
+import SignInFeatureInterface
 import SnapKit
 import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import SignInFeatureInterface
 
 final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
     var songCartView: SongCartView!
@@ -22,7 +22,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
     private let signInFactory: any SignInFactory
-    private let  textPopUpFactory: any TextPopUpFactory
+    private let textPopUpFactory: any TextPopUpFactory
     private let searchSortOptionComponent: SearchSortOptionComponent
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
@@ -365,7 +365,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 self.showBottomSheet(content: vc)
                 return
             }
-            
+
             let vc = containSongsFactory.makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)
