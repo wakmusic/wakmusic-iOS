@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PlaylistOwnerIdEntity {
+public struct PlaylistOwnerIDEntity {
     public init(
         ownerID: String
     ) {

@@ -60,7 +60,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
                     return
                 }
-                reactor.action.onNext(.requestOwnerId)
+                reactor.action.onNext(.requestOwnerID)
               
             }
             .disposed(by: disposeBag)

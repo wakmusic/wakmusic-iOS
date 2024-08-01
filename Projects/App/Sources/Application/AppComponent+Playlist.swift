@@ -128,9 +128,9 @@ public extension AppComponent {
         }
     }
     
-    var requestPlaylistOwnerIdUsecase: any RequestPlaylistOwnerIdUsecase {
+    var requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase {
         shared {
-            RequestPlaylistOwnerIdUsecaseImpl(playlistRepository: playlistRepository)
+            RequestPlaylistOwnerIDUsecaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

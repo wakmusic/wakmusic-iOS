@@ -6,11 +6,11 @@ import RxSwift
 final class PlaylistDetailContainerReactor: Reactor {
     
     enum Action {
-        case requestOwnerId
+        case requestOwnerID
     }
     
     enum Mutation {
-        case updateOwnerId(String)
+        case updateOwnerID(String)
         case updateLoadingState(Bool)
         case showToastMessagae(String)
     }
@@ -21,21 +21,21 @@ final class PlaylistDetailContainerReactor: Reactor {
         @Pulse var toastMessgae: String?
     }
     
-    private let requestPlaylistOwnerIdUsecase: any RequestPlaylistOwnerIdUsecase
+    private let requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase
     let key: String
     var initialState: State
     
-    init(key: String, requestPlaylistOwnerIdUsecase: any RequestPlaylistOwnerIdUsecase) {
+    init(key: String, requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase) {
         self.key = key
         initialState = State(isLoading: true)
-        self.requestPlaylistOwnerIdUsecase = requestPlaylistOwnerIdUsecase
+        self.requestPlaylistOwnerIDUsecase = requestPlaylistOwnerIDUsecase
     }
     
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .requestOwnerId:
-            return updateOwnerId()
+        case .requestOwnerID:
+            return updateOwnerID()
         }
     }
     
@@ -45,7 +45,7 @@ final class PlaylistDetailContainerReactor: Reactor {
         
         switch mutation {
             
-        case let .updateOwnerId(ownerID):
+        case let .updateOwnerID(ownerID):
             newState.ownerID = ownerID
         case let .showToastMessagae(message):
             newState.toastMessgae = message
@@ -59,14 +59,14 @@ final class PlaylistDetailContainerReactor: Reactor {
 }
 
 extension PlaylistDetailContainerReactor{
-    func updateOwnerId() -> Observable<Mutation> {
+    func updateOwnerID() -> Observable<Mutation> {
 
-        return requestPlaylistOwnerIdUsecase
+        return requestPlaylistOwnerIDUsecase
             .execute(key: key)
             .asObservable()
-            .catchAndReturn(PlaylistOwnerIdEntity(ownerID: "__"))
+            .catchAndReturn(PlaylistOwnerIDEntity(ownerID: "__"))
             .flatMap({ entitiy -> Observable<Mutation> in
-                return .just(Mutation.updateOwnerId(entitiy.ownerID))
+                return .just(Mutation.updateOwnerID(entitiy.ownerID))
             })
         
     }

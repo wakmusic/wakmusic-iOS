@@ -84,9 +84,9 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
     }
     
     
-    public func requestPlaylistOwnerId(key: String) -> Single<PlaylistOwnerIdEntity> {
-        return request(.requestPlaylistOwner(key: key))
-            .map(PlaylistOwnerIdResponseDTO.self)
+    public func requestPlaylistOwnerID(key: String) -> Single<PlaylistOwnerIDEntity> {
+        return request(.requestPlaylistOwnerID(key: key))
+            .map(PlaylistOwnerIDResponseDTO.self)
             .map{ $0.toDomain() }
     }
 }

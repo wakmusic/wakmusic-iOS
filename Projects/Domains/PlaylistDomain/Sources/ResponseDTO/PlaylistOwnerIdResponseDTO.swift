@@ -1,7 +1,7 @@
 import Foundation
 import PlaylistDomainInterface
 
-public struct PlaylistOwnerIdResponseDTO: Decodable {
+public struct PlaylistOwnerIDResponseDTO: Decodable {
     public let ownerID: String
     
     enum CodingKeys : String , CodingKey {
@@ -10,8 +10,8 @@ public struct PlaylistOwnerIdResponseDTO: Decodable {
     
 }
 
-public extension PlaylistOwnerIdResponseDTO {
-    func toDomain() -> PlaylistOwnerIdEntity {
-        PlaylistOwnerIdEntity(ownerID: ownerID)
+public extension PlaylistOwnerIDResponseDTO {
+    func toDomain() -> PlaylistOwnerIDEntity {
+        PlaylistOwnerIDEntity(ownerID: ownerID)
     }
 }

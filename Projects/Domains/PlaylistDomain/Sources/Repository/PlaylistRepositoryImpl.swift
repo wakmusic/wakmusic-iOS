@@ -66,7 +66,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.uploadCustomImage(presignedURL: presignedURL, data: data)
     }
     
-    public func requestPlaylistOwnerId(key: String) -> Single<PlaylistOwnerIdEntity> {
-        remotePlaylistDataSource.requestPlaylistOwnerId(key: key)
+    public func requestPlaylistOwnerID(key: String) -> Single<PlaylistOwnerIDEntity> {
+        remotePlaylistDataSource.requestPlaylistOwnerID(key: key)
     }
 }

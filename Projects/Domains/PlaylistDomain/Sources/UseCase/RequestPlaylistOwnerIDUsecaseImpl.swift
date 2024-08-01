@@ -3,7 +3,7 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct RequestPlaylistOwnerIdUsecaseImpl: RequestPlaylistOwnerIdUsecase {
+public struct RequestPlaylistOwnerIDUsecaseImpl: RequestPlaylistOwnerIDUsecase {
     private let playlistRepository: any PlaylistRepository
 
     public init(
@@ -12,7 +12,7 @@ public struct RequestPlaylistOwnerIdUsecaseImpl: RequestPlaylistOwnerIdUsecase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(key: String) -> Single<PlaylistOwnerIdEntity> {
-        playlistRepository.requestPlaylistOwnerId(key: key)
+    public func execute(key: String) -> Single<PlaylistOwnerIDEntity> {
+        playlistRepository.requestPlaylistOwnerID(key: key)
     }
 }

@@ -7,14 +7,14 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
     var myPlaylistDetailFactory: any MyPlaylistDetailFactory { get }
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory { get }
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
-    var requestPlaylistOwnerIdUsecase: any RequestPlaylistOwnerIdUsecase { get }
+    var requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase { get }
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
     
     public func makeView(key: String) -> UIViewController {
         
-        let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIdUsecase: dependency.requestPlaylistOwnerIdUsecase)
+        let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIDUsecase: dependency.requestPlaylistOwnerIDUsecase)
         
         return PlaylistDetailContainerViewController(reactor: reactor,
                                                      key: key,
