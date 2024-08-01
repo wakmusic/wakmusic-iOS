@@ -10,11 +10,13 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     var contentView: UIView! = UIView()
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
+    private let key: String
+    lazy var unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: key)
+    lazy var myPlaylistVC = myPlaylistDetailFactory.makeView(key: key)
     
     
-    
-    init(reactor: PlaylistDetailContainerReactor, unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,  myPlaylistDetailFactory: any MyPlaylistDetailFactory ) {
-        
+    init(reactor: PlaylistDetailContainerReactor, key: String ,unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,  myPlaylistDetailFactory: any MyPlaylistDetailFactory ) {
+        self.key = key 
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
         self.myPlaylistDetailFactory = myPlaylistDetailFactory
         
@@ -28,7 +30,6 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        reactor?.action.onNext(.viewDidLoad)
     }
     
     override func addView() {
@@ -46,11 +47,21 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     
     override func bind(reactor: PlaylistDetailContainerReactor) {
         super.bind(reactor: reactor)
-        
+    
         PreferenceManager.$userInfo
-            .bind(with: self) { owner, _ in
-                reactor.action.onNext(.viewDidLoad)
+            .bind(with: self) { owner, userInfo in
+                
+                owner.remove(asChildViewController: owner.children.first)
+                
+                guard let userInfo else {
+                    owner.add(asChildViewController: owner.unknownPlaylistVC)
+                    return
+                }
+                DEBUG_LOG("CHILD \(owner.children)")
+                reactor.action.onNext(.requestOwnerId)
+              
             }
+            .disposed(by: disposeBag)
         
     }
     
@@ -58,11 +69,33 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     override func bindState(reactor: PlaylistDetailContainerReactor) {
         super.bindState(reactor: reactor)
         
-        let unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: reactor.key)
-        let myPlaylistVC = myPlaylistDetailFactory.makeView(key: reactor.key)
-        
-        
         let sharedState = reactor.state.share()
+        
+        
+        sharedState.map(\.ownerId)
+            .compactMap({ $0 })
+            .bind(with: self) { owner, ownerId in
+                
+                guard let userInfo = PreferenceManager.userInfo else { return }
+                
+                owner.remove(asChildViewController: owner.children.first)
+                
+                if ownerId == userInfo.decryptedID {
+                    owner.add(asChildViewController: owner.myPlaylistVC)
+                } else {
+                    owner.add(asChildViewController: owner.unknownPlaylistVC)
+                }
+                
+                DEBUG_LOG("CHILD \(owner.children)")
+            }
+            .disposed(by: disposeBag)
+        
+//        sharedState.map(\.isLoading)
+//            .distinctUntilChanged()
+//            .bind(with: self) { owner, isLoading in
+//                owner.contentView.isHidden = isLoading
+//            }
+//            .disposed(by: disposeBag)
         
     
     

@@ -6,7 +6,7 @@ import RxSwift
 final class PlaylistDetailContainerReactor: Reactor {
     
     enum Action {
-        case viewDidLoad
+        case requestOwnerId
     }
     
     enum Mutation {
@@ -34,7 +34,7 @@ final class PlaylistDetailContainerReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .viewDidLoad:
+        case .requestOwnerId:
             return updateOwnerId()
         }
     }

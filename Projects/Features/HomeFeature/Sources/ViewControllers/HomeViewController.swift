@@ -432,7 +432,7 @@ extension HomeViewController: HomeNewSongCellDelegate {
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlaylistEntity) {
         LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
-        let viewController = playlistDetailFactory.makeView(key: model.key)
+        let viewController = playlistDetailFactory.makeWmView(key: model.key) // 왁뮤 플리 
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }

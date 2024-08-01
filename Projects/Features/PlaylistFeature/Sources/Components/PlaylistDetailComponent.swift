@@ -17,6 +17,7 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
         let reactor = PlaylistDetailContainerReactor(key: key, requestPlaylistOwnerIdUsecase: dependency.requestPlaylistOwnerIdUsecase)
         
         return PlaylistDetailContainerViewController(reactor: reactor,
+                                                     key: key,
                                                      unknownPlaylistDetailFactory: dependency.unknownPlaylistDetailFactory, myPlaylistDetailFactory: dependency.myPlaylistDetailFactory)
     }
     
