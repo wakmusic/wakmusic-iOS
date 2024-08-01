@@ -5,6 +5,7 @@ import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import SignInFeatureInterface
 import UIKit
 
 public protocol UnknownPlaylistDetailDependency: Dependency {
@@ -21,6 +22,8 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var textPopUpFactory: any TextPopUpFactory { get }
 
     var musicDetailFactory: any MusicDetailFactory { get }
+    
+    var signInFactory: any SignInFactory { get }
 }
 
 public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDetailDependency>,
@@ -36,7 +39,8 @@ public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDeta
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
-            musicDetailFactory: dependency.musicDetailFactory
+            musicDetailFactory: dependency.musicDetailFactory,
+            signInFactory: dependency.signInFactory
         )
     }
 }

@@ -83,10 +83,8 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         reactor.pulse(\.$showDetail)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, detailInfo in
-                let key = detailInfo.key
-                let isMine = detailInfo.isMine
-                owner.navigatePlaylistDetail(key: key, kind: isMine ? .my : .unknown)
+            .bind(with: self, onNext: { owner, key in
+                owner.navigatePlaylistDetail(key: key)
             })
             .disposed(by: disposeBag)
 
