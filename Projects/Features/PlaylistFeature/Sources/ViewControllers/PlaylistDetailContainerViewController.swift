@@ -60,7 +60,6 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
                     return
                 }
-                DEBUG_LOG("CHILD \(owner.children)")
                 reactor.action.onNext(.requestOwnerId)
               
             }
@@ -77,9 +76,14 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         
         sharedState.map(\.ownerId)
             .compactMap({ $0 })
-            .bind(with: self) { owner, ownerId in
+            .distinctUntilChanged()
+            .withLatestFrom(PreferenceManager.$userInfo){ ($0, $1) }
+            .bind(with: self) { owner, info in
                 
-                guard let userInfo = PreferenceManager.userInfo else { return }
+                let (ownerId, userInfo) = info
+                
+                guard let userInfo else { return }
+                
                 
                 owner.remove(asChildViewController: owner.children.first)
                 
@@ -89,7 +93,6 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
                 }
                 
-                DEBUG_LOG("CHILD \(owner.children)")
             }
             .disposed(by: disposeBag)
         

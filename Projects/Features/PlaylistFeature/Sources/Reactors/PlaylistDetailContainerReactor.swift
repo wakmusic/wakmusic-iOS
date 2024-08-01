@@ -60,19 +60,14 @@ final class PlaylistDetailContainerReactor: Reactor {
 
 extension PlaylistDetailContainerReactor{
     func updateOwnerId() -> Observable<Mutation> {
-        
-        return .concat([
-        
-            updateLoadingState(flag: true),
-            requestPlaylistOwnerIdUsecase
-                .execute(key: key)
-                .asObservable()
-                .catchAndReturn(PlaylistOwnerIdEntity(ownerId: "__"))
-                .flatMap({ entitiy -> Observable<Mutation> in
-                    return .just(Mutation.updateOwnerId(entitiy.ownerId))
-                }),
-            updateLoadingState(flag: false)
-        ])
+
+        return requestPlaylistOwnerIdUsecase
+            .execute(key: key)
+            .asObservable()
+            .catchAndReturn(PlaylistOwnerIdEntity(ownerId: "__"))
+            .flatMap({ entitiy -> Observable<Mutation> in
+                return .just(Mutation.updateOwnerId(entitiy.ownerId))
+            })
         
     }
     
