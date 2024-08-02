@@ -78,11 +78,11 @@ private extension ProfilePopupViewController {
                     NSMutableAttributedString(
                         string: "",
                         attributes: [
-                            .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                            .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color
+                            .font: UIFont.WMFontSystem.t4(weight: .medium).font,
+                            .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color,
+                            .kern: -0.5
                         ]
-                    ),
-                    for: .normal
+                    ), for: .normal
                 )
                 owner.input.requestSetProfile.onNext(())
             }
@@ -110,6 +110,17 @@ private extension ProfilePopupViewController {
         output.showToast
             .bind(with: self) { owner, message in
                 owner.showToast(text: message, options: [.tabBar])
+                owner.saveButton.setAttributedTitle(
+                    NSMutableAttributedString(
+                        string: "완료",
+                        attributes: [
+                            .font: UIFont.WMFontSystem.t4(weight: .medium).font,
+                            .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color,
+                            .kern: -0.5
+                        ]
+                    ), for: .normal
+                )
+                owner.activityIndicator.stopAnimating()
             }
             .disposed(by: disposeBag)
 
@@ -133,15 +144,16 @@ private extension ProfilePopupViewController {
         titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleLabel.setTextWithAttributes(kernValue: -0.5)
 
-        saveButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+        saveButton.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
         saveButton.setAttributedTitle(
             NSMutableAttributedString(
                 string: "완료",
                 attributes: [
-                    .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                    .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color
+                    .font: UIFont.WMFontSystem.t4(weight: .medium).font,
+                    .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray25.color,
+                    .kern: -0.5
                 ]
             ), for: .normal
         )
