@@ -81,7 +81,7 @@ final class MyInfoReactor: Reactor {
             isLoggedIn: false,
             profileImage: "",
             nickname: "",
-            platform: "", 
+            platform: "",
             fruitCount: 0,
             isAllNoticesRead: false
         )
@@ -154,7 +154,7 @@ final class MyInfoReactor: Reactor {
 
         case let .updateIsAllNoticesRead(isAllNoticesRead):
             newState.isAllNoticesRead = isAllNoticesRead
-        
+
         case let .updateFruitCount(count):
             newState.fruitCount = count
         case let .showToast(message):
@@ -183,25 +183,24 @@ private extension MyInfoReactor {
             }
             .disposed(by: disposeBag)
     }
-    
+
     func fetchUserInfo() -> Observable<Mutation> {
         return fetchUserInfoUseCase.execute()
-                .asObservable()
-                .flatMap { entity -> Observable<Mutation> in
-                    PreferenceManager.shared.setUserInfo(
-                        ID: entity.id,
-                        platform: entity.platform,
-                        profile: entity.profile,
-                        name: entity.name,
-                        itemCount: entity.itemCount
-                    )
-                    return .empty()
-                }
-                .catch { error in
-                    let error = error.asWMError
-                    return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
-                }
-
+            .asObservable()
+            .flatMap { entity -> Observable<Mutation> in
+                PreferenceManager.shared.setUserInfo(
+                    ID: entity.id,
+                    platform: entity.platform,
+                    profile: entity.profile,
+                    name: entity.name,
+                    itemCount: entity.itemCount
+                )
+                return .empty()
+            }
+            .catch { error in
+                let error = error.asWMError
+                return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            }
     }
 
     func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
@@ -224,7 +223,7 @@ private extension MyInfoReactor {
         guard let profile = userInfo?.profile else { return .empty() }
         return .just(.updateProfileImage(profile))
     }
-    
+
     func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
         setUsernameUseCase.execute(name: newNickname)
             .andThen(
@@ -242,7 +241,6 @@ private extension MyInfoReactor {
                             .just(.showToast("닉네임이 변경되었습니다.")),
                             .just(.dismissEditSheet)
                         )
-                            
                     }
             )
             .catch { error in
@@ -253,7 +251,7 @@ private extension MyInfoReactor {
                 )
             }
     }
-    
+
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let userInfo = userInfo else { return .empty() }
         return .just(.updateNickname(userInfo.decryptedName))
@@ -263,7 +261,7 @@ private extension MyInfoReactor {
         guard let platform = userInfo?.platform else { return .empty() }
         return .just(.updatePlatform(platform))
     }
-    
+
     func updateFruitCount(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let count = userInfo?.itemCount else { return .empty() }
         return .just(.updateFruitCount(count))

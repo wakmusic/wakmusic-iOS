@@ -320,7 +320,7 @@ private extension MyPlaylistDetailReactor {
             .andThen(.concat([
                 .just(.updateHeader(prev)),
                 .just(.showToast(message))
-               
+
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -447,7 +447,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateHeader(prevHeader)),
                 .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
                 updateSendRefreshNoti()
-                
+
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -460,7 +460,7 @@ private extension MyPlaylistDetailReactor {
     func updateImageData(imageData: PlaylistImageKind?) -> Observable<Mutation> {
         return .just(.updateImageData(imageData))
     }
-    
+
     func updateSendRefreshNoti() -> Observable<Mutation> {
         .just(.updateRefresh)
     }

@@ -86,7 +86,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
             })
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isAllNoticesRead)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
@@ -121,7 +121,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.profileView.updatePlatform(platform: platform)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.fruitCount)
             .distinctUntilChanged()
             .bind(with: self) { owner, count in
@@ -152,7 +152,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.hideEditSheet()
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in

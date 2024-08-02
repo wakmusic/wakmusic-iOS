@@ -130,31 +130,28 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .updateSubscribeState(flag):
             newState.isSubscribing = flag
-            
+
         case .updateRefresh:
             newState.refresh = ()
-            
+
         case .updateDetectedNotFound:
             newState.detectedNotFound = ()
         }
 
         return newState
     }
-    
-    
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let removeSubscriptionPlaylistEvent = playlistCommonService.removeSubscriptionPlaylistEvent
             .withUnretained(self)
             .flatMap { owner, notification -> Observable<Mutation> in
-                guard let removedPlaylistKeys =  notification.object as? [String] else {
+                guard let removedPlaylistKeys = notification.object as? [String] else {
                     return .empty()
                 }
-                
-                return removedPlaylistKeys.contains(owner.key) ?  owner.checkSubscription() : .empty()
 
+                return removedPlaylistKeys.contains(owner.key) ? owner.checkSubscription() : .empty()
             }
-        
+
         return Observable.merge(removeSubscriptionPlaylistEvent, mutation)
     }
 }
@@ -179,15 +176,16 @@ private extension UnknownPlaylistDetailReactor {
                             )
                         )),
                         Observable.just(Mutation.updateDataSource(data.songs)),
-                        PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : owner.checkSubscription()
+                        PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : owner
+                            .checkSubscription()
                     ])
                 }
                 .catch { [weak self] error in
-                    
+
                     guard let self else { return .empty() }
-                    
+
                     let wmErorr = error.asWMError
-                    
+
                     if wmErorr == .notFound {
                         return self.updateDetectedNotFound()
                     }
@@ -198,19 +196,19 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateLoadingState(false))
         ])
     }
-    
+
     func checkSubscription() -> Observable<Mutation> {
         return checkSubscriptionUseCase.execute(key: key)
-        .asObservable()
-        .flatMap { flag -> Observable<Mutation> in
-            return .just(.updateSubscribeState(flag))
-        }
-        .catch { error in
-            let wmErorr = error.asWMError
-            return Observable.just(
-                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
-            )
-        }
+            .asObservable()
+            .flatMap { flag -> Observable<Mutation> in
+                return .just(.updateSubscribeState(flag))
+            }
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                )
+            }
     }
 }
 
@@ -288,11 +286,11 @@ private extension UnknownPlaylistDetailReactor {
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
         return .just(.updateSubscribeState(flag))
     }
-    
+
     func updateSendRefreshNoti() -> Observable<Mutation> {
         .just(.updateRefresh)
     }
-    
+
     func updateDetectedNotFound() -> Observable<Mutation> {
         .just(.updateDetectedNotFound)
     }

@@ -151,8 +151,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
             })
             .disposed(by: disposeBag)
-        
-        
     }
 
     override func bindState(reactor: UnknownPlaylistDetailReactor) {
@@ -190,14 +188,14 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$refresh)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
                 NotificationCenter.default.post(name: .playlistRefresh, object: nil)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$detectedNotFound)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
@@ -213,7 +211,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 )
 
                 owner.showBottomSheet(content: vc, dismissOnOverlayTapAndPull: false) // 드래그로 닫기 불가
-                
             }
             .disposed(by: disposeBag)
 

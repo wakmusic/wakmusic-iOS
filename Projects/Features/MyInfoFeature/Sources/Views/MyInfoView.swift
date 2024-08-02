@@ -187,7 +187,7 @@ extension MyInfoView: MyInfoStateProtocol {
             loginWarningView.isHidden = false
         }
     }
-    
+
     func updateFruitCount(count: Int) {
         fruitDrawButtonView.updateFruitCount(count: count)
     }

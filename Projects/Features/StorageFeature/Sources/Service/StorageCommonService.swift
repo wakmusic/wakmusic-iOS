@@ -14,7 +14,7 @@ final class DefaultStorageCommonService: StorageCommonService {
     let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo
     let movedLikeStorageEvent: Observable<Notification> = NotificationCenter.default.rx
         .notification(.movedStorageFavoriteTab)
-    
+
     let playlistRefreshEvent: Observable<Notification> = NotificationCenter.default.rx.notification(.playlistRefresh)
 
     static let shared = DefaultStorageCommonService()
