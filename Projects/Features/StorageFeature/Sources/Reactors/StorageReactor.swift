@@ -63,9 +63,6 @@ final class StorageReactor: Reactor {
         let switchEditingStateMutation = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
 
-        let movedToLikeStorageMutation = storageCommonService.movedLikeStorageEvent
-            .map { _ in Mutation.switchTabIndex(1) }
-
         let updateIsLoggedInMutation = storageCommonService.changedUserInfoEvent
             .withUnretained(self)
             .flatMap { owner, userInfo -> Observable<Mutation> in
@@ -75,7 +72,6 @@ final class StorageReactor: Reactor {
         return Observable.merge(
             mutation,
             switchEditingStateMutation,
-            movedToLikeStorageMutation,
             updateIsLoggedInMutation
         )
     }
