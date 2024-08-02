@@ -18,7 +18,9 @@ public protocol StorageDependency: Dependency {
 public final class StorageComponent: Component<StorageDependency>, StorageFactory {
     public func makeView() -> UIViewController {
         return StorageViewController.viewController(
-            reactor: StorageReactor(),
+            reactor: StorageReactor(
+                storageCommonService: DefaultStorageCommonService()
+            ),
             listStorageComponent: dependency.listStorageComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             likeStorageComponent: dependency.likeStorageComponent,

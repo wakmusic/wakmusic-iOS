@@ -22,6 +22,7 @@ public final class LikeStorageComponent: Component<LikeStorageDependency> {
     public func makeView() -> UIViewController {
         return LikeStorageViewController.viewController(
             reactor: LikeStorageReactor(
+                storageCommonService: DefaultStorageCommonService(),
                 fetchFavoriteSongsUseCase: dependency.fetchFavoriteSongsUseCase,
                 deleteFavoriteListUseCase: dependency.deleteFavoriteListUseCase,
                 editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase

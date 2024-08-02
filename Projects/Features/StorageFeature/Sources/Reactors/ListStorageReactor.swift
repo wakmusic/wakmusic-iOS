@@ -68,7 +68,7 @@ final class ListStorageReactor: Reactor {
     private let deletePlayListUseCase: any DeletePlaylistUseCase
 
     init(
-        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,

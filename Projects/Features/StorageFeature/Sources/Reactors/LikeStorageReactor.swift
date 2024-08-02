@@ -66,7 +66,7 @@ final class LikeStorageReactor: Reactor {
     private let editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
 
     init(
-        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        storageCommonService: any StorageCommonService,
         fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase,
         deleteFavoriteListUseCase: any DeleteFavoriteListUseCase,
         editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase

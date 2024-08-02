@@ -30,7 +30,7 @@ final class StorageReactor: Reactor {
     private let storageCommonService: any StorageCommonService
 
     init(
-        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared
+        storageCommonService: any StorageCommonService
     ) {
         initialState = State(
             isLoggedIn: false,

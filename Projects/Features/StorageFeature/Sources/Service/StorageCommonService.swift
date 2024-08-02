@@ -13,6 +13,6 @@ final class DefaultStorageCommonService: StorageCommonService {
     let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo
     let movedLikeStorageEvent: Observable<Notification> = NotificationCenter.default.rx
         .notification(.movedStorageFavoriteTab)
-
-    static let shared = DefaultStorageCommonService()
+    
+    init() { }
 }
