@@ -32,9 +32,9 @@ final class FruitDrawButtonView: UIView {
     )
 
     let countLabel = WMLabel(
-        text: "0개",
+        text: "",
         textColor: DesignSystemAsset.PrimaryColorV2.point.color,
-        font: .t5(weight: .medium),
+        font: .t5(weight: .bold),
         alignment: .center,
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
         kernValue: -0.5
@@ -95,7 +95,7 @@ extension FruitDrawButtonView {
 
 extension FruitDrawButtonView: FruitDrawStateProtocol {
     func updateFruitCount(count: Int) {
-        countLabel.text = String(count)
+        countLabel.text = count >= 0 ? "\(count)개" : ""
     }
 }
 
