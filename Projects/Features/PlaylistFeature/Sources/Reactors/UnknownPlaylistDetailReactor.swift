@@ -27,6 +27,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateSubscribeState(Bool)
         case showToast(String)
         case updateLoginPopupState(Bool)
+        case updateRefresh
     }
 
     struct State {
@@ -37,6 +38,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var isSubscribing: Bool
         @Pulse var toastMessage: String?
         @Pulse var showLoginPopup: Bool
+        @Pulse var refresh: Void?
     }
 
     var initialState: State
@@ -124,6 +126,9 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .updateSubscribeState(flag):
             newState.isSubscribing = flag
+            
+        case .updateRefresh:
+            newState.refresh = ()
         }
 
         return newState
@@ -235,7 +240,8 @@ private extension UnknownPlaylistDetailReactor {
                 .andThen(
                     .concat([
                         .just(Mutation.updateSubscribeState(!prev)),
-                        .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다."))
+                        .just(Mutation.showToast(prev ? "리스트 구독을 취소 했습니다." : "리스트 구독을 했습니다.")),
+                        updateSendRefreshNoti()
                     ])
                 )
                 .catch { error in
@@ -247,5 +253,9 @@ private extension UnknownPlaylistDetailReactor {
 
     func updateSubscribeState(_ flag: Bool) -> Observable<Mutation> {
         return .just(.updateSubscribeState(flag))
+    }
+    
+    func updateSendRefreshNoti() -> Observable<Mutation> {
+        .just(.updateRefresh)
     }
 }

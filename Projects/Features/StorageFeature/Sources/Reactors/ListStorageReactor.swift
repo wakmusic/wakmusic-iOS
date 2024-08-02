@@ -181,8 +181,13 @@ final class ListStorageReactor: Reactor {
                     owner.fetchDataSource()
                 )
             }
+        let playlistRefreshMutation = storageCommonService.playlistRefreshEvent
+            .withUnretained(self)
+            .flatMap { (owner, _) -> Observable<Mutation> in
+                return owner.fetchDataSource()
+            }
 
-        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation, playlistRefreshMutation)
     }
 
     func reduce(state: State, mutation: Mutation) -> State {

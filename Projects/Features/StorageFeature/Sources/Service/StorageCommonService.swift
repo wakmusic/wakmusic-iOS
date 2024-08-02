@@ -6,6 +6,7 @@ protocol StorageCommonService {
     var isEditingState: BehaviorSubject<Bool> { get }
     var changedUserInfoEvent: Observable<UserInfo?> { get }
     var movedLikeStorageEvent: Observable<Notification> { get }
+    var playlistRefreshEvent: Observable<Notification> { get }
 }
 
 final class DefaultStorageCommonService: StorageCommonService {
@@ -13,6 +14,8 @@ final class DefaultStorageCommonService: StorageCommonService {
     let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo
     let movedLikeStorageEvent: Observable<Notification> = NotificationCenter.default.rx
         .notification(.movedStorageFavoriteTab)
+    
+    let playlistRefreshEvent: Observable<Notification> = NotificationCenter.default.rx.notification(.playlistRefresh)
 
     static let shared = DefaultStorageCommonService()
 }

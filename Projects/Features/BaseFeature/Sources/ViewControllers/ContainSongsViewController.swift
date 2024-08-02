@@ -71,7 +71,7 @@ extension ContainSongsViewController {
             .bind(to: input.itemDidTap)
             .disposed(by: disposeBag)
 
-        NotificationCenter.default.rx.notification(.playListRefresh)
+        NotificationCenter.default.rx.notification(.playlistRefresh)
             .map { _ in () }
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
@@ -111,9 +111,9 @@ extension ContainSongsViewController {
                 self.showToast(text: result.description, font: .setFont(.t6(weight: .light)))
 
                 if result.status == 201 {
-                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    NotificationCenter.default.post(name: .playlistRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                 } else if result.status == 200 {
-                    NotificationCenter.default.post(name: .playListRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    NotificationCenter.default.post(name: .playlistRefresh, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
                 } else if result.status == -1 {
                     return

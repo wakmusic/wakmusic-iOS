@@ -276,6 +276,16 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 activityViewController.popoverPresentationController?.permittedArrowDirections = []
                 owner.present(activityViewController, animated: true)
             }
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$refresh)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                NotificationCenter.default.post(name: .playlistRefresh, object: nil)
+            }
+            .disposed(by: disposeBag)
+            
+        
 
         sharedState.map(\.isEditing)
             .distinctUntilChanged()
