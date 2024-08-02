@@ -16,7 +16,7 @@ import Utility
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
-    private var profilePopUpComponent: ProfilePopComponent!
+    private var profilePopupFactory: ProfilePopupFactory!
     private var textPopUpFactory: TextPopUpFactory!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
@@ -52,7 +52,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
 
     public static func viewController(
         reactor: MyInfoReactor,
-        profilePopUpComponent: ProfilePopComponent,
+        profilePopupFactory: ProfilePopupFactory,
         textPopUpFactory: TextPopUpFactory,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
@@ -65,7 +65,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         fruitStorageFactory: FruitStorageFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
-        viewController.profilePopUpComponent = profilePopUpComponent
+        viewController.profilePopupFactory = profilePopupFactory
         viewController.textPopUpFactory = textPopUpFactory
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.signInFactory = signInFactory
@@ -83,11 +83,12 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
-                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                owner.showToast(text: message, options: [.tabBar])
             })
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isAllNoticesRead)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
                 owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
@@ -121,7 +122,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.myInfoView.profileView.updatePlatform(platform: platform)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.fruitCount)
             .distinctUntilChanged()
             .bind(with: self) { owner, count in
@@ -152,7 +153,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 owner.hideEditSheet()
             })
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$navigateType)
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
@@ -275,16 +276,24 @@ extension MyInfoViewController: EditSheetViewDelegate {
         case .share:
             break
         case .profile:
-            let vc = profilePopUpComponent.makeView()
-            showBottomSheet(content: vc, size: .fixed(352 + SAFEAREA_BOTTOM_HEIGHT()))
+            let vc = profilePopupFactory.makeView(
+                completion: { [reactor] () in
+                    reactor?.action.onNext(.completedSetProfile)
+                }
+            )
+            let height: CGFloat = (ProfilePopupViewController.rowHeight * 2) + 10
+            showBottomSheet(content: vc, size: .fixed(190 + height + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
-            guard let vc = multiPurposePopUpFactory
-                .makeView(type: .nickname, key: "", completion: { [weak self] text in
-                    self?.reactor?.action.onNext(.changeNicknameButtonDidTap(text))
-                }) as? MultiPurposePopupViewController
-            else { return }
+            let vc = multiPurposePopUpFactory.makeView(
+                type: .nickname,
+                key: "",
+                completion: { [reactor] text in
+                    reactor?.action.onNext(.changeNicknameButtonDidTap(text))
+                }
+            )
             showBottomSheet(content: vc, size: .fixed(296))
         }
+        hideEditSheet()
     }
 }
 

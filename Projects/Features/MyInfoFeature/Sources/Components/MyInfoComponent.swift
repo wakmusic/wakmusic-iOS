@@ -5,8 +5,8 @@ import NeedleFoundation
 import NoticeDomainInterface
 import SignInFeatureInterface
 import TeamFeatureInterface
-import UserDomainInterface
 import UIKit
+import UserDomainInterface
 
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }
@@ -17,7 +17,7 @@ public protocol MyInfoDependency: Dependency {
     var questionFactory: any QuestionFactory { get }
     var teamInfoFactory: any TeamInfoFactory { get }
     var settingFactory: any SettingFactory { get }
-    var profilePopComponent: ProfilePopComponent { get }
+    var profilePopupFactory: any ProfilePopupFactory { get }
     var fruitDrawFactory: any FruitDrawFactory { get }
     var fruitStorageFactory: any FruitStorageFactory { get }
     var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
@@ -33,7 +33,7 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
                 setUserNameUseCase: dependency.setUserNameUseCase,
                 fetchUserInfoUseCase: dependency.fetchUserInfoUseCase
             ),
-            profilePopUpComponent: dependency.profilePopComponent,
+            profilePopupFactory: dependency.profilePopupFactory,
             textPopUpFactory: dependency.textPopUpFactory,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             signInFactory: dependency.signInFactory,

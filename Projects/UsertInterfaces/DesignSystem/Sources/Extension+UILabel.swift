@@ -97,7 +97,7 @@ public extension UILabel {
 
     func setTextWithAttributes(
         lineHeight: CGFloat? = nil,
-        kernValue: Double? = nil,
+        kernValue: Double? = -0.5,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
         alignment: NSTextAlignment = .left

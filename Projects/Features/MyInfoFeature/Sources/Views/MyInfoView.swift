@@ -82,6 +82,7 @@ final class MyInfoView: UIView {
     let newNotiIndicator = UIView().then {
         $0.backgroundColor = .red
         $0.layer.cornerRadius = 2.5
+        $0.isHidden = true
     }
 
     init() {
@@ -187,7 +188,7 @@ extension MyInfoView: MyInfoStateProtocol {
             loginWarningView.isHidden = false
         }
     }
-    
+
     func updateFruitCount(count: Int) {
         fruitDrawButtonView.updateFruitCount(count: count)
     }
