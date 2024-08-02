@@ -11,7 +11,6 @@ import AuthDomainInterface
 import BaseFeature
 import ErrorModule
 import Foundation
-import KeychainModule
 import LogManager
 import RxCocoa
 import RxSwift
@@ -19,11 +18,11 @@ import UserDomainInterface
 import Utility
 
 public final class IntroViewModel: ViewModelType {
-    var fetchUserInfoUseCase: FetchUserInfoUseCase
-    var fetchAppCheckUseCase: FetchAppCheckUseCase
+    private let fetchUserInfoUseCase: FetchUserInfoUseCase
+    private let fetchAppCheckUseCase: FetchAppCheckUseCase
     private let logoutUseCase: any LogoutUseCase
     private let checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     public struct Input {
         var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
@@ -49,7 +48,6 @@ public final class IntroViewModel: ViewModelType {
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
         self.logoutUseCase = logoutUseCase
         self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
-        LogManager.printDebug("\(Self.self) 생성")
     }
 
     public func transform(from input: Input) -> Output {
@@ -140,16 +138,7 @@ public final class IntroViewModel: ViewModelType {
                     )
                     output.userInfoResult.onNext(.success(""))
                 },
-                onError: { [logoutUseCase, disposeBag] error in
-                    let asWMError = error.asWMError
-                    if asWMError == .tokenExpired || asWMError == .notFound {
-                        logoutUseCase.execute()
-                            .andThen(Observable.just(()))
-                            .bind {
-                                Utility.PreferenceManager.startPage = 4
-                            }
-                            .disposed(by: disposeBag)
-                    }
+                onError: { error in
                     output.userInfoResult.onNext(.failure(error))
                 }
             )
