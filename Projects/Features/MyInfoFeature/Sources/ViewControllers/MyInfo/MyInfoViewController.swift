@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Foundation
 import FruitDrawFeatureInterface
+import Localization
 import LogManager
 import MyInfoFeatureInterface
 import RxSwift
@@ -189,7 +190,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .login:
                     let vc = owner.textPopUpFactory.makeView(
-                        text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                        text: LocalizationStrings.needLoginWarning,
                         cancelButtonIsHidden: false,
                         confirmButtonText: nil,
                         cancelButtonText: nil,

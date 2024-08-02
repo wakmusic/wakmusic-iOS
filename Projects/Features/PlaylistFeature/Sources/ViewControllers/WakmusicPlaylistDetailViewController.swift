@@ -6,6 +6,7 @@ import LogManager
 import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
+import SignInFeatureInterface
 import SnapKit
 import SongsDomainInterface
 import Then
@@ -23,6 +24,8 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     private let textPopUpFactory: any TextPopUpFactory
 
     private let musicDetailFactory: any MusicDetailFactory
+
+    private let signInFactory: any SignInFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -53,11 +56,13 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
         reactor: WakmusicPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        musicDetailFactory: any MusicDetailFactory
+        musicDetailFactory: any MusicDetailFactory,
+        signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
         self.musicDetailFactory = musicDetailFactory
+        self.signInFactory = signInFactory
 
         super.init(reactor: reactor)
     }
@@ -130,6 +135,8 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
 
         let sharedState = reactor.state.share()
 
+        let currentState = reactor.currentState
+
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
 
@@ -137,7 +144,27 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
                     return
                 }
 
-                owner.showToast(text: message, options: [.tabBar])
+                owner.showToast(
+                    text: message,
+                    options: currentState.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$showLoginPopup)
+            .filter { $0 }
+            .bind(with: self) { owner, _ in
+                let vc = TextPopupViewController.viewController(
+                    text: LocalizationStrings.needLoginWarning,
+                    cancelButtonIsHidden: false,
+                    completion: { () in
+                        let vc = owner.signInFactory.makeView()
+                        vc.modalPresentationStyle = .fullScreen
+                        owner.present(vc, animated: true)
+                    }
+                )
+
+                owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)
 
@@ -330,6 +357,12 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+
+            if PreferenceManager.userInfo == nil {
+                reactor.action.onNext(.requestLoginRequiredAction)
+                return
+            }
+
             let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
             vc.modalPresentationStyle = .overFullScreen
             self.present(vc, animated: true)

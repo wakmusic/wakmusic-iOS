@@ -16,7 +16,6 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
             key: key,
             requestPlaylistOwnerIDUsecase: dependency.requestPlaylistOwnerIDUsecase
         )
-
         return PlaylistDetailContainerViewController(
             reactor: reactor,
             key: key,

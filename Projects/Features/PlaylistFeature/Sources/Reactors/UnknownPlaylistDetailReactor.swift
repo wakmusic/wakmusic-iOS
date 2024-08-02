@@ -15,6 +15,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case deselectAll
         case itemDidTap(Int)
         case subscriptionButtonDidTap
+        case requestLoginRequiredAction
     }
 
     enum Mutation {
@@ -91,6 +92,9 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case let .itemDidTap(index):
             return updateItemSelected(index)
+
+        case let requestLoginRequiredAction:
+            return .just(.updateLoginPopupState(true))
         }
     }
 
