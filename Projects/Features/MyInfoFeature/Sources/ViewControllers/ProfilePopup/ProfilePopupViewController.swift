@@ -59,6 +59,7 @@ private extension ProfilePopupViewController {
             .disposed(by: disposeBag)
 
         saveButton.rx.tap
+            .throttle(.milliseconds(1000), latest: false, scheduler: MainScheduler.instance)
             .withLatestFrom(output.dataSource)
             .map { model in
                 let id: String = model.filter { $0.isSelected }.first?.name ?? ""
