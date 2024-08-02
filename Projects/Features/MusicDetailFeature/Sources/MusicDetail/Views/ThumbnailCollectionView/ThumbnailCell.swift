@@ -35,7 +35,7 @@ final class ThumbnailCell: UICollectionViewCell {
 
         thumbnailImageView.kf.setImage(
             with: URL(string: thumbnailModel.imageURL),
-            placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
+            placeholder: DesignSystemAsset.Logo.musicDetailPlaceholder.image,
             options: [
                 .alsoPrefetchToMemory,
                 .alternativeSources(alternativeSources)
