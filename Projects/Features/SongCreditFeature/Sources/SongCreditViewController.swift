@@ -151,21 +151,26 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
                 var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
                 snapshot.appendSections(credits.map(\.position))
                 credits.forEach { snapshot.appendItems($0.names, toSection: $0.position) }
-                creditDiffableDataSource.apply(snapshot)
+                creditDiffableDataSource.apply(snapshot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
 
         sharedState.map(\.backgroundImageURL)
-            .bind(with: backgroundImageView) { backgroundImageView, url in
+            .bind(with: backgroundImageView) { backgroundImageView, backgroundImageModel in
+                let alternativeSources = [backgroundImageModel.alternativeImageURL]
+                    .compactMap { URL(string: $0) }
+                    .map { Source.network($0) }
+
                 backgroundImageView.kf.setImage(
-                    with: URL(string: url),
+                    with: URL(string: backgroundImageModel.imageURL),
                     options: [
                         .transition(.fade(0.5)),
                         .processor(
                             DownsamplingImageProcessor(
                                 size: .init(width: 10, height: 10)
                             )
-                        )
+                        ),
+                        .alternativeSources(alternativeSources)
                     ]
                 )
             }

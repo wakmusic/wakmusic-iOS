@@ -28,11 +28,18 @@ final class ThumbnailCell: UICollectionViewCell {
         thumbnailImageView.kf.cancelDownloadTask()
     }
 
-    func configure(thumbnailImageURL: String) {
+    func configure(thumbnailModel: ThumbnailModel) {
+        let alternativeSources = [thumbnailModel.alternativeImageURL]
+            .compactMap { URL(string: $0) }
+            .map { Source.network($0) }
+
         thumbnailImageView.kf.setImage(
-            with: URL(string: thumbnailImageURL),
+            with: URL(string: thumbnailModel.imageURL),
             placeholder: DesignSystemAsset.Logo.placeHolderLarge.image,
-            options: [.alsoPrefetchToMemory]
+            options: [
+                .alsoPrefetchToMemory,
+                .alternativeSources(alternativeSources)
+            ]
         )
     }
 }

@@ -24,7 +24,7 @@ final class CreditSongListTabItemViewController:
     ).then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         $0.delegate = self
-        $0.contentInset = .init(top: 12, left: 0, bottom: .songCartHeight, right: 0)
+        $0.contentInset = .init(top: 16, left: 0, bottom: .songCartHeight, right: 0)
         $0.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: .songCartHeight, right: 0)
     }
 
@@ -228,9 +228,9 @@ extension CreditSongListTabItemViewController {
         )
         headerSupplementary.pinToVisibleBounds = true
         headerSupplementary.contentInsets = .init(
-            top: .playButtonVerticalMargin,
+            top: .playButtonTopMargin,
             leading: .playButtonHorizontalMargin,
-            bottom: .playButtonVerticalMargin,
+            bottom: .playButtonBottomMargin,
             trailing: .playButtonHorizontalMargin
         )
 
@@ -279,8 +279,9 @@ extension CreditSongListTabItemViewController {
 
 private extension CGFloat {
     static let offsetForTabbarHeight: CGFloat = 36
-    static let playButtonHeight: CGFloat = 52
+    static let playButtonHeight: CGFloat = 52 + 10
     static let playButtonHorizontalMargin: CGFloat = 20
-    static let playButtonVerticalMargin: CGFloat = 0
+    static let playButtonTopMargin: CGFloat = 0
+    static let playButtonBottomMargin: CGFloat = 10
     static let songCartHeight: CGFloat = 56
 }

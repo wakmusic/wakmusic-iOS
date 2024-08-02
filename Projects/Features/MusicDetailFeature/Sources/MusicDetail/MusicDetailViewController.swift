@@ -38,6 +38,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .musicDetail))
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override func configureNavigation() {
@@ -53,9 +55,14 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState.map(\.songIDs)
             .distinctUntilChanged()
             .map { songs in
-                songs.map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
+                songs.map {
+                    ThumbnailModel(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: $0),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: $0)
+                    )
+                }
             }
-            .bind(onNext: musicDetailView.updateThumbnails(thumbnailURLs:))
+            .bind(onNext: musicDetailView.updateThumbnails(thumbnailModels:))
             .disposed(by: disposeBag)
 
         sharedState.map(\.isFirstSong)
@@ -85,7 +92,10 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .distinctUntilChanged()
             .bind(with: self) { owner, songID in
                 owner.musicDetailView.updateBackgroundImage(
-                    imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: songID)
+                    thumbnailModel: .init(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: songID),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: songID)
+                    )
                 )
             }
             .disposed(by: disposeBag)
@@ -217,5 +227,11 @@ private extension MusicDetailViewController {
 
     func dismiss() {
         self.dismiss(animated: true)
+    }
+}
+
+extension MusicDetailViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return navigationController?.viewControllers.count ?? 0 > 1
     }
 }
