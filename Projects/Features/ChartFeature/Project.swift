@@ -16,6 +16,7 @@ let project = Project.module(
                 dependencies: [
                     .feature(target: .BaseFeature),
                     .feature(target: .ChartFeature, type: .interface),
+                    .feature(target: .SignInFeature, type: .interface),
                     .domain(target: .ChartDomain, type: .interface)
                 ]
             )
