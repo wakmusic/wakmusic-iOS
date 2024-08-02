@@ -12,6 +12,7 @@ import BaseFeature
 import ErrorModule
 import Foundation
 import KeychainModule
+import LogManager
 import RxCocoa
 import RxSwift
 import UserDomainInterface
@@ -48,7 +49,7 @@ public final class IntroViewModel: ViewModelType {
         self.fetchAppCheckUseCase = fetchAppCheckUseCase
         self.logoutUseCase = logoutUseCase
         self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
-        DEBUG_LOG("✅ \(Self.self) 생성")
+        LogManager.printDebug("\(Self.self) 생성")
     }
 
     public func transform(from input: Input) -> Output {

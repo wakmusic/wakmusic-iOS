@@ -1,6 +1,8 @@
 import BaseFeature
 import BaseFeatureInterface
 import Inject
+import LikeDomainInterface
+import LikeDomainTesting
 import LyricHighlightingFeatureInterface
 @testable import MusicDetailFeature
 import RxSwift
@@ -29,9 +31,19 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     views: 120,
                     date: "2024.03.11",
                     likes: 120,
-                    karaokeNumber: .init(TJ: 36, KY: nil)
+                    isLiked: false,
+                    karaokeNumber: .init(tj: 36, ky: nil)
                 )
             )
+        }
+
+        let addLikeSongUseCase = AddLikeSongUseCaseSpy()
+        addLikeSongUseCase.handler = { _ in
+            .just(.init(status: "", likes: 0))
+        }
+        let cancelLikeSongUseCase = CancelLikeSongUseCaseSpy()
+        cancelLikeSongUseCase.handler = { _ in
+            .just(.init(status: "", likes: 0))
         }
 
         let reactor = MusicDetailReactor(
@@ -42,7 +54,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                 "qZi1Xh0_8q4"
             ],
             selectedID: "DPEtmqvaKqY",
-            fetchSongUseCase: fetchSongUseCase
+            fetchSongUseCase: fetchSongUseCase,
+            addLikeSongUseCase: addLikeSongUseCase,
+            cancelLikeSongUseCase: cancelLikeSongUseCase
         )
         let viewController = Inject.ViewControllerHost(
             UINavigationController(

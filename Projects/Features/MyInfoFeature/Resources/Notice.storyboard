@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -181,7 +181,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bau-r8-IYJ">
-                                        <rect key="frame" x="341" y="8" width="32" height="32"/>
+                                        <rect key="frame" x="20" y="8" width="32" height="32"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="32" id="EfH-Ea-DGB"/>
                                             <constraint firstAttribute="width" constant="32" id="pSQ-p0-GN8"/>
@@ -193,10 +193,10 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="bau-r8-IYJ" secondAttribute="trailing" constant="20" id="7zI-kw-Dbm"/>
                                     <constraint firstItem="ZeI-bM-ifs" firstAttribute="centerX" secondItem="dDG-n2-HUg" secondAttribute="centerX" id="Bro-3U-9V5"/>
                                     <constraint firstItem="bau-r8-IYJ" firstAttribute="centerY" secondItem="dDG-n2-HUg" secondAttribute="centerY" id="Phy-sj-AbE"/>
                                     <constraint firstItem="ZeI-bM-ifs" firstAttribute="centerY" secondItem="dDG-n2-HUg" secondAttribute="centerY" id="Y6a-bb-YSu"/>
+                                    <constraint firstItem="bau-r8-IYJ" firstAttribute="leading" secondItem="dDG-n2-HUg" secondAttribute="leading" constant="20" id="ZEn-AV-Pyg"/>
                                     <constraint firstAttribute="height" constant="48" id="wh3-GK-zsr"/>
                                 </constraints>
                             </view>

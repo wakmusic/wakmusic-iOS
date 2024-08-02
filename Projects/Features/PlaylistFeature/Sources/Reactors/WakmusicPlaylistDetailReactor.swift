@@ -16,6 +16,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         case selectAll
         case deselectAll
         case itemDidTap(Int)
+        case requestLoginRequiredAction
     }
 
     enum Mutation {
@@ -25,6 +26,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         case updateSelectedCount(Int)
         case updateSelectingStateByIndex([SongEntity])
         case showToast(String)
+        case updateLoginPopupState(Bool)
     }
 
     struct State {
@@ -33,6 +35,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         var isLoading: Bool
         var selectedCount: Int
         @Pulse var toastMessage: String?
+        @Pulse var showLoginPopup: Bool
     }
 
     var initialState: State
@@ -56,7 +59,8 @@ final class WakmusicPlaylistDetailReactor: Reactor {
             ),
             dataSource: [],
             isLoading: true,
-            selectedCount: 0
+            selectedCount: 0,
+            showLoginPopup: false
         )
     }
 
@@ -64,6 +68,9 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return updateDataSource()
+
+        case .requestLoginRequiredAction:
+            return .just(.updateLoginPopupState(true))
 
         case .selectAll:
             return selectAll()
@@ -96,6 +103,8 @@ final class WakmusicPlaylistDetailReactor: Reactor {
 
         case let .updateSelectingStateByIndex(dataSource):
             newState.dataSource = dataSource
+        case let .updateLoginPopupState(flag):
+            newState.showLoginPopup = flag
         }
 
         return newState

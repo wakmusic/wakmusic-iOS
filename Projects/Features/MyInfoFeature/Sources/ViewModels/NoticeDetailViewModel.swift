@@ -39,9 +39,11 @@ public final class NoticeDetailViewModel {
         input.fetchNoticeDetail
             .flatMap { [weak self] _ -> Observable<[CGSize]> in
                 guard let self = self else { return .never() }
-                return Observable.zip(
-                    imageURLs.map { self.downloadImageSize(url: $0) }
-                )
+                return imageURLs.isEmpty ?
+                    Observable.just([]) :
+                    Observable.zip(
+                        imageURLs.map { self.downloadImageSize(url: $0) }
+                    )
             }
             .bind { imageSizes in
                 output.imageSizes.accept(imageSizes)
@@ -64,6 +66,9 @@ public final class NoticeDetailViewModel {
 private extension NoticeDetailViewModel {
     func readNotice(ID: Int) {
         var newReadNoticeIDs = PreferenceManager.readNoticeIDs ?? []
+        guard newReadNoticeIDs.contains(ID) == false else {
+            return
+        }
         newReadNoticeIDs.append(ID)
         PreferenceManager.readNoticeIDs = newReadNoticeIDs
     }

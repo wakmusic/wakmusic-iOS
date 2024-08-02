@@ -7,6 +7,7 @@ import MusicDetailFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
+import SignInFeatureInterface
 import SnapKit
 import SongsDomainInterface
 import Then
@@ -20,9 +21,9 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     private let musicDetailFactory: any MusicDetailFactory
     private let containSongsFactory: any ContainSongsFactory
-
+    private let signInFactory: any SignInFactory
+    private let textPopUpFactory: any TextPopUpFactory
     private let searchSortOptionComponent: SearchSortOptionComponent
-
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
@@ -47,11 +48,15 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         searchSortOptionComponent: SearchSortOptionComponent,
         musicDetailFactory: any MusicDetailFactory,
         containSongsFactory: any ContainSongsFactory,
+        signInFactory: any SignInFactory,
+        textPopUpFactory: any TextPopUpFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         self.musicDetailFactory = musicDetailFactory
+        self.signInFactory = signInFactory
+        self.textPopUpFactory = textPopUpFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -341,6 +346,23 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
                     options: [.tabBar]
                 )
+                return
+            }
+
+            if PreferenceManager.userInfo == nil {
+                let vc = self.textPopUpFactory.makeView(
+                    text: LocalizationStrings.needLoginWarning,
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = self.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .fullScreen
+                        self.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                )
+                self.showBottomSheet(content: vc)
                 return
             }
 

@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Foundation
 import FruitDrawFeatureInterface
+import Localization
 import LogManager
 import MyInfoFeatureInterface
 import RxSwift
@@ -15,7 +16,7 @@ import Utility
 
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
-    private var profilePopUpComponent: ProfilePopComponent!
+    private var profilePopupFactory: ProfilePopupFactory!
     private var textPopUpFactory: TextPopUpFactory!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
@@ -51,7 +52,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
 
     public static func viewController(
         reactor: MyInfoReactor,
-        profilePopUpComponent: ProfilePopComponent,
+        profilePopupFactory: ProfilePopupFactory,
         textPopUpFactory: TextPopUpFactory,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
@@ -64,7 +65,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         fruitStorageFactory: FruitStorageFactory
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
-        viewController.profilePopUpComponent = profilePopUpComponent
+        viewController.profilePopupFactory = profilePopupFactory
         viewController.textPopUpFactory = textPopUpFactory
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.signInFactory = signInFactory
@@ -79,7 +80,15 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     }
 
     override func bindState(reactor: MyInfoReactor) {
+        reactor.pulse(\.$showToast)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, message in
+                owner.showToast(text: message, options: [.tabBar])
+            })
+            .disposed(by: disposeBag)
+
         reactor.state.map(\.isAllNoticesRead)
+            .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, isAllNoticesRead in
                 owner.myInfoView.newNotiIndicator.isHidden = isAllNoticesRead
@@ -114,6 +123,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             }
             .disposed(by: disposeBag)
 
+        reactor.state.map(\.fruitCount)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, count in
+                owner.myInfoView.updateFruitCount(count: count)
+            }
+            .disposed(by: disposeBag)
+
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
@@ -128,6 +144,13 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .bind(with: self, onNext: { owner, _ in
                 owner.showEditSheet(in: owner.view, type: .profile)
                 owner.editSheetView.delegate = owner
+            })
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$dismissEditSheet)
+            .compactMap { $0 }
+            .bind(with: self, onNext: { owner, _ in
+                owner.hideEditSheet()
             })
             .disposed(by: disposeBag)
 
@@ -168,7 +191,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case .login:
                     let vc = owner.textPopUpFactory.makeView(
-                        text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                        text: LocalizationStrings.needLoginWarning,
                         cancelButtonIsHidden: false,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
@@ -253,14 +276,24 @@ extension MyInfoViewController: EditSheetViewDelegate {
         case .share:
             break
         case .profile:
-            let vc = profilePopUpComponent.makeView()
-            showBottomSheet(content: vc, size: .fixed(352 + SAFEAREA_BOTTOM_HEIGHT()))
+            let vc = profilePopupFactory.makeView(
+                completion: { [reactor] () in
+                    reactor?.action.onNext(.completedSetProfile)
+                }
+            )
+            let height: CGFloat = (ProfilePopupViewController.rowHeight * 2) + 10
+            showBottomSheet(content: vc, size: .fixed(190 + height + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
-            guard let vc = multiPurposePopUpFactory
-                .makeView(type: .nickname, key: "", completion: nil) as? MultiPurposePopupViewController
-            else { return }
+            let vc = multiPurposePopUpFactory.makeView(
+                type: .nickname,
+                key: "",
+                completion: { [reactor] text in
+                    reactor?.action.onNext(.changeNicknameButtonDidTap(text))
+                }
+            )
             showBottomSheet(content: vc, size: .fixed(296))
         }
+        hideEditSheet()
     }
 }
 
@@ -275,7 +308,6 @@ extension MyInfoViewController: EqualHandleTappedType {
 
 extension MyInfoViewController: FruitDrawViewControllerDelegate {
     func completedFruitDraw(itemCount: Int) {
-        #warning("획득한 열매 갯수입니다. 다음 처리 진행해주세요.")
-        LogManager.printDebug("itemCount: \(itemCount)")
+        reactor?.action.onNext(.completedFruitDraw)
     }
 }

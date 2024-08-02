@@ -5,11 +5,15 @@ import SnapKit
 import Then
 import UIKit
 
-private protocol DrawActionProtocol {
+private protocol FruitDrawStateProtocol {
+    func updateFruitCount(count: Int)
+}
+
+private protocol FruitDrawActionProtocol {
     var drawButtonDidTap: Observable<Void> { get }
 }
 
-final class DrawButtonView: UIView {
+final class FruitDrawButtonView: UIView {
     let backgroundView = UIView().then {
         $0.backgroundColor = .white
         $0.layer.borderWidth = 1
@@ -56,7 +60,7 @@ final class DrawButtonView: UIView {
     }
 }
 
-extension DrawButtonView {
+extension FruitDrawButtonView {
     func addView() {
         self.addSubviews(
             backgroundView,
@@ -89,6 +93,12 @@ extension DrawButtonView {
     }
 }
 
-extension Reactive: DrawActionProtocol where Base: DrawButtonView {
+extension FruitDrawButtonView: FruitDrawStateProtocol {
+    func updateFruitCount(count: Int) {
+        countLabel.text = String(count)
+    }
+}
+
+extension Reactive: FruitDrawActionProtocol where Base: FruitDrawButtonView {
     var drawButtonDidTap: Observable<Void> { base.drawButton.rx.tap.asObservable() }
 }

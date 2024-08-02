@@ -13,7 +13,7 @@ public protocol LikeStorageTableViewCellDelegate: AnyObject {
 
 public enum LikeStorageTableViewCellDelegateConstant {
     case cellTapped(indexPath: IndexPath)
-    case playTapped(song: SongEntity)
+    case playTapped(song: FavoriteSongEntity)
 }
 
 class LikeStorageTableViewCell: UITableViewCell {
@@ -62,7 +62,8 @@ class LikeStorageTableViewCell: UITableViewCell {
     private let cellSelectButton = UIButton()
 
     weak var delegate: LikeStorageTableViewCellDelegate?
-    var passToModel: (IndexPath, SongEntity?) = (IndexPath(row: 0, section: 0), nil)
+    var indexPath: IndexPath?
+    var model: FavoriteSongEntity?
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -79,15 +80,16 @@ class LikeStorageTableViewCell: UITableViewCell {
 
 extension LikeStorageTableViewCell {
     func update(model: FavoriteSongEntity, isEditing: Bool, indexPath: IndexPath) {
-        self.passToModel = (indexPath, model.song)
+        self.indexPath = indexPath
+        self.model = model
 
         self.albumImageView.kf.setImage(
-            with: WMImageAPI.fetchYoutubeThumbnail(id: model.song.id).toURL,
+            with: WMImageAPI.fetchYoutubeThumbnail(id: model.songID).toURL,
             placeholder: DesignSystemAsset.Logo.placeHolderSmall.image,
             options: [.transition(.fade(0.2))]
         )
-        self.titleLabel.text = model.song.title
-        self.artistLabel.text = model.song.artist
+        self.titleLabel.text = model.title
+        self.artistLabel.text = model.artist
 
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
         self.cellSelectButton.isHidden = !isEditing
@@ -153,11 +155,12 @@ private extension LikeStorageTableViewCell {
 
 private extension LikeStorageTableViewCell {
     @objc func playButtonAction() {
-        guard let song = self.passToModel.1 else { return }
-        delegate?.buttonTapped(type: .playTapped(song: song))
+        guard let model else { return }
+        delegate?.buttonTapped(type: .playTapped(song: model))
     }
 
     @objc func cellSelectButtonAction() {
-        delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
+        guard let indexPath else { return }
+        delegate?.buttonTapped(type: .cellTapped(indexPath: indexPath))
     }
 }
