@@ -134,6 +134,11 @@ private extension ProfilePopupViewController {
         collectionView.clipsToBounds = false
         collectionViewHeightConstraint.constant = (ProfilePopupViewController.rowHeight * 2) + 10
 
+        titleLabel.text = "프로필을 선택해주세요"
+        titleLabel.font = UIFont.WMFontSystem.t4(weight: .medium).font
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+        titleLabel.setTextWithAttributes(kernValue: -0.5)
+
         saveButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
         saveButton.layer.cornerRadius = 12
         saveButton.clipsToBounds = true
