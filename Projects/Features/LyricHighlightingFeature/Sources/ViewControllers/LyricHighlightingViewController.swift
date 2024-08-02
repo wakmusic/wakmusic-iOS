@@ -134,11 +134,6 @@ public final class LyricHighlightingViewController: UIViewController {
         )
     }
 
-    override public func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = nil
-    }
-
     override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedLayer == nil {

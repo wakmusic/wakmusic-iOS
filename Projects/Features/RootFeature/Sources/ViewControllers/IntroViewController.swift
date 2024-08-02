@@ -190,7 +190,7 @@ private extension IntroViewController {
             case let .failure(error):
                 owner.showBottomSheet(
                     content: owner.textPopUpFactory.makeView(
-                        text: error.asWMError.errorDescription ?? "",
+                        text: error.asWMError.errorDescription ?? error.localizedDescription,
                         cancelButtonIsHidden: true,
                         confirmButtonText: nil,
                         cancelButtonText: nil,

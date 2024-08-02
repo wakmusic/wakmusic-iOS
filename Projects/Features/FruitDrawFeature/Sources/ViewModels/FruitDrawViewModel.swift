@@ -11,7 +11,6 @@ import Utility
 public final class FruitDrawViewModel: ViewModelType {
     private let fetchFruitDrawStatusUseCase: FetchFruitDrawStatusUseCase
     private let drawFruitUseCase: DrawFruitUseCase
-    private let logoutUseCase: LogoutUseCase
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -20,12 +19,10 @@ public final class FruitDrawViewModel: ViewModelType {
 
     public init(
         fetchFruitDrawStatusUseCase: any FetchFruitDrawStatusUseCase,
-        drawFruitUseCase: any DrawFruitUseCase,
-        logoutUseCase: any LogoutUseCase
+        drawFruitUseCase: any DrawFruitUseCase
     ) {
         self.fetchFruitDrawStatusUseCase = fetchFruitDrawStatusUseCase
         self.drawFruitUseCase = drawFruitUseCase
-        self.logoutUseCase = logoutUseCase
     }
 
     public struct Input {
@@ -50,20 +47,13 @@ public final class FruitDrawViewModel: ViewModelType {
         let output = Output()
 
         input.fetchFruitDrawStatus
-            .flatMap { [fetchFruitDrawStatusUseCase, logoutUseCase] _ in
+            .flatMap { [fetchFruitDrawStatusUseCase] _ in
                 return fetchFruitDrawStatusUseCase.execute()
                     .asObservable()
                     .catch { error in
-                        let wmError = error.asWMError
-                        let message = wmError.errorDescription ?? error.localizedDescription
+                        let message = error.asWMError.errorDescription ?? error.localizedDescription
                         output.occurredError.onNext(message)
-
-                        if wmError == .tokenExpired {
-                            return logoutUseCase.execute()
-                                .andThen(.never())
-                        } else {
-                            return .never()
-                        }
+                        return .empty()
                     }
             }
             .do(onNext: { entity in
@@ -77,19 +67,13 @@ public final class FruitDrawViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.didTapFruitDraw
-            .flatMap { [drawFruitUseCase, logoutUseCase] _ in
+            .flatMap { [drawFruitUseCase] _ in
                 return drawFruitUseCase.execute()
+                    .asObservable()
                     .catch { error in
-                        let wmError = error.asWMError
-                        let message = wmError.errorDescription ?? error.localizedDescription
+                        let message = error.asWMError.errorDescription ?? error.localizedDescription
                         output.occurredError.onNext(message)
-
-                        if wmError == .tokenExpired {
-                            return logoutUseCase.execute()
-                                .andThen(.never())
-                        } else {
-                            return .never()
-                        }
+                        return .empty()
                     }
             }
             .flatMap { [weak self] entity -> Observable<(FruitEntity, Data?)> in
