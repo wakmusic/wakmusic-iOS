@@ -111,7 +111,7 @@ final class MusicDetailReactor: Reactor {
         case .playListButtonDidTap:
             return playListButtonDidTap()
         case .dismissButtonDidTap:
-            return .just(.navigate(.dismiss))
+            return navigateMutation(navigate: .dismiss)
         }
     }
 
@@ -179,10 +179,7 @@ private extension MusicDetailReactor {
             )
             LogManager.analytics(log)
         }
-        return .concat(
-            .just(.navigate(.youtube(id: song.videoID))),
-            .just(.navigate(nil))
-        )
+        return navigateMutation(navigate: .youtube(id: song.videoID))
     }
 
     func nextButtonDidTap() -> Observable<Mutation> {
@@ -219,17 +216,14 @@ private extension MusicDetailReactor {
             title: song.title,
             artist: song.artistString
         )
-        return .concat(
-            .just(.navigate(.lyricsHighlighting(model: lyricHighlightingModel))),
-            .just(.navigate(nil))
-        )
+        return navigateMutation(navigate: .lyricsHighlighting(model: lyricHighlightingModel))
     }
 
     func creditButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickCreditButton(id: song.videoID)
         LogManager.analytics(log)
-        return .just(.navigate(.credit(id: song.videoID)))
+        return navigateMutation(navigate: .credit(id: song.videoID))
     }
 
     func likeButtonDidTap() -> Observable<Mutation> {
@@ -269,34 +263,35 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickMusicPickButton(id: song.videoID)
         LogManager.analytics(log)
-        return .concat(
-            .just(.navigate(.musicPick(id: song.videoID))),
-            .just(.navigate(nil))
-        )
+        return navigateMutation(navigate: .musicPick(id: song.videoID))
     }
 
     func playListButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickPlaylistButton(id: song.videoID)
         LogManager.analytics(log)
-        return .concat(
-            .just(.navigate(.playlist)),
-            .just(.navigate(nil))
-        )
+        return navigateMutation(navigate: .playlist)
     }
 }
 
 // MARK: - Private Methods
 
 private extension MusicDetailReactor {
+    func navigateMutation(navigate: NavigateType) -> Observable<Mutation> {
+        return .concat(
+            .just(.navigate(navigate)),
+            .just(.navigate(nil))
+        )
+    }
+
     func prefetchThumbnailImage(index: Int) {
-        if let songID = currentState.songIDs[safe: index],
-           let thumbnailPrefetchingSongID = currentState.songDictionary[songID]?.videoID,
-           let thumbnailURL = URL(
-               string: youtubeURLGenerator.generateHDThumbnailURL(id: thumbnailPrefetchingSongID)
-           ) {
-            ImagePrefetcher(urls: [thumbnailURL]).start()
-        }
+        let prefetchingSongImageURLs = [
+            currentState.songIDs[safe: index - 1],
+            currentState.songIDs[safe: index],
+            currentState.songIDs[safe: index + 1]
+        ].compactMap { $0 }
+            .compactMap { URL(string: youtubeURLGenerator.generateHDThumbnailURL(id: $0)) }
+        ImagePrefetcher(urls: prefetchingSongImageURLs).start()
     }
 
     func fetchSongDetailWith(index: Int) -> Observable<Mutation> {

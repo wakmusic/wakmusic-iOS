@@ -96,7 +96,11 @@ final class PlaylistViewModel: ViewModelType {
             })
             .withLatestFrom(output.selectedSongIds) { selectedPlaylistItem, selectedSongIds in
                 var mutableSelectedSongIds = selectedSongIds
-                mutableSelectedSongIds.insert(selectedPlaylistItem.id)
+                if mutableSelectedSongIds.contains(selectedPlaylistItem.id) {
+                    mutableSelectedSongIds.remove(selectedPlaylistItem.id)
+                } else {
+                    mutableSelectedSongIds.insert(selectedPlaylistItem.id)
+                }
                 return mutableSelectedSongIds
             }
             .bind(to: output.selectedSongIds)

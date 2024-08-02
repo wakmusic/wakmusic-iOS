@@ -20,25 +20,11 @@ final class MusicHeartButton: VerticalAlignButton {
     }
 
     func setIsLike(isLike: Bool, animated: Bool = true) {
-        let heartImage: UIImage
-        if isLike {
-            heartImage = DesignSystemAsset.MusicDetail.heartFill.image
+        let heartImage: UIImage = if isLike {
+            DesignSystemAsset.MusicDetail.heartFill.image
         } else {
-            heartImage = DesignSystemAsset.MusicDetail.heart.image
+            DesignSystemAsset.MusicDetail.heart.image
         }
-
-        self.isLike = isLike
-        guard animated else {
-            self.setImage(heartImage, for: .normal)
-            self.setIsLikeTextColor(isLike: isLike)
-            return
-        }
-
-        self.imageView?.transform = .init(scaleX: 1.25, y: 1.25)
-        UIViewPropertyAnimator(duration: 0.3, curve: .easeIn) {
-            self.imageView?.transform = .identity
-        }
-        .startAnimation()
 
         self.setImage(heartImage, for: .normal)
         self.setIsLikeTextColor(isLike: isLike)
@@ -46,13 +32,9 @@ final class MusicHeartButton: VerticalAlignButton {
 
     private func setIsLikeTextColor(isLike: Bool) {
         if isLike {
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .normal)
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .selected)
-            self.setTitleColor(DesignSystemAsset.PrimaryColorV2.increase.color, for: .highlighted)
+            self.setTextColor(color: DesignSystemAsset.PrimaryColorV2.increase.color)
         } else {
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .normal)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .selected)
-            self.setTitleColor(DesignSystemAsset.NewGrayColor.gray400.color, for: .highlighted)
+            self.setTextColor(color: DesignSystemAsset.NewGrayColor.gray400.color)
         }
     }
 }
