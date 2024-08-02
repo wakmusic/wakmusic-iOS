@@ -3,6 +3,7 @@ import ErrorModule
 import LikeDomainInterface
 import RxSwift
 import UserDomainInterface
+import Utility
 
 public final class UserRepositoryImpl: UserRepository {
     private let remoteUserDataSource: any RemoteUserDataSource
@@ -13,6 +14,15 @@ public final class UserRepositoryImpl: UserRepository {
 
     public func fetchUserInfo() -> Single<UserInfoEntity> {
         remoteUserDataSource.fetchUserInfo()
+            .do(onSuccess: { entity in
+                PreferenceManager.shared.setUserInfo(
+                    ID: entity.id,
+                    platform: entity.platform,
+                    profile: entity.profile,
+                    name: entity.name,
+                    itemCount: entity.itemCount
+                )
+            })
     }
 
     public func setProfile(image: String) -> Completable {

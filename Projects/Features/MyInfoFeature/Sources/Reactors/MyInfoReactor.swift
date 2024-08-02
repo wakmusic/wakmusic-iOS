@@ -192,16 +192,6 @@ private extension MyInfoReactor {
     func fetchUserInfo() -> Observable<Mutation> {
         return fetchUserInfoUseCase.execute()
             .asObservable()
-            .flatMap { entity -> Observable<Mutation> in
-                PreferenceManager.shared.setUserInfo(
-                    ID: entity.id,
-                    platform: entity.platform,
-                    profile: entity.profile,
-                    name: entity.name,
-                    itemCount: entity.itemCount
-                )
-                return .empty()
-            }
             .catch { error in
                 let error = error.asWMError
                 return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
@@ -235,13 +225,6 @@ private extension MyInfoReactor {
                 fetchUserInfoUseCase.execute()
                     .asObservable()
                     .flatMap { entity -> Observable<Mutation> in
-                        PreferenceManager.shared.setUserInfo(
-                            ID: entity.id,
-                            platform: entity.platform,
-                            profile: entity.profile,
-                            name: entity.name,
-                            itemCount: entity.itemCount
-                        )
                         return .concat(
                             .just(.showToast("닉네임이 변경되었습니다.")),
                             .just(.dismissEditSheet)

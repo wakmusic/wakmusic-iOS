@@ -88,13 +88,6 @@ private extension LoginViewModel {
             }
             .subscribe(onNext: { [input, output] entity in
                 LogManager.setUserID(userID: entity.id)
-                PreferenceManager.shared.setUserInfo(
-                    ID: entity.id,
-                    platform: entity.platform,
-                    profile: entity.profile,
-                    name: entity.name,
-                    itemCount: entity.itemCount
-                )
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
                 output.showLoading.accept(false)
 
