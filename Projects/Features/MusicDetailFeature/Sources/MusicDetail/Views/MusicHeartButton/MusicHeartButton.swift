@@ -20,25 +20,11 @@ final class MusicHeartButton: VerticalAlignButton {
     }
 
     func setIsLike(isLike: Bool, animated: Bool = true) {
-        let heartImage: UIImage
-        if isLike {
-            heartImage = DesignSystemAsset.MusicDetail.heartFill.image
+        let heartImage: UIImage = if isLike {
+            DesignSystemAsset.MusicDetail.heartFill.image
         } else {
-            heartImage = DesignSystemAsset.MusicDetail.heart.image
+            DesignSystemAsset.MusicDetail.heart.image
         }
-
-        self.isLike = isLike
-        guard animated else {
-            self.setImage(heartImage, for: .normal)
-            self.setIsLikeTextColor(isLike: isLike)
-            return
-        }
-
-        self.imageView?.transform = .init(scaleX: 1.25, y: 1.25)
-        UIViewPropertyAnimator(duration: 0.3, curve: .easeIn) {
-            self.imageView?.transform = .identity
-        }
-        .startAnimation()
 
         self.setImage(heartImage, for: .normal)
         self.setIsLikeTextColor(isLike: isLike)

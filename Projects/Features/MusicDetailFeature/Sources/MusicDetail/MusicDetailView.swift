@@ -129,7 +129,7 @@ private extension MusicDetailView {
 
     func setLayout() {
         thumbnailCollectionView.snp.makeConstraints {
-            $0.top.lessThanOrEqualTo(wmNavigationbarView.snp.bottom).offset(52)
+            $0.top.lessThanOrEqualTo(wmNavigationbarView.snp.bottom).offset(44)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(thumbnailCollectionView.snp.width).multipliedBy(9.0 / 16.0)
@@ -148,7 +148,7 @@ private extension MusicDetailView {
         wmNavigationbarView.setRightViews([creditButton])
 
         musicControlView.snp.makeConstraints {
-            $0.top.equalTo(thumbnailCollectionView.snp.bottom).offset(36)
+            $0.top.equalTo(thumbnailCollectionView.snp.bottom).offset(20).priority(.required)
             $0.leading.trailing.equalToSuperview().inset(36)
             $0.bottom.lessThanOrEqualTo(musicToolbarView.snp.top)
             $0.height.equalTo(musicControlView.snp.width).multipliedBy(1.0 / 1.0)
