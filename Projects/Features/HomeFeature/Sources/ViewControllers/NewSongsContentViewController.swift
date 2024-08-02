@@ -8,6 +8,7 @@ import RxSwift
 import SongsDomainInterface
 import UIKit
 import Utility
+import SignInFeatureInterface
 
 public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
@@ -19,6 +20,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
+    private var textPopupFactory: TextPopUpFactory!
+    private var signInFactory: SignInFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
     public var songCartView: SongCartView!
@@ -42,6 +45,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     public static func viewController(
         viewModel: NewSongsContentViewModel,
         containSongsFactory: ContainSongsFactory,
+        textPopupFactory: TextPopUpFactory,
+        signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> NewSongsContentViewController {
         let viewController = NewSongsContentViewController.viewController(
@@ -50,6 +55,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
         )
         viewController.viewModel = viewModel
         viewController.containSongsFactory = containSongsFactory
+        viewController.textPopupFactory = textPopupFactory
+        viewController.signInFactory = signInFactory
         viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
@@ -166,6 +173,24 @@ private extension NewSongsContentViewController {
                 )
             }
             .disposed(by: disposeBag)
+
+        output.showLogin
+            .bind(with: self) { owner, _ in
+                let viewController = owner.textPopupFactory.makeView(
+                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: nil,
+                    cancelButtonText: nil,
+                    completion: {
+                        let loginVC = owner.signInFactory.makeView()
+                        loginVC.modalPresentationStyle = .overFullScreen
+                        owner.present(loginVC, animated: true)
+                    },
+                    cancelCompletion: {}
+                )
+                owner.showBottomSheet(content: viewController)
+            }
+            .disposed(by: disposeBag)
     }
 
     func configureUI() {
@@ -219,10 +244,16 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            if PreferenceManager.userInfo == nil {
+                output.showLogin.onNext(())
+                return
+            }
+
             guard songs.count <= limit else {
                 output.showToast.onNext(LocalizationStrings.overFlowContainWarning(songs.count - limit))
                 return
             }
+
             let songIds: [String] = songs.map { $0.id }
             let viewController = containSongsFactory.makeView(songs: songIds)
             viewController.modalPresentationStyle = .overFullScreen
