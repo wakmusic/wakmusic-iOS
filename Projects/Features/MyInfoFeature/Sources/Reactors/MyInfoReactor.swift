@@ -268,7 +268,7 @@ private extension MyInfoReactor {
     }
 
     func updateFruitCount(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        guard let count = userInfo?.itemCount else { 
+        guard let count = userInfo?.itemCount else {
             return .just(.updateFruitCount(-1))
         }
         return .just(.updateFruitCount(count))
