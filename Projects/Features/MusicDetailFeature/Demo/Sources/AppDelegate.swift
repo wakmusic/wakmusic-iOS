@@ -4,8 +4,8 @@ import Inject
 import LikeDomainInterface
 import LikeDomainTesting
 import LyricHighlightingFeatureInterface
-import RxSwift
 @testable import MusicDetailFeature
+import RxSwift
 import SignInFeatureInterface
 import SongCreditFeatureInterface
 import SongsDomainTesting
