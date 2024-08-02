@@ -25,17 +25,17 @@ public final class IntroViewModel: ViewModelType {
     private let disposeBag = DisposeBag()
 
     public struct Input {
-        var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
-        var fetchAppCheck: PublishSubject<Void> = PublishSubject()
-        var fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
-        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
+        let fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
+        let fetchAppCheck: PublishSubject<Void> = PublishSubject()
+        let fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
+        let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var permissionResult: PublishSubject<Bool?> = PublishSubject()
-        var appInfoResult: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
-        var userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
-        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
+        let permissionResult: PublishSubject<Bool?> = PublishSubject()
+        let appInfoResult: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
+        let userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
+        let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public init(
