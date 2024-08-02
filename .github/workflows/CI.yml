@@ -53,6 +53,11 @@ jobs:
           path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
           key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
 
+      - name: Echo dependency cache hit
+        run: |
+          echo "package cache hit = ${{ steps.cache_package_dependencies.outputs.cache-hit }}"
+          echo "carthage cache hit = ${{ steps.cache_carthage_dependencies.outputs.cache-hit }}"
+
       - uses: jdx/mise-action@v2
         if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
 
@@ -68,7 +73,7 @@ jobs:
     outputs:
       package_dependency_cache_key: ${{ steps.compute_package_hash.outputs.package_hash }}
       carthage_dependency_cache_key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
-    
+
   test:
     name: 🧪 Test
     runs-on: macos-14
@@ -107,11 +112,16 @@ jobs:
           path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
           key: ${{ needs.prepare-ci.outputs.carthage_dependency_cache_key }}
 
+      - name: Echo dependency cache hit
+        run: |
+          echo "package cache hit = ${{ steps.cache_package_dependencies.outputs.cache-hit }}"
+          echo "carthage cache hit = ${{ steps.cache_carthage_dependencies.outputs.cache-hit }}"
+
       - name: Install needle
         run: brew install needle
 
       - name: Install dependencies needs
-        if: steps.cache_package_dependencies.outputs.cache-hit != 'true' || steps.cache_carthage_dependencies.outputs.cache-hit != 'true'
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
         run: make install
 
       - name: Make `Secrets.xcconfig`
@@ -126,7 +136,7 @@ jobs:
           echo "${{ secrets.GOOGLE_INFO_PLIST }}" > ${{ env.GOOGLE_SERVICE_INFO_PLIST_PATH }}
 
       - name: Generate NeedleGenerated.swift
-        run:  |
+        run: |
           sh Scripts/NeedleRunScript.sh ci
           echo finish NeedleRunScript
 
