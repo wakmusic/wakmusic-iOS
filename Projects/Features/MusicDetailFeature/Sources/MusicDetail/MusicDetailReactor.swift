@@ -136,7 +136,10 @@ final class MusicDetailReactor: Reactor {
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let signInIsRequired = signInIsRequiredSubject
-            .map { _ in Mutation.navigate(.signin) }
+            .withUnretained(self)
+            .flatMap { owner, _ in
+                owner.navigateMutation(navigate: .signin)
+            }
 
         return Observable.merge(mutation, signInIsRequired)
     }
