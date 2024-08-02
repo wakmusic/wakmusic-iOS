@@ -6,11 +6,11 @@ import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
+import SignInFeatureInterface
 import SnapKit
 import Then
 import UIKit
 import Utility
-import SignInFeatureInterface
 
 public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!

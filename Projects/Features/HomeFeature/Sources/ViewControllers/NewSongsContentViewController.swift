@@ -5,10 +5,10 @@ import Localization
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
+import SignInFeatureInterface
 import SongsDomainInterface
 import UIKit
 import Utility
-import SignInFeatureInterface
 
 public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
     @IBOutlet weak var tableView: UITableView!

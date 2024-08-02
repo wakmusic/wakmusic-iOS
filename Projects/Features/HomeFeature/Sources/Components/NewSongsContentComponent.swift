@@ -3,8 +3,8 @@ import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
-import SongsDomainInterface
 import SignInFeatureInterface
+import SongsDomainInterface
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
