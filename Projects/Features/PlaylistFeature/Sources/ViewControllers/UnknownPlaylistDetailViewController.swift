@@ -151,6 +151,8 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
             })
             .disposed(by: disposeBag)
+        
+        
     }
 
     override func bindState(reactor: UnknownPlaylistDetailReactor) {
@@ -185,7 +187,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                         owner.present(vc, animated: true)
                     }
                 )
-
                 owner.showBottomSheet(content: vc)
             }
             .disposed(by: disposeBag)

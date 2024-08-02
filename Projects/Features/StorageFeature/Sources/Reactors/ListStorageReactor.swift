@@ -278,6 +278,11 @@ extension ListStorageReactor {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
             .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
+        
+        #warning("케이 여기서 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요 ")
+        // TODO:
+        NotificationCenter.default.post(name: .removeSubscriptionPlaylist, object: [] , userInfo: nil)
+        
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
             mutateDeletePlaylistUseCase(selectedItemIDs),
@@ -369,6 +374,7 @@ private extension ListStorageReactor {
     }
 
     func mutateDeletePlaylistUseCase(_ ids: [String]) -> Observable<Mutation> {
+        
         deletePlayListUseCase.execute(ids: ids)
             .andThen(
                 .concat(

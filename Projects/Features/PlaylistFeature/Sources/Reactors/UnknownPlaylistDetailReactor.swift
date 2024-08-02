@@ -45,6 +45,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
     private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
     private let subscribePlaylistUseCase: any SubscribePlaylistUseCase
     private let checkSubscriptionUseCase: any CheckSubscriptionUseCase
+    private let playlistCommonService: any PlaylistCommonService
 
     private let logoutUseCase: any LogoutUseCase
 
@@ -53,14 +54,15 @@ final class UnknownPlaylistDetailReactor: Reactor {
         fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase,
         subscribePlaylistUseCase: any SubscribePlaylistUseCase,
         checkSubscriptionUseCase: any CheckSubscriptionUseCase,
-        logoutUseCase: any LogoutUseCase
-
+        logoutUseCase: any LogoutUseCase,
+        playlistCommonService: any PlaylistCommonService = DefaultPlaylistCommonService.shared
     ) {
         self.key = key
         self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
         self.subscribePlaylistUseCase = subscribePlaylistUseCase
         self.checkSubscriptionUseCase = checkSubscriptionUseCase
         self.logoutUseCase = logoutUseCase
+        self.playlistCommonService = playlistCommonService
 
         self.initialState = State(
             header: PlaylistDetailHeaderModel(
@@ -133,6 +135,23 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         return newState
     }
+    
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+
+        let removeSubscriptionPlaylistEvent = playlistCommonService.removeSubscriptionPlaylistEvent
+            .withUnretained(self)
+            .flatMap { owner, notification -> Observable<Mutation> in
+                guard let removedPlaylistKeys =  notification.object as? [String] else {
+                    return .empty()
+                }
+                
+                return removedPlaylistKeys.contains(owner.key) ?  owner.checkSubscription() : .empty()
+
+            }
+        
+        return Observable.merge(removeSubscriptionPlaylistEvent, mutation)
+    }
 }
 
 private extension UnknownPlaylistDetailReactor {
@@ -152,31 +171,40 @@ private extension UnknownPlaylistDetailReactor {
                                 private: data.private,
                                 songCount: data.songs.count
                             )
-                        )),
+                        ))
+                        ,
                         Observable.just(Mutation.updateDataSource(data.songs))
                     ])
                 }
                 .catch { error in
                     let wmErorr = error.asWMError
+                    
+                    if wmErorr == .notFound {
+                        
+                    }
+                    
                     return Observable.just(
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
             // 로그인 전이면 USECASE 안보냄
-            PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) :
-                checkSubscriptionUseCase.execute(key: key)
-                .asObservable()
-                .flatMap { flag -> Observable<Mutation> in
-                    return .just(.updateSubscribeState(flag))
-                }
-                .catch { error in
-                    let wmErorr = error.asWMError
-                    return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
-                    )
-                },
+            PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : checkSubscription(),
             .just(.updateLoadingState(false))
         ])
+    }
+    
+    func checkSubscription() -> Observable<Mutation> {
+        return checkSubscriptionUseCase.execute(key: key)
+        .asObservable()
+        .flatMap { flag -> Observable<Mutation> in
+            return .just(.updateSubscribeState(flag))
+        }
+        .catch { error in
+            let wmErorr = error.asWMError
+            return Observable.just(
+                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+            )
+        }
     }
 }
 
