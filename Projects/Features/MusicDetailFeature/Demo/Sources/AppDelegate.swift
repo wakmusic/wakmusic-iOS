@@ -4,8 +4,9 @@ import Inject
 import LikeDomainInterface
 import LikeDomainTesting
 import LyricHighlightingFeatureInterface
-@testable import MusicDetailFeature
 import RxSwift
+@testable import MusicDetailFeature
+import SignInFeatureInterface
 import SongCreditFeatureInterface
 import SongsDomainTesting
 import UIKit
@@ -64,7 +65,9 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     reactor: reactor,
                     lyricHighlightingFactory: DummyLyricHighlightingFactory(),
                     songCreditFactory: DummySongCreditFactory(),
+                    signInFactory: DummySignInFactory(),
                     containSongsFactory: DummyContainSongsFactory(),
+                    textPopupFactory: DummyTextPopupFactory(),
                     playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
                 )
             )
@@ -90,6 +93,25 @@ final class DummyContainSongsFactory: ContainSongsFactory {
 
 final class DummySongCreditFactory: SongCreditFactory {
     func makeViewController(songID: String) -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummySignInFactory: SignInFactory {
+    func makeView() -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummyTextPopupFactory: TextPopUpFactory {
+    func makeView(
+        text: String?,
+        cancelButtonIsHidden: Bool,
+        confirmButtonText: String?,
+        cancelButtonText: String?,
+        completion: (() -> Void)?,
+        cancelCompletion: (() -> Void)?
+    ) -> UIViewController {
         return UIViewController()
     }
 }
