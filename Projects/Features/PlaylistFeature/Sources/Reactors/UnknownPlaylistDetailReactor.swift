@@ -28,6 +28,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case showToast(String)
         case updateLoginPopupState(Bool)
         case updateRefresh
+        case updateDetectedNotFound
     }
 
     struct State {
@@ -39,6 +40,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         @Pulse var toastMessage: String?
         @Pulse var showLoginPopup: Bool
         @Pulse var refresh: Void?
+        @Pulse var detectedNotFound: Void?
     }
 
     var initialState: State
@@ -97,7 +99,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case let .itemDidTap(index):
             return updateItemSelected(index)
 
-        case let requestLoginRequiredAction:
+        case .requestLoginRequiredAction:
             return .just(.updateLoginPopupState(true))
         }
     }
@@ -131,6 +133,9 @@ final class UnknownPlaylistDetailReactor: Reactor {
             
         case .updateRefresh:
             newState.refresh = ()
+            
+        case .updateDetectedNotFound:
+            newState.detectedNotFound = ()
         }
 
         return newState
@@ -160,7 +165,8 @@ private extension UnknownPlaylistDetailReactor {
             .just(.updateLoadingState(true)),
             fetchPlaylistDetailUseCase.execute(id: key, type: .unknown)
                 .asObservable()
-                .flatMap { data -> Observable<Mutation> in
+                .withUnretained(self)
+                .flatMap { owner, data -> Observable<Mutation> in
                     return .concat([
                         Observable.just(Mutation.updateHeader(
                             PlaylistDetailHeaderModel(
@@ -171,24 +177,24 @@ private extension UnknownPlaylistDetailReactor {
                                 private: data.private,
                                 songCount: data.songs.count
                             )
-                        ))
-                        ,
-                        Observable.just(Mutation.updateDataSource(data.songs))
+                        )),
+                        Observable.just(Mutation.updateDataSource(data.songs)),
+                        PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : owner.checkSubscription()
                     ])
                 }
-                .catch { error in
+                .catch { [weak self] error in
+                    
+                    guard let self else { return .empty() }
+                    
                     let wmErorr = error.asWMError
                     
                     if wmErorr == .notFound {
-                        
+                        return self.updateDetectedNotFound()
                     }
-                    
                     return Observable.just(
                         Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
                     )
                 },
-            // 로그인 전이면 USECASE 안보냄
-            PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : checkSubscription(),
             .just(.updateLoadingState(false))
         ])
     }
@@ -285,5 +291,9 @@ private extension UnknownPlaylistDetailReactor {
     
     func updateSendRefreshNoti() -> Observable<Mutation> {
         .just(.updateRefresh)
+    }
+    
+    func updateDetectedNotFound() -> Observable<Mutation> {
+        .just(.updateDetectedNotFound)
     }
 }

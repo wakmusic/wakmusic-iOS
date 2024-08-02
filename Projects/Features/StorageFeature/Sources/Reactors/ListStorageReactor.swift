@@ -279,7 +279,7 @@ extension ListStorageReactor {
             .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
         
-        #warning("케이 여기서 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요 ")
+        #warning("케이 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요, 삭제 Usecase 끝나고 andThen에서 해주시면 될 듯 ")
         // TODO:
         NotificationCenter.default.post(name: .removeSubscriptionPlaylist, object: [] , userInfo: nil)
         

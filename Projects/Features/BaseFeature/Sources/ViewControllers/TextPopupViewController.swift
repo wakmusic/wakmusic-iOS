@@ -67,7 +67,7 @@ extension TextPopupViewController {
             string: cancelButtonText,
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         )
@@ -82,7 +82,7 @@ extension TextPopupViewController {
             string: confirmButtonText,
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         )
@@ -98,7 +98,7 @@ extension TextPopupViewController {
             string: contentString,
             attributes: [
                 .font: DesignSystem.DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5,
                 .paragraphStyle: paragraphStyle
             ]
