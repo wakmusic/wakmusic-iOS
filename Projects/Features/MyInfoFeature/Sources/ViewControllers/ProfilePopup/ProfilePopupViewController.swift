@@ -91,20 +91,13 @@ private extension ProfilePopupViewController {
     func outputBind() {
         output.dataSource
             .skip(1)
-            .do(onNext: { [weak self] _ in
-                self?.dataLoadActivityIndicator.stopAnimating()
+            .do(onNext: { [dataLoadActivityIndicator] _ in
+                dataLoadActivityIndicator?.stopAnimating()
             })
-            .bind(to: collectionView.rx.items) { (
-                collectionView: UICollectionView,
-                index: Int,
-                model: ProfileListEntity
-            ) -> UICollectionViewCell in
+            .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "ProfileCollectionViewCell",
-                    for: IndexPath(
-                        row: index,
-                        section: 0
-                    )
+                    for: IndexPath(row: index, section: 0)
                 ) as? ProfileCollectionViewCell else {
                     return UICollectionViewCell()
                 }
