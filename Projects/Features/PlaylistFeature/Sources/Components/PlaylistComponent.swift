@@ -6,6 +6,7 @@ import UIKit
 
 public protocol PlaylistDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class PlaylistComponent: Component<PlaylistDependency>, PlaylistFactory {
@@ -13,7 +14,8 @@ public final class PlaylistComponent: Component<PlaylistDependency>, PlaylistFac
         let viewModel = PlaylistViewModel()
         let viewController = PlaylistViewController(
             viewModel: viewModel,
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
         return viewController
     }

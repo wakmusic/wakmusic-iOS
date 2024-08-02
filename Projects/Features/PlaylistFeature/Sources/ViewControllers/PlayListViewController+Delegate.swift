@@ -45,6 +45,16 @@ extension PlaylistViewController: UITableViewDelegate {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
     }
 
+    public func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        72
+    }
+
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let playbuttonGroupView = PlayButtonGroupView()
+        playbuttonGroupView.delegate = self
+        return playbuttonGroupView
+    }
+
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
@@ -56,7 +66,7 @@ extension PlaylistViewController: UITableViewDelegate {
         return dragIndicatorView
     }
 
-    public func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+    public func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool {
         return true // 모든 Cell 을 이동 가능하게 설정합니다.
     }
 
@@ -73,10 +83,41 @@ extension PlaylistViewController: UITableViewDelegate {
     }
 }
 
+extension PlaylistViewController: PlayButtonGroupViewDelegate {
+    public func play(_ event: PlayEvent) {
+        switch event {
+        case .allPlay:
+            let songIDs = output.playlists.value
+                .map(\.id)
+                .prefix(50)
+            WakmusicYoutubePlayer(ids: Array(songIDs)).play()
+
+        case .shufflePlay:
+            let songIDs = output.playlists.value
+                .map(\.id)
+                .shuffled()
+                .prefix(50)
+            WakmusicYoutubePlayer(ids: Array(songIDs)).play()
+        }
+    }
+}
+
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
-        #warning("백튼님 여기 나중에 musicDetail 연결하시면됩니다.")
-        //
+        let currentSongs = output.playlists.value
+            .map(\.id)
+            .prefix(50)
+
+        self.dismiss(animated: true) { [songDetailPresenter] in
+            songDetailPresenter.present(
+                ids: Array(currentSongs),
+                selectedID: key
+            )
+        }
+    }
+
+    func playButtonDidTap(key: String) {
+        WakmusicYoutubePlayer(id: key).play()
     }
 
     func superButtonTapped(index: Int) {

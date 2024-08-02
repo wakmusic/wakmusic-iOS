@@ -37,3 +37,7 @@ public protocol QuestionFactory {
 public protocol ServiceInfoFactory {
     func makeView() -> UIViewController
 }
+
+public protocol ProfilePopupFactory {
+    func makeView(completion: (() -> Void)?) -> UIViewController
+}

@@ -11,6 +11,17 @@ import LogManager
 import Realm
 import RealmSwift
 
+/**
+ schemaVersion 업데이트 기록
+ v1
+ - PlayedLists 엔티티 추가
+    - 재생목록 저장을 위한 엔티티
+
+ v2
+ - PlaylistLocalEntity 엔티티 추가
+    - 재생목록 저장을 위한 엔티티 (리팩토링 버전)
+ - 기존 PlayedList는 레거시로 판정하여 migration 과정에서 데이터 모두 제거
+ */
 public class RealmManager: NSObject {
     public static let shared = RealmManager()
     private var realm: Realm!
@@ -65,7 +76,21 @@ public extension RealmManager {
         self.realm.objects(type)
     }
 
+    func fetchRealmDB<T: Object, KeyType>(_ type: T.Type, primaryKey: KeyType) -> T? {
+        self.realm.object(ofType: type, forPrimaryKey: primaryKey)
+    }
+
     func deleteRealmDB<T: Object>(model: Results<T>) {
+        do {
+            try self.realm.write {
+                self.realm.delete(model)
+            }
+        } catch {
+            LogManager.printError(error.localizedDescription)
+        }
+    }
+
+    func deleteRealmDB<T: Object>(model: [T]) {
         do {
             try self.realm.write {
                 self.realm.delete(model)

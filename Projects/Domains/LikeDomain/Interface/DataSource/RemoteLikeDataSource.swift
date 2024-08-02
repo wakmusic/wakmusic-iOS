@@ -12,4 +12,5 @@ import RxSwift
 public protocol RemoteLikeDataSource {
     func addLikeSong(id: String) -> Single<LikeEntity>
     func cancelLikeSong(id: String) -> Single<LikeEntity>
+    func checkIsLikedSong(id: String) -> Single<Bool>
 }

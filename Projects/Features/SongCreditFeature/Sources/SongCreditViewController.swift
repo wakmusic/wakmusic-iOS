@@ -17,7 +17,7 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     private let songCreditCollectionView = UICollectionView(frame: .zero, collectionViewLayout: .init()).then {
         let songCreditLayout = CreditCollectionViewLayout()
         $0.collectionViewLayout = songCreditLayout
-        $0.contentInset = .init(top: 40, left: 20, bottom: 20, right: 20)
+        $0.contentInset = .init(top: 0, left: 20, bottom: 20, right: 20)
         $0.backgroundColor = .clear
     }
 
@@ -98,7 +98,8 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
 
     override func setLayout() {
         songCreditCollectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(wmNavigationbarView.snp.bottom)
+            $0.horizontalEdges.bottom.equalToSuperview()
         }
 
         backgroundImageView.snp.makeConstraints {
@@ -150,21 +151,26 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
                 var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
                 snapshot.appendSections(credits.map(\.position))
                 credits.forEach { snapshot.appendItems($0.names, toSection: $0.position) }
-                creditDiffableDataSource.apply(snapshot)
+                creditDiffableDataSource.apply(snapshot, animatingDifferences: false)
             }
             .disposed(by: disposeBag)
 
         sharedState.map(\.backgroundImageURL)
-            .bind(with: backgroundImageView) { backgroundImageView, url in
+            .bind(with: backgroundImageView) { backgroundImageView, backgroundImageModel in
+                let alternativeSources = [backgroundImageModel.alternativeImageURL]
+                    .compactMap { URL(string: $0) }
+                    .map { Source.network($0) }
+
                 backgroundImageView.kf.setImage(
-                    with: URL(string: url),
+                    with: URL(string: backgroundImageModel.imageURL),
                     options: [
                         .transition(.fade(0.5)),
                         .processor(
                             DownsamplingImageProcessor(
                                 size: .init(width: 10, height: 10)
                             )
-                        )
+                        ),
+                        .alternativeSources(alternativeSources)
                     ]
                 )
             }

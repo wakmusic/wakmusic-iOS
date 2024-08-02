@@ -12,12 +12,13 @@ private protocol MusicDetailStateProtocol {
     func updateArtist(artist: String)
     func updateSelectedIndex(index: Int)
     func updateInitialSelectedIndex(index: Int)
-    func updateThumbnails(thumbnailURLs: [String])
-    func updateBackgroundImage(imageURL: String)
+    func updateThumbnails(thumbnailModels: [ThumbnailModel])
+    func updateBackgroundImage(thumbnailModel: ThumbnailModel)
     func updateIsDisabledSingingRoom(isDisabled: Bool)
     func updateIsDisabledPrevButton(isDisabled: Bool)
     func updateIsDisabledNextButton(isDisabled: Bool)
-    func updateIsLike(isLike: Bool)
+    func updateViews(views: Int)
+    func updateIsLike(likes: Int, isLike: Bool)
 }
 
 private protocol MusicDetailActionProtocol {
@@ -34,13 +35,16 @@ private protocol MusicDetailActionProtocol {
 }
 
 final class MusicDetailView: UIView {
+    private typealias SectionType = Int
+    private typealias ItemType = ThumbnailModel
+
     private let thumbnailCellRegistration = UICollectionView.CellRegistration<
-        ThumbnailCell, String
+        ThumbnailCell, ItemType
     > { cell, _, itemIdentifier in
-        cell.configure(thumbnailImageURL: itemIdentifier)
+        cell.configure(thumbnailModel: itemIdentifier)
     }
 
-    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<Int, String>(
+    private lazy var thumbnailDiffableDataSource = UICollectionViewDiffableDataSource<SectionType, ItemType>(
         collectionView: thumbnailCollectionView
     ) { [thumbnailCellRegistration] collectionView, indexPath, itemIdentifier in
         let cell = collectionView.dequeueConfiguredReusableCell(
@@ -128,7 +132,7 @@ private extension MusicDetailView {
             $0.top.lessThanOrEqualTo(self.safeAreaLayoutGuide.snp.top).offset(52)
             $0.centerX.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(thumbnailCollectionView.snp.width).multipliedBy(0.561)
+            $0.height.equalTo(thumbnailCollectionView.snp.width).multipliedBy(9.0 / 16.0)
         }
 
         backgroundImageView.snp.makeConstraints {
@@ -187,26 +191,30 @@ extension MusicDetailView: MusicDetailStateProtocol {
         )
     }
 
-    func updateThumbnails(thumbnailURLs: [String]) {
+    func updateThumbnails(thumbnailModels: [ThumbnailModel]) {
         var snapshot = thumbnailDiffableDataSource.snapshot()
         snapshot.appendSections([0])
-        snapshot.appendItems(thumbnailURLs, toSection: 0)
+        snapshot.appendItems(thumbnailModels, toSection: 0)
         thumbnailDiffableDataSource.apply(snapshot)
     }
 
-    func updateBackgroundImage(imageURL: String) {
+    func updateBackgroundImage(thumbnailModel: ThumbnailModel) {
+        let alternativeSources = [thumbnailModel.alternativeImageURL]
+            .compactMap { URL(string: $0) }
+            .map { Source.network($0) }
+
         backgroundImageView.kf.setImage(
-            with: URL(string: imageURL),
+            with: URL(string: thumbnailModel.imageURL),
             options: [
                 .waitForCache,
-                .onlyFromCache,
                 .transition(.fade(0.5)),
                 .forceTransition,
                 .processor(
                     DownsamplingImageProcessor(
                         size: .init(width: 10, height: 10)
                     )
-                )
+                ),
+                .alternativeSources(alternativeSources)
             ]
         )
     }
@@ -223,8 +231,12 @@ extension MusicDetailView: MusicDetailStateProtocol {
         musicControlView.updateIsDisabledNextButton(isDisabled: isDisabled)
     }
 
-    func updateIsLike(isLike: Bool) {
-        musicToolbarView.updateIsLike(isLike: isLike)
+    func updateViews(views: Int) {
+        musicToolbarView.updateViews(views: views)
+    }
+
+    func updateIsLike(likes: Int, isLike: Bool) {
+        musicToolbarView.updateIsLike(likes: likes, isLike: isLike)
     }
 }
 

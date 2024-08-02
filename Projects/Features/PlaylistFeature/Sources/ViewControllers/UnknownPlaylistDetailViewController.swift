@@ -158,6 +158,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         let sharedState = reactor.state.share()
 
+        let currentState = reactor.currentState
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
 
@@ -165,7 +166,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                     return
                 }
 
-                owner.showToast(text: message, options: [.tabBar])
+                owner.showToast(
+                    text: message,
+                    options: currentState.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
             }
             .disposed(by: disposeBag)
 
@@ -173,7 +177,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .filter { $0 }
             .bind(with: self) { owner, _ in
                 let vc = TextPopupViewController.viewController(
-                    text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
+                    text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { () in
                         let vc = owner.signInFactory.makeView()
@@ -405,8 +409,14 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+
+            if PreferenceManager.userInfo == nil {
+                reactor.action.onNext(.requestLoginRequiredAction)
+                return
+            }
+
             let vc = containSongsFactory.makeView(songs: songs.map { $0.id })
-            vc.modalPresentationStyle = .overFullScreen
+            vc.modalPresentationStyle = .fullScreen
             self.present(vc, animated: true)
             reactor.action.onNext(.deselectAll)
 

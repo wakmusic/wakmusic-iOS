@@ -1,14 +1,13 @@
 import BaseDomainInterface
 import ErrorModule
+import LikeDomainInterface
 import RxSwift
 import UserDomainInterface
 
 public final class UserRepositoryImpl: UserRepository {
     private let remoteUserDataSource: any RemoteUserDataSource
 
-    public init(
-        remoteUserDataSource: RemoteUserDataSource
-    ) {
+    public init(remoteUserDataSource: any RemoteUserDataSource) {
         self.remoteUserDataSource = remoteUserDataSource
     }
 

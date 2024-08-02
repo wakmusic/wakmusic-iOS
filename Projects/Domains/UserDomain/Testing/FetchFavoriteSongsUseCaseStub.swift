@@ -5,48 +5,16 @@ import UserDomainInterface
 public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
     let items: [FavoriteSongEntity] = [
         .init(
-            like: 1,
-            song: .init(
-                id: "123",
-                title: "리와인드 (RE:WIND)",
-                artist: "이세계아이돌",
-                views: 10,
-                date: ""
-            ),
-            isSelected: false
+            songID: "fgSXAKsq-Vo",
+            title: "리와인드 (RE:WIND)",
+            artist: "이세계아이돌",
+            like: 10
         ),
         .init(
-            like: 1,
-            song: .init(
-                id: "123",
-                title: "리와인드 (RE:WIND)",
-                artist: "이세계아이돌",
-                views: 10,
-                date: ""
-            ),
-            isSelected: false
-        ),
-        .init(
-            like: 1,
-            song: .init(
-                id: "123",
-                title: "리와인드 (RE:WIND)",
-                artist: "이세계아이돌",
-                views: 10,
-                date: ""
-            ),
-            isSelected: false
-        ),
-        .init(
-            like: 1,
-            song: .init(
-                id: "123",
-                title: "리와인드 (RE:WIND)",
-                artist: "이세계아이돌",
-                views: 10,
-                date: ""
-            ),
-            isSelected: false
+            songID: "6GQV6lhwgNs",
+            title: "팬서비스",
+            artist: "세구",
+            like: 100
         )
     ]
 

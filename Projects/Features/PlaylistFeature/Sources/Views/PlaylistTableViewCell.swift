@@ -1,6 +1,8 @@
 import DesignSystem
 import Kingfisher
 import Lottie
+import RxGesture
+import RxSwift
 import SnapKit
 import SongsDomainInterface
 import Then
@@ -10,6 +12,7 @@ import Utility
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)
     func thumbnailDidTap(key: String)
+    func playButtonDidTap(key: String)
 }
 
 internal class PlaylistTableViewCell: UITableViewCell {
@@ -65,6 +68,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
     internal var model: (index: Int, model: PlaylistItemModel?) = (0, nil)
 
     internal var isAnimating: Bool = false
+    private let disposeBag = DisposeBag()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -99,10 +103,7 @@ internal class PlaylistTableViewCell: UITableViewCell {
         }
 
         thumbnailButton.snp.makeConstraints {
-            $0.centerY.equalTo(thumbnailImageView)
-            $0.left.equalTo(thumbnailButton)
-            $0.width.equalTo(width)
-            $0.height.equalTo(height)
+            $0.edges.equalTo(thumbnailImageView)
         }
 
         titleArtistStackView.snp.makeConstraints {
@@ -156,6 +157,17 @@ extension PlaylistTableViewCell {
 
             self?.delegate?.thumbnailDidTap(key: song.id)
         }
+
+        playImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind(with: self) { owner, _ in
+                guard let song = owner.model.model else {
+                    return
+                }
+
+                owner.delegate?.playButtonDidTap(key: song.id)
+            }
+            .disposed(by: disposeBag)
 
         superButton.addAction { [weak self] in
             self?.delegate?.superButtonTapped(index: self?.model.index ?? 0)

@@ -38,6 +38,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .musicDetail))
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = true
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override func configureNavigation() {
@@ -53,9 +55,14 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState.map(\.songIDs)
             .distinctUntilChanged()
             .map { songs in
-                songs.map { youtubeURLGenerator.generateHDThumbnailURL(id: $0) }
+                songs.map {
+                    ThumbnailModel(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: $0),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: $0)
+                    )
+                }
             }
-            .bind(onNext: musicDetailView.updateThumbnails(thumbnailURLs:))
+            .bind(onNext: musicDetailView.updateThumbnails(thumbnailModels:))
             .disposed(by: disposeBag)
 
         sharedState.map(\.isFirstSong)
@@ -74,9 +81,21 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .bind(with: self) { owner, song in
                 owner.musicDetailView.updateTitle(title: song.title)
                 owner.musicDetailView.updateArtist(artist: song.artistString)
+                owner.musicDetailView.updateViews(views: song.views)
+                owner.musicDetailView.updateIsLike(likes: song.likes, isLike: song.isLiked)
+            }
+            .disposed(by: disposeBag)
 
+        sharedState
+            .compactMap(\.selectedSong)
+            .map(\.videoID)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, songID in
                 owner.musicDetailView.updateBackgroundImage(
-                    imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: song.videoID)
+                    thumbnailModel: .init(
+                        imageURL: youtubeURLGenerator.generateHDThumbnailURL(id: songID),
+                        alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: songID)
+                    )
                 )
             }
             .disposed(by: disposeBag)
@@ -155,6 +174,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         musicDetailView.rx.likeButtonDidTap
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.likeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -207,5 +227,11 @@ private extension MusicDetailViewController {
 
     func dismiss() {
         self.dismiss(animated: true)
+    }
+}
+
+extension MusicDetailViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return navigationController?.viewControllers.count ?? 0 > 1
     }
 }

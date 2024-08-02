@@ -21,7 +21,7 @@ final class SongCreditReactor: Reactor {
     }
 
     struct State {
-        var backgroundImageURL: String
+        var backgroundImageURL: BackgroundImageModel
         var credits: [CreditModel]
         var navigateType: NavigateType?
     }
@@ -37,9 +37,14 @@ final class SongCreditReactor: Reactor {
         self.songID = songID
         self.fetchSongCreditsUseCase = fetchSongCreditsUseCase
 
-        let backgroundImageURL = YoutubeURLGenerator().generateHDThumbnailURL(id: songID)
+        let backgroundImageHDURL = YoutubeURLGenerator().generateHDThumbnailURL(id: songID)
+        let backgroundImageURL = YoutubeURLGenerator().generateThumbnailURL(id: songID)
+
         self.initialState = .init(
-            backgroundImageURL: backgroundImageURL,
+            backgroundImageURL: BackgroundImageModel(
+                imageURL: backgroundImageHDURL,
+                alternativeImageURL: backgroundImageURL
+            ),
             credits: []
         )
     }

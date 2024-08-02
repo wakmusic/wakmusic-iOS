@@ -1,5 +1,6 @@
 import BaseFeature
 import BaseFeatureInterface
+import LikeDomainInterface
 import LyricHighlightingFeatureInterface
 import MusicDetailFeatureInterface
 import NeedleFoundation
@@ -13,6 +14,8 @@ public protocol MusicDetailDependency: Dependency {
     var songCreditFactory: any SongCreditFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
+    var addLikeSongUseCase: any AddLikeSongUseCase { get }
+    var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
 }
 
 public final class MusicDetailComponent: Component<MusicDetailDependency>, MusicDetailFactory {
@@ -20,7 +23,9 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
         let reactor = MusicDetailReactor(
             songIDs: songIDs,
             selectedID: selectedID,
-            fetchSongUseCase: dependency.fetchSongUseCase
+            fetchSongUseCase: dependency.fetchSongUseCase,
+            addLikeSongUseCase: dependency.addLikeSongUseCase,
+            cancelLikeSongUseCase: dependency.cancelLikeSongUseCase
         )
 
         let viewController = MusicDetailViewController(

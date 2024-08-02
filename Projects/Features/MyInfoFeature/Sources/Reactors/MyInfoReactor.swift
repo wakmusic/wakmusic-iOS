@@ -17,6 +17,9 @@ final class MyInfoReactor: Reactor {
         case mailNavigationDidTap
         case teamNavigationDidTap
         case settingNavigationDidTap
+        case completedFruitDraw
+        case completedSetProfile
+        case changeNicknameButtonDidTap(String)
         case changedUserInfo(UserInfo?)
         case changedReadNoticeIDs([Int])
         case requiredLogin
@@ -30,7 +33,10 @@ final class MyInfoReactor: Reactor {
         case updateProfileImage(String)
         case updateNickname(String)
         case updatePlatform(String)
+        case updateFruitCount(Int)
         case updateIsAllNoticesRead(Bool)
+        case showToast(String)
+        case dismissEditSheet
     }
 
     enum NavigateType {
@@ -49,25 +55,35 @@ final class MyInfoReactor: Reactor {
         var profileImage: String
         var nickname: String
         var platform: String
+        var fruitCount: Int
         var isAllNoticesRead: Bool
         @Pulse var loginButtonDidTap: Bool?
         @Pulse var profileImageDidTap: Bool?
         @Pulse var navigateType: NavigateType?
+        @Pulse var showToast: String?
+        @Pulse var dismissEditSheet: Bool?
     }
 
     var initialState: State
     private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
-    private var disposeBag = DisposeBag()
+    private let setUsernameUseCase: any SetUserNameUseCase
+    private let fetchUserInfoUseCase: any FetchUserInfoUseCase
+    private let disposeBag = DisposeBag()
 
     init(
-        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
+        setUserNameUseCase: any SetUserNameUseCase,
+        fetchUserInfoUseCase: any FetchUserInfoUseCase
     ) {
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
+        self.setUsernameUseCase = setUserNameUseCase
+        self.fetchUserInfoUseCase = fetchUserInfoUseCase
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
             nickname: "",
             platform: "",
+            fruitCount: 0,
             isAllNoticesRead: false
         )
         observeUserInfoChanges()
@@ -99,12 +115,19 @@ final class MyInfoReactor: Reactor {
                 updateIsLoggedIn(userInfo),
                 updateProfileImage(userInfo),
                 updateNickname(userInfo),
-                updatePlatform(userInfo)
+                updatePlatform(userInfo),
+                updateFruitCount(userInfo)
             )
         case let .changedReadNoticeIDs(readIDs):
             return updateIsAllNoticesRead(readIDs)
         case .requiredLogin:
             return navigateLogin()
+        case .completedFruitDraw:
+            return fetchUserInfo()
+        case .completedSetProfile:
+            return fetchUserInfo()
+        case let .changeNicknameButtonDidTap(newNickname):
+            return updateRemoteNickname(newNickname)
         }
     }
 
@@ -134,6 +157,15 @@ final class MyInfoReactor: Reactor {
 
         case let .updateIsAllNoticesRead(isAllNoticesRead):
             newState.isAllNoticesRead = isAllNoticesRead
+
+        case let .updateFruitCount(count):
+            newState.fruitCount = count
+
+        case let .showToast(message):
+            newState.showToast = message
+
+        case .dismissEditSheet:
+            newState.dismissEditSheet = true
         }
         return newState
     }
@@ -157,6 +189,25 @@ private extension MyInfoReactor {
             .disposed(by: disposeBag)
     }
 
+    func fetchUserInfo() -> Observable<Mutation> {
+        return fetchUserInfoUseCase.execute()
+            .asObservable()
+            .flatMap { entity -> Observable<Mutation> in
+                PreferenceManager.shared.setUserInfo(
+                    ID: entity.id,
+                    platform: entity.platform,
+                    profile: entity.profile,
+                    name: entity.name,
+                    itemCount: entity.itemCount
+                )
+                return .empty()
+            }
+            .catch { error in
+                let error = error.asWMError
+                return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            }
+    }
+
     func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
         return fetchNoticeIDListUseCase.execute()
             .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
@@ -178,6 +229,34 @@ private extension MyInfoReactor {
         return .just(.updateProfileImage(profile))
     }
 
+    func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
+        setUsernameUseCase.execute(name: newNickname)
+            .andThen(
+                fetchUserInfoUseCase.execute()
+                    .asObservable()
+                    .flatMap { entity -> Observable<Mutation> in
+                        PreferenceManager.shared.setUserInfo(
+                            ID: entity.id,
+                            platform: entity.platform,
+                            profile: entity.profile,
+                            name: entity.name,
+                            itemCount: entity.itemCount
+                        )
+                        return .concat(
+                            .just(.showToast("닉네임이 변경되었습니다.")),
+                            .just(.dismissEditSheet)
+                        )
+                    }
+            )
+            .catch { error in
+                let error = error.asWMError
+                return .concat(
+                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")),
+                    .just(.dismissEditSheet)
+                )
+            }
+    }
+
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let userInfo = userInfo else { return .empty() }
         return .just(.updateNickname(userInfo.decryptedName))
@@ -186,6 +265,11 @@ private extension MyInfoReactor {
     func updatePlatform(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let platform = userInfo?.platform else { return .empty() }
         return .just(.updatePlatform(platform))
+    }
+
+    func updateFruitCount(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        guard let count = userInfo?.itemCount else { return .empty() }
+        return .just(.updateFruitCount(count))
     }
 
     func loginButtonDidTap() -> Observable<Mutation> {

@@ -132,7 +132,6 @@ public final class LyricHighlightingViewController: UIViewController {
         LogManager.analytics(
             LyricHighlightingAnalyticsLog.viewPage(pageName: "lyric_highlighting")
         )
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -240,18 +239,23 @@ private extension LyricHighlightingViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.backgroundColor = .white
         collectionView.register(LyricHighlightingCell.self, forCellWithReuseIdentifier: "\(LyricHighlightingCell.self)")
+
+        let alternativeSources = [
+            WMImageAPI.fetchYoutubeThumbnail(id: output.updateInfo.value.songID).toURL
+        ].compactMap { $0 }
+            .map { Source.network($0) }
         thumbnailImageView.kf.setImage(
             with: URL(string: WMImageAPI.fetchYoutubeThumbnailHD(id: output.updateInfo.value.songID).toString),
             options: [
                 .waitForCache,
-                .onlyFromCache,
                 .transition(.fade(0.2)),
                 .forceTransition,
                 .processor(
                     DownsamplingImageProcessor(
                         size: .init(width: 10, height: 10)
                     )
-                )
+                ),
+                .alternativeSources(alternativeSources)
             ]
         )
         indicator.startAnimating()
@@ -265,11 +269,5 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.item])
-    }
-}
-
-extension LyricHighlightingViewController: UIGestureRecognizerDelegate {
-    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
     }
 }

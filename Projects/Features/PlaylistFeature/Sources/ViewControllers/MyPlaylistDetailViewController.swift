@@ -244,15 +244,17 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
+        let currentState = reactor.currentState
 
         reactor.pulse(\.$toastMessage)
             .bind(with: self) { owner, message in
-
                 guard let message = message else {
                     return
                 }
-
-                owner.showToast(text: message, options: [.tabBar])
+                owner.showToast(
+                    text: message,
+                    options: currentState.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                )
             }
             .disposed(by: disposeBag)
 
@@ -499,6 +501,10 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
         vc.modalPresentationStyle = .fullScreen
 
         self.present(vc, animated: true)
+    }
+
+    func playButtonDidTap(key: String) {
+        WakmusicYoutubePlayer(id: key).play()
     }
 
     func superButtonTapped(index: Int) {

@@ -9,39 +9,27 @@
 import Foundation
 import SongsDomainInterface
 import UserDomainInterface
+import Utility
 
 public struct FavoriteSongsResponseDTO: Decodable {
-    public let like: Int
-    public let id, title, artist, remix, reaction: String
-    public let date, start, end: Int
-    public let total: FavoriteSongsResponseDTO.Total?
+    public let songID, title: String
+    public let artists: [String]
+    public let views, likes: Int
+    public let date: Int
 
     enum CodingKeys: String, CodingKey {
-        case title, artist, remix, reaction, date, start, end, total, like
-        case id = "songId"
-    }
-}
-
-public extension FavoriteSongsResponseDTO {
-    struct Total: Codable {
-        public let views, last: Int
-        public let increase: Int?
+        case title, artists, date, views, likes
+        case songID = "videoId"
     }
 }
 
 public extension FavoriteSongsResponseDTO {
     func toDomain() -> FavoriteSongEntity {
         FavoriteSongEntity(
-            like: like,
-            song: SongEntity(
-                id: id,
-                title: title,
-                artist: artist,
-                views: total?.views ?? 0,
-                date: date.changeDateFormat(origin: "yyMMdd", result: "yyyy.MM.dd"),
-                likes: 0
-            ),
-            isSelected: false
+            songID: songID,
+            title: title,
+            artist: artists.joined(separator: ", "),
+            like: likes
         )
     }
 }

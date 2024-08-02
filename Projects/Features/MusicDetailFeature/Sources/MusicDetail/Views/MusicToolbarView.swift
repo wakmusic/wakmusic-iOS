@@ -6,7 +6,8 @@ import UIKit
 import Utility
 
 private protocol MusicToolbarStateProtocol {
-    func updateIsLike(isLike: Bool)
+    func updateViews(views: Int)
+    func updateIsLike(likes: Int, isLike: Bool)
 }
 
 private protocol MusicToolbarActionProtocol {
@@ -57,7 +58,12 @@ final class MusicToolbarView: UIStackView {
 }
 
 extension MusicToolbarView: MusicToolbarStateProtocol {
-    func updateIsLike(isLike: Bool) {
+    func updateViews(views: Int) {
+        viewsButton.setTitle("\(views.toUnitNumber)", for: .normal)
+    }
+
+    func updateIsLike(likes: Int, isLike: Bool) {
+        heartButton.setTitle("\(likes.toUnitNumber)", for: .normal)
         heartButton.setIsLike(isLike: isLike)
     }
 }

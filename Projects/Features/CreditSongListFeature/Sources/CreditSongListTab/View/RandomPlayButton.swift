@@ -50,8 +50,9 @@ final class RandomPlayButton: UIButton {
         }
 
         layer.borderWidth = 1
-        layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
+        layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
+            .withAlphaComponent(0.4).cgColor
         layer.cornerRadius = 8
-        backgroundColor = DesignSystemAsset.PrimaryColorV2.white.color
+        backgroundColor = DesignSystemAsset.PrimaryColorV2.white.color.withAlphaComponent(0.4)
     }
 }
