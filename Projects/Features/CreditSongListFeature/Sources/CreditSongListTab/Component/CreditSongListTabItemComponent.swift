@@ -2,8 +2,8 @@ import BaseFeatureInterface
 import CreditDomainInterface
 import CreditSongListFeatureInterface
 import NeedleFoundation
-import UIKit
 import SignInFeatureInterface
+import UIKit
 
 public protocol CreditSongListTabItemDependency: Dependency {
     var fetchCreditSongListUseCase: any FetchCreditSongListUseCase { get }
