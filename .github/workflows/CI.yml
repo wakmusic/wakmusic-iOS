@@ -10,7 +10,7 @@ on:
       - "*"
 
 env:
-  CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+  CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/.build
   CACHED_CARTHAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/Carthage
   MASTER_KEY_PATH: Tuist/master.key
   GOOGLE_SERVICE_INFO_PLIST_PATH: Projects/App/Resources/GoogleService-Info.plist
