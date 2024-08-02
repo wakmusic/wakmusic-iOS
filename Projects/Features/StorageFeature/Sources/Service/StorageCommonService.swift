@@ -9,7 +9,7 @@ protocol StorageCommonService {
 
 final class DefaultStorageCommonService: StorageCommonService {
     let isEditingState: BehaviorSubject<Bool> = .init(value: false)
-    let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo
+    let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo.skip(1)
     
     init() { }
 }

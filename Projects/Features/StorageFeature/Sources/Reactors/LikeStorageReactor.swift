@@ -215,15 +215,13 @@ final class LikeStorageReactor: Reactor {
 
 extension LikeStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        if currentState.isLoggedIn {
-            return .concat(
-                .just(.updateIsShowActivityIndicator(true)),
-                fetchDataSource(),
-                .just(.updateIsShowActivityIndicator(false))
-            )
-        } else {
-            return .empty()
-        }
+        guard let userInfo = PreferenceManager.userInfo else { return .empty() }
+        return .concat(
+            updateIsLoggedIn(userInfo),
+            .just(.updateIsShowActivityIndicator(true)),
+            fetchDataSource(),
+            .just(.updateIsShowActivityIndicator(false))
+        )
     }
 
     func fetchDataSource() -> Observable<Mutation> {
