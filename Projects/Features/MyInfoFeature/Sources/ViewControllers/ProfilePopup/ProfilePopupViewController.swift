@@ -94,7 +94,7 @@ private extension ProfilePopupViewController {
             .do(onNext: { [dataLoadActivityIndicator] _ in
                 dataLoadActivityIndicator?.stopAnimating()
             })
-            .bind(to: collectionView.rx.items) { (collectionView, index, model) -> UICollectionViewCell in
+            .bind(to: collectionView.rx.items) { collectionView, index, model -> UICollectionViewCell in
                 guard let cell = collectionView.dequeueReusableCell(
                     withReuseIdentifier: "ProfileCollectionViewCell",
                     for: IndexPath(row: index, section: 0)
