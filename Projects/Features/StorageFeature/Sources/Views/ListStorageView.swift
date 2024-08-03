@@ -39,8 +39,10 @@ final class ListStorageView: UIView {
     }
 
     fileprivate let drawFruitButton = UIButton().then {
-        $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
+        $0.setTitle("음표 열매 뽑기", for: .normal)
     }
+    
+    private let particleView = ParticleView()
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
@@ -71,6 +73,7 @@ final class ListStorageView: UIView {
             createListButton,
             tableView,
             drawFruitButton,
+            particleView,
             loginWarningView,
             activityIndicator
         )
@@ -89,6 +92,11 @@ final class ListStorageView: UIView {
         }
         drawFruitButton.snp.makeConstraints {
             $0.height.equalTo(56)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        particleView.snp.makeConstraints {
+            $0.height.equalTo(80)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
