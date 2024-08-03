@@ -200,7 +200,7 @@ public final class ContainSongsViewModel: ViewModelType {
             })
             .map { _ in BaseEntity(status: 201, description: "플레이리스트를 성곡적으로 생성했습니다.") }
             .do(onNext: { _ in
-                NotificationCenter.default.post(name: .willRefreshUserInfo,object: nil)
+                NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
             })
             .bind(to: output.showToastMessage)
             .disposed(by: disposeBag)

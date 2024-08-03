@@ -7,7 +7,6 @@ import SongsDomainInterface
 import Utility
 
 final class MyPlaylistDetailReactor: Reactor {
-    
     enum Action {
         case viewDidLoad
         case itemDidTap(Int)
@@ -264,7 +263,7 @@ private extension MyPlaylistDetailReactor {
             case let .custom(data):
                 mutations.append(
                     requestCustomImageURLUseCase.execute(key: self.key, data: data)
-                        .andThen(.concat([ 
+                        .andThen(.concat([
                             updateNotiName(notiName: .playlistRefresh), // 플리 이미지 갱신
                             updateNotiName(notiName: .willRefreshUserInfo) // 열매 갱신
                         ]))
@@ -468,5 +467,4 @@ private extension MyPlaylistDetailReactor {
     func updateNotiName(notiName: Notification.Name) -> Observable<Mutation> {
         .just(.updateNotiName(notiName))
     }
-    
 }

@@ -7,7 +7,6 @@ protocol MyInfoCommonService {
 }
 
 final class DefaultMyInfoCommonService: MyInfoCommonService {
-
     let willRefreshUserInfoEvent: Observable<Notification>
     static let shared = DefaultMyInfoCommonService()
 

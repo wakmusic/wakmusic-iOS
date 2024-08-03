@@ -282,7 +282,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .compactMap { $0 }
             .bind(with: self) { owner, name in
                 NotificationCenter.default.post(name: name, object: nil)
-               
             }
             .disposed(by: disposeBag)
 
