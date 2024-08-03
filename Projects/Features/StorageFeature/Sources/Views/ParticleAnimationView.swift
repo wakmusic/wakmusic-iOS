@@ -141,7 +141,7 @@ private extension ParticleAnimationView {
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(startAnimation),
