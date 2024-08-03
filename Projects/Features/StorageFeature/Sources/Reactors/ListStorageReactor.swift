@@ -8,6 +8,7 @@ import RxCocoa
 import RxSwift
 import UserDomainInterface
 import Utility
+import SongsDomainInterface
 
 final class ListStorageReactor: Reactor {
     enum Action {
@@ -115,7 +116,7 @@ final class ListStorageReactor: Reactor {
             return showDetail(indexPath)
 
         case let .playDidTap(index):
-            return playWithAddToCurrentPlaylist()
+            return playWithAddToCurrentPlaylist(index)
 
         case let .tapAll(isSelecting):
             return tapAll(isSelecting)
@@ -318,7 +319,11 @@ extension ListStorageReactor {
             .flatMap { $0.items.filter { $0.isSelected == true } }
 
         let selectedSongCount = selectedPlaylists.map { $0.songCount }.reduce(0, +)
-
+        
+        if selectedSongCount == 0 {
+            return .just(.showToast("플레이리스트가 비어있습니다."))
+        }
+        
         if selectedSongCount > limit {
             let overFlowQuantity = selectedSongCount - limit
             let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
@@ -358,25 +363,45 @@ extension ListStorageReactor {
         }
     }
 
-    func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("playWithAddToCurrentPlaylist 개발이 필요해요"))
+    func playWithAddToCurrentPlaylist(_ index: Int) -> Observable<Mutation> {
+        let limit = 50
+        guard let selectedPlaylist = currentState.dataSource.first?.items[safe: index] else {
+            return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
+        }
+        
+        if selectedPlaylist.songCount == 0 {
+            return .just(.showToast("플레이리스트가 비어있습니다."))
+        }
+        
+        if selectedPlaylist.songCount > limit {
+            let overFlowQuantity = selectedPlaylist.songCount - limit
+            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
+            return .just(.showToast(overFlowMessage))
+        }
+        
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            fetchPlaylistSongsUseCase.execute(key: selectedPlaylist.key)
+                .asObservable()
+                .do(onNext: { [weak self] appendingPlaylistItems in
+                    PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
+                    let firstItem = appendingPlaylistItems.first!
+                    WakmusicYoutubePlayer(id: firstItem.id).play()
+                    self?.storageCommonService.isEditingState.onNext(false)
+                })
+                .flatMap { songs -> Observable<Mutation> in
+                    return .just(.showToast(LocalizationStrings.addList))
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
+        .catch { error in
+            let error = error.asWMError
+            return Observable.concat([
+                .just(.updateIsShowActivityIndicator(false)),
+                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            ])
+        }
     }
-
-//    func addToCurrentPlaylist() -> Observable<Mutation> {
-//        let appendingPlaylisItems = currentState.dataSource
-//            .flatMap { $0.items.filter { $0.isSelected == true } }
-//            .map { PlaylistItem(id: $0.songID, title: $0.title, artist: $0.artist) }
-//        PlayState.shared.append(contentsOf: appendingPlaylisItems)
-//        return .just(.showToast(LocalizationStrings.addList))
-//    }
-//
-//    func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
-//        let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
-//        PlayState.shared.append(item: appendingPlaylisItem)
-//        WakmusicYoutubePlayer(id: song.songID).play()
-//        return .empty()
-//    }
 
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {
@@ -429,6 +454,18 @@ extension ListStorageReactor {
 }
 
 private extension ListStorageReactor {
+    /// 여러 키의 해당하는 플레이리스트의 노래들을 가져옵니다.
+    func fetchPlaylistSongs(keys: [String]) -> Observable<[SongEntity]> {
+        let observables = keys.map { key in
+            fetchPlaylistSongsUseCase.execute(key: key).asObservable()
+        }
+        
+        return Observable.zip(observables)
+            .map { songEntities in
+                songEntities.flatMap { $0 }
+            }
+    }
+    
     func mutateCreatePlaylistUseCase(_ title: String) -> Observable<Mutation> {
         createPlaylistUseCase.execute(title: title)
             .asObservable()
