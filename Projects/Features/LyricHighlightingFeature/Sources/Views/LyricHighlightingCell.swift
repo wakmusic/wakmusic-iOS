@@ -28,7 +28,7 @@ extension LyricHighlightingCell {
             width: APP_WIDTH(),
             height: entity.text.heightConstraintAt(
                 width: APP_WIDTH() - 50,
-                font: DesignSystemFontFamily.Pretendard.light.font(size: 18)
+                font: UIFont.WMFontSystem.t4(weight: .light).font
             )
         )
     }
@@ -40,7 +40,7 @@ extension LyricHighlightingCell {
         let attributedString = NSMutableAttributedString(
             string: entity.text,
             attributes: [
-                .font: DesignSystemFontFamily.Pretendard.light.font(size: 18),
+                .font: UIFont.WMFontSystem.t4(weight: .light).font,
                 .backgroundColor: entity.isHighlighting ? DesignSystemAsset.PrimaryColorV2.point.color
                     .withAlphaComponent(0.5) : .clear,
                 .foregroundColor: UIColor.white,
@@ -59,9 +59,8 @@ private extension LyricHighlightingCell {
 
     func setLayout() {
         lyricLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.leading.equalToSuperview().offset(25)
-            $0.trailing.equalToSuperview().offset(-25)
+            $0.horizontalEdges.equalToSuperview().inset(25)
+            $0.verticalEdges.equalToSuperview()
         }
     }
 }
