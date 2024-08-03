@@ -13,8 +13,5 @@ public struct LogoutUseCaseImpl: LogoutUseCase {
 
     public func execute() -> Completable {
         authRepository.logout()
-            .do(onCompleted: {
-                NotificationCenter.default.post(name: .loginStateDidChanged, object: false)
-            })
     }
 }
