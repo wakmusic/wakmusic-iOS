@@ -8,10 +8,6 @@ extension LyricHighlightingViewController {
     func inputBind() {
         input.fetchLyric.onNext(())
 
-        collectionView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
-
         collectionView.rx.itemSelected
             .bind(to: input.didTapHighlighting)
             .disposed(by: disposeBag)
@@ -37,12 +33,17 @@ extension LyricHighlightingViewController {
             })
             .disposed(by: disposeBag)
 
+        output.updateProvider
+            .bind(to: writerLabel.rx.text)
+            .disposed(by: disposeBag)
+
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator, warningView, collectionView] model in
+            .do(onNext: { [indicator, warningView, collectionView, writerLabel] model in
                 indicator.stopAnimating()
                 warningView.isHidden = !model.isEmpty
                 collectionView.isHidden = !warningView.isHidden
+                writerLabel.isHidden = !warningView.isHidden
             })
             .bind(to: collectionView.rx.items) { collectionView, index, entity in
                 guard let cell = collectionView.dequeueReusableCell(

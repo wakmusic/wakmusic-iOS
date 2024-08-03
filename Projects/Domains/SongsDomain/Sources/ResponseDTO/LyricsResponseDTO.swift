@@ -10,11 +10,23 @@ import Foundation
 import SongsDomainInterface
 
 public struct LyricsResponseDTO: Decodable {
-    let text: String
+    let provider: String
+    let lyrics: [LyricsResponseDTO.Lyric]
+}
+
+extension LyricsResponseDTO {
+    struct Lyric: Decodable {
+        let text: String
+    }
 }
 
 public extension LyricsResponseDTO {
     func toDomain() -> LyricsEntity {
-        return LyricsEntity(text: text)
+        return .init(
+            provider: provider,
+            lyrics: lyrics.map { lyric -> LyricsEntity.Lyric in
+                return LyricsEntity.Lyric(text: lyric.text)
+            }
+        )
     }
 }

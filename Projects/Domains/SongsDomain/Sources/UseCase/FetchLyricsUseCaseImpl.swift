@@ -18,7 +18,7 @@ public struct FetchLyricsUseCaseImpl: FetchLyricsUseCase {
         self.songsRepository = songsRepository
     }
 
-    public func execute(id: String) -> Single<[LyricsEntity]> {
+    public func execute(id: String) -> Single<LyricsEntity> {
         songsRepository.fetchLyrics(id: id)
     }
 }
