@@ -35,7 +35,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateImageData(PlaylistImageKind?)
         case showToast(String)
         case showShareLink(String)
-        case updateRefresh
+        case postNotification(Notification.Name)
     }
 
     struct State {
@@ -48,7 +48,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var imageData: PlaylistImageKind?
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
-        @Pulse var refresh: Void?
+        @Pulse var notiName: Notification.Name?
     }
 
     internal let key: String
@@ -97,7 +97,7 @@ final class MyPlaylistDetailReactor: Reactor {
             backupPlaylistModels: [],
             isLoading: true,
             selectedCount: 0,
-            refresh: nil
+            notiName: nil
         )
     }
 
@@ -174,8 +174,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showShareLink(link):
             newState.shareLink = link
-        case .updateRefresh:
-            newState.refresh = ()
+        case let .postNotification(notiName):
+            newState.notiName = notiName
         }
 
         return newState
@@ -263,7 +263,10 @@ private extension MyPlaylistDetailReactor {
             case let .custom(data):
                 mutations.append(
                     requestCustomImageURLUseCase.execute(key: self.key, data: data)
-                        .andThen(.empty())
+                        .andThen(.concat([
+                            postNotification(notiName: .playlistRefresh), // 플리 이미지 갱신
+                            postNotification(notiName: .willRefreshUserInfo) // 열매 갱신
+                        ]))
                         .catch { error in
                             let wmErorr = error.asWMError
                             return Observable.just(
@@ -339,7 +342,7 @@ private extension MyPlaylistDetailReactor {
         return .concat([
             .just(.updateHeader(prev)),
             updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
-                .andThen(updateSendRefreshNoti())
+                .andThen(postNotification(notiName: .playlistRefresh))
         ])
     }
 }
@@ -446,7 +449,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
                 .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
-                updateSendRefreshNoti()
+                postNotification(notiName: .playlistRefresh)
 
             ]))
             .catch { error in
@@ -461,7 +464,7 @@ private extension MyPlaylistDetailReactor {
         return .just(.updateImageData(imageData))
     }
 
-    func updateSendRefreshNoti() -> Observable<Mutation> {
-        .just(.updateRefresh)
+    func postNotification(notiName: Notification.Name) -> Observable<Mutation> {
+        .just(.postNotification(notiName))
     }
 }

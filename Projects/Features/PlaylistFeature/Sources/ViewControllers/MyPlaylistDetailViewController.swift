@@ -278,10 +278,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
-        reactor.pulse(\.$refresh)
+        reactor.pulse(\.$notiName)
             .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                NotificationCenter.default.post(name: .playlistRefresh, object: nil)
+            .bind(with: self) { owner, name in
+                NotificationCenter.default.post(name: name, object: nil)
             }
             .disposed(by: disposeBag)
 
