@@ -42,30 +42,6 @@ extension LyricDecoratingViewController {
                 owner.requestPhotoLibraryPermission()
             }
             .disposed(by: disposeBag)
-
-        shareButton.rx.tap
-            .bind(with: self) { owner, _ in
-                LogManager.analytics(
-                    LyricHighlightingAnalyticsLog.clickLyricDecoratingCompleteButton(
-                        type: "share",
-                        id: owner.output.updateInfo.value.songID,
-                        bg: owner.output.dataSource.value.filter { $0.isSelected }.first?.name ?? ""
-                    )
-                )
-                let activityViewController = UIActivityViewController(
-                    activityItems: [owner.decorateShareContentView.asImage(size: .init(width: 960, height: 960))],
-                    applicationActivities: nil
-                )
-                activityViewController.popoverPresentationController?.sourceRect = CGRect(
-                    x: owner.view.bounds.midX,
-                    y: owner.view.bounds.midY,
-                    width: 0,
-                    height: 0
-                )
-                activityViewController.popoverPresentationController?.permittedArrowDirections = []
-                owner.present(activityViewController, animated: true, completion: nil)
-            }
-            .disposed(by: disposeBag)
     }
 
     func outputBind() {
@@ -103,10 +79,9 @@ extension LyricDecoratingViewController {
 
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator, saveButton, shareButton] source in
+            .do(onNext: { [indicator, saveButton] source in
                 indicator.stopAnimating()
                 saveButton.isEnabled = !source.isEmpty
-                shareButton.isEnabled = saveButton.isEnabled
             })
             .bind(to: collectionView.rx.items) { collectionView, index, model in
                 guard let cell = collectionView.dequeueReusableCell(

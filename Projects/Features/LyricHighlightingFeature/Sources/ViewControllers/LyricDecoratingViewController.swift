@@ -112,30 +112,15 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
         $0.showsHorizontalScrollIndicator = false
     }
 
-    private let decorateCompleteContentView = UIView().then {
+    let saveButton = UIButton(type: .system).then {
         $0.backgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
-    }
-
-    private let decorateCompleteButtonStackView = UIStackView().then {
-        $0.axis = .horizontal
-        $0.spacing = 0
-        $0.distribution = .fillEqually
-    }
-
-    let saveButton = VerticalAlignButton(
-        title: "저장하기",
-        image: DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOn.image,
-        titleColor: .white
-    ).then {
+        $0.setTitle("저장하기", for: .normal)
+        $0.setTitleColor(.white, for: .normal)
+        $0.titleLabel?.font = UIFont.WMFontSystem.t4(weight: .medium).font
+        $0.titleLabel?.setTextWithAttributes()
         $0.isEnabled = false
-    }
-
-    let shareButton = VerticalAlignButton(
-        title: "공유하기",
-        image: DesignSystemAsset.PlayListEdit.playlistShare.image,
-        titleColor: .white
-    ).then {
-        $0.isEnabled = false
+        $0.layer.cornerRadius = 12
+        $0.clipsToBounds = true
     }
 
     let indicator = NVActivityIndicatorView(frame: .zero).then {
@@ -200,7 +185,6 @@ private extension LyricDecoratingViewController {
             navigationBarView,
             decorateContentView,
             decoratePickContentView,
-            decorateCompleteContentView,
             indicator
         )
         navigationBarView.addSubviews(backButton, navigationTitleLabel)
@@ -217,10 +201,7 @@ private extension LyricDecoratingViewController {
         decorateSecondStackView.addArrangedSubview(songTitleLabel)
         decorateSecondStackView.addArrangedSubview(artistLabel)
 
-        decoratePickContentView.addSubviews(decoratePickShadowImageView, descriptionLabel, collectionView)
-        decorateCompleteContentView.addSubviews(decorateCompleteButtonStackView)
-        decorateCompleteButtonStackView.addArrangedSubview(saveButton)
-        decorateCompleteButtonStackView.addArrangedSubview(shareButton)
+        decoratePickContentView.addSubviews(decoratePickShadowImageView, descriptionLabel, collectionView, saveButton)
     }
 
     func setLayout() {
@@ -243,7 +224,6 @@ private extension LyricDecoratingViewController {
         decorateContentView.snp.makeConstraints {
             $0.top.equalTo(navigationBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(decoratePickContentView.snp.top)
         }
 
         decorateShareContentView.snp.makeConstraints {
@@ -293,13 +273,14 @@ private extension LyricDecoratingViewController {
         }
 
         decoratePickContentView.snp.makeConstraints {
+            $0.top.equalTo(decorateContentView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(150)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
 
         decoratePickShadowImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(-24)
-            $0.leading.trailing.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(view.snp.bottom)
         }
 
@@ -315,16 +296,9 @@ private extension LyricDecoratingViewController {
             $0.height.equalTo(64)
         }
 
-        decorateCompleteContentView.snp.makeConstraints {
-            $0.top.equalTo(decoratePickContentView.snp.bottom)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-
-        decorateCompleteButtonStackView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.horizontalEdges.equalToSuperview().inset(40 * APP_WIDTH() / 375)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        saveButton.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(56)
         }
 
@@ -355,7 +329,7 @@ public extension LyricDecoratingViewController {
                 message = "해당 이미지가 저장되었습니다."
             }
             DispatchQueue.main.async {
-                self.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14))
+                self.showToast(text: message, options: [.tabBar])
             }
         }
     }
