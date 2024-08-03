@@ -34,7 +34,7 @@ extension LyricHighlightingCell {
         lyricLabel.text = entity.text
         lyricLabel.setBackgroundColorForAttributedString(
             color: entity.isHighlighting ?
-            DesignSystemAsset.PrimaryColorV2.point.color.withAlphaComponent(0.5) : .clear
+                DesignSystemAsset.PrimaryColorV2.point.color.withAlphaComponent(0.5) : .clear
         )
     }
 }

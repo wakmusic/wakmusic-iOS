@@ -254,18 +254,18 @@ private extension LyricHighlightingViewController {
             sectionIndex: Int,
             layoutEnvironment: NSCollectionLayoutEnvironment
         ) -> NSCollectionLayoutSection? in
-           var config = UICollectionLayoutListConfiguration(appearance: .plain)
-           config.showsSeparators = false
-           config.backgroundColor = .clear
+            var config = UICollectionLayoutListConfiguration(appearance: .plain)
+            config.showsSeparators = false
+            config.backgroundColor = .clear
 
-           let section = NSCollectionLayoutSection.list(
-               using: config,
-               layoutEnvironment: layoutEnvironment
-           )
-           section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 28, trailing: 0)
+            let section = NSCollectionLayoutSection.list(
+                using: config,
+                layoutEnvironment: layoutEnvironment
+            )
+            section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 28, trailing: 0)
 
-           return section
-       }
-       return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
-   }
+            return section
+        }
+        return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+    }
 }

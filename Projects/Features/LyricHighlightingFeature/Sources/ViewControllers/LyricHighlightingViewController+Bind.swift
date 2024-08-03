@@ -32,7 +32,7 @@ extension LyricHighlightingViewController {
                 owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             })
             .disposed(by: disposeBag)
-        
+
         output.updateProvider
             .filter { !$0.isEmpty }
             .debug("updateProvider")
