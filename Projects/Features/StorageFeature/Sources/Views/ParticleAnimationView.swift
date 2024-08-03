@@ -132,7 +132,6 @@ private extension ParticleAnimationView {
 
     func configureUI() {
         self.backgroundColor = .clear
-        // perform(#selector(startAnimation), with: nil, afterDelay: 0.3)
     }
 
     func bindNotification() {
@@ -147,8 +146,6 @@ private extension ParticleAnimationView {
 
 extension ParticleAnimationView: ParticleAnimationStateProtocol {
     @objc func startAnimation() {
-        print("🚀 hello?")
-        print(greenHeartImageView.isAnimating)
         greenHeartImageView.moveAnimate(duration: 2.0, amount: 20, direction: .up)
         [grayNoteImage, leftMediumParticleIamge, leftSmallParticeImage].forEach {
             $0.moveAnimate(duration: 2.0, amount: 10, direction: .up)

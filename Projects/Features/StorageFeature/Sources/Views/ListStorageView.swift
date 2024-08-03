@@ -147,7 +147,6 @@ final class ListStorageView: UIView {
 
 extension ListStorageView: ListStorageStateProtocol {
     func startParticeAnimation() {
-        print("🚀 나는 appear 되고 1번째로 호출될거야")
         particleAnimationView.startAnimation()
     }
 

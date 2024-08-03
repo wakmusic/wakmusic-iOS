@@ -56,7 +56,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        print("🚀 viewDidAppear")
         listStorageView.startParticeAnimation()
     }
 
