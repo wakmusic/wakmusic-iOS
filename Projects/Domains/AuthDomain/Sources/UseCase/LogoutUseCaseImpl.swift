@@ -1,6 +1,8 @@
 import AuthDomainInterface
 import BaseDomainInterface
 import RxSwift
+import Utility
+import Foundation
 
 public struct LogoutUseCaseImpl: LogoutUseCase {
     private let authRepository: any AuthRepository
@@ -11,5 +13,8 @@ public struct LogoutUseCaseImpl: LogoutUseCase {
 
     public func execute() -> Completable {
         authRepository.logout()
+            .do(onCompleted: {
+                NotificationCenter.default.post(name: .loginStateDidChanged, object: false)
+            })
     }
 }

@@ -68,7 +68,7 @@ final class ListStorageReactor: Reactor {
     private let deletePlayListUseCase: any DeletePlaylistUseCase
 
     init(
-        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
@@ -173,21 +173,28 @@ final class ListStorageReactor: Reactor {
                 }
             }
 
-        let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
+        let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .withUnretained(self)
-            .flatMap { owner, userInfo -> Observable<Mutation> in
-                .concat(
-                    owner.updateIsLoggedIn(userInfo),
+            .flatMap { (owner, notification) -> Observable<Mutation> in
+                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+                return .concat(
+                    owner.updateIsLoggedIn(isLoggedIn),
                     owner.fetchDataSource()
                 )
             }
+        
         let playlistRefreshMutation = storageCommonService.playlistRefreshEvent
             .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
                 return owner.fetchDataSource()
             }
 
-        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation, playlistRefreshMutation)
+        return Observable.merge(
+            mutation,
+            switchEditingStateMutation,
+            updateIsLoggedInMutation,
+            playlistRefreshMutation
+        )
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -232,15 +239,16 @@ final class ListStorageReactor: Reactor {
 
 extension ListStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        if currentState.isLoggedIn {
-            return .concat(
+        let isLoggedIn = PreferenceManager.userInfo != nil
+        if !isLoggedIn { return .empty() }
+        return .concat(
+            updateIsLoggedIn(isLoggedIn),
+            .concat(
                 .just(.updateIsShowActivityIndicator(true)),
                 fetchDataSource(),
                 .just(.updateIsShowActivityIndicator(false))
             )
-        } else {
-            return .empty()
-        }
+        )
     }
 
     func fetchDataSource() -> Observable<Mutation> {
@@ -261,8 +269,8 @@ extension ListStorageReactor {
         return .just(.clearDataSource)
     }
 
-    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        return .just(.updateIsLoggedIn(userInfo != nil))
+    func updateIsLoggedIn(_ isLoggedIn: Bool) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(isLoggedIn))
     }
 
     func createList(_ title: String) -> Observable<Mutation> {
@@ -281,7 +289,7 @@ extension ListStorageReactor {
 
         #warning("케이 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요, 삭제 Usecase 끝나고 andThen에서 해주시면 될 듯 ")
         // TODO:
-        NotificationCenter.default.post(name: .removeSubscriptionPlaylist, object: [], userInfo: nil)
+        NotificationCenter.default.post(name: .subscriptionPlaylistDidRemoved, object: [], userInfo: nil)
 
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),

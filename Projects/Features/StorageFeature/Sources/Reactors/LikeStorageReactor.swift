@@ -66,7 +66,7 @@ final class LikeStorageReactor: Reactor {
     private let editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
 
     init(
-        storageCommonService: any StorageCommonService = DefaultStorageCommonService.shared,
+        storageCommonService: any StorageCommonService,
         fetchFavoriteSongsUseCase: any FetchFavoriteSongsUseCase,
         deleteFavoriteListUseCase: any DeleteFavoriteListUseCase,
         editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase
@@ -163,16 +163,21 @@ final class LikeStorageReactor: Reactor {
                 }
             }
 
-        let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
+        let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .withUnretained(self)
-            .flatMap { owner, userInfo -> Observable<Mutation> in
-                .concat(
-                    owner.updateIsLoggedIn(userInfo),
+            .flatMap { (owner, notification) -> Observable<Mutation> in
+                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+                return .concat(
+                    owner.updateIsLoggedIn(isLoggedIn),
                     owner.fetchDataSource()
                 )
             }
 
-        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+        return Observable.merge(
+            mutation,
+            switchEditingStateMutation,
+            updateIsLoggedInMutation
+        )
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -215,15 +220,16 @@ final class LikeStorageReactor: Reactor {
 
 extension LikeStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        if currentState.isLoggedIn {
-            return .concat(
+        let isLoggedIn = PreferenceManager.userInfo != nil
+        if !isLoggedIn { return .empty() }
+        return .concat(
+            updateIsLoggedIn(isLoggedIn),
+            .concat(
                 .just(.updateIsShowActivityIndicator(true)),
                 fetchDataSource(),
                 .just(.updateIsShowActivityIndicator(false))
             )
-        } else {
-            return .empty()
-        }
+        )
     }
 
     func fetchDataSource() -> Observable<Mutation> {
@@ -292,8 +298,8 @@ extension LikeStorageReactor {
         return .empty()
     }
 
-    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        return .just(.updateIsLoggedIn(userInfo != nil))
+    func updateIsLoggedIn(_ isLoggedIn: Bool) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(isLoggedIn))
     }
 
     /// 순서 변경

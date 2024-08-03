@@ -8,7 +8,7 @@ protocol PlaylistCommonService {
 
 final class DefaultPlaylistCommonService: PlaylistCommonService {
     let removeSubscriptionPlaylistEvent: Observable<Notification> = NotificationCenter.default.rx
-        .notification(.removeSubscriptionPlaylist)
+        .notification(.subscriptionPlaylistDidRemoved)
 
     static let shared = DefaultPlaylistCommonService()
 }

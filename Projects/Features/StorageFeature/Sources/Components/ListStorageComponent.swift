@@ -27,6 +27,7 @@ public final class ListStorageComponent: Component<ListStorageDependency> {
     public func makeView() -> UIViewController {
         return ListStorageViewController(
             reactor: ListStorageReactor(
+                storageCommonService: DefaultStorageCommonService(),
                 createPlaylistUseCase: dependency.createPlaylistUseCase,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
