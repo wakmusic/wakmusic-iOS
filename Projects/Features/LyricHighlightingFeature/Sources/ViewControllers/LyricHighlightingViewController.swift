@@ -41,16 +41,9 @@ public final class LyricHighlightingViewController: UIViewController {
         kernValue: -0.5
     )
 
-    private let collectionViewFlowLayout = UICollectionViewFlowLayout().then {
-        $0.scrollDirection = .vertical
-        $0.minimumLineSpacing = 10
-        $0.minimumInteritemSpacing = 10
-        $0.sectionInset = .init(top: 16, left: 0, bottom: 28, right: 0)
-    }
-
     lazy var collectionView = UICollectionView(
         frame: .zero,
-        collectionViewLayout: collectionViewFlowLayout
+        collectionViewLayout: createLayout()
     ).then {
         $0.backgroundColor = .clear
     }
@@ -255,14 +248,24 @@ private extension LyricHighlightingViewController {
         )
         indicator.startAnimating()
     }
-}
 
-extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
-    public func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.row])
-    }
+    func createLayout() -> UICollectionViewLayout {
+        let sectionProvider = { (
+            sectionIndex: Int,
+            layoutEnvironment: NSCollectionLayoutEnvironment
+        ) -> NSCollectionLayoutSection? in
+           var config = UICollectionLayoutListConfiguration(appearance: .plain)
+           config.showsSeparators = false
+           config.backgroundColor = .clear
+
+           let section = NSCollectionLayoutSection.list(
+               using: config,
+               layoutEnvironment: layoutEnvironment
+           )
+           section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 28, trailing: 0)
+
+           return section
+       }
+       return UICollectionViewCompositionalLayout(sectionProvider: sectionProvider)
+   }
 }

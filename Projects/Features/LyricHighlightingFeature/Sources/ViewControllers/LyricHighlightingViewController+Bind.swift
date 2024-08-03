@@ -8,10 +8,6 @@ extension LyricHighlightingViewController {
     func inputBind() {
         input.fetchLyric.onNext(())
 
-        collectionView.rx
-            .setDelegate(self)
-            .disposed(by: disposeBag)
-
         collectionView.rx.itemSelected
             .bind(to: input.didTapHighlighting)
             .disposed(by: disposeBag)
@@ -35,6 +31,12 @@ extension LyricHighlightingViewController {
                 owner.artistLabel.text = info.artist
                 owner.artistLabel.setTextWithAttributes(kernValue: -0.5, alignment: .center)
             })
+            .disposed(by: disposeBag)
+        
+        output.updateProvider
+            .filter { !$0.isEmpty }
+            .debug("updateProvider")
+            .subscribe()
             .disposed(by: disposeBag)
 
         output.dataSource
