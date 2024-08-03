@@ -91,6 +91,7 @@ final class ListStorageReactor: Reactor {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
+        self.fetchPlaylistSongsUseCase = fetchPlaylistSongsUseCase
     }
 
     deinit {
@@ -312,7 +313,6 @@ extension ListStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
         let limit = 50
         let selectedPlaylists = currentState.dataSource
             .flatMap { $0.items.filter { $0.isSelected == true } }
@@ -324,11 +324,38 @@ extension ListStorageReactor {
             let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
             return .just(.showToast(overFlowMessage))
         }
-
-        // let appendingPlaylistItems = selectedPlaylists.map { PlaylistItem(id: , title: , artist: ) }
-        // PlayState.shared.append(contentsOf: appendingPlaylisItems)
-
-        return .just(.showToast(LocalizationStrings.addList))
+        
+        let keys = selectedPlaylists.map { $0.key }
+        
+        let observables = keys.map { key in
+            fetchPlaylistSongsUseCase.execute(key: key).asObservable()
+        }
+        
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            Observable.zip(observables)
+                .map { songEntities in
+                    songEntities.flatMap { $0 }
+                }
+                .do(onNext: { [weak self] appendingPlaylistItems in
+                    PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
+                    self?.storageCommonService.isEditingState.onNext(false)
+                })
+                .flatMap { _ -> Observable<Mutation> in
+                    return .concat(
+                        .just(.hideSongCart),
+                        .just(.showToast(LocalizationStrings.addList))
+                    )
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
+        .catch { error in
+            let error = error.asWMError
+            return Observable.concat([
+                .just(.updateIsShowActivityIndicator(false)),
+                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            ])
+        }
     }
 
     func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
