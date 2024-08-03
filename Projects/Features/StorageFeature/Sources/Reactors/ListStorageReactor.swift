@@ -181,8 +181,13 @@ final class ListStorageReactor: Reactor {
                     owner.fetchDataSource()
                 )
             }
+        let playlistRefreshMutation = storageCommonService.playlistRefreshEvent
+            .withUnretained(self)
+            .flatMap { owner, _ -> Observable<Mutation> in
+                return owner.fetchDataSource()
+            }
 
-        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation, playlistRefreshMutation)
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -273,6 +278,11 @@ extension ListStorageReactor {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
             .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
+
+        #warning("케이 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요, 삭제 Usecase 끝나고 andThen에서 해주시면 될 듯 ")
+        // TODO:
+        NotificationCenter.default.post(name: .removeSubscriptionPlaylist, object: [], userInfo: nil)
+
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
             mutateDeletePlaylistUseCase(selectedItemIDs),

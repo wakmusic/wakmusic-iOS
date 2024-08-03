@@ -185,8 +185,32 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                         owner.present(vc, animated: true)
                     }
                 )
-
                 owner.showBottomSheet(content: vc)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$refresh)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                NotificationCenter.default.post(name: .playlistRefresh, object: nil)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$detectedNotFound)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                let vc = owner.textPopUpFactory.makeView(
+                    text: "비공개된 리스트 입니다.",
+                    cancelButtonIsHidden: true,
+                    confirmButtonText: "확인",
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.navigationController?.popViewController(animated: true)
+                    },
+                    cancelCompletion: nil
+                )
+
+                owner.showBottomSheet(content: vc, dismissOnOverlayTapAndPull: false) // 드래그로 닫기 불가
             }
             .disposed(by: disposeBag)
 
@@ -194,22 +218,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .skip(1)
             .distinctUntilChanged()
             .bind(with: self) { owner, model in
-                if model.private {
-                    owner.wmNavigationbarView.isHidden = true
-                    owner.tableView.isHidden = true
-                    let vc = owner.textPopUpFactory.makeView(
-                        text: "비공개된 리스트 입니다.",
-                        cancelButtonIsHidden: true,
-                        confirmButtonText: "확인",
-                        cancelButtonText: nil,
-                        completion: {
-                            owner.navigationController?.popViewController(animated: true)
-                        },
-                        cancelCompletion: nil
-                    )
-
-                    owner.showBottomSheet(content: vc)
-                }
 
                 owner.headerView.updateData(model)
             }

@@ -35,6 +35,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateImageData(PlaylistImageKind?)
         case showToast(String)
         case showShareLink(String)
+        case updateRefresh
     }
 
     struct State {
@@ -47,6 +48,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var imageData: PlaylistImageKind?
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
+        @Pulse var refresh: Void?
     }
 
     internal let key: String
@@ -94,7 +96,8 @@ final class MyPlaylistDetailReactor: Reactor {
             playlistModels: [],
             backupPlaylistModels: [],
             isLoading: true,
-            selectedCount: 0
+            selectedCount: 0,
+            refresh: nil
         )
     }
 
@@ -171,6 +174,8 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case let .showShareLink(link):
             newState.shareLink = link
+        case .updateRefresh:
+            newState.refresh = ()
         }
 
         return newState
@@ -315,6 +320,7 @@ private extension MyPlaylistDetailReactor {
             .andThen(.concat([
                 .just(.updateHeader(prev)),
                 .just(.showToast(message))
+
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -333,7 +339,7 @@ private extension MyPlaylistDetailReactor {
         return .concat([
             .just(.updateHeader(prev)),
             updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
-                .andThen(.empty())
+                .andThen(updateSendRefreshNoti())
         ])
     }
 }
@@ -439,7 +445,9 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateEditingState(false)),
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
-                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다."))
+                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+                updateSendRefreshNoti()
+
             ]))
             .catch { error in
                 let wmErorr = error.asWMError
@@ -451,5 +459,9 @@ private extension MyPlaylistDetailReactor {
 
     func updateImageData(imageData: PlaylistImageKind?) -> Observable<Mutation> {
         return .just(.updateImageData(imageData))
+    }
+
+    func updateSendRefreshNoti() -> Observable<Mutation> {
+        .just(.updateRefresh)
     }
 }
