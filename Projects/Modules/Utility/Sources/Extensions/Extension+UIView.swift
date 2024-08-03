@@ -149,13 +149,13 @@ public extension UIView {
         amount: CGFloat,
         direction: StartDirection
     ) {
-        let add = (direction == .random) ? ((Array(0 ... 1).randomElement() ?? 0) == 0 ? 1 : -1) : direction.rawValue
+        let directionValue = (direction == .random) ? ((Array(0 ... 1).randomElement() ?? 0) == 0 ? 1 : -1) : direction.rawValue
         UIView.animate(
             withDuration: duration,
             delay: 0,
             options: [.autoreverse, .repeat],
             animations: {
-                self.transform = CGAffineTransform(translationX: 0, y: amount * add)
+                self.transform = CGAffineTransform(translationX: 0, y: amount * directionValue)
             },
             completion: nil
         )
