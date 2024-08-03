@@ -34,6 +34,7 @@ public final class ChartContentViewModel: ViewModelType {
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
         let showToast: PublishSubject<String> = PublishSubject()
+        let showLogin: PublishSubject<Void> = .init()
     }
 
     public func transform(from input: Input) -> Output {

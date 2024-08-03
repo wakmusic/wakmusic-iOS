@@ -64,7 +64,15 @@ extension MusicToolbarView: MusicToolbarStateProtocol {
 
     func updateIsLike(likes: Int, isLike: Bool) {
         heartButton.setTitle("\(likes.toUnitNumber)", for: .normal)
-        heartButton.setIsLike(isLike: isLike)
+
+//        let textColor = isLike
+//        ? DesignSystemAsset.PrimaryColorV2.increase.color
+//        : DesignSystemAsset.NewGrayColor.gray400.color
+//        heartButton.setTitleColor(
+//            textColor,
+//            for: .normal
+//        )
+        heartButton.setIsLike(isLike: isLike, animated: false)
     }
 }
 

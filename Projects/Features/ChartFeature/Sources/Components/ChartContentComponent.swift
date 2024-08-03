@@ -3,10 +3,13 @@ import BaseFeatureInterface
 import ChartDomainInterface
 import Foundation
 import NeedleFoundation
+import SignInFeatureInterface
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
+    var signInFactory: any SignInFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
@@ -18,6 +21,8 @@ public final class ChartContentComponent: Component<ChartContentDependency> {
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
+            textPopupFactory: dependency.textPopUpFactory,
+            signInFactory: dependency.signInFactory,
             songDetailPresenter: dependency.songDetailPresenter
         )
     }
