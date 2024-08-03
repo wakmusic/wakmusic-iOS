@@ -290,12 +290,7 @@ extension ListStorageReactor {
 
     func deleteList() -> Observable<Mutation> {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
-            .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
-
-        #warning("케이 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요, 삭제 Usecase 끝나고 andThen에서 해주시면 될 듯 ")
-        // TODO:
-        NotificationCenter.default.post(name: .subscriptionPlaylistDidRemoved, object: [], userInfo: nil)
 
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -454,18 +449,6 @@ extension ListStorageReactor {
 }
 
 private extension ListStorageReactor {
-    /// 여러 키의 해당하는 플레이리스트의 노래들을 가져옵니다.
-    func fetchPlaylistSongs(keys: [String]) -> Observable<[SongEntity]> {
-        let observables = keys.map { key in
-            fetchPlaylistSongsUseCase.execute(key: key).asObservable()
-        }
-        
-        return Observable.zip(observables)
-            .map { songEntities in
-                songEntities.flatMap { $0 }
-            }
-    }
-    
     func mutateCreatePlaylistUseCase(_ title: String) -> Observable<Mutation> {
         createPlaylistUseCase.execute(title: title)
             .asObservable()
@@ -479,11 +462,18 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateDeletePlaylistUseCase(_ ids: [String]) -> Observable<Mutation> {
-        deletePlayListUseCase.execute(ids: ids)
+    func mutateDeletePlaylistUseCase(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
+        let noti = NotificationCenter.default
+        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }.map { $0.key }
+        let ids = playlists.map { $0.key }
+        return deletePlayListUseCase.execute(ids: ids)
+            .do(onCompleted: {
+                noti.post(name: .subscriptionPlaylistDidRemoved, object: subscribedPlaylistKeys, userInfo: nil)
+            })
             .andThen(
                 .concat(
-                    fetchDataSource()
+                    fetchDataSource(),
+                    .just(.showToast("\(ids.count)개의 리스트를 삭제했습니다."))
                 )
             )
             .catch { error in
