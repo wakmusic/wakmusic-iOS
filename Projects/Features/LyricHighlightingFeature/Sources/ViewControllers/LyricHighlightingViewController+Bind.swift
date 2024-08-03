@@ -34,9 +34,9 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         output.updateProvider
-            .filter { !$0.isEmpty }
-            .debug("updateProvider")
-            .subscribe()
+            .bind { [writerLabel] provider in
+                writerLabel.text = "자막 제공 : \(provider)"
+            }
             .disposed(by: disposeBag)
 
         output.dataSource

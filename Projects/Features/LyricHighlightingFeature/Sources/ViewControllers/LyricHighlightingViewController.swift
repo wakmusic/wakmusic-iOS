@@ -47,6 +47,14 @@ public final class LyricHighlightingViewController: UIViewController {
     ).then {
         $0.backgroundColor = .clear
     }
+    
+    let writerLabel = WMLabel(
+        text: "",
+        textColor: .white.withAlphaComponent(0.5),
+        font: .t6(weight: .light),
+        alignment: .center,
+        kernValue: -0.5
+    )
 
     let warningView = UIView().then {
         $0.isHidden = true
@@ -143,6 +151,7 @@ private extension LyricHighlightingViewController {
             thumbnailImageView,
             dimmedBackgroundView,
             collectionView,
+            writerLabel,
             warningView,
             navigationBarView,
             indicator
@@ -197,7 +206,14 @@ private extension LyricHighlightingViewController {
 
         collectionView.snp.makeConstraints {
             $0.top.equalTo(navigationBarView.snp.bottom)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+        }
+
+        writerLabel.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(18)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
+            $0.height.equalTo(22)
         }
 
         warningView.snp.makeConstraints {

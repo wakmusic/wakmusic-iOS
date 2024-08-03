@@ -39,7 +39,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             title: "",
             artist: ""
         ))
-        let updateProvider: BehaviorRelay<String> = BehaviorRelay(value: "")
+        let updateProvider: PublishSubject<String> = .init()
     }
 
     public func transform(from input: Input) -> Output {
@@ -50,10 +50,10 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .flatMap { [fetchLyricsUseCase] _ -> Observable<LyricsEntity> in
                 return fetchLyricsUseCase.execute(id: songID)
                     .asObservable()
-                    .do(onNext: { entity in
-                        output.updateProvider.accept(entity.provider)
-                    })
                     .catchAndReturn(.init(provider: "", lyrics: []))
+                    .do(onNext: { entity in
+                        output.updateProvider.onNext(entity.provider)
+                    })
             }
             .map { $0.lyrics }
             .bind(to: output.dataSource)
