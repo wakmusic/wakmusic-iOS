@@ -158,19 +158,7 @@ extension ParticleAnimationView: ParticleAnimationStateProtocol {
     }
 
     @objc func removeAnimation() {
-        [
-            greenHeartImageView,
-            grayNoteImage,
-            leftMediumParticleIamge,
-            leftSmallParticeImage,
-            purpleHeartImage,
-            blueHeartImage,
-            rightSmallParticeImage,
-            yellowHeartImage,
-            rightMediumParticleIamge
-        ].forEach {
-            $0.removeAllAnimations()
-        }
+        self.subviews.forEach { $0.removeAllAnimations() }
     }
 
     @objc func startAnimation() {
