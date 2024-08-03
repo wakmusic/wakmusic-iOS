@@ -52,15 +52,15 @@ private extension IntroViewController {
     }
 
     func outputBind() {
-        permissionResult()
-        appInfoResult()
-        userInfoAndLottieEnded()
+        permissionBind()
+        appInfoBind()
+        userInfoAndLottieEndedBind()
     }
 }
 
 private extension IntroViewController {
-    func permissionResult() {
-        output.permissionResult
+    func permissionBind() {
+        output.confirmedPermission
             .do(onNext: { [weak self] permission in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
@@ -76,8 +76,8 @@ private extension IntroViewController {
             .disposed(by: disposeBag)
     }
 
-    func appInfoResult() {
-        output.appInfoResult
+    func appInfoBind() {
+        output.confirmedAppInfo
             .withUnretained(self)
             .subscribe(onNext: { owner, result in
                 switch result {
@@ -90,7 +90,7 @@ private extension IntroViewController {
 
                     switch entity.flag {
                     case .normal:
-                        owner.input.fetchUserInfoCheck.onNext(())
+                        owner.input.checkUserInfoPreference.onNext(())
                         return
 
                     case .offline:
@@ -131,7 +131,7 @@ private extension IntroViewController {
                                 owner.goAppStore()
                             },
                             cancelCompletion: {
-                                owner.input.fetchUserInfoCheck.onNext(())
+                                owner.input.checkUserInfoPreference.onNext(())
                             }
                         )
 
@@ -173,11 +173,11 @@ private extension IntroViewController {
             .disposed(by: disposeBag)
     }
 
-    func userInfoAndLottieEnded() {
+    func userInfoAndLottieEndedBind() {
         Observable.zip(
-            output.userInfoResult,
+            output.confirmedUserInfoPreference,
             output.endedLottieAnimation
-        ) { result, _ -> Result<String, Error> in
+        ) { result, _ -> Result<Void, Error> in
             return result
         }
         .withUnretained(self)
@@ -251,7 +251,7 @@ private extension IntroViewController {
         }
 
         animationView.play { _ in
-            self.input.endedLottieAnimation.onNext(())
+            self.output.endedLottieAnimation.onNext(())
         }
     }
 }

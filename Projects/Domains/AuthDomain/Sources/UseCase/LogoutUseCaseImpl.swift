@@ -11,7 +11,7 @@ public struct LogoutUseCaseImpl: LogoutUseCase {
         self.authRepository = authRepository
     }
 
-    public func execute() -> Completable {
-        authRepository.logout()
+    public func execute(localOnly: Bool) -> Completable {
+        authRepository.logout(localOnly: localOnly)
     }
 }

@@ -27,14 +27,13 @@ public final class IntroViewModel: ViewModelType {
     public struct Input {
         let fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
         let fetchAppCheck: PublishSubject<Void> = PublishSubject()
-        let fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
-        let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
+        let checkUserInfoPreference: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        let permissionResult: PublishSubject<Bool?> = PublishSubject()
-        let appInfoResult: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
-        let userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
+        let confirmedPermission: PublishSubject<Bool?> = PublishSubject()
+        let confirmedAppInfo: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
+        let confirmedUserInfoPreference: PublishSubject<Result<Void, Error>> = PublishSubject()
         let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
@@ -59,12 +58,8 @@ public final class IntroViewModel: ViewModelType {
         ) { _, permission -> Bool? in
             return permission
         }
-        .bind(to: output.permissionResult)
+        .bind(to: output.confirmedPermission)
         .disposed(by: disposeBag)
-
-        input.endedLottieAnimation
-            .bind(to: output.endedLottieAnimation)
-            .disposed(by: disposeBag)
 
         input.fetchAppCheck
             .flatMap { [weak self] _ -> Observable<AppCheckEntity> in
@@ -95,46 +90,33 @@ public final class IntroViewModel: ViewModelType {
             }
             .debug("✅ Intro > fetchCheckAppUseCase")
             .subscribe(onNext: { model in
-                output.appInfoResult.onNext(.success(model))
+                output.confirmedAppInfo.onNext(.success(model))
             }, onError: { error in
-                output.appInfoResult.onNext(.failure(error))
+                output.confirmedAppInfo.onNext(.failure(error))
             })
             .disposed(by: disposeBag)
 
-        input.fetchUserInfoCheck
-            .withLatestFrom(Utility.PreferenceManager.$userInfo)
-            .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo in
-                guard userInfo != nil else {
-                    // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
-                    return checkIsExistAccessTokenUseCase.execute()
-                        .asObservable()
-                        .flatMap { isExist in
-                            output.userInfoResult.onNext(.success(""))
-                            if isExist {
-                                return logoutUseCase.execute()
-                                    .andThen(Observable.just(false))
-                            } else {
-                                return Observable.just(false)
-                            }
-                        }
-                        .asObservable()
+        input.checkUserInfoPreference
+            .withLatestFrom(PreferenceManager.$userInfo)
+            .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo -> Observable<Void> in
+                // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
+                guard userInfo == nil else {
+                    return Observable.just(())
                 }
-                return Observable.just(true)
-            }
-            .filter { $0 }
-            .flatMap { [fetchUserInfoUseCase] _ -> Observable<UserInfoEntity> in
-                return fetchUserInfoUseCase.execute()
+                return checkIsExistAccessTokenUseCase.execute()
                     .asObservable()
+                    .flatMap { isExist in
+                        isExist ? logoutUseCase.execute(localOnly: true)
+                            .andThen(Observable.just(())) : Observable.just(())
+                    }
             }
-            .debug("✅ Intro > fetchUserInfoUseCase")
-            .subscribe(
-                onNext: { entity in
-                    output.userInfoResult.onNext(.success(""))
-                },
-                onError: { error in
-                    output.userInfoResult.onNext(.failure(error))
-                }
-            )
+            .debug("✅ Intro > checkIsExistUseInfoPreference")
+            .subscribe(onNext: { _ in
+                output.confirmedUserInfoPreference.onNext(.success(()))
+
+            }, onError: { error in
+                output.confirmedUserInfoPreference.onNext(.failure(error))
+            })
             .disposed(by: disposeBag)
 
         return output

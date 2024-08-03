@@ -165,7 +165,7 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        return logoutUseCase.execute()
+        return logoutUseCase.execute(localOnly: false)
             .andThen(
                 .concat(
                     .just(.updateIsHiddenLogoutButton(true)),
