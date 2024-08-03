@@ -129,13 +129,6 @@ public final class IntroViewModel: ViewModelType {
             .debug("✅ Intro > fetchUserInfoUseCase")
             .subscribe(
                 onNext: { entity in
-                    PreferenceManager.shared.setUserInfo(
-                        ID: entity.id,
-                        platform: entity.platform,
-                        profile: entity.profile,
-                        name: entity.name,
-                        itemCount: entity.itemCount
-                    )
                     output.userInfoResult.onNext(.success(""))
                 },
                 onError: { error in
