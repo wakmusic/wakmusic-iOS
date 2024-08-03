@@ -89,7 +89,11 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showToast)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
-                owner.showToast(text: message, font: DesignSystemFontFamily.Pretendard.light.font(size: 14), options: [.tabBar, .songCart])
+                owner.showToast(
+                    text: message,
+                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                    options: [.tabBar, .songCart]
+                )
             })
             .disposed(by: disposeBag)
 

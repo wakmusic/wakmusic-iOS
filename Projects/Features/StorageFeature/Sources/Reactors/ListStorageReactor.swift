@@ -6,9 +6,9 @@ import PlaylistDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import UserDomainInterface
 import Utility
-import SongsDomainInterface
 
 final class ListStorageReactor: Reactor {
     enum Action {
@@ -314,11 +314,11 @@ extension ListStorageReactor {
             .flatMap { $0.items.filter { $0.isSelected == true } }
 
         let selectedSongCount = selectedPlaylists.map { $0.songCount }.reduce(0, +)
-        
+
         if selectedSongCount == 0 {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
-        
+
         if selectedSongCount > limit {
             let overFlowQuantity = selectedSongCount - limit
             let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
@@ -363,17 +363,17 @@ extension ListStorageReactor {
         guard let selectedPlaylist = currentState.dataSource.first?.items[safe: index] else {
             return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
         }
-        
+
         if selectedPlaylist.songCount == 0 {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
-        
+
         if selectedPlaylist.songCount > limit {
             let overFlowQuantity = selectedPlaylist.songCount - limit
             let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
             return .just(.showToast(overFlowMessage))
         }
-        
+
         return Observable.concat(
             .just(.updateIsShowActivityIndicator(true)),
             fetchPlaylistSongsUseCase.execute(key: selectedPlaylist.key)
@@ -464,7 +464,8 @@ private extension ListStorageReactor {
 
     func mutateDeletePlaylistUseCase(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
         let noti = NotificationCenter.default
-        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }.map { $0.key }
+        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }
+            .map { $0.key }
         let ids = playlists.map { $0.key }
         return deletePlayListUseCase.execute(ids: ids)
             .do(onCompleted: {
