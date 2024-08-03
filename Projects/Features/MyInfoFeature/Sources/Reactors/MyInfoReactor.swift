@@ -68,16 +68,19 @@ final class MyInfoReactor: Reactor {
     private let fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
     private let setUsernameUseCase: any SetUserNameUseCase
     private let fetchUserInfoUseCase: any FetchUserInfoUseCase
+    private let myInfoCommonService: any MyInfoCommonService
     private let disposeBag = DisposeBag()
 
     init(
         fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
         setUserNameUseCase: any SetUserNameUseCase,
-        fetchUserInfoUseCase: any FetchUserInfoUseCase
+        fetchUserInfoUseCase: any FetchUserInfoUseCase,
+        myInfoCommonService: any MyInfoCommonService = DefaultMyInfoCommonService.shared
     ) {
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
         self.setUsernameUseCase = setUserNameUseCase
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
+        self.myInfoCommonService = myInfoCommonService
         self.initialState = .init(
             isLoggedIn: false,
             profileImage: "",
@@ -168,6 +171,16 @@ final class MyInfoReactor: Reactor {
             newState.dismissEditSheet = true
         }
         return newState
+    }
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        
+        let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent.withUnretained(self)
+            .flatMap { owner, _ -> Observable<Mutation> in
+            return owner.fetchUserInfo()
+        }
+    
+        return Observable.merge(willRefreshUserInfoMutation, mutation)
     }
 }
 
