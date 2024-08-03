@@ -55,11 +55,7 @@ public class GoogleLoginManager {
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
             LogManager.printDebug(url)
             let safari = SFSafariViewController(url: url)
-            let root = (UIApplication.shared.connectedScenes.first as? UIWindowScene)?
-                .windows
-                .first?
-                .rootViewController
-            (root as? UINavigationController)?.presentedViewController?.present(safari, animated: true)
+            UIApplication.topVisibleViewController()?.present(safari, animated: true)
         }
     }
 

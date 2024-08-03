@@ -3,6 +3,8 @@ import CreditDomainInterface
 import CreditSongListFeatureInterface
 import Localization
 import ReactorKit
+import RxSwift
+import Utility
 
 final class CreditSongListTabItemReactor: Reactor {
     private enum Metric {
@@ -32,6 +34,8 @@ final class CreditSongListTabItemReactor: Reactor {
     enum NavigateType {
         case playYoutube(ids: [String])
         case containSongs(ids: [String])
+        case textPopup(text: String, completion: () -> Void)
+        case signIn
     }
 
     struct State {
@@ -41,6 +45,8 @@ final class CreditSongListTabItemReactor: Reactor {
         @Pulse var isLoading = false
         @Pulse var toastMessage: String?
     }
+
+    private let signInIsRequiredSubject = PublishSubject<Void>()
 
     private var page: Int = 1
     let initialState: State
@@ -101,6 +107,16 @@ final class CreditSongListTabItemReactor: Reactor {
 
         return newState
     }
+
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let signinIsRequired = signInIsRequiredSubject
+            .withUnretained(self)
+            .flatMap { owner, _ in
+                owner.navigateMutation(navigateType: .signIn)
+            }
+
+        return Observable.merge(mutation, signinIsRequired)
+    }
 }
 
 // MARK: - Mutate
@@ -140,6 +156,17 @@ private extension CreditSongListTabItemReactor {
     }
 
     func addSongButtonDidTap() -> Observable<Mutation> {
+        guard PreferenceManager.userInfo != nil else {
+            return navigateMutation(
+                navigateType: .textPopup(
+                    text: LocalizationStrings.needLoginWarning,
+                    completion: { [signInIsRequiredSubject] in
+                        signInIsRequiredSubject.onNext(())
+                    }
+                )
+            )
+        }
+
         let containingSongIDs = currentState.songs
             .filter { currentState.selectedSongs.contains($0.id) }
             .map(\.id)
