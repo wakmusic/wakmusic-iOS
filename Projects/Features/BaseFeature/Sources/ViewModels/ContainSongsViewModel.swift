@@ -88,7 +88,7 @@ public final class ContainSongsViewModel: ViewModelType {
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
-                            return logoutUseCase.execute()
+                            return logoutUseCase.execute(localOnly: false)
                                 .andThen(Observable.error(wmError))
                         } else {
                             return Observable.error(wmError)
@@ -193,7 +193,7 @@ public final class ContainSongsViewModel: ViewModelType {
                         let wmError = error.asWMError
                         if wmError == .tokenExpired {
                             logoutRelay.accept(wmError)
-                            return owner.logoutUseCase.execute()
+                            return owner.logoutUseCase.execute(localOnly: false)
                                 .andThen(Observable.error(wmError))
                         } else {
                             return Observable.error(wmError)

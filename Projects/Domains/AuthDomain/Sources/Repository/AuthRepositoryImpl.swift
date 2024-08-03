@@ -30,14 +30,20 @@ public final class AuthRepositoryImpl: AuthRepository {
         remoteAuthDataSource.reGenerateAccessToken()
     }
 
-    public func logout() -> Completable {
+    public func logout(localOnly: Bool) -> Completable {
         let localLogoutCompletable = Completable.create { [localAuthDataSource] observer in
             localAuthDataSource.logout()
             observer(.completed)
             return Disposables.create()
         }
-        return remoteAuthDataSource.logout()
-            .andThen(localLogoutCompletable)
+
+        if localOnly {
+            return localLogoutCompletable
+
+        } else {
+            return remoteAuthDataSource.logout()
+                .andThen(localLogoutCompletable)
+        }
     }
 
     public func checkIsExistAccessToken() -> Single<Bool> {
