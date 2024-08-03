@@ -324,13 +324,13 @@ extension ListStorageReactor {
             let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
             return .just(.showToast(overFlowMessage))
         }
-        
+
         let keys = selectedPlaylists.map { $0.key }
-        
+
         let observables = keys.map { key in
             fetchPlaylistSongsUseCase.execute(key: key).asObservable()
         }
-        
+
         return Observable.concat(
             .just(.updateIsShowActivityIndicator(true)),
             Observable.zip(observables)
