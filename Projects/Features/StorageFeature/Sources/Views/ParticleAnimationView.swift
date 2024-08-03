@@ -137,7 +137,7 @@ private extension ParticleAnimationView {
     func bindNotification() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(startAnimation),
+            selector: #selector(resetAnimation),
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
@@ -145,6 +145,17 @@ private extension ParticleAnimationView {
 }
 
 extension ParticleAnimationView: ParticleAnimationStateProtocol {
+    @objc func resetAnimation() {
+        removeAnimation()
+        startAnimation()
+    }
+    
+    @objc func removeAnimation() {
+        [greenHeartImageView, grayNoteImage, leftMediumParticleIamge, leftSmallParticeImage, purpleHeartImage, blueHeartImage, rightSmallParticeImage, yellowHeartImage, rightMediumParticleIamge].forEach {
+            $0.removeAllAnimations()
+        }
+    }
+    
     @objc func startAnimation() {
         greenHeartImageView.moveAnimate(duration: 2.0, amount: 20, direction: .up)
         [grayNoteImage, leftMediumParticleIamge, leftSmallParticeImage].forEach {

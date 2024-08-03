@@ -20,7 +20,7 @@ private protocol ListStorageStateProtocol {
     func updateIsEnabledRefreshControl(isEnabled: Bool)
     func updateIsHiddenLoginWarningView(isHidden: Bool)
     func updateIsHiddenEmptyWarningView(isHidden: Bool)
-    func startParticeAnimation()
+    func resetParticeAnimation()
 }
 
 private protocol ListStorageActionProtocol {
@@ -146,8 +146,8 @@ final class ListStorageView: UIView {
 }
 
 extension ListStorageView: ListStorageStateProtocol {
-    func startParticeAnimation() {
-        particleAnimationView.startAnimation()
+    func resetParticeAnimation() {
+        particleAnimationView.resetAnimation()
     }
 
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {

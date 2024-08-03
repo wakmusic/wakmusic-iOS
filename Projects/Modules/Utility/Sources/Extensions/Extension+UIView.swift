@@ -150,10 +150,6 @@ public extension UIView {
         direction: StartDirection
     ) {
         let add = (direction == .random) ? ((Array(0 ... 1).randomElement() ?? 0) == 0 ? 1 : -1) : direction.rawValue
-
-        self.layer.removeAllAnimations()
-        self.transform = .identity
-
         UIView.animate(
             withDuration: duration,
             delay: 0,
@@ -163,5 +159,10 @@ public extension UIView {
             },
             completion: nil
         )
+    }
+    
+    func removeAllAnimations() {
+        self.layer.removeAllAnimations()
+        self.transform = .identity
     }
 }
