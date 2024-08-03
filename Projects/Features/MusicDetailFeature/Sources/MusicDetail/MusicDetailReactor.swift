@@ -1,13 +1,17 @@
 import Foundation
 import Kingfisher
 import LikeDomainInterface
+import Localization
 import LogManager
 import LyricHighlightingFeatureInterface
 import ReactorKit
+import RxSwift
 import SongsDomainInterface
 import Utility
 
 final class MusicDetailReactor: Reactor {
+    private typealias Log = MusicDetailAnalyticsLog
+
     enum Action {
         case viewDidLoad
         case prevButtonDidTap
@@ -35,6 +39,8 @@ final class MusicDetailReactor: Reactor {
         case musicPick(id: String)
         case playlist
         case dismiss
+        case textPopup(text: String, completion: () -> Void)
+        case signin
     }
 
     struct State {
@@ -51,7 +57,7 @@ final class MusicDetailReactor: Reactor {
         var navigateType: NavigateType?
     }
 
-    private typealias Log = MusicDetailAnalyticsLog
+    private let signInIsRequiredSubject = PublishSubject<Void>()
 
     var initialState: State
     private let youtubeURLGenerator = YoutubeURLGenerator()
@@ -126,6 +132,16 @@ final class MusicDetailReactor: Reactor {
             newState.songDictionary[key] = value
         }
         return newState
+    }
+
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let signInIsRequired = signInIsRequiredSubject
+            .withUnretained(self)
+            .flatMap { owner, _ in
+                owner.navigateMutation(navigate: .signin)
+            }
+
+        return Observable.merge(mutation, signInIsRequired)
     }
 }
 
@@ -227,8 +243,19 @@ private extension MusicDetailReactor {
     }
 
     func likeButtonDidTap() -> Observable<Mutation> {
-        let isLike = currentState.selectedSong?.isLiked ?? false
+        guard PreferenceManager.userInfo != nil else {
+            return navigateMutation(
+                navigate: NavigateType.textPopup(
+                    text: LocalizationStrings.needLoginWarning,
+                    completion: { [signInIsRequiredSubject] in
+                        signInIsRequiredSubject.onNext(())
+                    }
+                )
+            )
+        }
+
         guard let song = currentState.selectedSong else { return .empty() }
+        let isLike = currentState.selectedSong?.isLiked ?? false
         let log = Log.clickLikeMusicButton(
             id: song.videoID,
             like: isLike
@@ -260,6 +287,16 @@ private extension MusicDetailReactor {
     }
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
+        guard PreferenceManager.userInfo != nil else {
+            return navigateMutation(
+                navigate: NavigateType.textPopup(
+                    text: LocalizationStrings.needLoginWarning,
+                    completion: { [signInIsRequiredSubject] in
+                        signInIsRequiredSubject.onNext(())
+                    }
+                )
+            )
+        }
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickMusicPickButton(id: song.videoID)
         LogManager.analytics(log)

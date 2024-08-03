@@ -2,11 +2,14 @@ import BaseFeatureInterface
 import CreditDomainInterface
 import CreditSongListFeatureInterface
 import NeedleFoundation
+import SignInFeatureInterface
 import UIKit
 
 public protocol CreditSongListTabItemDependency: Dependency {
     var fetchCreditSongListUseCase: any FetchCreditSongListUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var textPopUpFactory: any TextPopUpFactory { get }
+    var signInFactory: any SignInFactory { get }
 }
 
 public final class CreditSongListTabItemComponent: Component<CreditSongListTabItemDependency>,
@@ -19,7 +22,9 @@ public final class CreditSongListTabItemComponent: Component<CreditSongListTabIt
         )
         let viewController = CreditSongListTabItemViewController(
             reactor: reactor,
-            containSongsFactory: dependency.containSongsFactory
+            containSongsFactory: dependency.containSongsFactory,
+            textPopupFactory: dependency.textPopUpFactory,
+            signInFactory: dependency.signInFactory
         )
         return viewController
     }

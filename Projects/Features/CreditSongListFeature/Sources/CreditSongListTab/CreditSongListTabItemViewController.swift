@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import CreditSongListFeatureInterface
 import DesignSystem
 import RxSwift
+import SignInFeatureInterface
 import Then
 import UIKit
 import Utility
@@ -50,12 +51,18 @@ final class CreditSongListTabItemViewController:
         }
 
     private let containSongsFactory: any ContainSongsFactory
+    private let textPopupFactory: any TextPopUpFactory
+    private let signInFactory: any SignInFactory
 
     init(
         reactor: Reactor,
-        containSongsFactory: any ContainSongsFactory
+        containSongsFactory: any ContainSongsFactory,
+        textPopupFactory: any TextPopUpFactory,
+        signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
+        self.textPopupFactory = textPopupFactory
+        self.signInFactory = signInFactory
         super.init(reactor: reactor)
     }
 
@@ -143,7 +150,11 @@ final class CreditSongListTabItemViewController:
                 case let .playYoutube(ids):
                     owner.playYoutube(ids: ids)
                 case let .containSongs(ids):
-                    owner.showContainSongs(ids: ids)
+                    owner.presentContainSongs(ids: ids)
+                case let .textPopup(text, completion):
+                    owner.presentTextPopup(text: text, completion: completion)
+                case .signIn:
+                    owner.presentSignIn()
                 }
             }
             .disposed(by: disposeBag)
@@ -270,9 +281,28 @@ extension CreditSongListTabItemViewController {
         WakmusicYoutubePlayer(ids: ids).play()
     }
 
-    private func showContainSongs(ids: [String]) {
+    private func presentContainSongs(ids: [String]) {
         let viewController = containSongsFactory.makeView(songs: ids)
-        viewController.modalPresentationStyle = .fullScreen
+        viewController.modalPresentationStyle = .overFullScreen
+        UIApplication.topVisibleViewController()?.present(viewController, animated: true)
+    }
+
+    private func presentTextPopup(text: String, completion: @escaping () -> Void) {
+        let viewController = textPopupFactory.makeView(
+            text: text,
+            cancelButtonIsHidden: false,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            completion: completion,
+            cancelCompletion: nil
+        )
+
+        self.showBottomSheet(content: viewController)
+    }
+
+    private func presentSignIn() {
+        let viewController = signInFactory.makeView()
+        viewController.modalPresentationStyle = .overFullScreen
         UIApplication.topVisibleViewController()?.present(viewController, animated: true)
     }
 }

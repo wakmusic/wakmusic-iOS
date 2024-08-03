@@ -4,6 +4,7 @@ import DesignSystem
 import LogManager
 import LyricHighlightingFeatureInterface
 import RxSwift
+import SignInFeatureInterface
 import SnapKit
 import SongCreditFeatureInterface
 import Then
@@ -14,19 +15,25 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     private let musicDetailView = MusicDetailView()
     private let lyricHighlightingFactory: any LyricHighlightingFactory
     private let songCreditFactory: any SongCreditFactory
+    private let signInFactory: any SignInFactory
     private let containSongsFactory: any ContainSongsFactory
+    private let textPopupFactory: any TextPopUpFactory
     private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
     init(
         reactor: MusicDetailReactor,
         lyricHighlightingFactory: any LyricHighlightingFactory,
         songCreditFactory: any SongCreditFactory,
+        signInFactory: any SignInFactory,
         containSongsFactory: any ContainSongsFactory,
+        textPopupFactory: any TextPopUpFactory,
         playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
         self.songCreditFactory = songCreditFactory
+        self.signInFactory = signInFactory
         self.containSongsFactory = containSongsFactory
+        self.textPopupFactory = textPopupFactory
         self.playlistPresenterGlobalState = playlistPresenterGlobalState
         super.init(reactor: reactor)
     }
@@ -128,6 +135,10 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.presentMusicPick(id: id)
                 case .playlist:
                     owner.presentPlaylist()
+                case let .textPopup(text, completion):
+                    owner.presentTextPopup(text: text, completion: completion)
+                case .signin:
+                    owner.presentSignIn()
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -223,6 +234,24 @@ private extension MusicDetailViewController {
         self.dismiss(animated: true) { [playlistPresenterGlobalState] in
             playlistPresenterGlobalState.presentPlayList()
         }
+    }
+
+    func presentTextPopup(text: String, completion: @escaping () -> Void) {
+        let viewController = textPopupFactory.makeView(
+            text: text,
+            cancelButtonIsHidden: false,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            completion: completion,
+            cancelCompletion: nil
+        )
+        self.showBottomSheet(content: viewController)
+    }
+
+    func presentSignIn() {
+        let viewController = signInFactory.makeView()
+        viewController.modalPresentationStyle = .overFullScreen
+        self.present(viewController, animated: true)
     }
 
     func dismiss() {

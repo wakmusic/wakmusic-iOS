@@ -3,6 +3,7 @@ import CreditDomainTesting
 @testable import CreditSongListFeature
 import CreditSongListFeatureInterface
 import Inject
+import SignInFeatureInterface
 import UIKit
 
 @main
@@ -66,7 +67,9 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
         return Inject.ViewControllerHost(
             CreditSongListTabItemViewController(
                 reactor: reactor,
-                containSongsFactory: DummyContainSongsFactory()
+                containSongsFactory: DummyContainSongsFactory(),
+                textPopupFactory: DummyTextPopupFactory(),
+                signInFactory: DummySignInFactory()
             )
         )
     }
@@ -79,5 +82,24 @@ final class DummyContainSongsFactory: ContainSongsFactory {
             viewController.dismiss(animated: true)
         }
         return viewController
+    }
+}
+
+final class DummySignInFactory: SignInFactory {
+    func makeView() -> UIViewController {
+        return UIViewController()
+    }
+}
+
+final class DummyTextPopupFactory: TextPopUpFactory {
+    func makeView(
+        text: String?,
+        cancelButtonIsHidden: Bool,
+        confirmButtonText: String?,
+        cancelButtonText: String?,
+        completion: (() -> Void)?,
+        cancelCompletion: (() -> Void)?
+    ) -> UIViewController {
+        return UIViewController()
     }
 }
