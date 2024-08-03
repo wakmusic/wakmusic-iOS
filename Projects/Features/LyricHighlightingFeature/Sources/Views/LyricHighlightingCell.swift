@@ -23,7 +23,7 @@ final class LyricHighlightingCell: UICollectionViewCell {
 }
 
 extension LyricHighlightingCell {
-    static func cellHeight(entity: LyricsEntity) -> CGSize {
+    static func cellHeight(entity: LyricsEntity.Lyric) -> CGSize {
         return .init(
             width: APP_WIDTH(),
             height: entity.text.heightConstraintAt(
@@ -33,7 +33,7 @@ extension LyricHighlightingCell {
         )
     }
 
-    func update(entity: LyricsEntity) {
+    func update(entity: LyricsEntity.Lyric) {
         let style = NSMutableParagraphStyle()
         style.alignment = .center
 

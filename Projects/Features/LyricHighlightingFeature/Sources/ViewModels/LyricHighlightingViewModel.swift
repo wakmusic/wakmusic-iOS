@@ -31,7 +31,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[LyricsEntity]> = BehaviorRelay(value: [])
+        let dataSource: BehaviorRelay<[LyricsEntity.Lyric]> = BehaviorRelay(value: [])
         let isStorable: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let goDecoratingScene: PublishSubject<LyricHighlightingRequiredModel> = PublishSubject()
         let updateInfo: BehaviorRelay<LyricHighlightingRequiredModel> = BehaviorRelay(value: .init(
@@ -39,6 +39,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             title: "",
             artist: ""
         ))
+        let updateProvider: BehaviorRelay<String> = BehaviorRelay(value: "")
     }
 
     public func transform(from input: Input) -> Output {
@@ -46,11 +47,15 @@ public final class LyricHighlightingViewModel: ViewModelType {
         let songID: String = self.model.songID
 
         input.fetchLyric
-            .flatMap { [fetchLyricsUseCase] _ -> Observable<[LyricsEntity]> in
+            .flatMap { [fetchLyricsUseCase] _ -> Observable<LyricsEntity> in
                 return fetchLyricsUseCase.execute(id: songID)
                     .asObservable()
-                    .catchAndReturn([])
+                    .do(onNext: { entity in
+                        output.updateProvider.accept(entity.provider)
+                    })
+                    .catchAndReturn(.init(provider: "", lyrics: []))
             }
+            .map { $0.lyrics }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)
 

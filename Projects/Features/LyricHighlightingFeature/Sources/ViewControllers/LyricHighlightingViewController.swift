@@ -263,6 +263,6 @@ extension LyricHighlightingViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
-        return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.item])
+        return LyricHighlightingCell.cellHeight(entity: output.dataSource.value[indexPath.row])
     }
 }

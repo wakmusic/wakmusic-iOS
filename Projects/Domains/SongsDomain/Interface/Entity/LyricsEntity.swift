@@ -1,20 +1,27 @@
-//
-//  LyricsEntity.swift
-//  DomainModule
-//
-//  Created by YoungK on 2023/02/22.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 
-public struct LyricsEntity: Equatable {
+public struct LyricsEntity {
     public init(
-        text: String
+        provider: String,
+        lyrics: [LyricsEntity.Lyric]
     ) {
-        self.text = text
+        self.provider = provider
+        self.lyrics = lyrics
     }
 
-    public let text: String
-    public var isHighlighting: Bool = false
+    public let provider: String
+    public let lyrics: [LyricsEntity.Lyric]
+}
+
+public extension LyricsEntity {
+    struct Lyric {
+        public init(
+            text: String
+        ) {
+            self.text = text
+        }
+
+        public let text: String
+        public var isHighlighting: Bool = false
+    }
 }
