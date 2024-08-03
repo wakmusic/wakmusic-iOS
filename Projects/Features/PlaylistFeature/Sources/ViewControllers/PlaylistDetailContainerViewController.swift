@@ -57,6 +57,8 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         super.bind(reactor: reactor)
 
         PreferenceManager.$userInfo
+            .map(\.?.ID)
+            .distinctUntilChanged()
             .bind(with: self) { owner, userInfo in
 
                 owner.remove(asChildViewController: owner.children.first)
@@ -77,7 +79,6 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
         sharedState.map(\.ownerID)
             .compactMap { $0 }
-            .distinctUntilChanged()
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .bind(with: self) { owner, info in
 
