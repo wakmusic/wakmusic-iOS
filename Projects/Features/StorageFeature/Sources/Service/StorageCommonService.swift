@@ -12,7 +12,7 @@ final class DefaultStorageCommonService: StorageCommonService {
     let isEditingState: BehaviorSubject<Bool>
     let loginStateDidChangedEvent: Observable<Notification>
     let playlistRefreshEvent: Observable<Notification>
-    
+
     init() {
         let notificationCenter = NotificationCenter.default
         isEditingState = .init(value: false)

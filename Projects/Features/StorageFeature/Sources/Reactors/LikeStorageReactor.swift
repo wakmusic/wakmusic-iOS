@@ -165,8 +165,8 @@ final class LikeStorageReactor: Reactor {
 
         let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .withUnretained(self)
-            .flatMap { (owner, notification) -> Observable<Mutation> in
-                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+            .flatMap { owner, notification -> Observable<Mutation> in
+                guard let isLoggedIn = notification.object as? Bool else { return .empty() }
                 return .concat(
                     owner.updateIsLoggedIn(isLoggedIn),
                     owner.fetchDataSource()

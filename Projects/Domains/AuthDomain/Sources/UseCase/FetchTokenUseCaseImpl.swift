@@ -15,6 +15,5 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
             .do(onSuccess: { _ in
                 NotificationCenter.default.post(name: .loginStateDidChanged, object: true)
             })
-        
     }
 }

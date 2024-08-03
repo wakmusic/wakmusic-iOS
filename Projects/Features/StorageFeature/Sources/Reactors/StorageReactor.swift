@@ -65,7 +65,7 @@ final class StorageReactor: Reactor {
 
         let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .flatMap { notification -> Observable<Mutation> in
-                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+                guard let isLoggedIn = notification.object as? Bool else { return .empty() }
                 return .just(.updateIsLoggedIn(isLoggedIn))
             }
 
