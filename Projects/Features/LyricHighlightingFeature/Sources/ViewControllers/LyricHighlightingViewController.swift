@@ -47,7 +47,7 @@ public final class LyricHighlightingViewController: UIViewController {
     ).then {
         $0.backgroundColor = .clear
     }
-    
+
     let writerLabel = WMLabel(
         text: "",
         textColor: .white.withAlphaComponent(0.5),
