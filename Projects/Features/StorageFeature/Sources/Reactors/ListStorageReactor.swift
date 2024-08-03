@@ -1,9 +1,12 @@
+import BaseFeature
 import Foundation
+import Localization
 import LogManager
 import PlaylistDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
+import SongsDomainInterface
 import UserDomainInterface
 import Utility
 
@@ -66,13 +69,15 @@ final class ListStorageReactor: Reactor {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let editPlayListOrderUseCase: any EditPlaylistOrderUseCase
     private let deletePlayListUseCase: any DeletePlaylistUseCase
+    private let fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
 
     init(
         storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
-        deletePlayListUseCase: any DeletePlaylistUseCase
+        deletePlayListUseCase: any DeletePlaylistUseCase,
+        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
     ) {
         self.initialState = State(
             isLoggedIn: false,
@@ -87,6 +92,7 @@ final class ListStorageReactor: Reactor {
         self.fetchPlayListUseCase = fetchPlayListUseCase
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
+        self.fetchPlaylistSongsUseCase = fetchPlaylistSongsUseCase
     }
 
     deinit {
@@ -110,7 +116,7 @@ final class ListStorageReactor: Reactor {
             return showDetail(indexPath)
 
         case let .playDidTap(index):
-            return playWithAddToCurrentPlaylist()
+            return playWithAddToCurrentPlaylist(index)
 
         case let .tapAll(isSelecting):
             return tapAll(isSelecting)
@@ -284,12 +290,7 @@ extension ListStorageReactor {
 
     func deleteList() -> Observable<Mutation> {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
-            .map { $0.key }
         storageCommonService.isEditingState.onNext(false)
-
-        #warning("케이 구독 플리인 것만 추려 내서 object에 key배열로 담아서 보내주세요, 삭제 Usecase 끝나고 andThen에서 해주시면 될 듯 ")
-        // TODO:
-        NotificationCenter.default.post(name: .subscriptionPlaylistDidRemoved, object: [], userInfo: nil)
 
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
@@ -308,13 +309,93 @@ extension ListStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+        let limit = 50
+        let selectedPlaylists = currentState.dataSource
+            .flatMap { $0.items.filter { $0.isSelected == true } }
+
+        let selectedSongCount = selectedPlaylists.map { $0.songCount }.reduce(0, +)
+
+        if selectedSongCount == 0 {
+            return .just(.showToast("플레이리스트가 비어있습니다."))
+        }
+
+        if selectedSongCount > limit {
+            let overFlowQuantity = selectedSongCount - limit
+            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
+            return .just(.showToast(overFlowMessage))
+        }
+
+        let keys = selectedPlaylists.map { $0.key }
+
+        let observables = keys.map { key in
+            fetchPlaylistSongsUseCase.execute(key: key).asObservable()
+        }
+
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            Observable.zip(observables)
+                .map { songEntities in
+                    songEntities.flatMap { $0 }
+                }
+                .do(onNext: { [weak self] appendingPlaylistItems in
+                    PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
+                    self?.storageCommonService.isEditingState.onNext(false)
+                })
+                .flatMap { _ -> Observable<Mutation> in
+                    return .concat(
+                        .just(.hideSongCart),
+                        .just(.showToast(LocalizationStrings.addList))
+                    )
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
+        .catch { error in
+            let error = error.asWMError
+            return Observable.concat([
+                .just(.updateIsShowActivityIndicator(false)),
+                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            ])
+        }
     }
 
-    func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
-        #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+    func playWithAddToCurrentPlaylist(_ index: Int) -> Observable<Mutation> {
+        let limit = 50
+        guard let selectedPlaylist = currentState.dataSource.first?.items[safe: index] else {
+            return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
+        }
+
+        if selectedPlaylist.songCount == 0 {
+            return .just(.showToast("플레이리스트가 비어있습니다."))
+        }
+
+        if selectedPlaylist.songCount > limit {
+            let overFlowQuantity = selectedPlaylist.songCount - limit
+            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
+            return .just(.showToast(overFlowMessage))
+        }
+
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            fetchPlaylistSongsUseCase.execute(key: selectedPlaylist.key)
+                .asObservable()
+                .do(onNext: { [weak self] appendingPlaylistItems in
+                    PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
+                    let firstItem = appendingPlaylistItems.first!
+                    WakmusicYoutubePlayer(id: firstItem.id).play()
+                    self?.storageCommonService.isEditingState.onNext(false)
+                })
+                .flatMap { songs -> Observable<Mutation> in
+                    return .just(.showToast(LocalizationStrings.addList))
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
+        .catch { error in
+            let error = error.asWMError
+            return Observable.concat([
+                .just(.updateIsShowActivityIndicator(false)),
+                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            ])
+        }
     }
 
     /// 순서 변경
@@ -381,11 +462,19 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateDeletePlaylistUseCase(_ ids: [String]) -> Observable<Mutation> {
-        deletePlayListUseCase.execute(ids: ids)
+    func mutateDeletePlaylistUseCase(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
+        let noti = NotificationCenter.default
+        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }
+            .map { $0.key }
+        let ids = playlists.map { $0.key }
+        return deletePlayListUseCase.execute(ids: ids)
+            .do(onCompleted: {
+                noti.post(name: .subscriptionPlaylistDidRemoved, object: subscribedPlaylistKeys, userInfo: nil)
+            })
             .andThen(
                 .concat(
-                    fetchDataSource()
+                    fetchDataSource(),
+                    .just(.showToast("\(ids.count)개의 리스트를 삭제했습니다."))
                 )
             )
             .catch { error in

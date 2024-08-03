@@ -17,6 +17,7 @@ public protocol ListStorageDependency: Dependency {
     var editPlayListOrderUseCase: any EditPlaylistOrderUseCase { get }
     var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
     var deletePlayListUseCase: any DeletePlaylistUseCase { get }
+    var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
@@ -27,11 +28,12 @@ public final class ListStorageComponent: Component<ListStorageDependency> {
     public func makeView() -> UIViewController {
         return ListStorageViewController(
             reactor: ListStorageReactor(
-                storageCommonService: DefaultStorageCommonService(),
+                storageCommonService: DefaultStorageCommonService.shared,
                 createPlaylistUseCase: dependency.createPlaylistUseCase,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
-                deletePlayListUseCase: dependency.deletePlayListUseCase
+                deletePlayListUseCase: dependency.deletePlayListUseCase,
+                fetchPlaylistSongsUseCase: dependency.fetchPlaylistSongsUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             textPopUpFactory: dependency.textPopUpFactory,

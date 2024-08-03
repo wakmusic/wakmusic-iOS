@@ -29,8 +29,8 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.createPlaylist(title: title)
     }
 
-    public func fetchPlaylistSongs(id: String) -> Single<[SongEntity]> {
-        remotePlaylistDataSource.fetchPlaylistSongs(id: id)
+    public func fetchPlaylistSongs(key: String) -> Single<[SongEntity]> {
+        remotePlaylistDataSource.fetchPlaylistSongs(key: key)
     }
 
     public func updatePlaylist(key: String, songs: [String]) -> Completable {
