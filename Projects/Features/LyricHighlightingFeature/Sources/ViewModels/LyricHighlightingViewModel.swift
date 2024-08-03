@@ -52,7 +52,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
                     .asObservable()
                     .catchAndReturn(.init(provider: "", lyrics: []))
                     .do(onNext: { entity in
-                        output.updateProvider.onNext("자막 제공 : \(entity.provider)")
+                        output.updateProvider.onNext(entity.lyrics.isEmpty ? "" : "자막 제공 : \(entity.provider)")
                     })
             }
             .map { $0.lyrics }
