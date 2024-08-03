@@ -55,6 +55,10 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         setTableView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        listStorageView.resetParticeAnimation()
+    }
+
     override func configureUI() {
         reactor?.action.onNext(.viewDidLoad)
     }

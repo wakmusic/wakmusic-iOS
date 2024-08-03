@@ -12,6 +12,12 @@ import SwiftEntryKit
 import UIKit
 
 public extension UIView {
+    enum StartDirection: CGFloat {
+        case up = -1
+        case down = 1
+        case random
+    }
+
     enum VerticalLocation {
         case bottom
         case top
@@ -136,5 +142,28 @@ public extension UIView {
         animation.isRemovedOnCompletion = false
         animation.fillMode = CAMediaTimingFillMode.forwards
         layer.add(animation, forKey: nil)
+    }
+
+    func moveAnimate(
+        duration: CGFloat,
+        amount: CGFloat,
+        direction: StartDirection
+    ) {
+        let directionValue = (direction == .random) ? ((Array(0 ... 1).randomElement() ?? 0) == 0 ? 1 : -1) : direction
+            .rawValue
+        UIView.animate(
+            withDuration: duration,
+            delay: 0,
+            options: [.autoreverse, .repeat],
+            animations: {
+                self.transform = CGAffineTransform(translationX: 0, y: amount * directionValue)
+            },
+            completion: nil
+        )
+    }
+
+    func removeAllAnimations() {
+        self.layer.removeAllAnimations()
+        self.transform = .identity
     }
 }

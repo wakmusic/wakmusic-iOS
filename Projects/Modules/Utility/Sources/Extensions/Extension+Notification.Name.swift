@@ -10,5 +10,4 @@ public extension Notification.Name {
     static let hideSongCart = Notification.Name("hideSongCart")
     static let movedTab = Notification.Name("movedTab")
     static let updateCurrentSongLikeState = Notification.Name("updateCurrentSongLikeState")
-    static let loginStateDidChanged = Notification.Name("loginStateDidChanged")
 }

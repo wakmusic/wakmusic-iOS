@@ -20,6 +20,7 @@ private protocol ListStorageStateProtocol {
     func updateIsEnabledRefreshControl(isEnabled: Bool)
     func updateIsHiddenLoginWarningView(isHidden: Bool)
     func updateIsHiddenEmptyWarningView(isHidden: Bool)
+    func resetParticeAnimation()
 }
 
 private protocol ListStorageActionProtocol {
@@ -39,8 +40,10 @@ final class ListStorageView: UIView {
     }
 
     fileprivate let drawFruitButton = UIButton().then {
-        $0.setTitle("음표 열매 뽑으러 가기", for: .normal)
+        $0.setTitle("음표 열매 뽑기", for: .normal)
     }
+
+    private let particleAnimationView = ParticleAnimationView()
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
@@ -71,6 +74,7 @@ final class ListStorageView: UIView {
             createListButton,
             tableView,
             drawFruitButton,
+            particleAnimationView,
             loginWarningView,
             activityIndicator
         )
@@ -89,6 +93,11 @@ final class ListStorageView: UIView {
         }
         drawFruitButton.snp.makeConstraints {
             $0.height.equalTo(56)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        particleAnimationView.snp.makeConstraints {
+            $0.height.equalTo(80)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
@@ -115,7 +124,7 @@ final class ListStorageView: UIView {
 
         drawFruitButton.setAttributedTitle(
             NSAttributedString(
-                string: "음표 열매 뽑으러 가기",
+                string: "음표 열매 뽑기",
                 attributes: [
                     .kern: -0.5,
                     .font: UIFont.WMFontSystem.t4(weight: .bold).font,
@@ -137,6 +146,10 @@ final class ListStorageView: UIView {
 }
 
 extension ListStorageView: ListStorageStateProtocol {
+    func resetParticeAnimation() {
+        particleAnimationView.resetAnimation()
+    }
+
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
         if tableView.frame.size == .zero { return }
         let isLoggedIn = loginWarningView.isHidden
