@@ -137,7 +137,14 @@ private extension ParticleAnimationView {
     func bindNotification() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(resetAnimation),
+            selector: #selector(removeAnimation),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(startAnimation),
             name: UIApplication.didBecomeActiveNotification,
             object: nil
         )
