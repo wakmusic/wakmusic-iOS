@@ -1,6 +1,7 @@
 import AuthDomainInterface
 import Foundation
 import RxSwift
+import Utility
 
 public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
     private let authRepository: any AuthRepository
@@ -11,5 +12,9 @@ public struct FetchTokenUseCaseImpl: FetchTokenUseCase {
 
     public func execute(providerType: ProviderType, token: String) -> Single<AuthLoginEntity> {
         authRepository.fetchToken(providerType: providerType, token: token)
+            .do(onSuccess: { _ in
+                NotificationCenter.default.post(name: .loginStateDidChanged, object: true)
+            })
+        
     }
 }

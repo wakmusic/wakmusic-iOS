@@ -173,16 +173,21 @@ final class ListStorageReactor: Reactor {
                 }
             }
 
-        let changedUserInfoMutation = storageCommonService.changedUserInfoEvent
+        let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .withUnretained(self)
-            .flatMap { owner, userInfo -> Observable<Mutation> in
-                .concat(
-                    owner.updateIsLoggedIn(userInfo),
+            .flatMap { (owner, notification) -> Observable<Mutation> in
+                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+                return .concat(
+                    owner.updateIsLoggedIn(isLoggedIn),
                     owner.fetchDataSource()
                 )
             }
-
-        return Observable.merge(mutation, switchEditingStateMutation, changedUserInfoMutation)
+        
+        return Observable.merge(
+            mutation,
+            switchEditingStateMutation,
+            updateIsLoggedInMutation
+        )
     }
 
     func reduce(state: State, mutation: Mutation) -> State {
@@ -227,12 +232,15 @@ final class ListStorageReactor: Reactor {
 
 extension ListStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        guard let userInfo = PreferenceManager.userInfo else { return .empty() }
+        let isLoggedIn = PreferenceManager.userInfo != nil
+        if !isLoggedIn { return .empty() }
         return .concat(
-            updateIsLoggedIn(userInfo),
-            .just(.updateIsShowActivityIndicator(true)),
-            fetchDataSource(),
-            .just(.updateIsShowActivityIndicator(false))
+            updateIsLoggedIn(isLoggedIn),
+            .concat(
+                .just(.updateIsShowActivityIndicator(true)),
+                fetchDataSource(),
+                .just(.updateIsShowActivityIndicator(false))
+            )
         )
     }
 
@@ -254,8 +262,8 @@ extension ListStorageReactor {
         return .just(.clearDataSource)
     }
 
-    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        return .just(.updateIsLoggedIn(userInfo != nil))
+    func updateIsLoggedIn(_ isLoggedIn: Bool) -> Observable<Mutation> {
+        return .just(.updateIsLoggedIn(isLoggedIn))
     }
 
     func createList(_ title: String) -> Observable<Mutation> {

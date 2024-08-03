@@ -4,12 +4,16 @@ import Utility
 
 protocol StorageCommonService {
     var isEditingState: BehaviorSubject<Bool> { get }
-    var changedUserInfoEvent: Observable<UserInfo?> { get }
+    var loginStateDidChangedEvent: Observable<Notification> { get }
 }
 
 final class DefaultStorageCommonService: StorageCommonService {
-    let isEditingState: BehaviorSubject<Bool> = .init(value: false)
-    let changedUserInfoEvent: Observable<UserInfo?> = PreferenceManager.$userInfo.skip(1)
+    let isEditingState: BehaviorSubject<Bool>
+    let loginStateDidChangedEvent: Observable<Notification>
     
-    init() { }
+    init() {
+        let notificationCenter = NotificationCenter.default
+        isEditingState = .init(value: false)
+        loginStateDidChangedEvent = notificationCenter.rx.notification(.loginStateDidChanged).asObservable()
+    }
 }

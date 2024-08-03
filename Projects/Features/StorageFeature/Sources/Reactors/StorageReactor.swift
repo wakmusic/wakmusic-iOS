@@ -43,7 +43,7 @@ final class StorageReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewDidLoad:
-            return .empty()
+            return viewDidLoad()
         case let .switchTab(index):
             return switchTabIndex(index)
         case .editButtonDidTap:
@@ -63,10 +63,10 @@ final class StorageReactor: Reactor {
         let switchEditingStateMutation = storageCommonService.isEditingState
             .map { Mutation.switchEditingState($0) }
 
-        let updateIsLoggedInMutation = storageCommonService.changedUserInfoEvent
-            .withUnretained(self)
-            .flatMap { owner, userInfo -> Observable<Mutation> in
-                owner.updateIsLoggedIn(userInfo)
+        let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
+            .flatMap { notification -> Observable<Mutation> in
+                guard let isLoggedIn = notification.object as? Bool else { return.empty() }
+                return .just(.updateIsLoggedIn(isLoggedIn))
             }
 
         return Observable.merge(
@@ -95,8 +95,9 @@ final class StorageReactor: Reactor {
 }
 
 private extension StorageReactor {
-    func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        return .just(.updateIsLoggedIn(userInfo != nil))
+    func viewDidLoad() -> Observable<Mutation> {
+        let isLoggedIn = PreferenceManager.userInfo != nil
+        return .just(.updateIsLoggedIn(isLoggedIn))
     }
 
     func switchTabIndex(_ index: Int) -> Observable<Mutation> {
