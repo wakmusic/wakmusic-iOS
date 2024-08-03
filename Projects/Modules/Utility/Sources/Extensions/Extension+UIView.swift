@@ -160,7 +160,7 @@ public extension UIView {
             completion: nil
         )
     }
-    
+
     func removeAllAnimations() {
         self.layer.removeAllAnimations()
         self.transform = .identity
