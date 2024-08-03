@@ -1,4 +1,6 @@
+import BaseFeature
 import Foundation
+import Localization
 import LogManager
 import PlaylistDomainInterface
 import ReactorKit
@@ -66,13 +68,15 @@ final class ListStorageReactor: Reactor {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let editPlayListOrderUseCase: any EditPlaylistOrderUseCase
     private let deletePlayListUseCase: any DeletePlaylistUseCase
+    private let fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
 
     init(
         storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
-        deletePlayListUseCase: any DeletePlaylistUseCase
+        deletePlayListUseCase: any DeletePlaylistUseCase,
+        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
     ) {
         self.initialState = State(
             isLoggedIn: false,
@@ -309,13 +313,43 @@ extension ListStorageReactor {
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+        let limit = 50
+        let selectedPlaylists = currentState.dataSource
+            .flatMap { $0.items.filter { $0.isSelected == true } }
+
+        let selectedSongCount = selectedPlaylists.map { $0.songCount }.reduce(0, +)
+
+        if selectedSongCount > limit {
+            let overFlowQuantity = selectedSongCount - limit
+            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
+            return .just(.showToast(overFlowMessage))
+        }
+
+        // let appendingPlaylistItems = selectedPlaylists.map { PlaylistItem(id: , title: , artist: ) }
+        // PlayState.shared.append(contentsOf: appendingPlaylisItems)
+
+        return .just(.showToast(LocalizationStrings.addList))
     }
 
     func playWithAddToCurrentPlaylist() -> Observable<Mutation> {
         #warning("PlayState 리팩토링 끝나면 수정 예정")
-        return .just(.showToast("개발이 필요해요"))
+        return .just(.showToast("playWithAddToCurrentPlaylist 개발이 필요해요"))
     }
+
+//    func addToCurrentPlaylist() -> Observable<Mutation> {
+//        let appendingPlaylisItems = currentState.dataSource
+//            .flatMap { $0.items.filter { $0.isSelected == true } }
+//            .map { PlaylistItem(id: $0.songID, title: $0.title, artist: $0.artist) }
+//        PlayState.shared.append(contentsOf: appendingPlaylisItems)
+//        return .just(.showToast(LocalizationStrings.addList))
+//    }
+//
+//    func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
+//        let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
+//        PlayState.shared.append(item: appendingPlaylisItem)
+//        WakmusicYoutubePlayer(id: song.songID).play()
+//        return .empty()
+//    }
 
     /// 순서 변경
     func updateOrder(src: Int, dest: Int) -> Observable<Mutation> {

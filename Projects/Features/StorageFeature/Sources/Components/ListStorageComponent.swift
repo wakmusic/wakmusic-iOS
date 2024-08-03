@@ -33,7 +33,7 @@ public final class ListStorageComponent: Component<ListStorageDependency> {
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
                 deletePlayListUseCase: dependency.deletePlayListUseCase,
-                fetchPlaylistSongsUseCase:  dependency.fetchPlaylistSongsUseCase
+                fetchPlaylistSongsUseCase: dependency.fetchPlaylistSongsUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             textPopUpFactory: dependency.textPopUpFactory,

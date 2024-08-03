@@ -67,7 +67,7 @@ public extension AppComponent {
             FetchRecommendPlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
     var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase {
         shared {
             FetchPlaylistSongsUseCaseImpl(playlistRepository: playlistRepository)
