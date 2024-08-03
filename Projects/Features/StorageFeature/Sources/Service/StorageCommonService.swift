@@ -9,6 +9,8 @@ protocol StorageCommonService {
 }
 
 final class DefaultStorageCommonService: StorageCommonService {
+    static let shared = DefaultStorageCommonService()
+    
     let isEditingState: BehaviorSubject<Bool>
     let loginStateDidChangedEvent: Observable<String?>
     let playlistRefreshEvent: Observable<Notification>

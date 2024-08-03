@@ -19,7 +19,7 @@ public final class StorageComponent: Component<StorageDependency>, StorageFactor
     public func makeView() -> UIViewController {
         return StorageViewController.viewController(
             reactor: StorageReactor(
-                storageCommonService: DefaultStorageCommonService()
+                storageCommonService: DefaultStorageCommonService.shared
             ),
             listStorageComponent: dependency.listStorageComponent,
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
