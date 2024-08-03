@@ -92,6 +92,14 @@ public final class PlayState {
         playlist.update(contentsOf: contentsOf)
     }
 
+    public func remove(id: String) {
+        playlist.remove(id: id)
+    }
+
+    public func remove(ids: [String]) {
+        ids.forEach { playlist.remove(id: $0) }
+    }
+
     public func remove(at index: Int) {
         playlist.remove(at: index)
     }
@@ -102,6 +110,10 @@ public final class PlayState {
 
     public func removeAll() {
         playlist.removeAll()
+    }
+
+    func removeAll(where shouldBeRemoved: (PlaylistItem) -> Bool) {
+        playlist.removeAll(where: shouldBeRemoved)
     }
 
     public func contains(item: PlaylistItem) -> Bool {

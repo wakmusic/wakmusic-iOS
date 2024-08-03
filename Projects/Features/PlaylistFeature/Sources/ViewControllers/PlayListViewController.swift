@@ -214,7 +214,7 @@ private extension PlaylistViewController {
     }
 
     private func bindCloseButton(output: PlaylistViewModel.Output) {
-        output.willClosePlaylist.sink { [weak self] _ in
+        output.shouldClosePlaylist.sink { [weak self] _ in
             self?.dismiss(animated: true)
         }.store(in: &subscription)
     }

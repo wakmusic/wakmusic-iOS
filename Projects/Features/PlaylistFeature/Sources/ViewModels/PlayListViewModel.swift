@@ -31,7 +31,7 @@ final class PlaylistViewModel: ViewModelType {
     }
 
     struct Output {
-        var willClosePlaylist = PassthroughSubject<Void, Never>()
+        var shouldClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<Bool, Never>(false)
         let playlists: BehaviorRelay<[PlaylistItemModel]> = BehaviorRelay(value: [])
         let selectedSongIds: BehaviorRelay<Set<String>> = BehaviorRelay(value: [])
@@ -75,7 +75,7 @@ final class PlaylistViewModel: ViewModelType {
         }.disposed(by: disposeBag)
 
         input.closeButtonDidTapEvent.sink { _ in
-            output.willClosePlaylist.send()
+            output.shouldClosePlaylist.send()
         }.store(in: &subscription)
 
         input.editButtonDidTapEvent.sink { [weak self] _ in
@@ -126,17 +126,16 @@ final class PlaylistViewModel: ViewModelType {
             .subscribe(onNext: { selectedIds in
                 if selectedIds.count == output.playlists.value.count {
                     output.playlists.accept([])
-                    output.willClosePlaylist.send()
+                    output.selectedSongIds.accept([])
+                    output.editState.send(false)
+                    output.shouldClosePlaylist.send()
                 } else {
-                    let removingIndex = output.playlists.value
-                        .filter { selectedIds.contains($0.id) }
-                        .enumerated()
-                        .map(\.offset)
-                    var playlists = output.playlists.value
-                    removingIndex.forEach { playlists.remove(at: $0) }
-                    output.playlists.accept(playlists)
+                    let removedPlaylists = output.playlists.value
+                        .filter { !selectedIds.contains($0.id) }
+                    output.playlists.accept(removedPlaylists)
                     output.selectedSongIds.accept([])
                 }
+                output.countOfSongs.send(output.playlists.value.count)
             }).disposed(by: disposeBag)
 
         input.itemMovedEvent

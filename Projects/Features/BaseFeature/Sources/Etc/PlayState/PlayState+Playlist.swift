@@ -52,8 +52,18 @@ final class Playlist {
         }
     }
 
+    func remove(id: String) {
+        if let index = list.firstIndex(where: { $0.id == id }) {
+            remove(at: index)
+        }
+    }
+
     func removeAll() {
         list.removeAll()
+    }
+
+    func removeAll(where shouldBeRemoved: (PlaylistItem) -> Bool) {
+        list.removeAll(where: shouldBeRemoved)
     }
 
     func contains(_ item: PlaylistItem) -> Bool {
