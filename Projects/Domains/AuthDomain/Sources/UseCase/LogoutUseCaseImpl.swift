@@ -1,8 +1,8 @@
 import AuthDomainInterface
 import BaseDomainInterface
+import Foundation
 import RxSwift
 import Utility
-import Foundation
 
 public struct LogoutUseCaseImpl: LogoutUseCase {
     private let authRepository: any AuthRepository

@@ -175,14 +175,14 @@ final class ListStorageReactor: Reactor {
 
         let updateIsLoggedInMutation = storageCommonService.loginStateDidChangedEvent
             .withUnretained(self)
-            .flatMap { (owner, userID) -> Observable<Mutation> in
+            .flatMap { owner, userID -> Observable<Mutation> in
                 let isLoggedIn = userID != nil
                 return .concat(
                     owner.updateIsLoggedIn(isLoggedIn),
                     owner.fetchDataSource()
                 )
             }
-        
+
         let playlistRefreshMutation = storageCommonService.playlistRefreshEvent
             .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in

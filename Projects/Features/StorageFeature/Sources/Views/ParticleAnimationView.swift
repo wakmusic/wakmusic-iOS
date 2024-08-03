@@ -1,8 +1,13 @@
 import DesignSystem
+import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
+
+private protocol ParticleAnimationStateProtocol {
+    func startAnimation()
+}
 
 final class ParticleAnimationView: UIView {
     private let isEnabledTouchEvent: Bool
@@ -11,60 +16,61 @@ final class ParticleAnimationView: UIView {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.heartGreen.image
     }
-    
+
     private let grayNoteImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.noteGray.image
     }
-    
+
     private let leftMediumParticleIamge = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.particleMedium.image
     }
-    
+
     private let leftSmallParticeImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.particleSmall.image
     }
-    
+
     private let purpleHeartImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.heartPurple.image
     }
-    
+
     private let blueHeartImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.heartBlue.image
     }
-    
+
     private let yellowHeartImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.heartYellow.image
     }
-    
+
     private let rightMediumParticleIamge = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.particleMedium.image
     }
-    
+
     private let rightSmallParticeImage = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.image = DesignSystemAsset.Storage.particleSmall.image
     }
-    
+
     init(isEnabledTouchEvent: Bool = false) {
         self.isEnabledTouchEvent = isEnabledTouchEvent
         super.init(frame: .zero)
         addView()
         setLayout()
         configureUI()
+        bindNotification()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         return isEnabledTouchEvent ? self : nil
     }
@@ -84,7 +90,7 @@ private extension ParticleAnimationView {
             rightSmallParticeImage
         )
     }
-    
+
     func setLayout() {
         greenHeartImageView.snp.makeConstraints {
             $0.left.equalToSuperview().inset(24)
@@ -123,13 +129,26 @@ private extension ParticleAnimationView {
             $0.top.equalToSuperview().offset(42)
         }
     }
-    
+
     func configureUI() {
         self.backgroundColor = .clear
-        perform(#selector(startComponentAnimation), with: nil, afterDelay: 0.3)
+        // perform(#selector(startAnimation), with: nil, afterDelay: 0.3)
     }
-    
-    @objc func startComponentAnimation() {
+
+    func bindNotification() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(startAnimation),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+    }
+}
+
+extension ParticleAnimationView: ParticleAnimationStateProtocol {
+    @objc func startAnimation() {
+        print("🚀 hello?")
+        print(greenHeartImageView.isAnimating)
         greenHeartImageView.moveAnimate(duration: 2.0, amount: 20, direction: .up)
         [grayNoteImage, leftMediumParticleIamge, leftSmallParticeImage].forEach {
             $0.moveAnimate(duration: 2.0, amount: 10, direction: .up)

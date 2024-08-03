@@ -20,6 +20,7 @@ private protocol ListStorageStateProtocol {
     func updateIsEnabledRefreshControl(isEnabled: Bool)
     func updateIsHiddenLoginWarningView(isHidden: Bool)
     func updateIsHiddenEmptyWarningView(isHidden: Bool)
+    func startParticeAnimation()
 }
 
 private protocol ListStorageActionProtocol {
@@ -41,7 +42,7 @@ final class ListStorageView: UIView {
     fileprivate let drawFruitButton = UIButton().then {
         $0.setTitle("음표 열매 뽑기", for: .normal)
     }
-    
+
     private let particleAnimationView = ParticleAnimationView()
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
@@ -145,6 +146,11 @@ final class ListStorageView: UIView {
 }
 
 extension ListStorageView: ListStorageStateProtocol {
+    func startParticeAnimation() {
+        print("🚀 나는 appear 되고 1번째로 호출될거야")
+        particleAnimationView.startAnimation()
+    }
+
     func updateIsHiddenEmptyWarningView(isHidden: Bool) {
         if tableView.frame.size == .zero { return }
         let isLoggedIn = loginWarningView.isHidden

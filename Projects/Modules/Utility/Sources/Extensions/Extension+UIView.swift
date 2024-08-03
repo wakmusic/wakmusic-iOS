@@ -17,7 +17,7 @@ public extension UIView {
         case down = 1
         case random
     }
-    
+
     enum VerticalLocation {
         case bottom
         case top
@@ -143,7 +143,7 @@ public extension UIView {
         animation.fillMode = CAMediaTimingFillMode.forwards
         layer.add(animation, forKey: nil)
     }
-    
+
     func moveAnimate(
         duration: CGFloat,
         amount: CGFloat,
