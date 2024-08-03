@@ -42,7 +42,7 @@ final class ListStorageView: UIView {
         $0.setTitle("음표 열매 뽑기", for: .normal)
     }
     
-    private let particleView = ParticleView()
+    private let particleAnimationView = ParticleAnimationView()
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
 
@@ -73,7 +73,7 @@ final class ListStorageView: UIView {
             createListButton,
             tableView,
             drawFruitButton,
-            particleView,
+            particleAnimationView,
             loginWarningView,
             activityIndicator
         )
@@ -95,7 +95,7 @@ final class ListStorageView: UIView {
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
-        particleView.snp.makeConstraints {
+        particleAnimationView.snp.makeConstraints {
             $0.height.equalTo(80)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
@@ -123,7 +123,7 @@ final class ListStorageView: UIView {
 
         drawFruitButton.setAttributedTitle(
             NSAttributedString(
-                string: "음표 열매 뽑으러 가기",
+                string: "음표 열매 뽑기",
                 attributes: [
                     .kern: -0.5,
                     .font: UIFont.WMFontSystem.t4(weight: .bold).font,
