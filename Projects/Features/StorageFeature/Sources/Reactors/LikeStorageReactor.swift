@@ -357,7 +357,8 @@ private extension LikeStorageReactor {
         deleteFavoriteListUseCase.execute(ids: ids)
             .andThen(
                 .concat(
-                    fetchDataSource()
+                    fetchDataSource(),
+                    .just(.showToast("\(ids.count)개의 리스트를 삭제했습니다."))
                 )
             )
             .catch { error in
