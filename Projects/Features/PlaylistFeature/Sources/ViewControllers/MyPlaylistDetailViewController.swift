@@ -555,14 +555,13 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
 
             reactor.action.onNext(.forceEndEditing)
 
-            break
         case .addPlayList:
             reactor.action.onNext(.forceEndEditing)
             PlayState.shared
                 .append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
             showToast(
                 text: Localization.LocalizationStrings.addList,
-                options: [.songCart, .tabBar]
+                options: [.tabBar]
             )
 
         case .play:

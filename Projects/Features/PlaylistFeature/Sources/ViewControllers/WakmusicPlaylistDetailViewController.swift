@@ -373,7 +373,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
             showToast(
                 text: Localization.LocalizationStrings.addList,
-                options: [.songCart, .tabBar]
+                options: [.tabBar]
             )
 
         case .play:

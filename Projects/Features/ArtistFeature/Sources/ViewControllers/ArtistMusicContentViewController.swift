@@ -227,6 +227,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
                 return
             }
             PlayState.shared.appendSongsToPlaylist(songs)
+            output.showToast.onNext(LocalizationStrings.addList)
             input.allSongSelected.onNext(false)
 
         case .play:
