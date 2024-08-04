@@ -37,21 +37,24 @@ final class SettingView: UIView {
 
     let settingItemTableView = UITableView().then {
         $0.register(SettingItemTableViewCell.self, forCellReuseIdentifier: SettingItemTableViewCell.reuseIdentifier)
-        $0.isScrollEnabled = false
         $0.separatorStyle = .none
+        $0.backgroundColor = .clear
     }
+
+    private let withDrawContentView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 60))
 
     private let dotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
 
-    fileprivate let withDrawLabel = WithDrawLabel()
+    fileprivate let withDrawLabel = WithDrawLabel().then {
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 56
+    }
 
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
-        self.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
     @available(*, unavailable)
@@ -65,15 +68,15 @@ private extension SettingView {
         self.addSubviews(
             wmNavigationbarView,
             titleLabel,
-            settingItemTableView,
-            dotImageView,
-            withDrawLabel
+            settingItemTableView
         )
+        withDrawContentView.addSubviews(dotImageView, withDrawLabel)
+        settingItemTableView.tableFooterView = withDrawContentView
     }
 
     func setLayout() {
         wmNavigationbarView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.top.equalTo(safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
@@ -86,20 +89,19 @@ private extension SettingView {
         settingItemTableView.snp.makeConstraints {
             $0.top.equalTo(wmNavigationbarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(360)
+            $0.bottom.equalToSuperview()
         }
 
         dotImageView.snp.makeConstraints {
-            $0.top.equalTo(settingItemTableView.snp.bottom).offset(12)
+            $0.top.equalTo(withDrawContentView.snp.top).offset(12)
             $0.left.equalToSuperview().offset(20)
-            $0.width.height.equalTo(16)
+            $0.size.equalTo(16)
         }
 
         withDrawLabel.snp.makeConstraints {
-            $0.top.equalTo(settingItemTableView.snp.bottom).offset(12)
-            $0.height.equalTo(18)
+            $0.top.equalTo(dotImageView.snp.top)
             $0.left.equalTo(dotImageView.snp.right)
-            $0.right.equalToSuperview().inset(20)
+            $0.height.equalTo(18)
         }
     }
 }
@@ -113,8 +115,11 @@ extension SettingView: SettingStateProtocol {
     func updateIsHiddenLogoutButton(isHidden: Bool) {
         guard let dataSource = settingItemTableView.dataSource as? SettingItemDataSource else { return }
         settingItemTableView.reloadData()
-        settingItemTableView.snp.updateConstraints {
-            $0.height.equalTo(dataSource.currentSettingItems.count * 60)
+    }
+
+    func updateNotificationAuthorizationStatus(granted: Bool) {
+        DispatchQueue.main.async {
+            self.settingItemTableView.reloadData()
         }
     }
 }

@@ -28,6 +28,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     override func viewDidLoad() {
         super.viewDidLoad()
         setSettingItemTableView()
+        view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
     public static func viewController(
@@ -60,6 +61,13 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .bind(with: self) { owner, isHidden in
                 owner.settingItemDataSource.updateCurrentSettingItems(isHidden: isHidden)
                 owner.settingView.updateIsHiddenLogoutButton(isHidden: isHidden)
+            }
+            .disposed(by: disposeBag)
+
+        reactor.state.map(\.notificationAuthorizationStatus)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, granted in
+                owner.settingView.updateNotificationAuthorizationStatus(granted: granted)
             }
             .disposed(by: disposeBag)
 
@@ -109,10 +117,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$toastMessage)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, message in
-                owner.showToast(
-                    text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                )
+                owner.showToast(text: message, options: [.tabBar])
             })
             .disposed(by: disposeBag)
 
@@ -188,9 +193,6 @@ extension SettingViewController: UITableViewDelegate {
     func setSettingItemTableView() {
         settingView.settingItemTableView.dataSource = settingItemDataSource
         settingView.settingItemTableView.delegate = self
-        settingView.settingItemTableView.snp.updateConstraints {
-            $0.height.equalTo(settingItemDataSource.currentSettingItems.count * 60)
-        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -198,6 +200,7 @@ extension SettingViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
         switch category {

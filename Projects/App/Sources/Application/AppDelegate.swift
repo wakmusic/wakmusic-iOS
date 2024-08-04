@@ -3,6 +3,7 @@ import BaseFeature
 import FirebaseAnalytics
 import FirebaseCore
 import FirebaseCrashlytics
+import FirebaseMessaging
 import LogManager
 import NaverThirdPartyLogin
 import RealmSwift
@@ -12,6 +13,8 @@ import Utility
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
+    private let gcmMessageIDKey = "gcm.message_id"
+
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -52,6 +55,60 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didDiscardSceneSessions sceneSessions: Set<UISceneSession>
     ) {}
+}
+
+extension AppDelegate {
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        // If you are receiving a notification message while your app is in the background,
+        // this callback will not be fired till the user taps on the notification launching the application.
+
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // Print full message.
+        LogManager.printDebug("🔔:: \(userInfo)")
+    }
+
+    // [START receive_message]
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
+        // If you are receiving a notification message while your app is in the background,
+        // this callback will not be fired till the user taps on the notification launching the application.
+
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // Print full message.
+        LogManager.printDebug("🔔:: \(userInfo)")
+
+        return UIBackgroundFetchResult.newData
+    }
+    // [END receive_message]
+
+    func application(_ application: UIApplication,
+                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        LogManager.printDebug("🔔:: Unable to register for remote notifications: \(error.localizedDescription)")
+    }
+
+    // This function is added here only for debugging purposes, and can be removed if swizzling is enabled.
+    // If swizzling is disabled then this function must be implemented so that the APNs token can be paired to
+    // the FCM registration token.
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        LogManager.printDebug("🔔:: APNs token retrieved: \(token)")
+
+        // With swizzling disabled you must set the APNs token here.
+        Messaging.messaging().apnsToken = deviceToken
+        Messaging.messaging().token { token, error in
+            if let error = error {
+                LogManager.printError("🔔:: Messaging.messaging().token: \(error.localizedDescription)")
+            } else if let token = token {
+                LogManager.printDebug("🔔:: Messaging.messaging().token: \(token)")
+            }
+        }
+    }
 }
 
 #if DEBUG

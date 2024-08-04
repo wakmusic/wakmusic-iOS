@@ -1,29 +1,35 @@
 import Foundation
 import NoticeDomainInterface
+import NotificationDomainInterface
 import RxRelay
 import RxSwift
 import Utility
+import LogManager
 
 public final class MainTabBarViewModel {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
     private let fetchNoticeIDListUseCase: FetchNoticeIDListUseCase
+    private let updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
     private let disposeBag = DisposeBag()
 
     public init(
         fetchNoticePopupUseCase: any FetchNoticePopupUseCase,
-        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase
+        fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
+        updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase
     ) {
         self.fetchNoticePopupUseCase = fetchNoticePopupUseCase
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
+        self.updateNotificationTokenUseCase = updateNotificationTokenUseCase
     }
 
     public struct Input {
         let fetchNoticePopup: PublishSubject<Void> = PublishSubject()
         let fetchNoticeIDList: PublishSubject<Void> = PublishSubject()
+        let detectedRefreshPushToken: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        let dataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
+        let noticePopupDataSource: BehaviorRelay<[FetchNoticeEntity]> = BehaviorRelay(value: [])
     }
 
     public func transform(from input: Input) -> Output {
@@ -43,14 +49,12 @@ public final class MainTabBarViewModel {
                 }
             }
             .debug("ignoredPopupIDs")
-            .bind(to: output.dataSource)
+            .bind(to: output.noticePopupDataSource)
             .disposed(by: disposeBag)
 
         input.fetchNoticeIDList
-            .filter {
-                let readNoticeIDs = PreferenceManager.readNoticeIDs ?? []
-                return readNoticeIDs.isEmpty
-            }
+            .withLatestFrom(PreferenceManager.$readNoticeIDs)
+            .filter { ($0 ?? []).isEmpty }
             .flatMap { [fetchNoticeIDListUseCase] _ -> Single<FetchNoticeIDListEntity> in
                 return fetchNoticeIDListUseCase.execute()
                     .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
@@ -60,6 +64,24 @@ public final class MainTabBarViewModel {
                 PreferenceManager.readNoticeIDs = allNoticeIDs
             }
             .disposed(by: disposeBag)
+
+        Observable.combineLatest(
+            input.detectedRefreshPushToken,
+            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged()
+        ) { _, id -> String? in
+            return id
+        }
+        .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
+        .flatMap { [updateNotificationTokenUseCase] id -> Observable<Bool> in
+            return id == nil ? Observable.just(false) :
+            updateNotificationTokenUseCase.execute(type: .update)
+                .debug("🔔:: updateNotificationTokenUseCase")
+                .andThen(Observable.just(true))
+                .catchAndReturn(false)
+        }
+        .debug("🔔:: updateNotificationTokenUseCase")
+        .subscribe()
+        .disposed(by: disposeBag)
 
         return output
     }

@@ -1,4 +1,5 @@
 import Foundation
+import Utility
 
 public enum SettingItemCategory: String {
     case appPush = "알림"

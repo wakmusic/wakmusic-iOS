@@ -33,10 +33,12 @@ class SettingItemDataSource: NSObject, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = currentSettingItems[indexPath.row]
-        let cell = tableView.dequeueReusableCell(
+        guard let cell = tableView.dequeueReusableCell(
             withIdentifier: SettingItemTableViewCell.reuseIdentifier,
             for: indexPath
-        ) as! SettingItemTableViewCell
+        ) as? SettingItemTableViewCell else {
+            return UITableViewCell()
+        }
         cell.configure(type: item)
         return cell
     }

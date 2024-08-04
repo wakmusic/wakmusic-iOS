@@ -16,7 +16,8 @@ let project = Project.module(
                 .SPM.RxMoya,
                 .SPM.Moya,
                 .SPM.FirebaseAnalytics,
-                .SPM.FirebaseCrashlytics
+                .SPM.FirebaseCrashlytics,
+                .SPM.FirebaseMessaging
             ]
         )
     ]

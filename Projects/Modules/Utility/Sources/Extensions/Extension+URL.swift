@@ -1,7 +1,7 @@
 import Foundation
 
 public extension URL {
-    func params() -> [String: Any] {
+    func parseToParams() -> [String: Any] {
         var dict: [String: Any] = [:]
 
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),

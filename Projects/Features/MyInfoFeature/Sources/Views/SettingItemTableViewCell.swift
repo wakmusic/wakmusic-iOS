@@ -22,7 +22,6 @@ class SettingItemTableViewCell: UITableViewCell {
         $0.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
         $0.setTextWithAttributes(kernValue: -0.5)
         $0.textAlignment = .right
-        $0.isHidden = true
     }
 
     private let rightImageView = UIImageView().then {
@@ -40,9 +39,10 @@ class SettingItemTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setBackgroundColor()
         addView()
         setLayout()
+        backgroundColor = .clear
+        contentView.backgroundColor = .clear
     }
 
     @available(*, unavailable)
@@ -50,12 +50,9 @@ class SettingItemTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setBackgroundColor() {
-        contentView.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
-    }
-
     func configure(type: SettingItemType) {
         configureTitle(type: type)
+        configureSubTitle(type: type)
         configureRightItem(type: type)
         configureIdentifier(type: type)
     }
@@ -71,14 +68,27 @@ private extension SettingItemTableViewCell {
         }
     }
 
+    func configureSubTitle(type: SettingItemType) {
+        switch type {
+        case let .navigate(category):
+            let pushNotificationAuthorizationStatus = PreferenceManager.pushNotificationAuthorizationStatus ?? false
+            self.subTitleLabel.text = (category == .appPush) ?
+                pushNotificationAuthorizationStatus ? "켜짐" : "꺼짐" : ""
+        case let .description(category):
+            self.subTitleLabel.text = ""
+        }
+    }
+
     func configureRightItem(type: SettingItemType) {
         switch type {
-        case .navigate(_):
+        case let .navigate(category):
             rightImageView.isHidden = false
             rightLabel.isHidden = true
-        case .description(_):
+            subTitleLabel.isHidden = category != .appPush
+        case .description:
             rightImageView.isHidden = true
             rightLabel.isHidden = false
+            subTitleLabel.isHidden = true
         }
     }
 

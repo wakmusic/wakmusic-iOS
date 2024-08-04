@@ -9,10 +9,12 @@ import NoticeDomainInterface
 import PlaylistFeatureInterface
 import SearchFeatureInterface
 import StorageFeatureInterface
+import NotificationDomainInterface
 
 public protocol MainTabBarDependency: Dependency {
     var fetchNoticePopupUseCase: any FetchNoticePopupUseCase { get }
     var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
+    var updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase { get }
     var appEntryState: any AppEntryStateHandleable { get }
     var homeFactory: any HomeFactory { get }
     var searchFactory: any SearchFactory { get }
@@ -31,7 +33,8 @@ public final class MainTabBarComponent: Component<MainTabBarDependency> {
         return MainTabBarViewController.viewController(
             viewModel: MainTabBarViewModel.init(
                 fetchNoticePopupUseCase: dependency.fetchNoticePopupUseCase,
-                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase
+                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase,
+                updateNotificationTokenUseCase: dependency.updateNotificationTokenUseCase
             ),
             appEntryState: dependency.appEntryState,
             homeFactory: dependency.homeFactory,
