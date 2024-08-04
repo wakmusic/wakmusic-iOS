@@ -6,6 +6,7 @@ import FruitDrawFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import PriceDomainInterface
 import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
@@ -18,6 +19,7 @@ public protocol ListStorageDependency: Dependency {
     var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
     var deletePlayListUseCase: any DeletePlaylistUseCase { get }
     var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase { get }
+    var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
@@ -33,7 +35,8 @@ public final class ListStorageComponent: Component<ListStorageDependency> {
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 editPlayListOrderUseCase: dependency.editPlayListOrderUseCase,
                 deletePlayListUseCase: dependency.deletePlayListUseCase,
-                fetchPlaylistSongsUseCase: dependency.fetchPlaylistSongsUseCase
+                fetchPlaylistSongsUseCase: dependency.fetchPlaylistSongsUseCase,
+                fetchPlaylistCreationPriceUseCase: dependency.fetchPlaylistCreationPriceUseCase
             ),
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
             textPopUpFactory: dependency.textPopUpFactory,

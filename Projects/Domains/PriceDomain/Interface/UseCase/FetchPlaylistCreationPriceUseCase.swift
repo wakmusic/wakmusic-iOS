@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchPlaylistCreationPriceUsecase {
+public protocol FetchPlaylistCreationPriceUseCase {
     func execute() -> Single<PriceEntity>
 }

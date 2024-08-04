@@ -8,7 +8,7 @@ import PriceDomainInterface
 import UIKit
 
 public protocol PlaylistCoverOptionPopupDependency: Dependency {
-    var fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase { get }
+    var fetchPlaylistImagePriceUseCase: any FetchPlaylistImagePriceUseCase { get }
 }
 
 public final class PlaylistCoverOptionPopupComponent: Component<PlaylistCoverOptionPopupDependency>,
@@ -17,7 +17,7 @@ public final class PlaylistCoverOptionPopupComponent: Component<PlaylistCoverOpt
         PlaylistCoverOptionPopupViewController(
             reactor: PlaylistCoverOptionPopupReactor(
                 fetchPlaylistImagePriceUsecase: dependency
-                    .fetchPlaylistImagePriceUsecase
+                    .fetchPlaylistImagePriceUseCase
             ),
             delegate: delegate
         )

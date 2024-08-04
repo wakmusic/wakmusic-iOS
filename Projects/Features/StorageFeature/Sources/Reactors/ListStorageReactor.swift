@@ -3,6 +3,7 @@ import Foundation
 import Localization
 import LogManager
 import PlaylistDomainInterface
+import PriceDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
@@ -21,6 +22,7 @@ final class ListStorageReactor: Reactor {
         case tapAll(isSelecting: Bool)
         case loginButtonDidTap
         case createListButtonDidTap
+        case confirmCreatePriceButtonDidTap
         case confirmCreateListButtonDidTap(String)
         case addToCurrentPlaylistButtonDidTap
         case deleteButtonDidTap
@@ -39,6 +41,7 @@ final class ListStorageReactor: Reactor {
         case updateIsShowActivityIndicator(Bool)
         case showLoginAlert
         case showToast(String)
+        case showCreatePricePopup(Int)
         case showCreateListPopup
         case showDeletePopup(Int)
         case showDetail(key: String)
@@ -57,6 +60,7 @@ final class ListStorageReactor: Reactor {
         @Pulse var showLoginAlert: Void?
         @Pulse var showToast: String?
         @Pulse var hideSongCart: Void?
+        @Pulse var showCreatePricePopup: Int?
         @Pulse var showCreateListPopup: Void?
         @Pulse var showDeletePopup: Int?
         @Pulse var showDetail: String?
@@ -71,6 +75,7 @@ final class ListStorageReactor: Reactor {
     private let editPlayListOrderUseCase: any EditPlaylistOrderUseCase
     private let deletePlayListUseCase: any DeletePlaylistUseCase
     private let fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
+    private let fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase
 
     init(
         storageCommonService: any StorageCommonService,
@@ -78,7 +83,8 @@ final class ListStorageReactor: Reactor {
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
         deletePlayListUseCase: any DeletePlaylistUseCase,
-        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
+        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase,
+        fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase
     ) {
         self.initialState = State(
             isLoggedIn: false,
@@ -94,6 +100,7 @@ final class ListStorageReactor: Reactor {
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
         self.fetchPlaylistSongsUseCase = fetchPlaylistSongsUseCase
+        self.fetchPlaylistCreationPriceUseCase = fetchPlaylistCreationPriceUseCase
     }
 
     deinit {
@@ -130,14 +137,17 @@ final class ListStorageReactor: Reactor {
 
         case .createListButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
-            return isLoggedIn ? .just(.showCreateListPopup) : .just(.showLoginAlert)
+            return isLoggedIn ? mutateFetchPlaylistCreationPrice() : .just(.showLoginAlert)
+
+        case .confirmCreatePriceButtonDidTap:
+            return .just(.showCreateListPopup)
+
+        case let .confirmCreateListButtonDidTap(title):
+            return createList(title)
 
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
             return .just(.showDeletePopup(itemCount))
-
-        case let .confirmCreateListButtonDidTap(title):
-            return createList(title)
 
         case .confirmDeleteButtonDidTap:
             return deleteList()
@@ -164,7 +174,7 @@ final class ListStorageReactor: Reactor {
                     if isChanged {
                         return .concat(
                             .just(.updateIsShowActivityIndicator(true)),
-                            owner.mutateEditPlayListOrderUseCase(),
+                            owner.mutateEditPlayListOrder(),
                             .just(.updateIsShowActivityIndicator(false)),
                             .just(.updateSelectedItemCount(0)),
                             .just(.hideSongCart),
@@ -241,6 +251,8 @@ final class ListStorageReactor: Reactor {
             newState.showDetail = key
         case .showDrawFruitPopup:
             newState.showDrawFruitPopup = ()
+        case let .showCreatePricePopup(price):
+            newState.showCreatePricePopup = price
         }
 
         return newState
@@ -291,7 +303,7 @@ extension ListStorageReactor {
     func createList(_ title: String) -> Observable<Mutation> {
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
-            mutateCreatePlaylistUseCase(title),
+            mutateCreatePlaylist(title),
             .just(.updateIsShowActivityIndicator(false)),
             .just(.hideSongCart)
         )
@@ -303,7 +315,7 @@ extension ListStorageReactor {
 
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
-            mutateDeletePlaylistUseCase(selectedItemIDs),
+            mutateDeletePlaylist(selectedItemIDs),
             .just(.updateIsShowActivityIndicator(false)),
             .just(.hideSongCart),
             .just(.switchEditingState(false))
@@ -458,12 +470,15 @@ extension ListStorageReactor {
 }
 
 private extension ListStorageReactor {
-    func mutateCreatePlaylistUseCase(_ title: String) -> Observable<Mutation> {
+    func mutateCreatePlaylist(_ title: String) -> Observable<Mutation> {
         createPlaylistUseCase.execute(title: title)
             .asObservable()
             .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.fetchDataSource()
+                return .concat(
+                    owner.fetchDataSource(),
+                    .just(.showToast("리스트를 만들었습니다."))
+                )
             }
             .catch { error in
                 let error = error.asWMError
@@ -471,7 +486,7 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateDeletePlaylistUseCase(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
+    func mutateDeletePlaylist(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
         let noti = NotificationCenter.default
         let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }
             .map { $0.key }
@@ -495,7 +510,7 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateEditPlayListOrderUseCase() -> Observable<Mutation> {
+    func mutateEditPlayListOrder() -> Observable<Mutation> {
         let currentDataSource = currentState.dataSource
         let playlistOrder = currentDataSource.flatMap { $0.items.map { $0.key } }
         return editPlayListOrderUseCase.execute(ids: playlistOrder)
@@ -511,5 +526,25 @@ private extension ListStorageReactor {
                     .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
                 ])
             }
+    }
+
+    func mutateFetchPlaylistCreationPrice() -> Observable<Mutation> {
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            fetchPlaylistCreationPriceUseCase.execute()
+                .asObservable()
+                .map { $0.price }
+                .do(onNext: { _ in
+                    NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
+                })
+                .flatMap { price -> Observable<Mutation> in
+                    return .just(.showCreatePricePopup(price))
+                }
+                .catch { error in
+                    let error = error.asWMError
+                    return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
     }
 }

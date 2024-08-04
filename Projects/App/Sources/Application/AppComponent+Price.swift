@@ -15,15 +15,15 @@ extension AppComponent {
         }
     }
 
-    var fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase {
+    var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase {
         shared {
-            FetchPlaylistCreationPriceUsecaseImpl(priceRepository: priceRepository)
+            FetchPlaylistCreationPriceUseCaseImpl(priceRepository: priceRepository)
         }
     }
 
-    var fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase {
+    var fetchPlaylistImagePriceUseCase: any FetchPlaylistImagePriceUseCase {
         shared {
-            FetchPlaylistImagePriceUsecaseImpl(priceRepository: priceRepository)
+            FetchPlaylistImagePriceUseCaseImpl(priceRepository: priceRepository)
         }
     }
 }

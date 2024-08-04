@@ -120,6 +120,22 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             })
             .disposed(by: disposeBag)
 
+        reactor.pulse(\.$showCreatePricePopup)
+            .compactMap { $0 }
+            .bind(with: self) { owner, price in
+                let text = owner.textPopUpFactory.makeView(
+                    text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: "\(price)개 사용",
+                    cancelButtonText: "취소",
+                    completion: {
+                        reactor.action.onNext(.confirmCreatePriceButtonDidTap)
+                    }, cancelCompletion: nil
+                )
+                owner.showBottomSheet(content: text)
+            }
+            .disposed(by: disposeBag)
+
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in

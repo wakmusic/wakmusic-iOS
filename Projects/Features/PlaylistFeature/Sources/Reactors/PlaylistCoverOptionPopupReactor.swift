@@ -16,10 +16,10 @@ final class PlaylistCoverOptionPopupReactor: Reactor {
         var isLoading: Bool
     }
 
-    private let fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase
+    private let fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUseCase
     var initialState: State
 
-    init(fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUsecase) {
+    init(fetchPlaylistImagePriceUsecase: any FetchPlaylistImagePriceUseCase) {
         self.fetchPlaylistImagePriceUsecase = fetchPlaylistImagePriceUsecase
         initialState = State(
             dataSource: [],

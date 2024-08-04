@@ -15,7 +15,7 @@ public final class ContainSongsViewModel: ViewModelType {
     private let fetchPlayListUseCase: any FetchPlaylistUseCase
     private let addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase
     private let createPlaylistUseCase: any CreatePlaylistUseCase
-    private let fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase
+    private let fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUseCase
     private let logoutUseCase: LogoutUseCase
     var songs: [String]!
     let disposeBag = DisposeBag()
@@ -49,7 +49,7 @@ public final class ContainSongsViewModel: ViewModelType {
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase,
-        fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase,
+        fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUseCase,
         logoutUseCase: LogoutUseCase
     ) {
         self.createPlaylistUseCase = createPlaylistUseCase
