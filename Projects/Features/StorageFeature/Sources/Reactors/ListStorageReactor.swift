@@ -529,11 +529,19 @@ private extension ListStorageReactor {
     }
 
     func mutateFetchPlaylistCreationPrice() -> Observable<Mutation> {
-        return fetchPlaylistCreationPriceUseCase.execute()
-            .asObservable()
-            .map { $0.price }
-            .flatMap { price -> Observable<Mutation> in
-                return .just(.showCreatePricePopup(price))
-            }
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            fetchPlaylistCreationPriceUseCase.execute()
+                .asObservable()
+                .map { $0.price }
+                .flatMap { price -> Observable<Mutation> in
+                    return .just(.showCreatePricePopup(price))
+                }
+                .catch { error in
+                    let error = error.asWMError
+                    return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
     }
 }
