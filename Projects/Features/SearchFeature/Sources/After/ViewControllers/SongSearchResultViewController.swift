@@ -380,7 +380,10 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 )
                 return
             }
-
+            showToast(
+                text: Localization.LocalizationStrings.addList,
+                options: [.tabBar]
+            )
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
 
