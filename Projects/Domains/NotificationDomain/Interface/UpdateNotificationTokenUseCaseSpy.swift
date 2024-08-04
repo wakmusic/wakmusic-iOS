@@ -8,4 +8,5 @@ public struct UpdateNotificationTokenUseCaseSpy: UpdateNotificationTokenUseCase 
             return Disposables.create()
         }
     }
+    public init() {}
 }
