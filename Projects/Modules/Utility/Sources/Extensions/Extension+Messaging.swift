@@ -1,5 +1,5 @@
-import Foundation
 import FirebaseMessaging
+import Foundation
 import RxSwift
 
 extension Messaging {
@@ -7,7 +7,7 @@ extension Messaging {
         let token = try await self.token()
         return token
     }
-    
+
     func fetchRxPushToken() -> Single<String> {
         return Single.create { single in
             self.token { token, error in

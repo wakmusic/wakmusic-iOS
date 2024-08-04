@@ -1,10 +1,10 @@
 import Foundation
+import LogManager
 import NoticeDomainInterface
 import NotificationDomainInterface
 import RxRelay
 import RxSwift
 import Utility
-import LogManager
 
 public final class MainTabBarViewModel {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
@@ -74,7 +74,7 @@ public final class MainTabBarViewModel {
         .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
         .flatMap { [updateNotificationTokenUseCase] id -> Observable<Bool> in
             return id == nil ? Observable.just(false) :
-            updateNotificationTokenUseCase.execute(type: .update)
+                updateNotificationTokenUseCase.execute(type: .update)
                 .debug("🔔:: updateNotificationTokenUseCase")
                 .andThen(Observable.just(true))
                 .catchAndReturn(false)

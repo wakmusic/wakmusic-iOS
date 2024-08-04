@@ -58,8 +58,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate {
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
+    ) {
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
 
@@ -70,9 +72,11 @@ extension AppDelegate {
         LogManager.printDebug("🔔:: \(userInfo)")
     }
 
-    // [START receive_message]
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
+    /// [START receive_message]
+    func application(
+        _ application: UIApplication,
+        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
+    ) async -> UIBackgroundFetchResult {
         // If you are receiving a notification message while your app is in the background,
         // this callback will not be fired till the user taps on the notification launching the application.
 
@@ -84,18 +88,23 @@ extension AppDelegate {
 
         return UIBackgroundFetchResult.newData
     }
+
     // [END receive_message]
 
-    func application(_ application: UIApplication,
-                     didFailToRegisterForRemoteNotificationsWithError error: Error) {
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ) {
         LogManager.printDebug("🔔:: Unable to register for remote notifications: \(error.localizedDescription)")
     }
 
-    // This function is added here only for debugging purposes, and can be removed if swizzling is enabled.
-    // If swizzling is disabled then this function must be implemented so that the APNs token can be paired to
-    // the FCM registration token.
-    func application(_ application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+    /// This function is added here only for debugging purposes, and can be removed if swizzling is enabled.
+    /// If swizzling is disabled then this function must be implemented so that the APNs token can be paired to
+    /// the FCM registration token.
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         LogManager.printDebug("🔔:: APNs token retrieved: \(token)")
 

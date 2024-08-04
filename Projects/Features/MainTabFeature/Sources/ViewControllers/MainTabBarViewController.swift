@@ -1,6 +1,7 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
+import FirebaseMessaging
 import HomeFeatureInterface
 import LogManager
 import MusicDetailFeatureInterface
@@ -15,7 +16,6 @@ import SnapKit
 import StorageFeatureInterface
 import UIKit
 import Utility
-import FirebaseMessaging
 
 public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
@@ -261,7 +261,7 @@ extension MainTabBarViewController: UNUserNotificationCenterDelegate {
 }
 
 extension MainTabBarViewController: MessagingDelegate {
-    // [START refresh_token]
+    /// [START refresh_token]
     public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         LogManager.printDebug("🔔:: Firebase registration token: \(String(describing: fcmToken ?? "-"))")
         // If necessary send token to application server.

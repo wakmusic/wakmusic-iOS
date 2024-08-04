@@ -173,62 +173,62 @@ extension ArtistViewController: UIGestureRecognizerDelegate {
 }
 
 #if DEBUG
-#warning("🎉:: 디버그용 이스터에그")
-private extension ArtistViewController {
-    func showTextInputAlert(completion: @escaping (String?) -> Void) {
-        let alertController = UIAlertController(
-            title: "푸시발송",
-            message: "songID를 입력하세요.",
-            preferredStyle: .alert
-        )
+    #warning("🎉:: 디버그용 이스터에그")
+    private extension ArtistViewController {
+        func showTextInputAlert(completion: @escaping (String?) -> Void) {
+            let alertController = UIAlertController(
+                title: "푸시발송",
+                message: "songID를 입력하세요.",
+                preferredStyle: .alert
+            )
 
-        alertController.addTextField { textField in
-            textField.placeholder = "songID를 입력하세요."
+            alertController.addTextField { textField in
+                textField.placeholder = "songID를 입력하세요."
+            }
+
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                let textField = alertController.textFields?.first
+                let inputText = textField?.text
+                completion(inputText)
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(okAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true, completion: nil)
         }
 
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            let textField = alertController.textFields?.first
-            let inputText = textField?.text
-            completion(inputText)
-        }
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alertController.addAction(okAction)
-        alertController.addAction(cancelAction)
-
-        present(alertController, animated: true, completion: nil)
-    }
-
-    func postNotification(id: String) {
-        let urlString = "U5l/gXs0ZmvBbJC8Lj4REKUhMpiYZByzM3MgyVD4Bk+LR+6IMoZBaEDwQB47DcpH"
-        guard let url = URL(string: AES256.decrypt(encoded: urlString)) else {
-            return
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        let keychain = KeychainImpl()
-        request.addValue("bearer \(keychain.load(type: .accessToken))", forHTTPHeaderField: "Authorization")
-
-        let parameters: [String: String] = [
-            "page": "songDetail",
-            "songId": id
-        ]
-
-        if let bodyData = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
-            request.httpBody = bodyData
-        }
-
-        let task = URLSession.shared.dataTask(with: request) { _, response, error in
-            if let error = error {
-                LogManager.printDebug("Error: \(error.localizedDescription)")
+        func postNotification(id: String) {
+            let urlString = "U5l/gXs0ZmvBbJC8Lj4REKUhMpiYZByzM3MgyVD4Bk+LR+6IMoZBaEDwQB47DcpH"
+            guard let url = URL(string: AES256.decrypt(encoded: urlString)) else {
                 return
             }
-            LogManager.printDebug("response: \(String(describing: response))")
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let keychain = KeychainImpl()
+            request.addValue("bearer \(keychain.load(type: .accessToken))", forHTTPHeaderField: "Authorization")
+
+            let parameters: [String: String] = [
+                "page": "songDetail",
+                "songId": id
+            ]
+
+            if let bodyData = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
+                request.httpBody = bodyData
+            }
+
+            let task = URLSession.shared.dataTask(with: request) { _, response, error in
+                if let error = error {
+                    LogManager.printDebug("Error: \(error.localizedDescription)")
+                    return
+                }
+                LogManager.printDebug("response: \(String(describing: response))")
+            }
+            task.resume()
         }
-        task.resume()
     }
-}
 #endif
