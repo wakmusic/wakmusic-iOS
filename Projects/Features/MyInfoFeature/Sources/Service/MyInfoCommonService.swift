@@ -12,7 +12,7 @@ final class DefaultMyInfoCommonService: MyInfoCommonService {
     let willRefreshUserInfoEvent: Observable<Notification>
     let didChangedUserInfoEvent: Observable<UserInfo?>
     let didChangedReadNoticeIDsEvent: Observable<[Int]?>
-    
+
     static let shared = DefaultMyInfoCommonService()
 
     init() {

@@ -167,7 +167,7 @@ final class MyInfoReactor: Reactor {
             .flatMap { owner, _ -> Observable<Mutation> in
                 return owner.mutateFetchUserInfoUseCase()
             }
-        
+
         let didChangedUserInfoMutation = myInfoCommonService.didChangedUserInfoEvent
             .withUnretained(self)
             .flatMap { owner, userInfo -> Observable<Mutation> in
@@ -179,13 +179,13 @@ final class MyInfoReactor: Reactor {
                     owner.updateProfileImage(userInfo)
                 )
             }
-        
+
         let didChangedReadNoticeIDsMutation = myInfoCommonService.didChangedReadNoticeIDsEvent
             .withUnretained(self)
             .flatMap { owner, readIDs -> Observable<Mutation> in
                 return owner.mutateFetchNoticeIDListUseCase(readIDs ?? [])
             }
-        
+
         return Observable.merge(
             mutation,
             willRefreshUserInfoMutation,
@@ -277,7 +277,7 @@ private extension MyInfoReactor {
                 return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
             }
     }
-    
+
     func mutateSetRemoteUserNameUseCase(_ newNickname: String) -> Observable<Mutation> {
         setUsernameUseCase.execute(name: newNickname)
             .andThen(
@@ -298,7 +298,7 @@ private extension MyInfoReactor {
                 )
             }
     }
-    
+
     func mutateFetchNoticeIDListUseCase(_ readIDs: [Int]) -> Observable<Mutation> {
         return fetchNoticeIDListUseCase.execute()
             .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
