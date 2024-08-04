@@ -115,11 +115,11 @@ final class MyInfoReactor: Reactor {
         case .requiredLogin:
             return navigateLogin()
         case .completedFruitDraw:
-            return mutateFetchUserInfoUseCase()
+            return mutateFetchUserInfo()
         case .completedSetProfile:
-            return mutateFetchUserInfoUseCase()
+            return mutateFetchUserInfo()
         case let .changeNicknameButtonDidTap(newNickname):
-            return mutateSetRemoteUserNameUseCase(newNickname)
+            return mutateSetRemoteUserName(newNickname)
         }
     }
 
@@ -165,7 +165,7 @@ final class MyInfoReactor: Reactor {
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent.withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.mutateFetchUserInfoUseCase()
+                return owner.mutateFetchUserInfo()
             }
 
         let didChangedUserInfoMutation = myInfoCommonService.didChangedUserInfoEvent
@@ -183,7 +183,7 @@ final class MyInfoReactor: Reactor {
         let didChangedReadNoticeIDsMutation = myInfoCommonService.didChangedReadNoticeIDsEvent
             .withUnretained(self)
             .flatMap { owner, readIDs -> Observable<Mutation> in
-                return owner.mutateFetchNoticeIDListUseCase(readIDs ?? [])
+                return owner.mutateFetchNoticeIDList(readIDs ?? [])
             }
 
         return Observable.merge(
@@ -197,7 +197,7 @@ final class MyInfoReactor: Reactor {
 
 private extension MyInfoReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        return mutateFetchUserInfoUseCase()
+        return mutateFetchUserInfo()
     }
 
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
@@ -268,7 +268,7 @@ private extension MyInfoReactor {
 }
 
 private extension MyInfoReactor {
-    func mutateFetchUserInfoUseCase() -> Observable<Mutation> {
+    func mutateFetchUserInfo() -> Observable<Mutation> {
         return fetchUserInfoUseCase.execute()
             .asObservable()
             .flatMap { _ in Observable.empty() }
@@ -278,7 +278,7 @@ private extension MyInfoReactor {
             }
     }
 
-    func mutateSetRemoteUserNameUseCase(_ newNickname: String) -> Observable<Mutation> {
+    func mutateSetRemoteUserName(_ newNickname: String) -> Observable<Mutation> {
         setUsernameUseCase.execute(name: newNickname)
             .andThen(
                 fetchUserInfoUseCase.execute()
@@ -299,7 +299,7 @@ private extension MyInfoReactor {
             }
     }
 
-    func mutateFetchNoticeIDListUseCase(_ readIDs: [Int]) -> Observable<Mutation> {
+    func mutateFetchNoticeIDList(_ readIDs: [Int]) -> Observable<Mutation> {
         return fetchNoticeIDListUseCase.execute()
             .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
             .asObservable()
