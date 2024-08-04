@@ -2,6 +2,7 @@ import BaseFeature
 import DesignSystem
 import UIKit
 import Utility
+import Localization
 
 extension PlaylistViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
@@ -9,16 +10,34 @@ extension PlaylistViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
-            let songs: [String] = []
+            let songs: [String] = Array(output.selectedSongIds.value)
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
             }
-
+            
+            let count = songs.count
+            
+            if PreferenceManager.userInfo == nil {
+                
+                let textPopvc = TextPopupViewController.viewController(
+                    text: LocalizationStrings.needLoginWarning,
+                    cancelButtonIsHidden: false,
+                    completion: { [weak self] in
+                        guard let self else { return }
+                        let vc = self.signInFactory.makeView()
+                        vc.modalPresentationStyle = .fullScreen
+                        self.present(vc, animated: true) {
+                            self.tappedAddPlaylist.onNext(())
+                        }
+                    }
+                )
+                self.showBottomSheet(content: textPopvc)
+                return
+            }
             viewController.modalPresentationStyle = .overFullScreen
 
             self.present(viewController, animated: true) {
                 self.tappedAddPlaylist.onNext(())
-                self.hideSongCart()
             }
 
         case .remove:

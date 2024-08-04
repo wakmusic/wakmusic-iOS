@@ -10,6 +10,7 @@ import RxSwift
 import SnapKit
 import UIKit
 import Utility
+import SignInFeatureInterface
 
 public final class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
@@ -25,6 +26,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
+    private(set) var textPopUpFactory: any TextPopUpFactory
+    private(set) var signInFactory: any SignInFactory
 
     public var songCartView: BaseFeature.SongCartView!
     public var bottomSheetView: BaseFeature.BottomSheetView!
@@ -51,10 +54,14 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     init(
         viewModel: PlaylistViewModel,
         containSongsFactory: ContainSongsFactory,
-        songDetailPresenter: any SongDetailPresentable
+        songDetailPresenter: any SongDetailPresentable,
+        textPopUpFactory: any TextPopUpFactory,
+        signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
+        self.signInFactory = signInFactory
+        self.textPopUpFactory = textPopUpFactory
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
