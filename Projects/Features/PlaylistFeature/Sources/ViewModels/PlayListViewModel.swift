@@ -6,7 +6,6 @@ import RxRelay
 import RxSwift
 import Utility
 
-
 internal typealias PlayListSectionModel = SectionModel<Int, PlaylistItemModel>
 
 final class PlaylistViewModel: ViewModelType {
@@ -110,7 +109,7 @@ final class PlaylistViewModel: ViewModelType {
 
         input.addPlaylistButtonDidTapEvent
             .withUnretained(self)
-            .subscribe(onNext: { (owner, _) in
+            .subscribe(onNext: { owner, _ in
                 output.selectedSongIds.accept([])
                 output.editState.send(false)
                 owner.isEditing = false

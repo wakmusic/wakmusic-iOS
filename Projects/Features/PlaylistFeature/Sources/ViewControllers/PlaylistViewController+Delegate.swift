@@ -1,8 +1,8 @@
 import BaseFeature
 import DesignSystem
+import Localization
 import UIKit
 import Utility
-import Localization
 
 extension PlaylistViewController: SongCartViewDelegate {
     public func buttonTapped(type: SongCartSelectType) {
@@ -14,11 +14,10 @@ extension PlaylistViewController: SongCartViewDelegate {
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
             }
-            
+
             let count = songs.count
-            
+
             if PreferenceManager.userInfo == nil {
-                
                 let textPopvc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,

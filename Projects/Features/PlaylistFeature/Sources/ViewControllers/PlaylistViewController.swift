@@ -7,10 +7,10 @@ import Kingfisher
 import RxDataSources
 import RxRelay
 import RxSwift
+import SignInFeatureInterface
 import SnapKit
 import UIKit
 import Utility
-import SignInFeatureInterface
 
 public final class PlaylistViewController: UIViewController, SongCartViewType {
     var viewModel: PlaylistViewModel!
