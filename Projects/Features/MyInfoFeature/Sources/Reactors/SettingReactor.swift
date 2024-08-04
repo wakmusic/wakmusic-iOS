@@ -272,9 +272,15 @@ private extension SettingReactor {
     }
 
     func confirmRemoveCacheButtonDidTap() -> Observable<Mutation> {
-        ImageCache.default.clearDiskCache()
-        action.onNext(.showToast("캐시 데이터가 삭제되었습니다."))
-        return .just(.confirmRemoveCacheButtonDidTap)
+        return Completable.create { completable in
+            ImageCache.default.clearCache {
+                completable(.completed)
+            }
+            return Disposables.create()
+        }
+        .andThen(
+            Observable.just(Mutation.showToast("캐시 데이터가 삭제되었습니다."))
+        )
     }
 
     func calculateCacheSize() -> Single<String> {

@@ -142,7 +142,7 @@ extension ListStorageTableViewCell {
 
         self.playlistImageView.kf.setImage(
             with: URL(string: model.image),
-            placeholder: DesignSystemAsset.PlayListTheme.theme3.image,
+            placeholder: nil,
             options: [.transition(.fade(0.2))]
         )
 
