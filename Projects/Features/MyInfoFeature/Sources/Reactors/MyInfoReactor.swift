@@ -163,8 +163,10 @@ final class MyInfoReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent.withUnretained(self)
+        let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent
+            .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
+                print("🚀 willRefreshUserInfoEvent 수신")
                 return owner.mutateFetchUserInfo()
             }
 
@@ -220,6 +222,7 @@ private extension MyInfoReactor {
     }
 
     func updateFruitCount(_ userInfo: UserInfo?) -> Observable<Mutation> {
+        print("🚀 updateFruitCount 호출됨:",userInfo)
         guard let count = userInfo?.itemCount else {
             return .just(.updateFruitCount(-1))
         }
