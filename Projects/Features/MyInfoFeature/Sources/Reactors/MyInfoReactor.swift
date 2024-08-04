@@ -8,6 +8,7 @@ import Utility
 
 final class MyInfoReactor: Reactor {
     enum Action {
+        case viewDidLoad
         case loginButtonDidTap
         case profileImageDidTap
         case drawButtonDidTap
@@ -20,8 +21,6 @@ final class MyInfoReactor: Reactor {
         case completedFruitDraw
         case completedSetProfile
         case changeNicknameButtonDidTap(String)
-        case changedUserInfo(UserInfo?)
-        case changedReadNoticeIDs([Int])
         case requiredLogin
     }
 
@@ -89,12 +88,12 @@ final class MyInfoReactor: Reactor {
             fruitCount: 0,
             isAllNoticesRead: false
         )
-        observeUserInfoChanges()
-        observeReadNoticeIdChanges()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .viewDidLoad:
+            return viewDidLoad()
         case .loginButtonDidTap:
             return loginButtonDidTap()
         case .profileImageDidTap:
@@ -113,24 +112,14 @@ final class MyInfoReactor: Reactor {
             return teamNavigationDidTap()
         case .settingNavigationDidTap:
             return settingNavigationDidTap()
-        case let .changedUserInfo(userInfo):
-            return .concat(
-                updateIsLoggedIn(userInfo),
-                updateProfileImage(userInfo),
-                updateNickname(userInfo),
-                updatePlatform(userInfo),
-                updateFruitCount(userInfo)
-            )
-        case let .changedReadNoticeIDs(readIDs):
-            return updateIsAllNoticesRead(readIDs)
         case .requiredLogin:
             return navigateLogin()
         case .completedFruitDraw:
-            return fetchUserInfo()
+            return mutateFetchUserInfo()
         case .completedSetProfile:
-            return fetchUserInfo()
+            return mutateFetchUserInfo()
         case let .changeNicknameButtonDidTap(newNickname):
-            return updateRemoteNickname(newNickname)
+            return mutateSetRemoteUserName(newNickname)
         }
     }
 
@@ -176,51 +165,39 @@ final class MyInfoReactor: Reactor {
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent.withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.fetchUserInfo()
+                return owner.mutateFetchUserInfo()
             }
 
-        return Observable.merge(willRefreshUserInfoMutation, mutation)
+        let didChangedUserInfoMutation = myInfoCommonService.didChangedUserInfoEvent
+            .withUnretained(self)
+            .flatMap { owner, userInfo -> Observable<Mutation> in
+                return .concat(
+                    owner.updateNickname(userInfo),
+                    owner.updatePlatform(userInfo),
+                    owner.updateFruitCount(userInfo),
+                    owner.updateIsLoggedIn(userInfo),
+                    owner.updateProfileImage(userInfo)
+                )
+            }
+
+        let didChangedReadNoticeIDsMutation = myInfoCommonService.didChangedReadNoticeIDsEvent
+            .withUnretained(self)
+            .flatMap { owner, readIDs -> Observable<Mutation> in
+                return owner.mutateFetchNoticeIDList(readIDs ?? [])
+            }
+
+        return Observable.merge(
+            mutation,
+            willRefreshUserInfoMutation,
+            didChangedUserInfoMutation,
+            didChangedReadNoticeIDsMutation
+        )
     }
 }
 
 private extension MyInfoReactor {
-    func observeUserInfoChanges() {
-        PreferenceManager.$userInfo
-            .bind(with: self) { owner, userInfo in
-                owner.action.onNext(.changedUserInfo(userInfo))
-            }
-            .disposed(by: disposeBag)
-    }
-
-    func observeReadNoticeIdChanges() {
-        PreferenceManager.$readNoticeIDs
-            .map { $0 ?? [] }
-            .bind(with: self) { owner, readIDs in
-                owner.action.onNext(.changedReadNoticeIDs(readIDs))
-            }
-            .disposed(by: disposeBag)
-    }
-
-    func fetchUserInfo() -> Observable<Mutation> {
-        return fetchUserInfoUseCase.execute()
-            .asObservable()
-            .flatMap { _ in Observable.empty() }
-            .catch { error in
-                let error = error.asWMError
-                return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
-            }
-    }
-
-    func updateIsAllNoticesRead(_ readIDs: [Int]) -> Observable<Mutation> {
-        return fetchNoticeIDListUseCase.execute()
-            .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
-            .asObservable()
-            .map {
-                let readIDsSet = Set(readIDs)
-                let allNoticeIDsSet = Set($0.data)
-                return allNoticeIDsSet.isSubset(of: readIDsSet)
-            }
-            .map { Mutation.updateIsAllNoticesRead($0) }
+    func viewDidLoad() -> Observable<Mutation> {
+        return mutateFetchUserInfo()
     }
 
     func updateIsLoggedIn(_ userInfo: UserInfo?) -> Observable<Mutation> {
@@ -230,27 +207,6 @@ private extension MyInfoReactor {
     func updateProfileImage(_ userInfo: UserInfo?) -> Observable<Mutation> {
         guard let profile = userInfo?.profile else { return .empty() }
         return .just(.updateProfileImage(profile))
-    }
-
-    func updateRemoteNickname(_ newNickname: String) -> Observable<Mutation> {
-        setUsernameUseCase.execute(name: newNickname)
-            .andThen(
-                fetchUserInfoUseCase.execute()
-                    .asObservable()
-                    .flatMap { _ -> Observable<Mutation> in
-                        return .concat(
-                            .just(.showToast("닉네임이 변경되었습니다.")),
-                            .just(.dismissEditSheet)
-                        )
-                    }
-            )
-            .catch { error in
-                let error = error.asWMError
-                return .concat(
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")),
-                    .just(.dismissEditSheet)
-                )
-            }
     }
 
     func updateNickname(_ userInfo: UserInfo?) -> Observable<Mutation> {
@@ -308,5 +264,50 @@ private extension MyInfoReactor {
 
     func navigateLogin() -> Observable<Mutation> {
         return .just(.navigate(.login))
+    }
+}
+
+private extension MyInfoReactor {
+    func mutateFetchUserInfo() -> Observable<Mutation> {
+        return fetchUserInfoUseCase.execute()
+            .asObservable()
+            .flatMap { _ in Observable.empty() }
+            .catch { error in
+                let error = error.asWMError
+                return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+            }
+    }
+
+    func mutateSetRemoteUserName(_ newNickname: String) -> Observable<Mutation> {
+        setUsernameUseCase.execute(name: newNickname)
+            .andThen(
+                fetchUserInfoUseCase.execute()
+                    .asObservable()
+                    .flatMap { _ -> Observable<Mutation> in
+                        return .concat(
+                            .just(.showToast("닉네임이 변경되었습니다.")),
+                            .just(.dismissEditSheet)
+                        )
+                    }
+            )
+            .catch { error in
+                let error = error.asWMError
+                return .concat(
+                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")),
+                    .just(.dismissEditSheet)
+                )
+            }
+    }
+
+    func mutateFetchNoticeIDList(_ readIDs: [Int]) -> Observable<Mutation> {
+        return fetchNoticeIDListUseCase.execute()
+            .catchAndReturn(FetchNoticeIDListEntity(status: "404", data: []))
+            .asObservable()
+            .map {
+                let readIDsSet = Set(readIDs)
+                let allNoticeIDsSet = Set($0.data)
+                return allNoticeIDsSet.isSubset(of: readIDsSet)
+            }
+            .map { Mutation.updateIsAllNoticesRead($0) }
     }
 }
