@@ -60,19 +60,19 @@ public final class ArtistViewController:
             .bind(with: self) { owner, entity in
                 #warning("🎉:: 디버그용 이스터에그")
                 #if DEBUG
-                if entity.id == "gosegu" {
-                    owner.showTextInputAlert { id in
-                        owner.postNotification(id: id ?? "")
+                    if entity.id == "gosegu" {
+                        owner.showTextInputAlert { id in
+                            owner.postNotification(id: id ?? "")
+                        }
+                    } else {
+                        LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                        let viewController = owner.artistDetailFactory.makeView(model: entity)
+                        owner.navigationController?.pushViewController(viewController, animated: true)
                     }
-                } else {
+                #else
                     LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
                     let viewController = owner.artistDetailFactory.makeView(model: entity)
                     owner.navigationController?.pushViewController(viewController, animated: true)
-                }
-                #else
-                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                let viewController = owner.artistDetailFactory.makeView(model: entity)
-                owner.navigationController?.pushViewController(viewController, animated: true)
                 #endif
             }
             .disposed(by: disposeBag)
