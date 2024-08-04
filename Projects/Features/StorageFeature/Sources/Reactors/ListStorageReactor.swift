@@ -26,6 +26,7 @@ final class ListStorageReactor: Reactor {
         case deleteButtonDidTap
         case confirmDeleteButtonDidTap
         case drawFruitButtonDidTap
+        case completedFruitDraw
     }
 
     enum Mutation {
@@ -144,6 +145,9 @@ final class ListStorageReactor: Reactor {
         case .drawFruitButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
             return isLoggedIn ? .just(.showDrawFruitPopup) : .just(.showLoginAlert)
+
+        case .completedFruitDraw:
+            return completedFruitDraw()
         }
     }
 
@@ -273,6 +277,11 @@ extension ListStorageReactor {
 
     func clearDataSource() -> Observable<Mutation> {
         return .just(.clearDataSource)
+    }
+
+    func completedFruitDraw() -> Observable<Mutation> {
+        NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
+        return .empty()
     }
 
     func updateIsLoggedIn(_ isLoggedIn: Bool) -> Observable<Mutation> {

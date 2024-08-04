@@ -163,7 +163,8 @@ final class MyInfoReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent.withUnretained(self)
+        let willRefreshUserInfoMutation = myInfoCommonService.willRefreshUserInfoEvent
+            .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
                 return owner.mutateFetchUserInfo()
             }
