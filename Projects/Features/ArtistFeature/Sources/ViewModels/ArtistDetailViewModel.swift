@@ -96,6 +96,18 @@ public final class ArtistDetailViewModel: ViewModelType {
             })
             .disposed(by: disposeBag)
 
+        /// 로그인/아웃, 기기알림 끔 상태 반영
+        Observable.combineLatest(
+            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
+            PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
+        ) { id, granted -> (String?, Bool) in
+            return (id, granted)
+        }
+        .skip(1)
+        .map { _ in () }
+        .bind(to: input.fetchArtistSubscriptionStatus)
+        .disposed(by: disposeBag)
+
         return output
     }
 }
