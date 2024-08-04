@@ -77,7 +77,7 @@ final class SettingReactor: Reactor {
             userInfo: Utility.PreferenceManager.userInfo,
             isHiddenLogoutButton: true,
             isHiddenWithDrawButton: true,
-            notificationAuthorizationStatus: PreferenceManager.pushNotificationAuthorizationStatus ?? false, 
+            notificationAuthorizationStatus: PreferenceManager.pushNotificationAuthorizationStatus ?? false,
             isShowActivityIndicator: false
         )
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
@@ -140,7 +140,7 @@ final class SettingReactor: Reactor {
         }
         return newState
     }
-    
+
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let updateIsLoggedInMutation = PreferenceManager.$userInfo.map { $0?.ID }
             .distinctUntilChanged()
@@ -152,7 +152,7 @@ final class SettingReactor: Reactor {
                     owner.updateIsHiddenWithDrawButton(isLoggedIn)
                 )
             }
-        
+
         let updatepushNotificationAuthorizationStatusMutation = PreferenceManager.$pushNotificationAuthorizationStatus
             .skip(1)
             .distinctUntilChanged()
@@ -160,7 +160,7 @@ final class SettingReactor: Reactor {
             .flatMap { granted -> Observable<Mutation> in
                 return .just(.changedNotificationAuthorizationStatus(granted))
             }
-        
+
         return Observable.merge(
             mutation,
             updateIsLoggedInMutation,

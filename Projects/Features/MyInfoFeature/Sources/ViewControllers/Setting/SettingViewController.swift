@@ -4,13 +4,13 @@ import DesignSystem
 import Foundation
 import LogManager
 import MyInfoFeatureInterface
+import NVActivityIndicatorView
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
 import Then
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var textPopUpFactory: TextPopUpFactory!
@@ -56,7 +56,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.settingView.updateActivityIndicatorState(isPlaying: isShow)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isHiddenWithDrawButton)
             .distinctUntilChanged()
             .bind(with: self) { owner, isHidden in

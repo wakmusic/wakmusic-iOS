@@ -1,4 +1,5 @@
 import DesignSystem
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SignInFeatureInterface
@@ -7,7 +8,6 @@ import Then
 import UIKit
 import UserDomainInterface
 import Utility
-import NVActivityIndicatorView
 
 private protocol SettingStateProtocol {
     func updateIsHiddenWithDrawButton(isHidden: Bool)
@@ -52,7 +52,7 @@ final class SettingView: UIView {
     fileprivate let withDrawLabel = WithDrawLabel().then {
         $0.preferredMaxLayoutWidth = APP_WIDTH() - 56
     }
-    
+
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
         type: .circleStrokeSpin,
@@ -113,13 +113,13 @@ private extension SettingView {
             $0.left.equalTo(dotImageView.snp.right)
             $0.height.equalTo(18)
         }
-        
+
         activityIndicator.snp.makeConstraints {
             $0.width.height.equalTo(30)
             $0.center.equalToSuperview()
         }
     }
-    
+
     func configureUI() {
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
@@ -134,7 +134,7 @@ extension SettingView: SettingStateProtocol {
             self.activityIndicator.stopAnimating()
         }
     }
-    
+
     func updateIsHiddenWithDrawButton(isHidden: Bool) {
         self.dotImageView.isHidden = isHidden
         self.withDrawLabel.isHidden = isHidden
