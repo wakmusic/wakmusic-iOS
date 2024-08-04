@@ -40,6 +40,8 @@ final class MusicToolbarView: UIStackView {
         self.axis = .horizontal
         self.distribution = .fillEqually
         self.alignment = .top
+        self.isLayoutMarginsRelativeArrangement = true
+        self.layoutMargins = .init(top: 4, left: 0, bottom: 0, right: 0)
         self.backgroundColor = DesignSystemAsset.NewGrayColor.gray900.color
     }
 
@@ -64,14 +66,6 @@ extension MusicToolbarView: MusicToolbarStateProtocol {
 
     func updateIsLike(likes: Int, isLike: Bool) {
         heartButton.setTitle("\(likes.toUnitNumber)", for: .normal)
-
-//        let textColor = isLike
-//        ? DesignSystemAsset.PrimaryColorV2.increase.color
-//        : DesignSystemAsset.NewGrayColor.gray400.color
-//        heartButton.setTitleColor(
-//            textColor,
-//            for: .normal
-//        )
         heartButton.setIsLike(isLike: isLike, animated: false)
     }
 }

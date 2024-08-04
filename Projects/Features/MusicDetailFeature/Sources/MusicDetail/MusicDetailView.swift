@@ -140,7 +140,7 @@ private extension MusicDetailView {
         }
 
         wmNavigationbarView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.top)
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
         }
@@ -156,7 +156,7 @@ private extension MusicDetailView {
 
         musicToolbarView.snp.makeConstraints {
             $0.leading.bottom.trailing.equalToSuperview()
-            $0.height.equalTo(SAFEAREA_BOTTOM_HEIGHT() + 56)
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.bottom).offset(-56)
         }
 
         dimmedBackgroundView.snp.makeConstraints {
