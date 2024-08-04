@@ -152,7 +152,7 @@ private extension LikeStorageTableViewCell {
     func setAction() {
         self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
-        
+
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(albumImageDidTapAction))
         self.albumImageView.addGestureRecognizer(tapGestureRecognizer)
     }
@@ -163,12 +163,12 @@ private extension LikeStorageTableViewCell {
         guard let model else { return }
         delegate?.buttonTapped(type: .thumbnailTapped(song: model))
     }
-    
+
     @objc func playButtonAction() {
         guard let model else { return }
         delegate?.buttonTapped(type: .playTapped(song: model))
     }
-    
+
     @objc func cellSelectButtonAction() {
         guard let indexPath else { return }
         delegate?.buttonTapped(type: .cellTapped(indexPath: indexPath))

@@ -24,7 +24,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     var textPopUpFactory: TextPopUpFactory!
     var signInFactory: SignInFactory!
     var songDetailPresenter: SongDetailPresentable!
-        
+
     var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
 
