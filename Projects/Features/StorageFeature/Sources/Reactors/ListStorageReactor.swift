@@ -174,7 +174,7 @@ final class ListStorageReactor: Reactor {
                     if isChanged {
                         return .concat(
                             .just(.updateIsShowActivityIndicator(true)),
-                            owner.mutateEditPlayListOrderUseCase(),
+                            owner.mutateEditPlayListOrder(),
                             .just(.updateIsShowActivityIndicator(false)),
                             .just(.updateSelectedItemCount(0)),
                             .just(.hideSongCart),
@@ -303,7 +303,7 @@ extension ListStorageReactor {
     func createList(_ title: String) -> Observable<Mutation> {
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
-            mutateCreatePlaylistUseCase(title),
+            mutateCreatePlaylist(title),
             .just(.updateIsShowActivityIndicator(false)),
             .just(.hideSongCart)
         )
@@ -315,7 +315,7 @@ extension ListStorageReactor {
 
         return .concat(
             .just(.updateIsShowActivityIndicator(true)),
-            mutateDeletePlaylistUseCase(selectedItemIDs),
+            mutateDeletePlaylist(selectedItemIDs),
             .just(.updateIsShowActivityIndicator(false)),
             .just(.hideSongCart),
             .just(.switchEditingState(false))
@@ -470,7 +470,7 @@ extension ListStorageReactor {
 }
 
 private extension ListStorageReactor {
-    func mutateCreatePlaylistUseCase(_ title: String) -> Observable<Mutation> {
+    func mutateCreatePlaylist(_ title: String) -> Observable<Mutation> {
         createPlaylistUseCase.execute(title: title)
             .asObservable()
             .withUnretained(self)
@@ -486,7 +486,7 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateDeletePlaylistUseCase(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
+    func mutateDeletePlaylist(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
         let noti = NotificationCenter.default
         let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }
             .map { $0.key }
@@ -510,7 +510,7 @@ private extension ListStorageReactor {
             }
     }
 
-    func mutateEditPlayListOrderUseCase() -> Observable<Mutation> {
+    func mutateEditPlayListOrder() -> Observable<Mutation> {
         let currentDataSource = currentState.dataSource
         let playlistOrder = currentDataSource.flatMap { $0.items.map { $0.key } }
         return editPlayListOrderUseCase.execute(ids: playlistOrder)
