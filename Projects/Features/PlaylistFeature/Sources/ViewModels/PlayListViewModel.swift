@@ -1,11 +1,3 @@
-//
-//  PlaylistViewModel.swift
-//  PlayerFeature
-//
-//  Created by YoungK on 2023/02/28.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import BaseFeature
 import Combine
 import Foundation
@@ -116,18 +108,21 @@ final class PlaylistViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.addPlaylistButtonDidTapEvent
-            .subscribe { _ in
+            .withUnretained(self)
+            .subscribe(onNext: { owner, _ in
                 output.selectedSongIds.accept([])
                 output.editState.send(false)
-            }.disposed(by: disposeBag)
+                owner.isEditing = false
+            })
+            .disposed(by: disposeBag)
 
         input.removeSongsButtonDidTapEvent
             .withLatestFrom(output.selectedSongIds)
-            .subscribe(onNext: { selectedIds in
+            .withUnretained(self)
+            .subscribe(onNext: { owner, selectedIds in
                 if selectedIds.count == output.playlists.value.count {
                     output.playlists.accept([])
                     output.selectedSongIds.accept([])
-                    output.editState.send(false)
                     output.shouldClosePlaylist.send()
                 } else {
                     let removedPlaylists = output.playlists.value
@@ -135,6 +130,7 @@ final class PlaylistViewModel: ViewModelType {
                     output.playlists.accept(removedPlaylists)
                     output.selectedSongIds.accept([])
                 }
+                owner.isEditing = false
                 output.countOfSongs.send(output.playlists.value.count)
             }).disposed(by: disposeBag)
 
