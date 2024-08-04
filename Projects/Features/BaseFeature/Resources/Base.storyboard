@@ -375,42 +375,31 @@
                                         </state>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AUz-tK-BNV">
-                                        <rect key="frame" x="20" y="153" width="0.0" height="37"/>
+                                        <rect key="frame" x="20" y="190" width="0.0" height="0.0"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GKw-Bn-dI7" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
-                                        <rect key="frame" x="181.66666666666666" y="243" width="30" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="7hY-8T-nSb"/>
-                                            <constraint firstAttribute="width" constant="30" id="Y5j-1c-r0y"/>
-                                        </constraints>
-                                    </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="/18" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kn4-E0-QGV">
-                                        <rect key="frame" x="350.66666666666669" y="161" width="22.333333333333314" height="21"/>
+                                        <rect key="frame" x="350.66666666666669" y="179.66666666666666" width="22.333333333333314" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iat-p0-Uk6">
-                                        <rect key="frame" x="308.66666666666669" y="161" width="42" height="21"/>
+                                        <rect key="frame" x="308.66666666666669" y="179.66666666666666" width="42" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cfO-nl-nfD">
-                                        <rect key="frame" x="20" y="126.33333333333336" width="303" height="18.666666666666671"/>
+                                        <rect key="frame" x="20" y="145" width="316" height="18.666666666666657"/>
                                         <color key="textColor" name="gray800"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O6b-uG-uWT">
-                                        <rect key="frame" x="328" y="123.66666666666666" width="45" height="24"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="24" id="06R-rG-lya"/>
-                                            <constraint firstAttribute="width" constant="45" id="HLG-BX-PYD"/>
-                                        </constraints>
+                                        <rect key="frame" x="341" y="137.33333333333334" width="32" height="34"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="취소">
                                             <color key="titleColor" name="gray400"/>
@@ -420,7 +409,7 @@
                                         </connections>
                                     </button>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ij3-fi-jC1">
-                                        <rect key="frame" x="20" y="156" width="353" height="1"/>
+                                        <rect key="frame" x="20" y="174.66666666666666" width="353" height="1"/>
                                         <color key="backgroundColor" name="WAKTAVERSE"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="z0v-FD-Ab5"/>
@@ -450,9 +439,7 @@
                                     <constraint firstAttribute="trailing" secondItem="ij3-fi-jC1" secondAttribute="trailing" constant="20" id="0cV-AG-oXd"/>
                                     <constraint firstItem="Kn4-E0-QGV" firstAttribute="centerY" secondItem="AUz-tK-BNV" secondAttribute="centerY" id="3hl-TH-OSP"/>
                                     <constraint firstItem="dXA-NK-1pe" firstAttribute="top" secondItem="XrV-Zc-jwE" secondAttribute="bottom" constant="32" id="6Ki-ib-7EC"/>
-                                    <constraint firstItem="GKw-Bn-dI7" firstAttribute="centerX" secondItem="xs4-m5-Jmc" secondAttribute="centerX" id="6dJ-aL-Dwn"/>
                                     <constraint firstItem="O6b-uG-uWT" firstAttribute="leading" secondItem="cfO-nl-nfD" secondAttribute="trailing" constant="5" id="6yN-Iy-hpx"/>
-                                    <constraint firstItem="ij3-fi-jC1" firstAttribute="bottom" secondItem="AUz-tK-BNV" secondAttribute="top" constant="4" id="ADz-D1-Znw"/>
                                     <constraint firstItem="Iat-p0-Uk6" firstAttribute="top" secondItem="ij3-fi-jC1" secondAttribute="bottom" constant="4" id="AV7-aR-3OS"/>
                                     <constraint firstItem="XrV-Zc-jwE" firstAttribute="leading" secondItem="rWb-JT-gub" secondAttribute="leading" constant="20" id="Dh2-JS-ffs"/>
                                     <constraint firstItem="xs4-m5-Jmc" firstAttribute="leading" secondItem="rWb-JT-gub" secondAttribute="leading" constant="20" id="HkX-Y3-mzU"/>
@@ -461,7 +448,6 @@
                                     <constraint firstAttribute="bottom" secondItem="xs4-m5-Jmc" secondAttribute="bottom" constant="10" id="NV4-CY-70Q"/>
                                     <constraint firstItem="ij3-fi-jC1" firstAttribute="leading" secondItem="rWb-JT-gub" secondAttribute="leading" constant="20" id="Vsd-1u-9UH"/>
                                     <constraint firstItem="ij3-fi-jC1" firstAttribute="top" secondItem="cfO-nl-nfD" secondAttribute="bottom" constant="11" id="Xob-yg-ouk"/>
-                                    <constraint firstItem="GKw-Bn-dI7" firstAttribute="centerY" secondItem="xs4-m5-Jmc" secondAttribute="centerY" id="aJv-7M-AbD"/>
                                     <constraint firstItem="O6b-uG-uWT" firstAttribute="centerY" secondItem="cfO-nl-nfD" secondAttribute="centerY" id="awc-JZ-1ye"/>
                                     <constraint firstItem="XrV-Zc-jwE" firstAttribute="top" secondItem="rWb-JT-gub" secondAttribute="top" constant="24" id="dsF-BY-iaL"/>
                                     <constraint firstAttribute="trailing" secondItem="xs4-m5-Jmc" secondAttribute="trailing" constant="20" id="iH0-YE-CxA"/>
@@ -485,13 +471,9 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="O6b-uG-uWT" id="gBb-0o-IFi"/>
-                        <outlet property="cancelButtonHeight" destination="06R-rG-lya" id="DpS-Da-Bew"/>
-                        <outlet property="cancelButtonWidth" destination="HLG-BX-PYD" id="sZu-ly-VES"/>
-                        <outlet property="confireLabelGap" destination="ADz-D1-Znw" id="9so-e4-KaU"/>
                         <outlet property="confirmLabel" destination="AUz-tK-BNV" id="p6G-Xl-RUD"/>
                         <outlet property="countLabel" destination="Iat-p0-Uk6" id="Da7-C0-x2Z"/>
                         <outlet property="dividerView" destination="ij3-fi-jC1" id="vVP-X8-uCR"/>
-                        <outlet property="indicator" destination="GKw-Bn-dI7" id="4eW-96-xBl"/>
                         <outlet property="limitLabel" destination="Kn4-E0-QGV" id="Qg8-Np-DMm"/>
                         <outlet property="saveButton" destination="xs4-m5-Jmc" id="fiD-rw-1D6"/>
                         <outlet property="subTitleLabel" destination="dXA-NK-1pe" id="zFj-kk-vo1"/>
