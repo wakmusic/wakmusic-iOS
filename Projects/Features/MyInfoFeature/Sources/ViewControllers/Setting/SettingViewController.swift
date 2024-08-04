@@ -10,6 +10,7 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import NVActivityIndicatorView
 
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var textPopUpFactory: TextPopUpFactory!
@@ -49,6 +50,13 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.state.map(\.isShowActivityIndicator)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isShow in
+                owner.settingView.updateActivityIndicatorState(isPlaying: isShow)
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.isHiddenWithDrawButton)
             .distinctUntilChanged()
             .bind(with: self) { owner, isHidden in
