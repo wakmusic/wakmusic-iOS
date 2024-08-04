@@ -4,6 +4,7 @@ import DesignSystem
 import Foundation
 import LogManager
 import MyInfoFeatureInterface
+import NVActivityIndicatorView
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
@@ -49,6 +50,13 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.state.map(\.isShowActivityIndicator)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isShow in
+                owner.settingView.updateActivityIndicatorState(isPlaying: isShow)
+            }
+            .disposed(by: disposeBag)
+
         reactor.state.map(\.isHiddenWithDrawButton)
             .distinctUntilChanged()
             .bind(with: self) { owner, isHidden in

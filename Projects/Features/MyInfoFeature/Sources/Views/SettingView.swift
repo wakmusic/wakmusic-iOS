@@ -1,4 +1,5 @@
 import DesignSystem
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SignInFeatureInterface
@@ -11,6 +12,7 @@ import Utility
 private protocol SettingStateProtocol {
     func updateIsHiddenWithDrawButton(isHidden: Bool)
     func updateIsHiddenLogoutButton(isHidden: Bool)
+    func updateActivityIndicatorState(isPlaying: Bool)
 }
 
 private protocol SettingActionProtocol {
@@ -51,10 +53,17 @@ final class SettingView: UIView {
         $0.preferredMaxLayoutWidth = APP_WIDTH() - 56
     }
 
+    private let activityIndicator = NVActivityIndicatorView(
+        frame: .zero,
+        type: .circleStrokeSpin,
+        color: DesignSystemAsset.PrimaryColor.point.color
+    )
+
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
+        configureUI()
     }
 
     @available(*, unavailable)
@@ -68,7 +77,8 @@ private extension SettingView {
         self.addSubviews(
             wmNavigationbarView,
             titleLabel,
-            settingItemTableView
+            settingItemTableView,
+            activityIndicator
         )
         withDrawContentView.addSubviews(dotImageView, withDrawLabel)
         settingItemTableView.tableFooterView = withDrawContentView
@@ -103,10 +113,28 @@ private extension SettingView {
             $0.left.equalTo(dotImageView.snp.right)
             $0.height.equalTo(18)
         }
+
+        activityIndicator.snp.makeConstraints {
+            $0.width.height.equalTo(30)
+            $0.center.equalToSuperview()
+        }
+    }
+
+    func configureUI() {
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
 }
 
 extension SettingView: SettingStateProtocol {
+    func updateActivityIndicatorState(isPlaying: Bool) {
+        if isPlaying {
+            self.activityIndicator.startAnimating()
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
     func updateIsHiddenWithDrawButton(isHidden: Bool) {
         self.dotImageView.isHidden = isHidden
         self.withDrawLabel.isHidden = isHidden
