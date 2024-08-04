@@ -1,5 +1,6 @@
 import AuthDomainInterface
 import BaseDomainInterface
+import FirebaseMessaging
 import Foundation
 import Kingfisher
 import LogManager
@@ -8,7 +9,6 @@ import NotificationDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
-import FirebaseMessaging
 
 final class SettingReactor: Reactor {
     enum Action {
@@ -212,9 +212,9 @@ private extension SettingReactor {
                 .flatMap { [updateNotificationTokenUseCase] token -> Observable<Void> in
                     return token.isEmpty ?
                         Observable.just(()) :
-                            updateNotificationTokenUseCase.execute(type: .delete)
-                            .andThen(Observable.just(()))
-                            .catchAndReturn(())
+                        updateNotificationTokenUseCase.execute(type: .delete)
+                        .andThen(Observable.just(()))
+                        .catchAndReturn(())
                 }
                 .flatMap { _ in
                     return logoutUseCase
