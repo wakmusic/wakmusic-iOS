@@ -534,6 +534,9 @@ private extension ListStorageReactor {
             fetchPlaylistCreationPriceUseCase.execute()
                 .asObservable()
                 .map { $0.price }
+                .do(onNext: { _ in
+                    NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
+                })
                 .flatMap { price -> Observable<Mutation> in
                     return .just(.showCreatePricePopup(price))
                 }
