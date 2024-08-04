@@ -198,7 +198,7 @@ public final class ContainSongsViewModel: ViewModelType {
                 let wmError: WMError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(status: 400, description: wmError.errorDescription!))
             })
-            .map { _ in BaseEntity(status: 201, description: "플레이리스트를 성곡적으로 생성했습니다.") }
+            .map { _ in BaseEntity(status: 201, description: "플레이리스트를 성공적으로 생성했습니다.") }
             .do(onNext: { _ in
                 NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
             })
