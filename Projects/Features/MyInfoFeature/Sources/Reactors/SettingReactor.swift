@@ -4,6 +4,7 @@ import Foundation
 import Kingfisher
 import LogManager
 import NaverThirdPartyLogin
+import NotificationDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
@@ -65,11 +66,13 @@ final class SettingReactor: Reactor {
     private var disposeBag = DisposeBag()
     private let withDrawUserInfoUseCase: any WithdrawUserInfoUseCase
     private let logoutUseCase: any LogoutUseCase
+    private let updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase
     private let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     init(
         withDrawUserInfoUseCase: WithdrawUserInfoUseCase,
-        logoutUseCase: LogoutUseCase
+        logoutUseCase: LogoutUseCase,
+        updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
     ) {
         self.initialState = .init(
             userInfo: Utility.PreferenceManager.userInfo,
@@ -79,6 +82,7 @@ final class SettingReactor: Reactor {
         )
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
         self.logoutUseCase = logoutUseCase
+        self.updateNotificationTokenUseCase = updateNotificationTokenUseCase
         observeUserInfoChanges()
         observePushNotificationAuthorizationStatus()
     }
