@@ -43,6 +43,11 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         super.viewDidAppear(animated)
         navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        reactor?.action.onNext(.viewDidLoad)
+    }
 
     override public func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
