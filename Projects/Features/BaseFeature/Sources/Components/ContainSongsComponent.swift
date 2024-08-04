@@ -12,7 +12,7 @@ public protocol ContainSongsDependency: Dependency {
     var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var createPlaylistUseCase: any CreatePlaylistUseCase { get }
-    var fetchPlaylistCreationPriceUsecase: any FetchPlaylistCreationPriceUsecase { get }
+    var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
@@ -27,7 +27,7 @@ public final class ContainSongsComponent: Component<ContainSongsDependency>, Con
                 createPlaylistUseCase: dependency.createPlaylistUseCase,
                 fetchPlayListUseCase: dependency.fetchPlayListUseCase,
                 addSongIntoPlaylistUseCase: dependency.addSongIntoPlaylistUseCase,
-                fetchPlaylistCreationPriceUsecase: dependency.fetchPlaylistCreationPriceUsecase,
+                fetchPlaylistCreationPriceUsecase: dependency.fetchPlaylistCreationPriceUseCase,
                 logoutUseCase: dependency.logoutUseCase
             )
         )

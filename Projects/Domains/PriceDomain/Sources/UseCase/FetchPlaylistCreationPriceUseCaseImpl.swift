@@ -2,7 +2,7 @@ import Foundation
 import PriceDomainInterface
 import RxSwift
 
-public struct FetchPlaylistImagePriceUsecaseImpl: FetchPlaylistImagePriceUsecase {
+public struct FetchPlaylistCreationPriceUseCaseImpl: FetchPlaylistCreationPriceUseCase {
     private let priceRepository: any PriceRepository
 
     public init(
@@ -12,6 +12,6 @@ public struct FetchPlaylistImagePriceUsecaseImpl: FetchPlaylistImagePriceUsecase
     }
 
     public func execute() -> Single<PriceEntity> {
-        priceRepository.fetchPlaylistImagePrice()
+        priceRepository.fetchPlaylistCreationPrice()
     }
 }

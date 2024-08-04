@@ -9,6 +9,7 @@ import PlaylistFeatureInterface
 import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
+import PriceDomainInterface
 
 public protocol ListStorageDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
@@ -18,6 +19,7 @@ public protocol ListStorageDependency: Dependency {
     var fetchPlayListUseCase: any FetchPlaylistUseCase { get }
     var deletePlayListUseCase: any DeletePlaylistUseCase { get }
     var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase { get }
+    var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
