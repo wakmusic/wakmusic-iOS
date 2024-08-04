@@ -471,19 +471,24 @@ extension ListStorageReactor {
 
 private extension ListStorageReactor {
     func mutateCreatePlaylist(_ title: String) -> Observable<Mutation> {
-        createPlaylistUseCase.execute(title: title)
-            .asObservable()
-            .withUnretained(self)
-            .flatMap { owner, _ -> Observable<Mutation> in
-                return .concat(
-                    owner.fetchDataSource(),
-                    .just(.showToast("리스트를 만들었습니다."))
-                )
-            }
-            .catch { error in
-                let error = error.asWMError
-                return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
-            }
+        return Observable.concat(
+            .just(.updateIsShowActivityIndicator(true)),
+            createPlaylistUseCase.execute(title: title)
+                .asObservable()
+                .withUnretained(self)
+                .flatMap { owner, _ -> Observable<Mutation> in
+                    NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
+                    return .concat(
+                        owner.fetchDataSource(),
+                        .just(.showToast("리스트를 만들었습니다."))
+                    )
+                }
+                .catch { error in
+                    let error = error.asWMError
+                    return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                },
+            .just(.updateIsShowActivityIndicator(false))
+        )
     }
 
     func mutateDeletePlaylist(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
@@ -534,10 +539,13 @@ private extension ListStorageReactor {
             fetchPlaylistCreationPriceUseCase.execute()
                 .asObservable()
                 .map { $0.price }
-                .do(onNext: { _ in
-                    NotificationCenter.default.post(name: .willRefreshUserInfo, object: nil)
-                })
                 .flatMap { price -> Observable<Mutation> in
+                    guard let userItemCount = PreferenceManager.userInfo?.itemCount else {
+                        return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
+                    }
+                    if userItemCount < price {
+                        return .just(.showToast("음표 열매가 부족합니다."))
+                    }
                     return .just(.showCreatePricePopup(price))
                 }
                 .catch { error in
