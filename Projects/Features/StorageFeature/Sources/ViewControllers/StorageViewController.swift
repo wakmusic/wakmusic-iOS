@@ -42,6 +42,7 @@ final class StorageViewController: TabmanViewController, View {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        reactor?.action.onNext(.viewDidLoad)
     }
 
     public static func viewController(

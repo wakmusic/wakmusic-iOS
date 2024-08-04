@@ -9,6 +9,7 @@ import RxSwift
 import SongsDomainInterface
 import UserDomainInterface
 import Utility
+import PriceDomainInterface
 
 final class ListStorageReactor: Reactor {
     enum Action {
@@ -21,6 +22,7 @@ final class ListStorageReactor: Reactor {
         case tapAll(isSelecting: Bool)
         case loginButtonDidTap
         case createListButtonDidTap
+        case confirmCreatePriceButtonDidTap
         case confirmCreateListButtonDidTap(String)
         case addToCurrentPlaylistButtonDidTap
         case deleteButtonDidTap
@@ -39,6 +41,7 @@ final class ListStorageReactor: Reactor {
         case updateIsShowActivityIndicator(Bool)
         case showLoginAlert
         case showToast(String)
+        case showCreatePricePopup(Int)
         case showCreateListPopup
         case showDeletePopup(Int)
         case showDetail(key: String)
@@ -57,6 +60,7 @@ final class ListStorageReactor: Reactor {
         @Pulse var showLoginAlert: Void?
         @Pulse var showToast: String?
         @Pulse var hideSongCart: Void?
+        @Pulse var showCreatePricePopup: Int?
         @Pulse var showCreateListPopup: Void?
         @Pulse var showDeletePopup: Int?
         @Pulse var showDetail: String?
@@ -71,14 +75,16 @@ final class ListStorageReactor: Reactor {
     private let editPlayListOrderUseCase: any EditPlaylistOrderUseCase
     private let deletePlayListUseCase: any DeletePlaylistUseCase
     private let fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
-
+    private let fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase
+    
     init(
         storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
         fetchPlayListUseCase: any FetchPlaylistUseCase,
         editPlayListOrderUseCase: any EditPlaylistOrderUseCase,
         deletePlayListUseCase: any DeletePlaylistUseCase,
-        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
+        fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase,
+        fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase
     ) {
         self.initialState = State(
             isLoggedIn: false,
@@ -94,6 +100,7 @@ final class ListStorageReactor: Reactor {
         self.editPlayListOrderUseCase = editPlayListOrderUseCase
         self.deletePlayListUseCase = deletePlayListUseCase
         self.fetchPlaylistSongsUseCase = fetchPlaylistSongsUseCase
+        self.fetchPlaylistCreationPriceUseCase = fetchPlaylistCreationPriceUseCase
     }
 
     deinit {
@@ -127,17 +134,20 @@ final class ListStorageReactor: Reactor {
 
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
-
+            
         case .createListButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
-            return isLoggedIn ? .just(.showCreateListPopup) : .just(.showLoginAlert)
-
+            return isLoggedIn ? mutateFetchPlaylistCreationPrice() : .just(.showLoginAlert)
+            
+        case .confirmCreatePriceButtonDidTap:
+            return .just(.showCreateListPopup)
+            
+        case let .confirmCreateListButtonDidTap(title):
+            return createList(title)
+            
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
             return .just(.showDeletePopup(itemCount))
-
-        case let .confirmCreateListButtonDidTap(title):
-            return createList(title)
 
         case .confirmDeleteButtonDidTap:
             return deleteList()
@@ -241,6 +251,8 @@ final class ListStorageReactor: Reactor {
             newState.showDetail = key
         case .showDrawFruitPopup:
             newState.showDrawFruitPopup = ()
+        case let .showCreatePricePopup(price):
+            newState.showCreatePricePopup = price
         }
 
         return newState
@@ -463,7 +475,10 @@ private extension ListStorageReactor {
             .asObservable()
             .withUnretained(self)
             .flatMap { owner, _ -> Observable<Mutation> in
-                return owner.fetchDataSource()
+                return .concat(
+                    owner.fetchDataSource(),
+                    .just(.showToast("리스트를 만들었습니다."))
+                )
             }
             .catch { error in
                 let error = error.asWMError
@@ -510,6 +525,15 @@ private extension ListStorageReactor {
                     .just(.undoDataSource),
                     .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
                 ])
+            }
+    }
+    
+    func mutateFetchPlaylistCreationPrice() -> Observable<Mutation> {
+        return fetchPlaylistCreationPriceUseCase.execute()
+            .asObservable()
+            .map { $0.price }
+            .flatMap { price -> Observable<Mutation> in
+                return .just(.showCreatePricePopup(price))
             }
     }
 }
