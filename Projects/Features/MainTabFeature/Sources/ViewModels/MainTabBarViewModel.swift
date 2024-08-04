@@ -5,6 +5,13 @@ import NotificationDomainInterface
 import RxRelay
 import RxSwift
 import Utility
+import FirebaseMessaging
+
+private typealias Observer = (
+    detectedRefreshPushToken: Void,
+    isLoggedIn: Bool,
+    grantedNotificationAuthorization: Bool
+)
 
 public final class MainTabBarViewModel {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
@@ -65,20 +72,43 @@ public final class MainTabBarViewModel {
             }
             .disposed(by: disposeBag)
 
-        // 호출 조건: 앱 실행 시, 리프레쉬 토큰 감지, 앱 설정 푸시 끔
+        // 호출 조건: 앱 실행 시 1회, 리프레쉬 토큰 감지, 기기알림 on/off
         Observable.combineLatest(
             input.detectedRefreshPushToken,
-            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged()
-        ) { _, id -> String? in
-            return id
+            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
+            PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
+        ) { (detected, id, granted) -> Observer in
+            return Observer(
+                detectedRefreshPushToken: detected,
+                isLoggedIn: id != nil,
+                grantedNotificationAuthorization: granted
+            )
         }
         .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
-        .flatMap { [updateNotificationTokenUseCase] id -> Observable<Bool> in
-            return id == nil ? Observable.just(false) :
-                updateNotificationTokenUseCase.execute(type: .update)
+        .flatMap { [updateNotificationTokenUseCase] observer -> Observable<Bool> in
+            let updateUseCase = updateNotificationTokenUseCase.execute(type: .update)
                 .debug("🔔:: updateNotificationTokenUseCase")
                 .andThen(Observable.just(true))
                 .catchAndReturn(false)
+            let deleteUseCase = updateNotificationTokenUseCase.execute(type: .delete)
+                .debug("🔔:: updateNotificationTokenUseCase")
+                .andThen(Observable.just(true))
+                .catchAndReturn(false)
+
+            if observer.isLoggedIn && observer.grantedNotificationAuthorization {
+                return updateUseCase
+
+            } else if observer.isLoggedIn && observer.grantedNotificationAuthorization == false {
+                return Messaging.messaging().fetchRxPushToken()
+                    .asObservable()
+                    .catchAndReturn("")
+                    .flatMap { (token) in
+                        return token.isEmpty ? Observable.just(false) : deleteUseCase
+                    }
+
+            } else {
+                return Observable.just(false)
+            }
         }
         .debug("🔔:: updateNotificationTokenUseCase")
         .subscribe()

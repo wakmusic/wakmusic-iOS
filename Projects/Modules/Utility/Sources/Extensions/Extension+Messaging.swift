@@ -2,7 +2,7 @@ import FirebaseMessaging
 import Foundation
 import RxSwift
 
-extension Messaging {
+public extension Messaging {
     func fetchAsyncPushToken() async throws -> String {
         let token = try await self.token()
         return token

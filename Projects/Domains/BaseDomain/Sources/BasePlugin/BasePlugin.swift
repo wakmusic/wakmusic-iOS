@@ -22,7 +22,7 @@ public struct BasePlugin: PluginType {
         }
         var newRequest = request
 
-        if request.httpMethod == "GET" {
+        if request.httpMethod == "GET" || request.httpMethod == "DELETE" {
             guard let url = request.url,
                   var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 return request
