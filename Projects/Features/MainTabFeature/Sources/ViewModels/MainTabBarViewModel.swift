@@ -1,3 +1,4 @@
+import FirebaseMessaging
 import Foundation
 import LogManager
 import NoticeDomainInterface
@@ -5,7 +6,6 @@ import NotificationDomainInterface
 import RxRelay
 import RxSwift
 import Utility
-import FirebaseMessaging
 
 private typealias Observer = (
     detectedRefreshPushToken: Void,
@@ -77,7 +77,7 @@ public final class MainTabBarViewModel {
             input.detectedRefreshPushToken,
             PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
             PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
-        ) { (detected, id, granted) -> Observer in
+        ) { detected, id, granted -> Observer in
             return Observer(
                 detectedRefreshPushToken: detected,
                 isLoggedIn: id != nil,
@@ -102,7 +102,7 @@ public final class MainTabBarViewModel {
                 return Messaging.messaging().fetchRxPushToken()
                     .asObservable()
                     .catchAndReturn("")
-                    .flatMap { (token) in
+                    .flatMap { token in
                         return token.isEmpty ? Observable.just(false) : deleteUseCase
                     }
 
