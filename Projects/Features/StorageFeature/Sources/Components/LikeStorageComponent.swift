@@ -16,6 +16,7 @@ public protocol LikeStorageDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var signInFactory: any SignInFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class LikeStorageComponent: Component<LikeStorageDependency> {
@@ -29,7 +30,8 @@ public final class LikeStorageComponent: Component<LikeStorageDependency> {
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
-            signInFactory: dependency.signInFactory
+            signInFactory: dependency.signInFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

@@ -23,6 +23,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     var containSongsFactory: ContainSongsFactory!
     var textPopUpFactory: TextPopUpFactory!
     var signInFactory: SignInFactory!
+    var songDetailPresenter: SongDetailPresentable!
 
     var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
@@ -43,12 +44,14 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor: Reactor,
         containSongsFactory: ContainSongsFactory,
         textPopUpFactory: TextPopUpFactory,
-        signInFactory: SignInFactory
+        signInFactory: SignInFactory,
+        songDetailPresenter: SongDetailPresentable
     ) -> LikeStorageViewController {
         let viewController = LikeStorageViewController(reactor: reactor)
         viewController.containSongsFactory = containSongsFactory
         viewController.textPopUpFactory = textPopUpFactory
         viewController.signInFactory = signInFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 
@@ -267,6 +270,8 @@ extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
             self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
             self.reactor?.action.onNext(.playDidTap(song: song))
+        case let .thumbnailTapped(song):
+            songDetailPresenter.present(id: song.songID)
         }
     }
 }
