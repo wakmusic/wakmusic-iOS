@@ -684,7 +684,7 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
 
             if user.itemCount < cost {
                 showToast(
-                    text: "음표열매가 부족합니다.",
+                    text: "음표 열매가 부족합니다.",
                     options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
                 )
             } else {

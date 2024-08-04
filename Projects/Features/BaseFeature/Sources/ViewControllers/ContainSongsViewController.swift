@@ -143,7 +143,7 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: "음표열매가 부족합니다.")
+                    owner.showToast(text: "음표 열매가 부족합니다.")
                     return
                 }
 
