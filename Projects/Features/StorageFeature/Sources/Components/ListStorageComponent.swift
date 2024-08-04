@@ -6,10 +6,10 @@ import FruitDrawFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
+import PriceDomainInterface
 import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
-import PriceDomainInterface
 
 public protocol ListStorageDependency: Dependency {
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }

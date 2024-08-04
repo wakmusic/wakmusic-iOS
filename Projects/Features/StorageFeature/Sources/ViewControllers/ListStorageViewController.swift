@@ -135,7 +135,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
                 owner.showBottomSheet(content: text)
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in

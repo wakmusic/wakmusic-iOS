@@ -3,13 +3,13 @@ import Foundation
 import Localization
 import LogManager
 import PlaylistDomainInterface
+import PriceDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
 import SongsDomainInterface
 import UserDomainInterface
 import Utility
-import PriceDomainInterface
 
 final class ListStorageReactor: Reactor {
     enum Action {
@@ -76,7 +76,7 @@ final class ListStorageReactor: Reactor {
     private let deletePlayListUseCase: any DeletePlaylistUseCase
     private let fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase
     private let fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase
-    
+
     init(
         storageCommonService: any StorageCommonService,
         createPlaylistUseCase: any CreatePlaylistUseCase,
@@ -134,17 +134,17 @@ final class ListStorageReactor: Reactor {
 
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
-            
+
         case .createListButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
             return isLoggedIn ? mutateFetchPlaylistCreationPrice() : .just(.showLoginAlert)
-            
+
         case .confirmCreatePriceButtonDidTap:
             return .just(.showCreateListPopup)
-            
+
         case let .confirmCreateListButtonDidTap(title):
             return createList(title)
-            
+
         case .deleteButtonDidTap:
             let itemCount = currentState.selectedItemCount
             return .just(.showDeletePopup(itemCount))
@@ -527,7 +527,7 @@ private extension ListStorageReactor {
                 ])
             }
     }
-    
+
     func mutateFetchPlaylistCreationPrice() -> Observable<Mutation> {
         return fetchPlaylistCreationPriceUseCase.execute()
             .asObservable()
