@@ -235,7 +235,7 @@ private extension LoginViewController {
         let servicePrivacyButtons: [UIButton] = [serviceButton, privacyButton]
         let termsAttributedString: [NSMutableAttributedString] = [
             NSMutableAttributedString.init(string: "서비스 이용약관"),
-            NSMutableAttributedString.init(string: "개인정보처리방침")
+            NSMutableAttributedString.init(string: "개인정보 처리방침")
         ]
         for attr in termsAttributedString {
             attr.addAttributes(
