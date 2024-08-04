@@ -13,7 +13,6 @@ import Utility
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
-    private let gcmMessageIDKey = "gcm.message_id"
 
     func application(
         _ application: UIApplication,
