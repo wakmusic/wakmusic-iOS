@@ -9,7 +9,6 @@ import Utility
 
 public final class FruitStorageViewModel: ViewModelType {
     private let fetchFruitListUseCase: FetchFruitListUseCase
-    private let logoutUseCase: LogoutUseCase
     private let disposeBag = DisposeBag()
 
     deinit {
@@ -17,11 +16,9 @@ public final class FruitStorageViewModel: ViewModelType {
     }
 
     public init(
-        fetchFruitListUseCase: any FetchFruitListUseCase,
-        logoutUseCase: any LogoutUseCase
+        fetchFruitListUseCase: any FetchFruitListUseCase
     ) {
         self.fetchFruitListUseCase = fetchFruitListUseCase
-        self.logoutUseCase = logoutUseCase
     }
 
     public struct Input {

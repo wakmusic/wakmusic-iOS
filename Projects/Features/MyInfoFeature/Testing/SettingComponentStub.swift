@@ -4,6 +4,7 @@ import BaseFeatureInterface
 @testable import BaseFeatureTesting
 @testable import MyInfoFeature
 import MyInfoFeatureInterface
+import NotificationDomainInterface
 import SignInFeatureInterface
 @testable import SignInFeatureTesting
 import UIKit
@@ -15,7 +16,8 @@ public final class SettingComponentStub: SettingFactory {
         return SettingViewController.viewController(
             reactor: SettingReactor(
                 withDrawUserInfoUseCase: WithdrawUserInfoUseCaseSpy(),
-                logoutUseCase: LogoutUseCaseSpy()
+                logoutUseCase: LogoutUseCaseSpy(),
+                updateNotificationTokenUseCase: UpdateNotificationTokenUseCaseSpy()
             ),
             textPopUpFactory: TextPopUpComponentStub(),
             signInFactory: SignInComponentStub(),

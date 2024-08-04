@@ -1,6 +1,7 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
+import FirebaseMessaging
 import HomeFeatureInterface
 import LogManager
 import MusicDetailFeatureInterface
@@ -51,6 +52,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        requestNotificationAuthorization()
         outputBind()
         inputBind()
         entryBind()
@@ -100,7 +102,7 @@ public final class MainTabBarViewController: BaseViewController, ViewControllerF
 private extension MainTabBarViewController {
     func entryBind() {
         appEntryState.moveSceneObservable
-            .debug("moveSceneObservable")
+            .debug("🚚:: moveSceneObservable")
             .filter { !$0.isEmpty }
             .delay(.milliseconds(500), scheduler: MainScheduler.instance)
             .bind(with: self, onNext: { owner, params in
@@ -109,6 +111,7 @@ private extension MainTabBarViewController {
             .disposed(by: disposeBag)
 
         songDetailPresenter.presentSongDetailObservable
+            .filter { !$0.selectedID.isEmpty }
             .bind(with: self, onNext: { owner, selection in
                 let viewController = owner.musicDetailFactory.makeViewController(
                     songIDs: selection.ids,
@@ -116,6 +119,13 @@ private extension MainTabBarViewController {
                 )
                 viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)
+            })
+            .disposed(by: disposeBag)
+
+        NotificationCenter.default.rx
+            .notification(UIApplication.willEnterForegroundNotification)
+            .bind(with: self, onNext: { owner, _ in
+                owner.requestNotificationAuthorization()
             })
             .disposed(by: disposeBag)
     }
@@ -130,20 +140,23 @@ private extension MainTabBarViewController {
             let viewController = playlistDetailFactory.makeView(key: key)
             navigationController?.pushViewController(viewController, animated: true)
 
+        case "songDetail":
+            let id = params["id"] as? String ?? ""
+            songDetailPresenter.present(id: id)
+
         default:
             break
         }
     }
-}
 
-private extension MainTabBarViewController {
     func inputBind() {
         input.fetchNoticePopup.onNext(())
         input.fetchNoticeIDList.onNext(())
+        input.detectedRefreshPushToken.onNext(())
     }
 
     func outputBind() {
-        output.dataSource
+        output.noticePopupDataSource
             .filter { !$0.isEmpty }
             .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
@@ -151,6 +164,29 @@ private extension MainTabBarViewController {
                 owner.showBottomSheet(content: viewController)
             }
             .disposed(by: disposeBag)
+    }
+}
+
+private extension MainTabBarViewController {
+    func requestNotificationAuthorization() {
+        Messaging.messaging().delegate = self
+        UNUserNotificationCenter.current().delegate = self
+
+        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: authOptions,
+            completionHandler: { granted, _ in
+                if granted {
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                    LogManager.printDebug("🔔:: Notification authorized: \(Messaging.messaging().fcmToken ?? "")")
+                } else {
+                    LogManager.printDebug("🔔:: Notification denied")
+                }
+                PreferenceManager.pushNotificationAuthorizationStatus = granted
+            }
+        )
     }
 
     func configureUI() {
@@ -190,6 +226,49 @@ extension MainTabBarViewController: NoticePopupViewControllerDelegate {
             present(SFSafariViewController(url: URL), animated: true)
         }
     }
+}
+
+extension MainTabBarViewController: UNUserNotificationCenterDelegate {
+    public func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification
+    ) async -> UNNotificationPresentationOptions {
+        let userInfo = notification.request.content.userInfo
+
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // Print full message.
+        LogManager.printDebug("🔔:: \(userInfo)")
+
+        // Change this to your preferred presentation option
+        return [[.list, .banner, .sound]]
+    }
+
+    public func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse
+    ) async {
+        let userInfo = response.notification.request.content.userInfo
+        appEntryState.moveScene(params: userInfo.parseNotificationInfo)
+
+        // With swizzling disabled you must let Messaging know about the message, for Analytics
+        Messaging.messaging().appDidReceiveMessage(userInfo)
+
+        // Print full message.
+        LogManager.printDebug("🔔:: \(userInfo)")
+    }
+}
+
+extension MainTabBarViewController: MessagingDelegate {
+    /// [START refresh_token]
+    public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+        LogManager.printDebug("🔔:: Firebase registration token: \(String(describing: fcmToken ?? "-"))")
+        // If necessary send token to application server.
+        input.detectedRefreshPushToken.onNext(())
+        // Note: This callback is fired at each app startup and whenever a new token is generated.
+    }
+    // [END refresh_token]
 }
 
 extension MainTabBarViewController: UIGestureRecognizerDelegate {

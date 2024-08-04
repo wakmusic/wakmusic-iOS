@@ -1,4 +1,3 @@
-import AuthDomainInterface
 import BaseFeatureInterface
 import Foundation
 import FruitDrawFeatureInterface
@@ -8,7 +7,6 @@ import UserDomainInterface
 
 public protocol FruitStorageDependency: Dependency {
     var fetchFruitListUseCase: any FetchFruitListUseCase { get }
-    var logoutUseCase: any LogoutUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
@@ -16,8 +14,7 @@ public final class FruitStorageComponent: Component<FruitStorageDependency>, Fru
     public func makeView() -> UIViewController {
         return FruitStorageViewController(
             viewModel: .init(
-                fetchFruitListUseCase: dependency.fetchFruitListUseCase,
-                logoutUseCase: dependency.logoutUseCase
+                fetchFruitListUseCase: dependency.fetchFruitListUseCase
             ),
             textPopUpFactory: dependency.textPopUpFactory
         )

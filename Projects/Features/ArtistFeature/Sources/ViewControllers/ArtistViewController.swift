@@ -1,6 +1,7 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
+import KeychainModule
 import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
@@ -57,9 +58,22 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
-                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                let viewController = owner.artistDetailFactory.makeView(model: entity)
-                owner.navigationController?.pushViewController(viewController, animated: true)
+                #warning("🎉:: 디버그용 이스터에그")
+                #if DEBUG
+                    if entity.id == "gosegu" {
+                        owner.showTextInputAlert { id in
+                            owner.postNotification(id: id ?? "")
+                        }
+                    } else {
+                        LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                        let viewController = owner.artistDetailFactory.makeView(model: entity)
+                        owner.navigationController?.pushViewController(viewController, animated: true)
+                    }
+                #else
+                    LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                    let viewController = owner.artistDetailFactory.makeView(model: entity)
+                    owner.navigationController?.pushViewController(viewController, animated: true)
+                #endif
             }
             .disposed(by: disposeBag)
     }
@@ -163,3 +177,64 @@ extension ArtistViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
+
+#if DEBUG
+    #warning("🎉:: 디버그용 이스터에그")
+    private extension ArtistViewController {
+        func showTextInputAlert(completion: @escaping (String?) -> Void) {
+            let alertController = UIAlertController(
+                title: "푸시발송",
+                message: "songID를 입력하세요.",
+                preferredStyle: .alert
+            )
+
+            alertController.addTextField { textField in
+                textField.placeholder = "songID를 입력하세요."
+            }
+
+            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+                let textField = alertController.textFields?.first
+                let inputText = textField?.text
+                completion(inputText)
+            }
+
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(okAction)
+            alertController.addAction(cancelAction)
+
+            present(alertController, animated: true, completion: nil)
+        }
+
+        func postNotification(id: String) {
+            let urlString = "U5l/gXs0ZmvBbJC8Lj4REKUhMpiYZByzM3MgyVD4Bk+LR+6IMoZBaEDwQB47DcpH"
+            guard let url = URL(string: AES256.decrypt(encoded: urlString)) else {
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let keychain = KeychainImpl()
+            request.addValue("bearer \(keychain.load(type: .accessToken))", forHTTPHeaderField: "Authorization")
+
+            let parameters: [String: String] = [
+                "page": "songDetail",
+                "songId": id
+            ]
+
+            if let bodyData = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
+                request.httpBody = bodyData
+            }
+
+            let task = URLSession.shared.dataTask(with: request) { _, response, error in
+                if let error = error {
+                    LogManager.printDebug("Error: \(error.localizedDescription)")
+                    return
+                }
+                LogManager.printDebug("response: \(String(describing: response))")
+            }
+            task.resume()
+        }
+    }
+#endif

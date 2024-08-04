@@ -1,5 +1,7 @@
+import FirebaseMessaging
 import Foundation
 import KeychainModule
+import LogManager
 import Moya
 import UIKit
 
@@ -20,7 +22,7 @@ public struct BasePlugin: PluginType {
         }
         var newRequest = request
 
-        if request.httpMethod == "GET" {
+        if request.httpMethod == "GET" || request.httpMethod == "DELETE" {
             guard let url = request.url,
                   var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
                 return request
@@ -37,16 +39,17 @@ public struct BasePlugin: PluginType {
             newRequest.url = urlComponents.url
 
         } else {
-            guard let bodyData = request.httpBody,
-                  var json = try? JSONSerialization.jsonObject(with: bodyData, options: []) as? [String: Any] else {
-                return request
+            var newJson: [String: Any] = [:]
+            if let bodyData = request.httpBody,
+               let json = try? JSONSerialization.jsonObject(with: bodyData, options: []) as? [String: Any] {
+                newJson = json
             }
 
             for type in baseInfoTypes {
-                json[type.apiKey] = typeToValue(with: type)
+                newJson[type.apiKey] = typeToValue(with: type)
             }
 
-            guard let newBodyData = try? JSONSerialization.data(withJSONObject: json, options: []) else {
+            guard let newBodyData = try? JSONSerialization.data(withJSONObject: newJson, options: []) else {
                 return request
             }
             newRequest.httpBody = newBodyData
@@ -83,8 +86,7 @@ private extension BasePlugin {
         }
     }
 
-    #warning("FCM SDK 셋업 이후 작업")
     func fetchPushToken() -> String {
-        return ""
+        return Messaging.messaging().fcmToken ?? ""
     }
 }

@@ -121,6 +121,23 @@ private extension ArtistDetailViewController {
                 owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
+
+        output.showWarningNotification
+            .bind(with: self) { owner, _ in
+                let viewController = owner.textPopupFactory.makeView(
+                    text: "기기 알림이 꺼져있습니다.\n설정에서 알림을 켜주세요.",
+                    cancelButtonIsHidden: false,
+                    confirmButtonText: "설정 바로가기",
+                    cancelButtonText: "확인",
+                    completion: {
+                        guard let openSettingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                        UIApplication.shared.open(openSettingsURL)
+                    },
+                    cancelCompletion: {}
+                )
+                owner.showBottomSheet(content: viewController)
+            }
+            .disposed(by: disposeBag)
     }
 
     func inputBind() {

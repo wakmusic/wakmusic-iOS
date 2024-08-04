@@ -31,6 +31,7 @@ public final class ArtistDetailViewModel: ViewModelType {
         let isSubscription: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let showToast: PublishSubject<String> = PublishSubject()
         let showLogin: PublishSubject<Void> = PublishSubject()
+        let showWarningNotification: PublishSubject<Void> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
@@ -38,9 +39,12 @@ public final class ArtistDetailViewModel: ViewModelType {
         let id = model.id
 
         input.fetchArtistSubscriptionStatus
-            .flatMap { [fetchArtistSubscriptionStatusUseCase] _ -> Observable<ArtistSubscriptionStatusEntity> in
-                if PreferenceManager.userInfo == nil {
-                    return Observable.just(ArtistSubscriptionStatusEntity(isSubscription: false))
+            .withLatestFrom(PreferenceManager.$userInfo)
+            .withLatestFrom(PreferenceManager.$pushNotificationAuthorizationStatus) { ($0, $1 ?? false) }
+            .flatMap { [fetchArtistSubscriptionStatusUseCase] userInfo, granted
+                -> Observable<ArtistSubscriptionStatusEntity> in
+                if userInfo == nil || granted == false {
+                    return Observable.just(.init(isSubscription: false))
                 } else {
                     return fetchArtistSubscriptionStatusUseCase.execute(id: id)
                         .asObservable()
@@ -57,9 +61,19 @@ public final class ArtistDetailViewModel: ViewModelType {
                     ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)
                 )
             })
-            .filter { _ in
-                if PreferenceManager.userInfo == nil {
+            .withLatestFrom(PreferenceManager.$userInfo)
+            .filter { userInfo in
+                if userInfo == nil {
                     output.showLogin.onNext(())
+                    return false
+                }
+                return true
+            }
+            .withLatestFrom(PreferenceManager.$pushNotificationAuthorizationStatus)
+            .map { $0 ?? false }
+            .filter { granted in
+                if granted == false {
+                    output.showWarningNotification.onNext(())
                     return false
                 }
                 return true
@@ -81,6 +95,18 @@ public final class ArtistDetailViewModel: ViewModelType {
                 )
             })
             .disposed(by: disposeBag)
+
+        // 로그인/아웃, 기기알림 끔 상태 반영
+        Observable.combineLatest(
+            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
+            PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
+        ) { id, granted -> (String?, Bool) in
+            return (id, granted)
+        }
+        .skip(1)
+        .map { _ in () }
+        .bind(to: input.fetchArtistSubscriptionStatus)
+        .disposed(by: disposeBag)
 
         return output
     }

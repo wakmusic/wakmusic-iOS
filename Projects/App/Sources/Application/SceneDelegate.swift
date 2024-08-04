@@ -77,20 +77,22 @@ private extension SceneDelegate {
     func handleAppEntry(with connectionOptions: UIScene.ConnectionOptions) {
         if let url = connectionOptions.urlContexts.first?.url {
             handleDeeplink(url: url)
+
         } else if let userActivity = connectionOptions.userActivities.first,
                   userActivity.activityType == NSUserActivityTypeBrowsingWeb,
                   let webpageURL = userActivity.webpageURL {
             handleUniversalLink(url: webpageURL)
-        } else if let _ = connectionOptions.notificationResponse?.notification {
-            #warning("TO-DO:: Push Notification")
-            // notification.request.content.userInfo
+
+        } else if let notification = connectionOptions.notificationResponse?.notification {
+            let userInfo = notification.request.content.userInfo
+            root?.appEntryState.moveScene(params: userInfo.parseNotificationInfo)
         }
     }
 
     func handleDeeplink(url: URL) {
         let page: String = url.host ?? ""
         let pathComponents: [String] = url.pathComponents.filter { $0 != "/" }
-        var params: [String: Any] = url.params()
+        var params: [String: Any] = url.parseToParams()
         params["page"] = page
         LogManager.printDebug("host: \(page), pathComponents: \(pathComponents), params: \(params)")
         root?.appEntryState.moveScene(params: params)
@@ -101,7 +103,7 @@ private extension SceneDelegate {
         let pathComponents: [String] = url.pathComponents.filter { $0 != "/" }
         let page: String = pathComponents.first ?? ""
         let key: String = pathComponents.last ?? ""
-        var params: [String: Any] = url.params()
+        var params: [String: Any] = url.parseToParams()
         params["page"] = page
         params["key"] = key
         LogManager.printDebug("host: \(host), pathComponents: \(pathComponents), params: \(params)")

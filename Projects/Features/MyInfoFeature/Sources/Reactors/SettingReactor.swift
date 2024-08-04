@@ -1,9 +1,11 @@
 import AuthDomainInterface
 import BaseDomainInterface
+import FirebaseMessaging
 import Foundation
 import Kingfisher
 import LogManager
 import NaverThirdPartyLogin
+import NotificationDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
@@ -21,10 +23,11 @@ final class SettingReactor: Reactor {
         case confirmRemoveCacheButtonDidTap
         case confirmLogoutButtonDidTap
         case versionInfoButtonDidTap
-        case changedUserInfo(UserInfo?)
+        case changedUserInfo(Bool)
         case showToast(String)
         case updateIsHiddenLogoutButton(Bool)
         case updateIsHiddenWithDrawButton(Bool)
+        case changedNotificationAuthorizationStatus(Bool)
     }
 
     enum Mutation {
@@ -36,6 +39,7 @@ final class SettingReactor: Reactor {
         case withDrawResult(BaseEntity)
         case updateIsHiddenLogoutButton(Bool)
         case updateIsHiddenWithDrawButton(Bool)
+        case changedNotificationAuthorizationStatus(Bool)
     }
 
     enum NavigateType {
@@ -50,6 +54,7 @@ final class SettingReactor: Reactor {
         var userInfo: UserInfo?
         var isHiddenLogoutButton: Bool
         var isHiddenWithDrawButton: Bool
+        var notificationAuthorizationStatus: Bool
         @Pulse var cacheSize: String?
         @Pulse var toastMessage: String?
         @Pulse var navigateType: NavigateType?
@@ -62,20 +67,25 @@ final class SettingReactor: Reactor {
     private var disposeBag = DisposeBag()
     private let withDrawUserInfoUseCase: any WithdrawUserInfoUseCase
     private let logoutUseCase: any LogoutUseCase
+    private let updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase
     private let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     init(
         withDrawUserInfoUseCase: WithdrawUserInfoUseCase,
-        logoutUseCase: LogoutUseCase
+        logoutUseCase: LogoutUseCase,
+        updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
     ) {
         self.initialState = .init(
             userInfo: Utility.PreferenceManager.userInfo,
             isHiddenLogoutButton: true,
-            isHiddenWithDrawButton: true
+            isHiddenWithDrawButton: true,
+            notificationAuthorizationStatus: PreferenceManager.pushNotificationAuthorizationStatus ?? false
         )
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
         self.logoutUseCase = logoutUseCase
+        self.updateNotificationTokenUseCase = updateNotificationTokenUseCase
         observeUserInfoChanges()
+        observePushNotificationAuthorizationStatus()
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -104,16 +114,17 @@ final class SettingReactor: Reactor {
             return showToast(message: message)
         case .confirmWithDrawButtonDidTap:
             return confirmWithDrawButtonDidTap()
-        case let .changedUserInfo(userInfo):
-            return .concat (
-                updateIsHiddenLogoutButton(userInfo),
-                updateIsHiddenWithDrawButton(userInfo)
+        case let .changedUserInfo(isLoggedIn):
+            return .concat(
+                updateIsHiddenLogoutButton(isLoggedIn),
+                updateIsHiddenWithDrawButton(isLoggedIn)
             )
-
         case let .updateIsHiddenLogoutButton(isHidden):
             return .just(.updateIsHiddenLogoutButton(isHidden))
         case let .updateIsHiddenWithDrawButton(isHidden):
             return .just(.updateIsHiddenWithDrawButton(isHidden))
+        case let .changedNotificationAuthorizationStatus(granted):
+            return .just(.changedNotificationAuthorizationStatus(granted))
         }
     }
 
@@ -136,6 +147,8 @@ final class SettingReactor: Reactor {
             newState.isHiddenLogoutButton = isHiddenLogoutButton
         case let .updateIsHiddenWithDrawButton(isHiddenWithDrawButton):
             newState.isHiddenWithDrawButton = isHiddenWithDrawButton
+        case let .changedNotificationAuthorizationStatus(granted):
+            newState.notificationAuthorizationStatus = granted
         }
         return newState
     }
@@ -143,20 +156,33 @@ final class SettingReactor: Reactor {
 
 private extension SettingReactor {
     func observeUserInfoChanges() {
-        PreferenceManager.$userInfo
-            .bind(with: self) { owner, userInfo in
-                owner.action.onNext(.changedUserInfo(userInfo))
+        PreferenceManager.$userInfo.map { $0?.ID }
+            .distinctUntilChanged()
+            .map { $0 != nil }
+            .bind(with: self) { owner, isLoggedIn in
+                owner.action.onNext(.changedUserInfo(isLoggedIn))
             }
             .disposed(by: disposeBag)
     }
 
-    func updateIsHiddenLogoutButton(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        let isHidden = userInfo == nil
+    func observePushNotificationAuthorizationStatus() {
+        PreferenceManager.$pushNotificationAuthorizationStatus
+            .skip(1)
+            .distinctUntilChanged()
+            .map { $0 ?? false }
+            .bind(with: self) { owner, granted in
+                owner.action.onNext(.changedNotificationAuthorizationStatus(granted))
+            }
+            .disposed(by: disposeBag)
+    }
+
+    func updateIsHiddenLogoutButton(_ isLoggedIn: Bool) -> Observable<Mutation> {
+        let isHidden = isLoggedIn == false
         return .just(.updateIsHiddenLogoutButton(isHidden))
     }
 
-    func updateIsHiddenWithDrawButton(_ userInfo: UserInfo?) -> Observable<Mutation> {
-        let isHidden = userInfo == nil
+    func updateIsHiddenWithDrawButton(_ isLoggedIn: Bool) -> Observable<Mutation> {
+        let isHidden = isLoggedIn == false
         return .just(.updateIsHiddenWithDrawButton(isHidden))
     }
 
@@ -165,7 +191,8 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        return logoutUseCase.execute(localOnly: false)
+        let notificationGranted = PreferenceManager.pushNotificationAuthorizationStatus ?? false
+        let logoutUseCase = logoutUseCase.execute(localOnly: false)
             .andThen(
                 .concat(
                     .just(.updateIsHiddenLogoutButton(true)),
@@ -177,13 +204,29 @@ private extension SettingReactor {
                 let description = error.asWMError.errorDescription ?? ""
                 return Observable.just(Mutation.showToast(description))
             }
+
+        if notificationGranted {
+            return Messaging.messaging().fetchRxPushToken()
+                .asObservable()
+                .catchAndReturn("")
+                .flatMap { [updateNotificationTokenUseCase] token -> Observable<Void> in
+                    return token.isEmpty ?
+                        Observable.just(()) :
+                        updateNotificationTokenUseCase.execute(type: .delete)
+                        .andThen(Observable.just(()))
+                        .catchAndReturn(())
+                }
+                .flatMap { _ in
+                    return logoutUseCase
+                }
+
+        } else {
+            return logoutUseCase
+        }
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
-        let mutation: Mutation = currentState.userInfo == nil
-            ? .showToast("로그인이 필요합니다.")
-            : .withDrawButtonDidTap
-        return .just(mutation)
+        return .just(.withDrawButtonDidTap)
     }
 
     func confirmWithDrawButtonDidTap() -> Observable<Mutation> {

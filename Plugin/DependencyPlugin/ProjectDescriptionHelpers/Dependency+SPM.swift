@@ -26,6 +26,7 @@ public extension TargetDependency.SPM {
     static let MarqueeLabel = TargetDependency.external(name: "MarqueeLabel")
     static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalyticsWithoutAdIdSupport")
     static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
+    static let FirebaseMessaging = TargetDependency.external(name: "FirebaseMessaging")
     static let NVActivityIndicatorView = TargetDependency.external(name: "NVActivityIndicatorView")
     static let ReactorKit = TargetDependency.external(name: "ReactorKit")
     static let Quick = TargetDependency.external(name: "Quick")
