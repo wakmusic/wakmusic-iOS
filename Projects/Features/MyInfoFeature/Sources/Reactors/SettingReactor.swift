@@ -8,6 +8,7 @@ import NotificationDomainInterface
 import ReactorKit
 import UserDomainInterface
 import Utility
+import FirebaseMessaging
 
 final class SettingReactor: Reactor {
     enum Action {
@@ -190,7 +191,8 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        return logoutUseCase.execute(localOnly: false)
+        let notificationGranted = PreferenceManager.pushNotificationAuthorizationStatus ?? false
+        let logoutUseCase = logoutUseCase.execute(localOnly: false)
             .andThen(
                 .concat(
                     .just(.updateIsHiddenLogoutButton(true)),
@@ -202,6 +204,25 @@ private extension SettingReactor {
                 let description = error.asWMError.errorDescription ?? ""
                 return Observable.just(Mutation.showToast(description))
             }
+
+        if notificationGranted {
+            return Messaging.messaging().fetchRxPushToken()
+                .asObservable()
+                .catchAndReturn("")
+                .flatMap { [updateNotificationTokenUseCase] token -> Observable<Void> in
+                    return token.isEmpty ?
+                        Observable.just(()) :
+                            updateNotificationTokenUseCase.execute(type: .delete)
+                            .andThen(Observable.just(()))
+                            .catchAndReturn(())
+                }
+                .flatMap { _ in
+                    return logoutUseCase
+                }
+
+        } else {
+            return logoutUseCase
+        }
     }
 
     func withDrawButtonDidTap() -> Observable<Mutation> {
