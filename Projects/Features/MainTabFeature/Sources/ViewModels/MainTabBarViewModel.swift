@@ -65,6 +65,7 @@ public final class MainTabBarViewModel {
             }
             .disposed(by: disposeBag)
 
+        /// 호출 조건: 앱 실행 시, 리프레쉬 토큰 감지, 앱 설정 푸시 끔
         Observable.combineLatest(
             input.detectedRefreshPushToken,
             PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged()
