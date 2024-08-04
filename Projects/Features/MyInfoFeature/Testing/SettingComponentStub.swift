@@ -9,13 +9,15 @@ import SignInFeatureInterface
 import UIKit
 import UserDomainInterface
 @testable import UserDomainTesting
+import NotificationDomainInterface
 
 public final class SettingComponentStub: SettingFactory {
     public func makeView() -> UIViewController {
         return SettingViewController.viewController(
             reactor: SettingReactor(
                 withDrawUserInfoUseCase: WithdrawUserInfoUseCaseSpy(),
-                logoutUseCase: LogoutUseCaseSpy()
+                logoutUseCase: LogoutUseCaseSpy(),
+                updateNotificationTokenUseCase: UpdateNotificationTokenUseCaseSpy()
             ),
             textPopUpFactory: TextPopUpComponentStub(),
             signInFactory: SignInComponentStub(),
