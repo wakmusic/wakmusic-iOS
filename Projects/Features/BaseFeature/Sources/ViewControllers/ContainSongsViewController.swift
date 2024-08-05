@@ -7,6 +7,7 @@ import RxSwift
 import UIKit
 import UserDomainInterface
 import Utility
+import Localization
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -108,7 +109,7 @@ extension ContainSongsViewController {
             .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] result in
                 guard let self = self else { return }
-                self.showToast(text: result.description, font: .setFont(.t6(weight: .light)))
+                self.showToast(text: result.description, options: [.tabBar])
 
                 if result.status == 201 {
                     NotificationCenter.default.post(name: .playlistRefresh, object: nil) // 플리목록창 이름 변경하기 위함
@@ -143,7 +144,7 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: "음표 열매가 부족합니다.")
+                    owner.showToast(text: LocalizationStrings.lackOfMoney(price-user.itemCount), options: [.tabBar])
                     return
                 }
 

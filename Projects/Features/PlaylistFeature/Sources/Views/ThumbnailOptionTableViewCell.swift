@@ -109,7 +109,7 @@ final class PlaylistCoverOptionTableViewCell: UITableViewCell {
 extension PlaylistCoverOptionTableViewCell {
     public func update(_ model: PlaylistCoverOptionModel) {
         titleLabel.text = model.title
-        costLabel.text = "\(model.cost)"
-        productTypeLabel.text = model.cost == .zero ? "무료" : "구매"
+        costLabel.text = "\(model.price)"
+        productTypeLabel.text = model.price == .zero ? "무료" : "구매"
     }
 }
