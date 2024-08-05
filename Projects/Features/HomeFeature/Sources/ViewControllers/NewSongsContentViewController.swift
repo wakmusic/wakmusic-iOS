@@ -64,6 +64,8 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
 
 private extension NewSongsContentViewController {
     func inputBind() {
+        input.fetchPlaylistURL.onNext(())
+
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)
@@ -164,6 +166,10 @@ private extension NewSongsContentViewController {
             .subscribe()
             .disposed(by: disposeBag)
 
+        output.playlistURL
+            .subscribe()
+            .disposed(by: disposeBag)
+
         output.showToast
             .bind(with: self) { owner, message in
                 owner.showToast(
@@ -229,8 +235,23 @@ extension NewSongsContentViewController: UITableViewDelegate {
 
 extension NewSongsContentViewController: SingleActionButtonViewDelegate {
     public func tappedButtonAction() {
-        #warning("TO-DO:: 액션 수정해야함")
-        input.groupPlayTapped.onNext(PlayEvent.allPlay)
+        let playlistURL: String = output.playlistURL.value
+        guard !playlistURL.isEmpty, let url = URL(string: playlistURL) else {
+            output.showToast.onNext("해당 기능은 준비 중입니다.")
+            return
+        }
+        UIApplication.shared.open(url)
+
+        let songs: [SongEntity] = output.dataSource.value.map {
+            return SongEntity(
+                id: $0.id,
+                title: $0.title,
+                artist: $0.artist,
+                views: $0.views,
+                date: "\($0.date)"
+            )
+        }
+        PlayState.shared.loadAndAppendSongsToPlaylist(songs)
     }
 }
 

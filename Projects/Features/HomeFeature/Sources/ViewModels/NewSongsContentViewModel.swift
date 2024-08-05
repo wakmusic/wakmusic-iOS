@@ -19,29 +19,33 @@ public final class NewSongsContentViewModel: ViewModelType {
     public let type: NewSongGroupType
     private let disposeBag = DisposeBag()
     private let fetchNewSongsUseCase: FetchNewSongsUseCase
+    private let fetchNewSongsPlaylistUseCase: FetchNewSongsPlaylistUseCase
 
     deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
 
     public init(
         type: NewSongGroupType,
-        fetchNewSongsUseCase: FetchNewSongsUseCase
+        fetchNewSongsUseCase: FetchNewSongsUseCase,
+        fetchNewSongsPlaylistUseCase: FetchNewSongsPlaylistUseCase
     ) {
         self.type = type
         self.fetchNewSongsUseCase = fetchNewSongsUseCase
+        self.fetchNewSongsPlaylistUseCase = fetchNewSongsPlaylistUseCase
     }
 
     public struct Input {
         let pageID: BehaviorRelay<Int> = BehaviorRelay(value: 1)
         let songTapped: PublishSubject<Int> = PublishSubject()
         let allSongSelected: PublishSubject<Bool> = PublishSubject()
-        let groupPlayTapped: PublishSubject<PlayEvent> = PublishSubject()
         let refreshPulled: PublishSubject<Void> = PublishSubject()
+        let fetchPlaylistURL: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
         let dataSource: BehaviorRelay<[NewSongsEntity]> = BehaviorRelay(value: [])
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
+        let playlistURL: BehaviorRelay<String> = BehaviorRelay(value: "")
         let canLoadMore: BehaviorRelay<Bool> = BehaviorRelay(value: true)
         let showToast: PublishSubject<String> = .init()
         let showLogin: PublishSubject<Void> = .init()
@@ -87,6 +91,15 @@ public final class NewSongsContentViewModel: ViewModelType {
         input.refreshPulled
             .map { _ in 1 }
             .bind(to: input.pageID)
+            .disposed(by: disposeBag)
+        
+        input.fetchPlaylistURL
+            .flatMap { [fetchNewSongsPlaylistUseCase] _ in
+                return fetchNewSongsPlaylistUseCase.execute(type: type)
+                    .catchAndReturn(.init(url: ""))
+            }
+            .map { $0.url }
+            .bind(to: output.playlistURL)
             .disposed(by: disposeBag)
 
         input.songTapped
@@ -146,33 +159,6 @@ public final class NewSongsContentViewModel: ViewModelType {
                 }
             }
             .bind(to: output.songEntityOfSelectedSongs)
-            .disposed(by: disposeBag)
-
-        input.groupPlayTapped
-            .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { type, dataSource -> (PlayEvent, [SongEntity]) in
-                let songEntities: [SongEntity] = dataSource.map {
-                    return SongEntity(
-                        id: $0.id,
-                        title: $0.title,
-                        artist: $0.artist,
-                        views: $0.views,
-                        date: "\($0.date)"
-                    )
-                }
-                return (type, songEntities)
-            }
-            .map { type, dataSource -> [SongEntity] in
-                switch type {
-                case .allPlay:
-                    return dataSource
-                case .shufflePlay:
-                    return dataSource.shuffled()
-                }
-            }
-            .subscribe(onNext: { songs in
-                PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-            })
             .disposed(by: disposeBag)
 
         return output

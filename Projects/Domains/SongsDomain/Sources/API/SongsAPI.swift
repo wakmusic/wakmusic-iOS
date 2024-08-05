@@ -9,6 +9,7 @@ public enum SongsAPI {
     case fetchLyrics(id: String)
     case fetchCredits(id: String)
     case fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int)
+    case fetchNewSongsPlaylist(type: NewSongGroupType)
 }
 
 extension SongsAPI: WMAPI {
@@ -26,6 +27,8 @@ extension SongsAPI: WMAPI {
             return "/\(id)/credits"
         case let .fetchNewSongs(type, _, _):
             return "/latest/\(type.apiKey)"
+        case let .fetchNewSongsPlaylist(type):
+            return "/latest/\(type.apiKey)/playlist"
         }
     }
 
@@ -35,7 +38,8 @@ extension SongsAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchSong, .fetchLyrics, .fetchCredits:
+        case .fetchSong, .fetchLyrics, .fetchCredits,
+            .fetchNewSongsPlaylist:
             return .requestPlain
 
         case let .fetchNewSongs(_, page, limit):

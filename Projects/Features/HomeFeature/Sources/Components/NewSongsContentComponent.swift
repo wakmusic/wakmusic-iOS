@@ -8,6 +8,7 @@ import SongsDomainInterface
 
 public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
+    var fetchNewSongsPlaylistUseCase: any FetchNewSongsPlaylistUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
@@ -19,7 +20,8 @@ public final class NewSongsContentComponent: Component<NewSongsContentDependency
         return NewSongsContentViewController.viewController(
             viewModel: .init(
                 type: type,
-                fetchNewSongsUseCase: dependency.fetchNewSongsUseCase
+                fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
+                fetchNewSongsPlaylistUseCase: dependency.fetchNewSongsPlaylistUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopupFactory: dependency.textPopUpFactory,

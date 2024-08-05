@@ -27,4 +27,10 @@ public final class RemoteSongsDataSourceImpl: BaseRemoteDataSource<SongsAPI>, Re
             .map([NewSongsResponseDTO].self)
             .map { $0.map { $0.toDomain() }}
     }
+
+    public func fetchNewSongsPlaylist(type: NewSongGroupType) -> Single<NewSongsPlaylistEntity> {
+        request(.fetchNewSongsPlaylist(type: type))
+            .map(NewSongsPlaylistResponseDTO.self)
+            .map { $0.toDomain() }
+    }
 }
