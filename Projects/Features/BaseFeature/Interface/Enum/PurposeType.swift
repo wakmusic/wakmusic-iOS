@@ -39,4 +39,22 @@ public extension PurposeType {
             return "완료"
         }
     }
+
+    var textLimitCount: Int {
+        switch self {
+        case .creation, .updatePlaylistTitle:
+            return 12
+        case .nickname:
+            return 8
+        }
+    }
+
+    var placeHolder: String {
+        switch self {
+        case .creation, .updatePlaylistTitle:
+            return "리스트 제목을 입력하세요."
+        case .nickname:
+            return "닉네임을 입력하세요."
+        }
+    }
 }
