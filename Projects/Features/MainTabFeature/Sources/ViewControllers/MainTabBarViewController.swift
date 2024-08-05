@@ -117,7 +117,7 @@ private extension MainTabBarViewController {
                     songIDs: selection.ids,
                     selectedID: selection.selectedID
                 )
-                viewController.modalPresentationStyle = .fullScreen
+                viewController.modalPresentationStyle = .overFullScreen
                 owner.present(viewController, animated: true)
             })
             .disposed(by: disposeBag)
