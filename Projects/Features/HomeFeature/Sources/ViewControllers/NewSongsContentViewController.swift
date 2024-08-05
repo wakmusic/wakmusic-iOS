@@ -171,7 +171,7 @@ private extension NewSongsContentViewController {
             .disposed(by: disposeBag)
 
         output.showToast
-            .withLatestFrom(output.songEntityOfSelectedSongs) { ($0, $1)}
+            .withLatestFrom(output.songEntityOfSelectedSongs) { ($0, $1) }
             .bind(with: self) { owner, model in
                 let (message, selectedSongs) = model
                 owner.showToast(
