@@ -23,7 +23,7 @@ extension ContractType {
     var title: String {
         switch self {
         case .privacy:
-            return "개인정보처리방침"
+            return "개인정보 처리방침"
         case .service:
             return "서비스 이용약관"
         }
