@@ -171,11 +171,12 @@ private extension NewSongsContentViewController {
             .disposed(by: disposeBag)
 
         output.showToast
-            .bind(with: self) { owner, message in
+            .withLatestFrom(output.songEntityOfSelectedSongs) { ($0, $1)}
+            .bind(with: self) { owner, model in
+                let (message, selectedSongs) = model
                 owner.showToast(
                     text: message,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: 56 + 56 + 40
+                    options: selectedSongs.isEmpty ? [.tabBar] : [.tabBar, .songCart]
                 )
             }
             .disposed(by: disposeBag)
