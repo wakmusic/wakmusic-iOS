@@ -214,6 +214,8 @@ extension StorageViewController: EqualHandleTappedType {
         let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
+        } else {
+            scrollToTop()
         }
     }
 }
