@@ -61,9 +61,35 @@ public extension UIViewController {
             .systemFont(ofSize: 14, weight: .light),
         options: WMToastOptions = [.empty]
     ) {
-        showToast(text: text, font: font, verticalOffset: options.offset)
+        var attributes = EKAttributes.bottomFloat
+        attributes.displayDuration = 2
+        attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
+        attributes.roundCorners = .all(radius: 20)
+        attributes.entranceAnimation = EKAttributes.Animation.init(
+            translate: .init(duration: 0.3),
+            fade: .init(from: 0, to: 1, duration: 0.3)
+        )
+        attributes.exitAnimation = EKAttributes.Animation.init(
+            fade: .init(from: 1, to: 0, duration: 0.3)
+        )
+        attributes.positionConstraints.verticalOffset = options.offset
+
+        let style = EKProperty.LabelStyle(
+            font: font,
+            color: EKColor(rgb: 0xFCFCFD),
+            alignment: .center
+        )
+        let labelContent = EKProperty.LabelContent(
+            text: text,
+            style: style
+        )
+
+        let contentView = EKNoteMessageView(with: labelContent)
+        contentView.verticalOffset = 10
+        SwiftEntryKit.display(entry: contentView, using: attributes)
     }
 
+    @available(*, deprecated, message: "토스트 위치 조정 버전으로 개선")
     func showToast(
         text: String,
         font: UIFont = UIFont(name: "Pretendard-Light", size: 14) ??
