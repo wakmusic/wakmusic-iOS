@@ -13,12 +13,28 @@ public extension TargetScript {
         name: "Needle",
         basedOnDependencyAnalysis: false
     )
+
+    static let firebaseInfoByConfiguration = TargetScript.post(
+        script: """
+            case "${CONFIGURATION}" in
+              "Release" )
+                cp -r "$SRCROOT/Resources/GoogleService-Info.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist"
+                ;;
+              *)
+                cp -r "$SRCROOT/Resources/GoogleService-Info-QA.plist" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist"
+                ;;
+            esac
+
+            """,
+        name: "Firebase Info copy by Configuration",
+        basedOnDependencyAnalysis: false
+    )
     
     static let firebaseCrashlytics = TargetScript.post(
         script:
             """
             ROOT_DIR=\(ProcessInfo.processInfo.environment["TUIST_ROOT_DIR"] ?? "")
-            "${ROOT_DIR}/Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
+            "${ROOT_DIR}/.build/checkouts/firebase-ios-sdk/Crashlytics/run"
             """
         ,
         name: "FirebaseCrashlytics",

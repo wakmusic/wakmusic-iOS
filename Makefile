@@ -9,6 +9,10 @@ install:
 test:
 	TUIST_ENV=CI TUIST_ROOT_DIR=${PWD} tuist test --platform ios
 
+deploy:
+	make install
+	TUIST_ENV=CD TUIST_ROOT_DIR=${PWD} tuist generate
+
 clean:
 	rm -rf **/*.xcodeproj
 	rm -rf *.xcworkspace
