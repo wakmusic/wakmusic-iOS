@@ -133,21 +133,9 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                guard let vc = owner.textPopUpFactory.makeView(
-                    text: LocalizationStrings.needLoginWarning,
-                    cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
-                    completion: {
-                        let loginVC = owner.signInFactory.makeView()
-                        loginVC.modalPresentationStyle = .fullScreen
-                        owner.present(loginVC, animated: true)
-                    },
-                    cancelCompletion: {}
-                ) as? TextPopupViewController else {
-                    return
-                }
-                owner.showBottomSheet(content: vc)
+                let loginVC = owner.signInFactory.makeView()
+                loginVC.modalPresentationStyle = .fullScreen
+                owner.present(loginVC, animated: true)
             })
             .disposed(by: disposeBag)
 
