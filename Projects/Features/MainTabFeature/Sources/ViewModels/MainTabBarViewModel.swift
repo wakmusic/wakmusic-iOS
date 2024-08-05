@@ -84,7 +84,6 @@ public final class MainTabBarViewModel {
                 grantedNotificationAuthorization: granted
             )
         }
-        .throttle(.seconds(3), latest: false, scheduler: MainScheduler.instance)
         .flatMap { [updateNotificationTokenUseCase] observer -> Observable<Bool> in
             let updateUseCase = updateNotificationTokenUseCase.execute(type: .update)
                 .debug("🔔:: updateNotificationTokenUseCase")
