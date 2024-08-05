@@ -77,6 +77,12 @@ public extension AppComponent {
         }
     }
 
+    var fetchNewSongsPlaylistUseCase: any FetchNewSongsPlaylistUseCase {
+        shared {
+            FetchNewSongsPlaylistUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+
     var fetchSongCreditsUseCase: any FetchSongCreditsUseCase {
         shared {
             FetchSongCreditsUseCaseImpl(songsRepository: songsRepository)

@@ -25,4 +25,8 @@ public final class SongsRepositoryImpl: SongsRepository {
     public func fetchNewSongs(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]> {
         remoteSongsDataSource.fetchNewSongs(type: type, page: page, limit: limit)
     }
+
+    public func fetchNewSongsPlaylist(type: NewSongGroupType) -> Single<NewSongsPlaylistEntity> {
+        remoteSongsDataSource.fetchNewSongsPlaylist(type: type)
+    }
 }
