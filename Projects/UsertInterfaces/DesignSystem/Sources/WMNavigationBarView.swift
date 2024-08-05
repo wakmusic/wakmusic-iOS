@@ -14,6 +14,7 @@ public final class WMNavigationBarView: UIView {
         $0.axis = .horizontal
         $0.alignment = .trailing
         $0.distribution = .fillEqually
+        $0.spacing = 10
     }
 
     private let horizontalInset: CGFloat
