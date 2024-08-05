@@ -1,7 +1,6 @@
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
-import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -13,16 +12,14 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase { get }
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
-
     var logoutUseCase: any LogoutUseCase { get }
-
     var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory { get }
     var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
     var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory { get }
     var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
-    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
 
@@ -45,7 +42,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
             checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
             defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory,
-            musicDetailFactory: dependency.musicDetailFactory
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }
