@@ -655,7 +655,7 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
 }
 
 extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
-    func didTap(_ index: Int, _ cost: Int) {
+    func didTap(_ index: Int, _ price: Int) {
         guard let reactor = reactor else {
             return
         }
@@ -678,10 +678,9 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
                 return
             }
 
-            if user.itemCount < cost {
+            if user.itemCount < price {
                 showToast(
-                    text: "음표 열매가 부족합니다.",
-                    options: state.selectedCount == .zero ? [.tabBar] : [.tabBar, .songCart]
+                    text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar]
                 )
             } else {
                 requestPhotoLibraryPermission()

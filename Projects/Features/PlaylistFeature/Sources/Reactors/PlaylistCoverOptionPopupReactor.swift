@@ -60,8 +60,8 @@ extension PlaylistCoverOptionPopupReactor {
                 .flatMap { entity -> Observable<Mutation> in
                     return Observable.just(
                         Mutation.updateDataSource([
-                            PlaylistCoverOptionModel(title: "이미지 선택", cost: 0),
-                            PlaylistCoverOptionModel(title: "앨범에서 고르기", cost: entity.price)
+                            PlaylistCoverOptionModel(title: "이미지 선택", price: 0),
+                            PlaylistCoverOptionModel(title: "앨범에서 고르기", price: entity.price)
                         ])
                     )
                 },

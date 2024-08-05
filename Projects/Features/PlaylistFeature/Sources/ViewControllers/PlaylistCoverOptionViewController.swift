@@ -129,7 +129,7 @@ extension PlaylistCoverOptionPopupViewController: UITableViewDelegate {
         }
 
         self.dismiss(animated: true) {
-            self.delegate?.didTap(indexPath.row, identifier.cost)
+            self.delegate?.didTap(indexPath.row, identifier.price)
         }
     }
 }

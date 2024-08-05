@@ -6,3 +6,4 @@
 "TITLE_RANDOM_PLAY" = "랜덤재생";
 "TITLE_50_RANDOM_PLAY" = "50곡 랜덤재생";
 "NEED_LOGIN_WARNING" = "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?";
+"LACK_OF_MONEY" = "음표 열매가 %@개가 부족합니다.";

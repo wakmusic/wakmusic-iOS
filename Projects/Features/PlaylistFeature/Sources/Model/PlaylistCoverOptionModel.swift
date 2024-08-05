@@ -2,10 +2,10 @@ import Foundation
 
 struct PlaylistCoverOptionModel: Hashable {
     var title: String
-    var cost: Int
+    var price: Int
 
-    init(title: String, cost: Int) {
+    init(title: String, price: Int) {
         self.title = title
-        self.cost = cost
+        self.price = price
     }
 }
