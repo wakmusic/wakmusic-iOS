@@ -1,6 +1,6 @@
 import BaseFeatureInterface
 import DesignSystem
-import NVActivityIndicatorView
+import LogManager
 import RxCocoa
 import RxKeyboard
 import RxSwift
@@ -18,34 +18,25 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     @IBOutlet weak var limitLabel: UILabel!
     @IBOutlet weak var confirmLabel: UILabel!
 
-    @IBOutlet weak var indicator: NVActivityIndicatorView!
-
-    @IBOutlet weak var confireLabelGap: NSLayoutConstraint!
-
-    @IBOutlet weak var cancelButtonHeight: NSLayoutConstraint!
-
-    @IBOutlet weak var cancelButtonWidth: NSLayoutConstraint!
-
     @IBAction func cancelAction(_ sender: UIButton) {
         textField.rx.text.onNext("")
         input.textString.accept("")
     }
 
-    var viewModel: MultiPurposePopupViewModel!
-    lazy var input = MultiPurposePopupViewModel.Input()
-    lazy var output = viewModel.transform(from: input)
+    private var viewModel: MultiPurposePopupViewModel!
+    private lazy var input = MultiPurposePopupViewModel.Input()
+    private lazy var output = viewModel.transform(from: input)
 
-    var limitCount: Int = 12
-    var completion: ((String) -> Void)?
-    public var disposeBag = DisposeBag()
+    private var limitCount: Int = 12
+    private var completion: ((String) -> Void)?
+    private let disposeBag = DisposeBag()
 
-    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+    deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindInput()
-        bindAction()
+        inputBind()
     }
 
     public static func viewController(
@@ -62,72 +53,21 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     }
 }
 
-extension MultiPurposePopupViewController {
-    private func configureUI() {
-        textField.becomeFirstResponder()
+private extension MultiPurposePopupViewController {
+    func inputBind() {
+        textField.rx.text.orEmpty
+            .skip(1)
+            .bind(to: input.textString)
+            .disposed(by: disposeBag)
 
-        titleLabel.text = viewModel.type.title
-        titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-
-        subTitleLabel.text = viewModel.type.subTitle
-        subTitleLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 16)
-        subTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
-
-        let headerFontSize: CGFloat = 20
-        let focusedplaceHolderAttributes = [
-            NSAttributedString.Key.foregroundColor: DesignSystemAsset.BlueGrayColor.gray400.color,
-            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
-        ] // 포커싱 플레이스홀더 폰트 및 color 설정
-
-//        textField.becomeFirstResponder()
-        self.textField.attributedPlaceholder = NSAttributedString(
-            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTitle ?
-                "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요.",
-            attributes: focusedplaceHolderAttributes
-        ) // 플레이스 홀더 설정
-        self.textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
-
-        self.dividerView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray200.color
-
-        self.cancelButton.layer.cornerRadius = 12
-        self.cancelButton.titleLabel?.text = "취소"
-        self.cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
-        self.cancelButton.layer.cornerRadius = 4
-        self.cancelButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
-        self.cancelButton.layer.borderWidth = 1
-        self.cancelButton.backgroundColor = .white
-        self.cancelButton.isHidden = true
-
-        self.confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.confirmLabel.isHidden = true
-
-        self.limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.limitLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
-
-        self.countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
-
-        saveButton.layer.cornerRadius = 12
-        saveButton.clipsToBounds = true
-        saveButton.setAttributedTitle(NSMutableAttributedString(
-            string: viewModel.type.btnText,
-            attributes: [
-                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color
-            ]
-        ), for: .normal)
-
-        saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
-        saveButton.setBackgroundColor(DesignSystemAsset.BlueGrayColor.gray300.color, for: .disabled)
-
-        self.indicator.type = .circleStrokeSpin
-        self.indicator.color = .white
-    }
-
-    private func bindInput() {
-        limitCount = viewModel.type == .nickname ? 8 : 12
-        limitLabel.text = "/\(limitCount)"
+        saveButton.rx.tap
+            .withLatestFrom(input.textString)
+            .bind(with: self) { owner, text in
+                owner.dismiss(animated: true) {
+                    owner.completion?(text)
+                }
+            }
+            .disposed(by: disposeBag)
 
         input.textString
             .bind(with: self) { owner, str in
@@ -171,27 +111,84 @@ extension MultiPurposePopupViewController {
                     owner.countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
                     owner.saveButton.isEnabled = true
                 }
-
-            }.disposed(by: disposeBag)
-    }
-
-    private func bindAction() {
-        textField.rx.text.orEmpty
-            .skip(1) // 바인드 할 때 발생하는 첫 이벤트를 무시
-            .bind(to: input.textString)
-            .disposed(by: disposeBag)
-
-        saveButton.rx
-            .tap
-            .withLatestFrom(input.textString)
-            .bind(with: self) { owner, text in
-                owner.dismiss(animated: true) {
-                    guard let completion = owner.completion else {
-                        return
-                    }
-                    completion(text)
-                }
             }
             .disposed(by: disposeBag)
+    }
+}
+
+private extension MultiPurposePopupViewController {
+    func configureUI() {
+        limitCount = viewModel.type == .nickname ? 8 : 12
+        limitLabel.text = "/\(limitCount)"
+
+        titleLabel.text = viewModel.type.title
+        titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+
+        subTitleLabel.text = viewModel.type.subTitle
+        subTitleLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 16)
+        subTitleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray400.color
+
+        let headerFontSize: CGFloat = 20
+        let focusedplaceHolderAttributes = [
+            NSAttributedString.Key.foregroundColor: DesignSystemAsset.BlueGrayColor.gray400.color,
+            NSAttributedString.Key.font: DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        ]
+
+        textField.attributedPlaceholder = NSAttributedString(
+            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTitle ?
+                "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요.",
+            attributes: focusedplaceHolderAttributes
+        )
+        textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
+        textField.becomeFirstResponder()
+        textField.delegate = self
+
+        dividerView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray200.color
+
+        cancelButton.layer.cornerRadius = 12
+        cancelButton.titleLabel?.text = "취소"
+        cancelButton.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
+        cancelButton.layer.cornerRadius = 4
+        cancelButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
+        cancelButton.layer.borderWidth = 1
+        cancelButton.backgroundColor = .white
+        cancelButton.isHidden = true
+
+        confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        confirmLabel.isHidden = true
+
+        limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        limitLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
+
+        countLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+        countLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
+
+        saveButton.layer.cornerRadius = 12
+        saveButton.clipsToBounds = true
+        saveButton.setAttributedTitle(NSMutableAttributedString(
+            string: viewModel.type.btnText,
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color
+            ]
+        ), for: .normal)
+
+        saveButton.setBackgroundColor(DesignSystemAsset.PrimaryColor.point.color, for: .normal)
+        saveButton.setBackgroundColor(DesignSystemAsset.BlueGrayColor.gray300.color, for: .disabled)
+    }
+}
+
+extension MultiPurposePopupViewController: UITextFieldDelegate {
+    public func textField(
+        _ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String
+    ) -> Bool {
+        guard let char = string.cString(using: String.Encoding.utf8) else { return false }
+        let isBackSpace = strcmp(char, "\\b")
+
+        guard isBackSpace == -92 || (textField.text?.count ?? 0) < limitCount else { return false }
+        return true
     }
 }

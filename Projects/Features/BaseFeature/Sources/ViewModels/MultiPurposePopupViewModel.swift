@@ -9,8 +9,8 @@ import UserDomainInterface
 import Utility
 
 public final class MultiPurposePopupViewModel: ViewModelType {
-    var type: PurposeType
-    var key: String
+    let type: PurposeType
+    let key: String
 
     public struct Input {
         let textString: BehaviorRelay<String> = BehaviorRelay(value: "")
@@ -31,8 +31,7 @@ public final class MultiPurposePopupViewModel: ViewModelType {
     }
 
     public func transform(from input: Input) -> Output {
-        var output = Output()
-
+        let output = Output()
         return output
     }
 }
