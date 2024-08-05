@@ -92,7 +92,7 @@ public final class NewSongsContentViewModel: ViewModelType {
             .map { _ in 1 }
             .bind(to: input.pageID)
             .disposed(by: disposeBag)
-        
+
         input.fetchPlaylistURL
             .flatMap { [fetchNewSongsPlaylistUseCase] _ in
                 return fetchNewSongsPlaylistUseCase.execute(type: type)

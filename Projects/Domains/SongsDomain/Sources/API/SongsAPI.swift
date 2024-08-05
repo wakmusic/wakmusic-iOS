@@ -39,7 +39,7 @@ extension SongsAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case .fetchSong, .fetchLyrics, .fetchCredits,
-            .fetchNewSongsPlaylist:
+             .fetchNewSongsPlaylist:
             return .requestPlain
 
         case let .fetchNewSongs(_, page, limit):
