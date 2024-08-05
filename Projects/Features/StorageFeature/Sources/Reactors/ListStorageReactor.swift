@@ -544,7 +544,7 @@ private extension ListStorageReactor {
                         return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
                     }
                     if userItemCount < price {
-                        return .just(.showToast(LocalizationStrings.lackOfMoney(price-userItemCount)))
+                        return .just(.showToast(LocalizationStrings.lackOfMoney(price - userItemCount)))
                     }
                     return .just(.showCreatePricePopup(price))
                 }

@@ -1,13 +1,13 @@
 import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
+import Localization
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
 import UIKit
 import UserDomainInterface
 import Utility
-import Localization
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -144,7 +144,7 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: LocalizationStrings.lackOfMoney(price-user.itemCount), options: [.tabBar])
+                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar])
                     return
                 }
 

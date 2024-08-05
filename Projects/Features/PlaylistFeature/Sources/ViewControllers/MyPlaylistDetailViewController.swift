@@ -680,7 +680,7 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
 
             if user.itemCount < price {
                 showToast(
-                    text: LocalizationStrings.lackOfMoney(price-user.itemCount), options: [.tabBar]
+                    text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar]
                 )
             } else {
                 requestPhotoLibraryPermission()
