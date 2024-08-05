@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
-import MusicDetailFeatureInterface
 import PhotosUI
 import ReactorKit
 import SignInFeatureInterface
@@ -23,7 +22,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
     private let textPopUpFactory: any TextPopUpFactory
 
-    private let musicDetailFactory: any MusicDetailFactory
+    private let songDetailPresenter: any SongDetailPresentable
 
     private let signInFactory: any SignInFactory
 
@@ -65,12 +64,12 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
         reactor: UnknownPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
         textPopUpFactory: any TextPopUpFactory,
-        musicDetailFactory: any MusicDetailFactory,
+        songDetailPresenter: any SongDetailPresentable,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.textPopUpFactory = textPopUpFactory
-        self.musicDetailFactory = musicDetailFactory
+        self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
         super.init(reactor: reactor)
     }
@@ -368,10 +367,7 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 
 extension UnknownPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
-        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
-        vc.modalPresentationStyle = .fullScreen
-
-        self.present(vc, animated: true)
+        songDetailPresenter.present(id: key)
     }
 }
 
