@@ -448,7 +448,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateEditingState(false)),
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
-                .just(.showToast("\(remainSongs.count)개의 곡을 삭제했습니다.")),
+                .just(.showToast("\(removeSongs.count)개의 곡을 삭제했습니다.")),
                 postNotification(notiName: .playlistRefresh)
 
             ]))
