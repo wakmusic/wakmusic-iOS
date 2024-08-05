@@ -144,7 +144,7 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar])
+                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.empty])
                     return
                 }
 
