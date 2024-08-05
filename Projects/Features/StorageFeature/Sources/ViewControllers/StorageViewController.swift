@@ -45,6 +45,16 @@ final class StorageViewController: TabmanViewController, View {
         reactor?.action.onNext(.viewDidLoad)
     }
 
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+
+    override public func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
+
     public static func viewController(
         reactor: Reactor,
         listStorageComponent: ListStorageComponent,
@@ -205,5 +215,11 @@ extension StorageViewController: EqualHandleTappedType {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         }
+    }
+}
+
+extension StorageViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
     }
 }
