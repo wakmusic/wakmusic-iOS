@@ -6,7 +6,6 @@ import Utility
 
 final class ThumbnailCell: UICollectionViewCell {
     private let thumbnailImageView = UIImageView().then {
-        $0.backgroundColor = .gray
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
