@@ -27,7 +27,6 @@ public final class MultiPurposePopupViewController: UIViewController, ViewContro
     private lazy var input = MultiPurposePopupViewModel.Input()
     private lazy var output = viewModel.transform(from: input)
 
-    private var limitCount: Int = 12
     private var completion: ((String) -> Void)?
     private let disposeBag = DisposeBag()
 
@@ -97,7 +96,7 @@ private extension MultiPurposePopupViewController {
                     owner.countLabel.textColor = errorColor
                     owner.saveButton.isEnabled = false
 
-                } else if str.count > owner.limitCount {
+                } else if str.count > owner.viewModel.type.textLimitCount {
                     owner.dividerView.backgroundColor = errorColor
                     owner.confirmLabel.text = "글자 수를 초과하였습니다."
                     owner.confirmLabel.textColor = errorColor
@@ -118,8 +117,7 @@ private extension MultiPurposePopupViewController {
 
 private extension MultiPurposePopupViewController {
     func configureUI() {
-        limitCount = viewModel.type == .nickname ? 8 : 12
-        limitLabel.text = "/\(limitCount)"
+        limitLabel.text = "/\(viewModel.type.textLimitCount)"
 
         titleLabel.text = viewModel.type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
@@ -136,8 +134,7 @@ private extension MultiPurposePopupViewController {
         ]
 
         textField.attributedPlaceholder = NSAttributedString(
-            string: viewModel.type == .creation || viewModel.type == .updatePlaylistTitle ?
-                "리스트 제목을 입력하세요." : viewModel.type == .nickname ? "닉네임을 입력하세요." : "코드를 입력해주세요.",
+            string: viewModel.type.placeHolder,
             attributes: focusedplaceHolderAttributes
         )
         textField.font = DesignSystemFontFamily.Pretendard.medium.font(size: headerFontSize)
@@ -188,7 +185,7 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
         guard let char = string.cString(using: String.Encoding.utf8) else { return false }
         let isBackSpace = strcmp(char, "\\b")
 
-        guard isBackSpace == -92 || (textField.text?.count ?? 0) < limitCount else { return false }
+        guard isBackSpace == -92 || (textField.text?.count ?? 0) < viewModel.type.textLimitCount else { return false }
         return true
     }
 }
