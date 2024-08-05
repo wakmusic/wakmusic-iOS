@@ -34,7 +34,7 @@ final class LikeStorageView: UIView {
         $0.separatorStyle = .none
     }
 
-    fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n리스트를 확인해보세요.") { return }
+    fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n좋아요를 확인해보세요.") { return }
 
     private let activityIndicator = NVActivityIndicatorView(
         frame: .zero,
