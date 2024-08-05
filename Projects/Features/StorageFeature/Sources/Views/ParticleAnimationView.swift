@@ -93,40 +93,40 @@ private extension ParticleAnimationView {
 
     func setLayout() {
         greenHeartImageView.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(24)
-            $0.top.equalToSuperview().offset(34)
+            $0.left.equalToSuperview().inset(24.0.correctLeading)
+            $0.top.equalToSuperview().offset(34.0.correctTop)
         }
         grayNoteImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(38)
-            $0.top.equalToSuperview().offset(27)
+            $0.left.equalToSuperview().inset(38.0.correctLeading)
+            $0.top.equalToSuperview().offset(27.0.correctTop)
         }
         leftMediumParticleIamge.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(82)
-            $0.top.equalToSuperview().offset(47)
+            $0.left.equalToSuperview().inset(82.0.correctLeading)
+            $0.top.equalToSuperview().offset(47.0.correctTop)
         }
         leftSmallParticeImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(91)
-            $0.top.equalToSuperview().offset(42)
+            $0.left.equalToSuperview().inset(91.0.correctLeading)
+            $0.top.equalToSuperview().offset(42.0.correctTop)
         }
         purpleHeartImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(97)
-            $0.top.equalToSuperview().offset(8)
+            $0.left.equalToSuperview().inset(97.0.correctLeading)
+            $0.top.equalToSuperview().offset(8.0.correctTop)
         }
         blueHeartImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(251)
-            $0.top.equalToSuperview().offset(15)
+            $0.left.equalToSuperview().inset(251.0.correctLeading)
+            $0.top.equalToSuperview().offset(15.0.correctTop)
         }
         rightSmallParticeImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(297)
-            $0.top.equalToSuperview().offset(42)
+            $0.left.equalToSuperview().inset(297.0.correctLeading)
+            $0.top.equalToSuperview().offset(42.0.correctTop)
         }
         yellowHeartImage.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(309)
-            $0.top.equalToSuperview().offset(37)
+            $0.left.equalToSuperview().inset(309.0.correctLeading)
+            $0.top.equalToSuperview().offset(37.0.correctTop)
         }
         rightMediumParticleIamge.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(345)
-            $0.top.equalToSuperview().offset(42)
+            $0.left.equalToSuperview().inset(345.0.correctLeading)
+            $0.top.equalToSuperview().offset(42.0.correctTop)
         }
     }
 
