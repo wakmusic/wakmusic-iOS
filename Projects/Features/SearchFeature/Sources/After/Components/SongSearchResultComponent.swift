@@ -1,7 +1,5 @@
 import BaseFeature
 import BaseFeatureInterface
-import Foundation
-import MusicDetailFeatureInterface
 import NeedleFoundation
 import SearchDomainInterface
 import SearchFeatureInterface
@@ -13,7 +11,7 @@ public protocol SongSearchResultDependency: Dependency {
     var searchSortOptionComponent: SearchSortOptionComponent { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
-    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
     var signInFactory: any SignInFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
 }
@@ -26,7 +24,7 @@ public final class SongSearchResultComponent: Component<SongSearchResultDependen
                 fetchSearchSongsUseCase: dependency.fetchSearchSongsUseCase
             ),
             searchSortOptionComponent: dependency.searchSortOptionComponent,
-            musicDetailFactory: dependency.musicDetailFactory,
+            songDetailPresenter: dependency.songDetailPresenter,
             containSongsFactory: dependency.containSongsFactory,
             signInFactory: dependency.signInFactory,
             textPopUpFactory: dependency.textPopUpFactory,

@@ -3,7 +3,6 @@ import ChartDomainInterface
 import ChartFeatureInterface
 import DesignSystem
 import LogManager
-import MusicDetailFeatureInterface
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -58,7 +57,7 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
     private var chartFactory: ChartFactory!
     private var playlistDetailFactory: PlaylistDetailFactory!
     private var newSongsComponent: NewSongsComponent!
-    private var musicDetailFactory: (any MusicDetailFactory)!
+    private var songDetailPresenter: (any SongDetailPresentable)!
     private var recommendViewHeightConstraint: NSLayoutConstraint?
 
     private var viewModel: HomeViewModel!
@@ -90,14 +89,14 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         playlistDetailFactory: PlaylistDetailFactory,
         newSongsComponent: NewSongsComponent,
         chartFactory: ChartFactory,
-        musicDetailFactory: any MusicDetailFactory
+        songDetailPresenter: any SongDetailPresentable
     ) -> HomeViewController {
         let viewController = HomeViewController.viewController(storyBoardName: "Home", bundle: Bundle.module)
         viewController.viewModel = viewModel
         viewController.playlistDetailFactory = playlistDetailFactory
         viewController.newSongsComponent = newSongsComponent
         viewController.chartFactory = chartFactory
-        viewController.musicDetailFactory = musicDetailFactory
+        viewController.songDetailPresenter = songDetailPresenter
         return viewController
     }
 }
@@ -399,12 +398,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 extension HomeViewController: HomeChartCellDelegate {
     func thumbnailDidTap(model: ChartRankingEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: model.id))
-        let musicDetailViewController = musicDetailFactory.makeViewController(
-            songIDs: [model.id],
-            selectedID: model.id
-        )
-        musicDetailViewController.modalPresentationStyle = .fullScreen
-        self.present(musicDetailViewController, animated: true)
+        songDetailPresenter.present(id: model.id)
     }
 
     func playButtonDidTap(model: ChartRankingEntity) {
@@ -417,9 +411,7 @@ extension HomeViewController: HomeChartCellDelegate {
 extension HomeViewController: HomeNewSongCellDelegate {
     func thumbnailDidTap(model: NewSongsEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent, id: model.id))
-        let musicDetailViewController = musicDetailFactory.makeViewController(songIDs: [model.id], selectedID: model.id)
-        musicDetailViewController.modalPresentationStyle = .fullScreen
-        self.present(musicDetailViewController, animated: true)
+        songDetailPresenter.present(id: model.id)
     }
 
     func playButtonDidTap(model: NewSongsEntity) {

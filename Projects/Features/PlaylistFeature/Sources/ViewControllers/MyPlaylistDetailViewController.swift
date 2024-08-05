@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
-import MusicDetailFeatureInterface
 import PhotosUI
 import PlaylistFeatureInterface
 import ReactorKit
@@ -37,7 +36,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory
 
-    private let musicDetailFactory: any MusicDetailFactory
+    private let songDetailPresenter: any SongDetailPresentable
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
 
@@ -89,7 +88,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
         defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory,
-        musicDetailFactory: any MusicDetailFactory
+        songDetailPresenter: any SongDetailPresentable
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
@@ -97,7 +96,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
         self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
         self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
-        self.musicDetailFactory = musicDetailFactory
+        self.songDetailPresenter = songDetailPresenter
 
         super.init(reactor: reactor)
     }
@@ -505,10 +504,7 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 /// 편집모드 시 셀 선택 이벤트
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
-        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
-        vc.modalPresentationStyle = .fullScreen
-
-        self.present(vc, animated: true)
+        songDetailPresenter.present(id: key)
     }
 
     func playButtonDidTap(key: String) {

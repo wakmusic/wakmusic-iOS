@@ -1,7 +1,6 @@
 import AuthDomainInterface
 import BaseFeature
 import BaseFeatureInterface
-import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -15,7 +14,7 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var logoutUseCase: any LogoutUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
-    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 
     var signInFactory: any SignInFactory { get }
 }
@@ -33,7 +32,7 @@ public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDeta
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,
-            musicDetailFactory: dependency.musicDetailFactory,
+            songDetailPresenter: dependency.songDetailPresenter,
             signInFactory: dependency.signInFactory
         )
     }

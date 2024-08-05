@@ -3,7 +3,6 @@ import ChartDomainInterface
 import ChartFeatureInterface
 import Foundation
 import HomeFeatureInterface
-import MusicDetailFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -17,7 +16,7 @@ public protocol HomeDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var chartFactory: any ChartFactory { get }
     var newSongsComponent: NewSongsComponent { get }
-    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class HomeComponent: Component<HomeDependency>, HomeFactory {
@@ -31,7 +30,7 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
             playlistDetailFactory: dependency.playlistDetailFactory,
             newSongsComponent: dependency.newSongsComponent,
             chartFactory: dependency.chartFactory,
-            musicDetailFactory: dependency.musicDetailFactory
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

@@ -3,7 +3,6 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
-import MusicDetailFeatureInterface
 import RxCocoa
 import RxSwift
 import SearchDomainInterface
@@ -19,7 +18,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
 
     var bottomSheetView: BottomSheetView!
 
-    private let musicDetailFactory: any MusicDetailFactory
+    private let songDetailPresenter: any SongDetailPresentable
     private let containSongsFactory: any ContainSongsFactory
     private let signInFactory: any SignInFactory
     private let textPopUpFactory: any TextPopUpFactory
@@ -46,7 +45,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     init(
         _ reactor: SongSearchResultReactor,
         searchSortOptionComponent: SearchSortOptionComponent,
-        musicDetailFactory: any MusicDetailFactory,
+        songDetailPresenter: any SongDetailPresentable,
         containSongsFactory: any ContainSongsFactory,
         signInFactory: any SignInFactory,
         textPopUpFactory: any TextPopUpFactory,
@@ -54,7 +53,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
-        self.musicDetailFactory = musicDetailFactory
+        self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
         self.textPopUpFactory = textPopUpFactory
         self.searchGlobalScrollState = searchGlobalScrollState
@@ -319,10 +318,7 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 
 extension SongSearchResultViewController: SongResultCellDelegate {
     func thumbnailDidTap(key: String) {
-        let vc = musicDetailFactory.makeViewController(songIDs: [key], selectedID: key)
-        vc.modalPresentationStyle = .fullScreen
-
-        self.present(vc, animated: true)
+        songDetailPresenter.present(id: key)
     }
 }
 
