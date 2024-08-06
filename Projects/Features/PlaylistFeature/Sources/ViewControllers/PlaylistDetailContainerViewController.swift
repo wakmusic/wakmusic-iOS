@@ -13,6 +13,13 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
 
+    private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
+    private let dismissButton = UIButton().then {
+        let dismissImage = DesignSystemAsset.Navigation.back.image
+            .withTintColor(DesignSystemAsset.BlueGrayColor.blueGray900.color, renderingMode: .alwaysOriginal)
+        $0.setImage(dismissImage, for: .normal)
+    }
+
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
     private let key: String
@@ -43,13 +50,20 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(contentView)
+        self.view.addSubviews(contentView, wmNavigationbarView)
+        wmNavigationbarView.setLeftViews([dismissButton])
     }
 
     override func setLayout() {
         super.setLayout()
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+
+        wmNavigationbarView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(48)
         }
     }
 
@@ -65,9 +79,20 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
                 if userInfo == nil {
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
+                    reactor.action.onNext(.clearOwnerID)
                 } else {
                     reactor.action.onNext(.requestOwnerID)
                 }
+            }
+            .disposed(by: disposeBag)
+    }
+
+    override func bindAction(reactor: PlaylistDetailContainerReactor) {
+        super.bindAction(reactor: reactor)
+        dismissButton.rx
+            .tap
+            .bind(with: self) { owner, _ in
+                owner.navigationController?.popViewController(animated: true)
             }
             .disposed(by: disposeBag)
     }
@@ -77,7 +102,20 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
         let sharedState = reactor.state.share()
 
+        sharedState.map(\.isLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoading in
+                if isLoading {
+                    owner.indicator.startAnimating()
+                    owner.wmNavigationbarView.isHidden = false
+                } else {
+                    owner.indicator.stopAnimating()
+                    owner.wmNavigationbarView.isHidden = true
+                }
+            }.disposed(by: disposeBag)
+
         sharedState.map(\.ownerID)
+            .distinctUntilChanged()
             .compactMap { $0 }
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .bind(with: self) { owner, info in

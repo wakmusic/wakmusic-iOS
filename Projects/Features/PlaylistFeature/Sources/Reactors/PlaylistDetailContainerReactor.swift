@@ -6,10 +6,11 @@ import RxSwift
 final class PlaylistDetailContainerReactor: Reactor {
     enum Action {
         case requestOwnerID
+        case clearOwnerID
     }
 
     enum Mutation {
-        case updateOwnerID(String)
+        case updateOwnerID(String?)
         case updateLoadingState(Bool)
         case showToastMessagae(String)
     }
@@ -34,6 +35,8 @@ final class PlaylistDetailContainerReactor: Reactor {
         switch action {
         case .requestOwnerID:
             return updateOwnerID()
+        case .clearOwnerID:
+            return .just(.updateOwnerID(nil))
         }
     }
 
@@ -55,12 +58,23 @@ final class PlaylistDetailContainerReactor: Reactor {
 
 extension PlaylistDetailContainerReactor {
     func updateOwnerID() -> Observable<Mutation> {
+        return .concat([
+            updateLoadingState(flag: true),
+            updateOwnerIDMutation(),
+            updateLoadingState(flag: false)
+        ])
+    }
+
+    func updateOwnerIDMutation() -> Observable<Mutation> {
         return requestPlaylistOwnerIDUsecase
             .execute(key: key)
             .asObservable()
-            .catchAndReturn(PlaylistOwnerIDEntity(ownerID: "__"))
             .flatMap { entitiy -> Observable<Mutation> in
                 return .just(Mutation.updateOwnerID(entitiy.ownerID))
+            }
+            .catch { error in
+                let wmError = error.asWMError
+                return .just(Mutation.showToastMessagae(wmError.localizedDescription))
             }
     }
 
