@@ -58,14 +58,13 @@ final class PlaylistDetailContainerReactor: Reactor {
 
 extension PlaylistDetailContainerReactor {
     func updateOwnerID() -> Observable<Mutation> {
-        
         return .concat([
             updateLoadingState(flag: true),
             updateOwnerIDMutation(),
             updateLoadingState(flag: false)
         ])
     }
-    
+
     func updateOwnerIDMutation() -> Observable<Mutation> {
         return requestPlaylistOwnerIDUsecase
             .execute(key: key)
@@ -73,15 +72,13 @@ extension PlaylistDetailContainerReactor {
             .flatMap { entitiy -> Observable<Mutation> in
                 return .just(Mutation.updateOwnerID(entitiy.ownerID))
             }
-            .catch { error  in
+            .catch { error in
                 let wmError = error.asWMError
                 return .just(Mutation.showToastMessagae(wmError.localizedDescription))
             }
     }
-    
 
     func updateLoadingState(flag: Bool) -> Observable<Mutation> {
         return .just(.updateLoadingState(flag))
     }
-    
 }

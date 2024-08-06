@@ -12,7 +12,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     var contentView: UIView! = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
-    
+
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView()
     private let dismissButton = UIButton().then {
         let dismissImage = DesignSystemAsset.Navigation.back.image
@@ -59,7 +59,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         wmNavigationbarView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.horizontalEdges.equalToSuperview()
@@ -86,6 +86,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
             }
             .disposed(by: disposeBag)
     }
+
     override func bindAction(reactor: PlaylistDetailContainerReactor) {
         super.bindAction(reactor: reactor)
         dismissButton.rx
@@ -100,7 +101,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         super.bindState(reactor: reactor)
 
         let sharedState = reactor.state.share()
-        
+
         sharedState.map(\.isLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
@@ -112,10 +113,10 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                     owner.wmNavigationbarView.isHidden = true
                 }
             }.disposed(by: disposeBag)
-        
+
         sharedState.map(\.ownerID)
             .distinctUntilChanged()
-            .compactMap({ $0 })
+            .compactMap { $0 }
             .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
             .bind(with: self) { owner, info in
 
