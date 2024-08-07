@@ -78,13 +78,17 @@ private extension BaseRemoteDataSource {
     }
 
     func authorizedRequest(_ api: API) -> Single<Response> {
-        if checkAccessTokenIsValid() {
+        guard checkTokenIsExist() else {
             return defaultRequest(api)
-        } else {
+        }
+
+        guard checkAccessTokenIsValid() else {
             return reissueToken()
                 .andThen(defaultRequest(api))
                 .retry(maxRetryCount)
         }
+
+        return defaultRequest(api)
     }
 
     func checkIsApiNeedsAuthorization(_ api: API) -> Bool {
@@ -96,6 +100,10 @@ private extension BaseRemoteDataSource {
         let today = Date()
         let expiredDate = (expired / 1000.0).unixTimeToDate
         return today < expiredDate
+    }
+
+    func checkTokenIsExist() -> Bool {
+        !keychain.load(type: .accessToken).isEmpty || !keychain.load(type: .refreshToken).isEmpty
     }
 
     func reissueToken() -> Completable {
