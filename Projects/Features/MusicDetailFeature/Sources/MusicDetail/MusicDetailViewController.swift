@@ -152,7 +152,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        self.rx.methodInvoked(#selector(viewDidDisappear))
+        self.rx.methodInvoked(#selector(viewWillDisappear))
             .map { _ in Reactor.Action.viewWillDisappear }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
