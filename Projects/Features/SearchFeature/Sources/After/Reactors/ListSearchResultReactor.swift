@@ -1,7 +1,7 @@
+import Localization
 import LogManager
 import ReactorKit
 import SearchDomainInterface
-import Localization
 
 final class ListSearchResultReactor: Reactor {
     enum Action {

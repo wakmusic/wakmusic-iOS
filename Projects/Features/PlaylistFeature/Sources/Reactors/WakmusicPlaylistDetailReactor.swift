@@ -1,11 +1,11 @@
 import AuthDomainInterface
 import Foundation
+import Localization
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Utility
-import Localization
 
 final class WakmusicPlaylistDetailReactor: Reactor {
     let key: String

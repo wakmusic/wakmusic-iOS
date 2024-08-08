@@ -2,6 +2,7 @@ import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
 import KeychainModule
+import Localization
 import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
@@ -10,7 +11,6 @@ import RxCocoa
 import RxSwift
 import UIKit
 import Utility
-import Localization
 
 public final class ArtistViewController:
     BaseViewController,

@@ -2,13 +2,13 @@ import AuthDomainInterface
 import AuthenticationServices
 import BaseFeature
 import CryptoSwift
+import Localization
 import LogManager
 import NaverThirdPartyLogin
 import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
-import Localization
 
 public final class LoginViewModel: NSObject { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let fetchTokenUseCase: FetchTokenUseCase

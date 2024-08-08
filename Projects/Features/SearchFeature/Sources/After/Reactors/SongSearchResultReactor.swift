@@ -1,8 +1,8 @@
+import Localization
 import LogManager
 import ReactorKit
 import SearchDomainInterface
 import SongsDomainInterface
-import Localization
 
 final class SongSearchResultReactor: Reactor {
     enum Action {

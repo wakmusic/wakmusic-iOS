@@ -1,10 +1,10 @@
 import ChartDomainInterface
 import Foundation
+import Localization
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
 import Utility
-import Localization
 
 public struct WrapperDataSourceModel {
     let currentVideo: CurrentVideoEntity
