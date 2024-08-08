@@ -218,8 +218,6 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     override func bindAction(reactor: ListStorageReactor) {
-        let currentState = reactor.state
-
         listStorageView.rx.loginButtonDidTap
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
@@ -236,6 +234,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         listStorageView.rx.createListButtonDidTap
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

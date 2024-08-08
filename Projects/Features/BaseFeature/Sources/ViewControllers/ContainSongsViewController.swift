@@ -62,6 +62,7 @@ extension ContainSongsViewController {
             .disposed(by: disposeBag)
 
         tableView.rx.itemSelected
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.instance)
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .do(onNext: { [weak self] indexPath, _ in
                 self?.tableView.deselectRow(at: indexPath, animated: true)
