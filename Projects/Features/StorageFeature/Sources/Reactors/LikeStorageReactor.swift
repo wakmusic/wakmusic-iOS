@@ -96,7 +96,7 @@ final class LikeStorageReactor: Reactor {
             return viewDidLoad()
 
         case .refresh:
-            return fetchDataSource()
+            return fetchLikeSongList()
 
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
@@ -169,14 +169,21 @@ final class LikeStorageReactor: Reactor {
                 let isLoggedIn = userID != nil
                 return .concat(
                     owner.updateIsLoggedIn(isLoggedIn),
-                    owner.fetchDataSource()
+                    owner.fetchLikeSongList()
                 )
+            }
+
+        let refreshLikeSongListMutation = storageCommonService.likeListRefreshEvent
+            .withUnretained(self)
+            .flatMap { owner, _ -> Observable<Mutation> in
+                return owner.fetchLikeSongList()
             }
 
         return Observable.merge(
             mutation,
             switchEditingStateMutation,
-            updateIsLoggedInMutation
+            updateIsLoggedInMutation,
+            refreshLikeSongListMutation
         )
     }
 
@@ -226,13 +233,13 @@ extension LikeStorageReactor {
             updateIsLoggedIn(isLoggedIn),
             .concat(
                 .just(.updateIsShowActivityIndicator(true)),
-                fetchDataSource(),
+                fetchLikeSongList(),
                 .just(.updateIsShowActivityIndicator(false))
             )
         )
     }
 
-    func fetchDataSource() -> Observable<Mutation> {
+    func fetchLikeSongList() -> Observable<Mutation> {
         fetchFavoriteSongsUseCase
             .execute()
             .catchAndReturn([])
@@ -366,7 +373,7 @@ private extension LikeStorageReactor {
         deleteFavoriteListUseCase.execute(ids: ids)
             .andThen(
                 .concat(
-                    fetchDataSource(),
+                    fetchLikeSongList(),
                     .just(.showToast("\(ids.count)개의 리스트를 삭제했습니다."))
                 )
             )

@@ -15,6 +15,7 @@ final class MusicDetailReactor: Reactor {
 
     enum Action {
         case viewDidLoad
+        case viewWillDisappear
         case prevButtonDidTap
         case playButtonDidTap
         case nextButtonDidTap
@@ -65,6 +66,7 @@ final class MusicDetailReactor: Reactor {
     private let fetchSongUseCase: any FetchSongUseCase
     private let addLikeSongUseCase: any AddLikeSongUseCase
     private let cancelLikeSongUseCase: any CancelLikeSongUseCase
+    private var shouldRefreshLikeList = false
 
     init(
         songIDs: [String],
@@ -99,6 +101,8 @@ final class MusicDetailReactor: Reactor {
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
+        case .viewWillDisappear:
+            return viewWillDisappear()
         case .prevButtonDidTap:
             return prevButtonDidTap()
         case .playButtonDidTap:
@@ -171,6 +175,13 @@ private extension MusicDetailReactor {
         return Observable.merge(
             [songMutationObservable] + prefetchingSongMutationObservable
         )
+    }
+
+    func viewWillDisappear() -> Observable<Mutation> {
+        if shouldRefreshLikeList {
+            NotificationCenter.default.post(name: .likeListRefresh, object: nil)
+        }
+        return .empty()
     }
 
     func prevButtonDidTap() -> Observable<Mutation> {
@@ -271,6 +282,7 @@ private extension MusicDetailReactor {
         }
         LogManager.analytics(log)
 
+        shouldRefreshLikeList = true
         return if newLike {
             .concat(
                 .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
