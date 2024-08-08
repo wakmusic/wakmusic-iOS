@@ -36,7 +36,7 @@ final class PlaylistDetailContainerReactor: Reactor {
         case .requestOwnerID:
             return updateOwnerID()
         case .clearOwnerID:
-            return .just(.updateOwnerID(nil))
+            return clearOwnerID()
         }
     }
 
@@ -80,5 +80,12 @@ extension PlaylistDetailContainerReactor {
 
     func updateLoadingState(flag: Bool) -> Observable<Mutation> {
         return .just(.updateLoadingState(flag))
+    }
+
+    func clearOwnerID() -> Observable<Mutation> {
+        return .concat([
+            Observable.just(Mutation.updateOwnerID(nil)),
+            Observable.just(.updateLoadingState(false))
+        ])
     }
 }

@@ -78,8 +78,8 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                 owner.remove(asChildViewController: owner.children.first)
 
                 if userInfo == nil {
-                    owner.add(asChildViewController: owner.unknownPlaylistVC)
                     reactor.action.onNext(.clearOwnerID)
+                    owner.add(asChildViewController: owner.unknownPlaylistVC)
                 } else {
                     reactor.action.onNext(.requestOwnerID)
                 }
