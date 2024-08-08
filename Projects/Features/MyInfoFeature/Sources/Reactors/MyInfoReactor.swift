@@ -1,6 +1,7 @@
 import BaseFeature
 import Foundation
 import LogManager
+import Localization
 import NoticeDomainInterface
 import ReactorKit
 import UserDomainInterface
@@ -276,7 +277,7 @@ private extension MyInfoReactor {
             .flatMap { _ in Observable.empty() }
             .catch { error in
                 let error = error.asWMError
-                return Observable.just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                return Observable.just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
             }
     }
 
@@ -295,7 +296,7 @@ private extension MyInfoReactor {
             .catch { error in
                 let error = error.asWMError
                 return .concat(
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")),
+                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning)),
                     .just(.dismissEditSheet)
                 )
             }

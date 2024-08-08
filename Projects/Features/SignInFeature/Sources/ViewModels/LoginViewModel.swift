@@ -8,6 +8,7 @@ import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
+import Localization
 
 public final class LoginViewModel: NSObject { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let fetchTokenUseCase: FetchTokenUseCase
@@ -93,7 +94,7 @@ private extension LoginViewModel {
 
             }, onError: { [input, output] error in
                 let error = error.asWMError
-                output.showToast.accept(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                output.showToast.accept(error.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
                 output.showLoading.accept(false)
             })

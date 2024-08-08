@@ -5,6 +5,7 @@ import ReactorKit
 import RxSwift
 import SongsDomainInterface
 import Utility
+import Localization
 
 final class MyPlaylistDetailReactor: Reactor {
     enum Action {
@@ -229,7 +230,7 @@ private extension MyPlaylistDetailReactor {
                 .catch { error in
                     let wmErorr = error.asWMError
                     return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                     )
                 },
             .just(.updateLoadingState(false))
@@ -255,7 +256,7 @@ private extension MyPlaylistDetailReactor {
                         .catch { error in
                             let wmErorr = error.asWMError
                             return Observable.just(
-                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                                Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                             )
                         }
                 )
@@ -270,7 +271,7 @@ private extension MyPlaylistDetailReactor {
                         .catch { error in
                             let wmErorr = error.asWMError
                             return Observable.just(
-                                Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                                Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                             )
                         }
                 )
@@ -285,7 +286,7 @@ private extension MyPlaylistDetailReactor {
                     .catch { error in
                         let wmErorr = error.asWMError
                         return Observable.just(
-                            Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                            Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                         )
                     }
             )
@@ -328,7 +329,7 @@ private extension MyPlaylistDetailReactor {
             .catch { error in
                 let wmErorr = error.asWMError
                 return Observable.just(
-                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 )
             }
     }
@@ -455,7 +456,7 @@ private extension MyPlaylistDetailReactor {
             .catch { error in
                 let wmErorr = error.asWMError
                 return Observable.just(
-                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 )
             }
     }

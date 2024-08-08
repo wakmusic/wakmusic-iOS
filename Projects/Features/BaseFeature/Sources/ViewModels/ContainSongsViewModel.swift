@@ -99,7 +99,7 @@ public final class ContainSongsViewModel: ViewModelType {
                 let wmError = error.asWMError
                 output.showToastMessage.onNext(BaseEntity(
                     status: 401,
-                    description: wmError.errorDescription ?? "알 수 없는 오류가 발생하였습니다."
+                    description: wmError.errorDescription ?? LocalizationStrings.unknownErrorWarning
                 ))
             })
             .catchAndReturn([])
