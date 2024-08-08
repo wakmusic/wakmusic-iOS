@@ -23,10 +23,10 @@ public struct JwtPlugin: PluginType {
     ) -> URLRequest {
         guard let jwtTokenType = (target as? JwtAuthorizable)?.jwtTokenType,
               jwtTokenType != .none,
-              let keychainType = jwtTokenTypeToKeychainType(jwtTokenType: jwtTokenType)
+              let keychainType = jwtTokenTypeToKeychainType(jwtTokenType: jwtTokenType),
+              let token = getToken(type: keychainType)
         else { return request }
         var req = request
-        let token = "\(getToken(type: keychainType))"
 
         req.addValue(token, forHTTPHeaderField: jwtTokenType.headerKey)
         return req
@@ -59,13 +59,17 @@ private extension JwtPlugin {
         }
     }
 
-    func getToken(type: KeychainType) -> String {
+    func getToken(type: KeychainType) -> String? {
+        let token = keychain.load(type: type)
+
+        guard !token.isEmpty else { return nil }
+
         switch type {
         case .accessToken:
-            return "bearer \(keychain.load(type: .accessToken))"
+            return "bearer \(token)"
 
         case .refreshToken:
-            return "bearer \(keychain.load(type: .refreshToken))"
+            return "bearer \(token)"
         default:
             return ""
         }
