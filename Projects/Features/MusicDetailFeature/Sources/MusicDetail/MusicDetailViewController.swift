@@ -152,6 +152,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        self.rx.methodInvoked(#selector(viewDidDisappear))
+            .map { _ in Reactor.Action.viewWillDisappear }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         musicDetailView.rx.prevMusicButtonDidTap
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.prevButtonDidTap }
