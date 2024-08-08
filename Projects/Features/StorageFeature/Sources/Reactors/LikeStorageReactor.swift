@@ -374,7 +374,7 @@ private extension LikeStorageReactor {
                 let error = error.asWMError
                 return .concat(
                     .just(.undoDataSource),
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 )
             }
     }
@@ -392,7 +392,7 @@ private extension LikeStorageReactor {
                 let error = error.asWMError
                 return Observable.concat([
                     .just(.undoDataSource),
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 ])
             }
     }

@@ -2,6 +2,7 @@ import AuthDomainInterface
 import AuthenticationServices
 import BaseFeature
 import CryptoSwift
+import Localization
 import LogManager
 import NaverThirdPartyLogin
 import RxRelay
@@ -93,7 +94,7 @@ private extension LoginViewModel {
 
             }, onError: { [input, output] error in
                 let error = error.asWMError
-                output.showToast.accept(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                output.showToast.accept(error.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 output.dismissLoginScene.accept(input.arrivedTokenFromThirdParty.value.0)
                 output.showLoading.accept(false)
             })

@@ -1,5 +1,6 @@
 import AuthDomainInterface
 import Foundation
+import Localization
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
@@ -190,7 +191,7 @@ private extension UnknownPlaylistDetailReactor {
                         return self.updateDetectedNotFound()
                     }
                     return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                        Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                     )
                 },
             .just(.updateLoadingState(false))
@@ -206,7 +207,7 @@ private extension UnknownPlaylistDetailReactor {
             .catch { error in
                 let wmErorr = error.asWMError
                 return Observable.just(
-                    Mutation.showToast(wmErorr.errorDescription ?? "알 수 없는 오류가 발생하였습니다.")
+                    Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 )
             }
     }

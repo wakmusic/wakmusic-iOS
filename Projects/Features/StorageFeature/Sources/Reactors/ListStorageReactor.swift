@@ -374,7 +374,7 @@ extension ListStorageReactor {
             let error = error.asWMError
             return Observable.concat([
                 .just(.updateIsShowActivityIndicator(false)),
-                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
             ])
         }
     }
@@ -382,7 +382,7 @@ extension ListStorageReactor {
     func playWithAddToCurrentPlaylist(_ index: Int) -> Observable<Mutation> {
         let limit = 50
         guard let selectedPlaylist = currentState.dataSource.first?.items[safe: index] else {
-            return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
+            return .just(.showToast(LocalizationStrings.unknownErrorWarning))
         }
 
         if selectedPlaylist.songCount == 0 {
@@ -414,7 +414,7 @@ extension ListStorageReactor {
             let error = error.asWMError
             return Observable.concat([
                 .just(.updateIsShowActivityIndicator(false)),
-                .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
             ])
         }
     }
@@ -485,7 +485,7 @@ private extension ListStorageReactor {
                 }
                 .catch { error in
                     let error = error.asWMError
-                    return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    return .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 },
             .just(.updateIsShowActivityIndicator(false))
         )
@@ -510,7 +510,7 @@ private extension ListStorageReactor {
                 let error = error.asWMError
                 return .concat(
                     .just(.undoDataSource),
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 )
             }
     }
@@ -528,7 +528,7 @@ private extension ListStorageReactor {
                 let error = error.asWMError
                 return Observable.concat([
                     .just(.undoDataSource),
-                    .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 ])
             }
     }
@@ -541,7 +541,7 @@ private extension ListStorageReactor {
                 .map { $0.price }
                 .flatMap { price -> Observable<Mutation> in
                     guard let userItemCount = PreferenceManager.userInfo?.itemCount else {
-                        return .just(.showToast("알 수 없는 오류가 발생하였습니다."))
+                        return .just(.showToast(LocalizationStrings.unknownErrorWarning))
                     }
                     if userItemCount < price {
                         return .just(.showToast(LocalizationStrings.lackOfMoney(price - userItemCount)))
@@ -550,7 +550,7 @@ private extension ListStorageReactor {
                 }
                 .catch { error in
                     let error = error.asWMError
-                    return .just(.showToast(error.errorDescription ?? "알 수 없는 오류가 발생하였습니다."))
+                    return .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning))
                 },
             .just(.updateIsShowActivityIndicator(false))
         )

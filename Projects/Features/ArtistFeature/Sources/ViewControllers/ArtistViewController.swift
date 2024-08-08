@@ -2,6 +2,7 @@ import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
 import KeychainModule
+import Localization
 import LogManager
 import NeedleFoundation
 import NVActivityIndicatorView
@@ -20,12 +21,18 @@ public final class ArtistViewController:
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
+    private let retryWarningView = WMRetryWarningView(
+        description: LocalizationStrings.unknownErrorWarning,
+        retryButtonTitle: LocalizationStrings.titleRetry
+    )
 
     var artistDetailFactory: ArtistDetailFactory!
     public var disposeBag: DisposeBag = DisposeBag()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setLayout()
         configureUI()
     }
 
@@ -82,7 +89,9 @@ public final class ArtistViewController:
         let sharedState = reactor.state.share(replay: 1)
 
         sharedState.map(\.artistList)
-            .do(onNext: { [activityIndicator] _ in
+            .skip(1)
+            .do(onNext: { [activityIndicator, retryWarningView] entities in
+                retryWarningView.isHidden = !entities.isEmpty
                 activityIndicator?.stopAnimating()
             })
             .bind(to: collectionView.rx.items) { collectionView, index, artist in
@@ -110,8 +119,20 @@ public final class ArtistViewController:
     }
 }
 
-extension ArtistViewController {
-    private func configureUI() {
+private extension ArtistViewController {
+    func addSubviews() {
+        view.addSubview(retryWarningView)
+    }
+
+    func setLayout() {
+        let topOffset = (APP_HEIGHT() - SAFEAREA_BOTTOM_HEIGHT() - PLAYER_HEIGHT() - 160) / 3.0
+        retryWarningView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().offset(topOffset + STATUS_BAR_HEGHIT())
+        }
+    }
+
+    func configureUI() {
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
         activityIndicator.type = .circleStrokeSpin
@@ -128,6 +149,17 @@ extension ArtistViewController {
 
         collectionView.setCollectionViewLayout(layout, animated: false)
         collectionView.showsVerticalScrollIndicator = false
+
+        retryWarningView.isHidden = true
+        retryWarningView.delegate = self
+    }
+}
+
+extension ArtistViewController: WMRetryWarningViewDelegate {
+    public func tappedRetryButton() {
+        retryWarningView.isHidden = true
+        activityIndicator.startAnimating()
+        reactor?.action.onNext(Reactor.Action.viewDidLoad)
     }
 }
 
