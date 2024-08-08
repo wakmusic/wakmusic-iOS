@@ -48,11 +48,12 @@ extension TeamInfoSectionView {
         titleLabel.text = title
         folderImageView.image = isOpen ?
             DesignSystemAsset.Team.folderOn.image : DesignSystemAsset.Team.folderOff.image
-        rotate(isOpen: isOpen)
+        arrowImageView.image = isOpen ?
+            DesignSystemAsset.Team.arrowTop.image : DesignSystemAsset.Team.arrowBottom.image
     }
 
     func rotate(isOpen: Bool) {
-        arrowImageView.rotate(isOpen ? 0 : .pi)
+        arrowImageView.rotate(.pi)
     }
 }
 
