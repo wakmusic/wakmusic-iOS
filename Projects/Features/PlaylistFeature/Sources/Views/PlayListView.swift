@@ -35,7 +35,7 @@ public final class PlaylistView: UIView {
 
     lazy var titleLabel = WMLabel(
         text: "재생목록",
-        textColor: DesignSystemAsset.GrayColor.gray900.color,
+        textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t5(weight: .medium),
         alignment: .center,
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
@@ -140,9 +140,6 @@ private extension PlaylistView {
     }
 
     private func configurePlaylist() {
-        playlistTableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 56))
-        playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 72, left: 0, bottom: 56, right: 0)
-        playlistTableView.contentInset = .init(top: 0, left: 0, bottom: 56, right: 0)
         playlistTableView.snp.makeConstraints {
             $0.top.equalTo(titleBarView.snp.bottom)
             $0.horizontalEdges.equalToSuperview()
