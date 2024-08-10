@@ -29,8 +29,8 @@ let targets: [Target] = [
         entitlements: "Support/\(env.name).entitlements",
         scripts: scripts,
         dependencies: [
-            .Project.Features.RootFeature,
-            .Project.Module.ThirdPartyLib,
+            .module(target: .ThirdPartyLib),
+            .feature(target: .RootFeature),
             .feature(target: .PlaylistFeature),
             .feature(target: .MusicDetailFeature),
             .feature(target: .SongCreditFeature),

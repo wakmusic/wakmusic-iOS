@@ -8,15 +8,15 @@ let project = Project.module(
         .interface(
             module: .domain(.BaseDomain),
             dependencies: [
-                .Project.Module.ThirdPartyLib,
-                .Project.Module.ErrorModule,
+                .module(target: .ThirdPartyLib),
+                .module(target: .ErrorModule)
             ]
         ),
         .implements(
             module: .domain(.BaseDomain),
             dependencies: [
-                .Project.Module.Utility,
-                .Project.Module.KeychainModule,
+                .module(target: .Utility),
+                .module(target: .KeychainModule),
                 .domain(target: .BaseDomain, type: .interface)
             ]
         ),
