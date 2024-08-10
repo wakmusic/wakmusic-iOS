@@ -163,7 +163,6 @@ private extension MainContainerViewController {
         ) { startPage, storagePage -> (Int, Int) in
             return (startPage, storagePage)
         }
-        .debug("testtest")
         .bind(with: self, onNext: { owner, params in
             let (startPage, storagePage) = params
             let bottomOffset: Int = (startPage == 3) ? ((storagePage == 0) ? -80 : -20) : -20
