@@ -52,9 +52,11 @@ private extension MainContainerViewController {
     func setLayout() {
         view.addSubview(playlistFloatingActionButton)
 
+        let startPage: Int = PreferenceManager.startPage ?? 0
+        let bottomOffset: Int = startPage == 3 ? -80 : -20
         playlistFloatingActionButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalTo(bottomContainerView.snp.top).offset(-20)
+            $0.bottom.equalTo(bottomContainerView.snp.top).offset(bottomOffset)
             $0.size.equalTo(56)
         }
     }
@@ -154,6 +156,23 @@ private extension MainContainerViewController {
                 }
             })
             .disposed(by: disposeBag)
+
+        Observable.combineLatest(
+            PreferenceManager.$startPage.map { $0 ?? 0 },
+            NotificationCenter.default.rx.notification(.didChangeTabInStorage).map { $0.object as? Int ?? 0 }
+        ) { startPage, storagePage -> (Int, Int) in
+            return (startPage, storagePage)
+        }
+        .bind(with: self, onNext: { owner, params in
+            let (startPage, storagePage) = params
+            let bottomOffset: Int = (startPage == 3) ? ((storagePage == 0) ? -80 : -20) : -20
+            owner.playlistFloatingActionButton.snp.updateConstraints {
+                $0.trailing.equalToSuperview().inset(20)
+                $0.bottom.equalTo(owner.bottomContainerView.snp.top).offset(bottomOffset)
+                $0.size.equalTo(56)
+            }
+        })
+        .disposed(by: disposeBag)
     }
 }
 
