@@ -30,14 +30,11 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
-    
+
     @IBOutlet weak var creditSuperView: UIView!
     @IBOutlet weak var creditButton: UIButton!
     @IBOutlet weak var creditCheckImageView: UIImageView!
     @IBOutlet weak var nextButton: UIButton!
-    
-
-    
 
     let selectedColor: UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor: UIColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
@@ -133,8 +130,8 @@ extension QuestionViewController {
             imageViews[i].image = DesignSystemAsset.Storage.checkBox.image
             imageViews[i].isHidden = true
 
-            guard let type = InquiryType(rawValue: i)  else  { return }
-            
+            guard let type = InquiryType(rawValue: i) else { return }
+
             buttons[i].setAttributedTitle(
                 NSMutableAttributedString(
                     string: type.title,
@@ -204,9 +201,8 @@ extension QuestionViewController {
                 ]
 
                 for i in 0 ..< superViews.count {
-                    
-                    guard let type = InquiryType(rawValue: i)  else  { return }
-                    
+                    guard let type = InquiryType(rawValue: i) else { return }
+
                     buttons[i].setAttributedTitle(
                         NSMutableAttributedString(
                             string: type.title,
