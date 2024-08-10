@@ -82,6 +82,7 @@ final class StorageViewController: TabmanViewController, View {
         animated: Bool
     ) {
         self.reactor?.action.onNext(.switchTab(index))
+        NotificationCenter.default.post(name: .didChangeTabInStorage, object: index)
     }
 }
 
