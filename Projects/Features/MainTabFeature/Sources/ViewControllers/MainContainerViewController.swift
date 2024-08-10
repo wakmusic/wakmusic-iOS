@@ -126,21 +126,21 @@ private extension MainContainerViewController {
 
     func bindNotification() {
         NotificationCenter.default.rx
-            .notification(.statusBarEnterDarkBackground)
+            .notification(.willStatusBarEnterDarkBackground)
             .subscribe(onNext: { [weak self] _ in
                 self?.statusBarEnterDarkBackground()
             })
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.statusBarEnterLightBackground)
+            .notification(.willStatusBarEnterLightBackground)
             .subscribe(onNext: { [weak self] _ in
                 self?.statusBarEnterLightBackground()
             })
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.showSongCart)
+            .notification(.willShowSongCart)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 0
@@ -149,7 +149,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.hideSongCart)
+            .notification(.willHideSongCart)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 1

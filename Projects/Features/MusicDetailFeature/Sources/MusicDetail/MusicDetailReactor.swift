@@ -179,7 +179,7 @@ private extension MusicDetailReactor {
 
     func viewWillDisappear() -> Observable<Mutation> {
         if shouldRefreshLikeList {
-            NotificationCenter.default.post(name: .likeListRefresh, object: nil)
+            NotificationCenter.default.post(name: .shouldRefreshLikeList, object: nil)
         }
         return .empty()
     }

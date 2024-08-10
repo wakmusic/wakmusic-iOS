@@ -204,6 +204,7 @@ private extension PlaylistViewController {
             .subscribe(onNext: { [weak self] songs, dataSourceCount in
                 guard let self = self else { return }
                 self.playlistView.playlistTableView.reloadData()
+                self.playlistView.willShowSongCart(isShow: !songs.isEmpty)
                 switch songs.isEmpty {
                 case true:
                     self.hideSongCart()

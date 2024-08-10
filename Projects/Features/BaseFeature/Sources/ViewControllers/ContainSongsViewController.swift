@@ -73,7 +73,7 @@ extension ContainSongsViewController {
             .bind(to: input.itemDidTap)
             .disposed(by: disposeBag)
 
-        NotificationCenter.default.rx.notification(.playlistRefresh)
+        NotificationCenter.default.rx.notification(.shouldRefreshPlaylist)
             .map { _ in () }
             .bind(to: input.playListLoad)
             .disposed(by: disposeBag)
@@ -113,16 +113,15 @@ extension ContainSongsViewController {
                 self.showToast(text: result.description, options: [.tabBar])
 
                 if result.status == 201 {
-                    NotificationCenter.default.post(name: .playlistRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    NotificationCenter.default.post(name: .shouldRefreshPlaylist, object: nil) // 플리목록창 이름 변경하기 위함
                 } else if result.status == 200 {
-                    NotificationCenter.default.post(name: .playlistRefresh, object: nil) // 플리목록창 이름 변경하기 위함
+                    NotificationCenter.default.post(name: .shouldRefreshPlaylist, object: nil) // 플리목록창 이름 변경하기 위함
                     self.dismiss(animated: true)
                 } else if result.status == -1 {
                     return
                 } else {
                     self.dismiss(animated: true)
                 }
-
             })
             .disposed(by: disposeBag)
 
@@ -130,8 +129,6 @@ extension ContainSongsViewController {
             .bind(with: self) { owner, error in
                 let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
                 owner.showToast(text: error.localizedDescription, font: toastFont)
-                NotificationCenter.default.post(name: .movedTab, object: 4)
-
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)

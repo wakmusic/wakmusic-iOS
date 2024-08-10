@@ -16,7 +16,7 @@ protocol TabItemViewDelegate: AnyObject {
     func handleTap(view: TabItemView)
 }
 
-class TabItemView: UIView {
+final class TabItemView: UIView {
     @IBOutlet weak var defaultTabImageView: UIImageView!
     @IBOutlet weak var lottieContentView: UIView!
     @IBOutlet weak var titleStringLabel: UILabel!
@@ -31,7 +31,7 @@ class TabItemView: UIView {
 
     weak var delegate: TabItemViewDelegate?
 
-    var lottieAnimationView: LottieAnimationView?
+    private var lottieAnimationView: LottieAnimationView?
 
     var isSelected: Bool = false {
         didSet {
@@ -51,8 +51,8 @@ class TabItemView: UIView {
     }
 }
 
-extension TabItemView {
-    private func animateLottie() {
+private extension TabItemView {
+    func animateLottie() {
         guard let item = self.item else { return }
 
         if self.lottieAnimationView == nil {
@@ -81,8 +81,6 @@ extension TabItemView {
 
             lottieAnimationView.stop()
             lottieAnimationView.play { _ in
-//                self.lottieContentView.isHidden = true
-//                self.defaultTabImageView.isHidden = !self.lottieContentView.isHidden
             }
 
         } else {
@@ -92,15 +90,13 @@ extension TabItemView {
 
             lottieAnimationView.stop()
             lottieAnimationView.play { _ in
-//                self.lottieContentView.isHidden = true
-//                self.defaultTabImageView.isHidden = !self.lottieContentView.isHidden
             }
         }
     }
 
-    private func updateUI(isSelected: Bool) {
-        self.titleStringLabel.textColor = isSelected ? DesignSystemAsset.GrayColor.gray900.color : DesignSystemAsset
-            .GrayColor.gray400.color
+    func updateUI(isSelected: Bool) {
+        self.titleStringLabel.textColor = isSelected ?
+            DesignSystemAsset.BlueGrayColor.gray900.color : DesignSystemAsset.BlueGrayColor.gray400.color
         self.defaultTabImageView.image = isSelected ? item?.onImage : item?.offImage
 
         if isSelected {
@@ -112,14 +108,14 @@ extension TabItemView {
         }
     }
 
-    private func configure(_ item: TabItem?) {
+    func configure(_ item: TabItem?) {
         guard let model = item else { return }
 
         let attributedString = NSMutableAttributedString(
             string: model.title,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 12),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
@@ -142,7 +138,7 @@ extension TabItemView {
     }
 }
 
-class TabItem {
+final class TabItem {
     var title: String
     var offImage: UIImage
     var onImage: UIImage

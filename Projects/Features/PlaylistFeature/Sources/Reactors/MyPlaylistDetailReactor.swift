@@ -265,7 +265,7 @@ private extension MyPlaylistDetailReactor {
                 mutations.append(
                     requestCustomImageURLUseCase.execute(key: self.key, data: data)
                         .andThen(.concat([
-                            postNotification(notiName: .playlistRefresh), // 플리 이미지 갱신
+                            postNotification(notiName: .shouldRefreshPlaylist), // 플리 이미지 갱신
                             postNotification(notiName: .willRefreshUserInfo) // 열매 갱신
                         ]))
                         .catch { error in
@@ -343,7 +343,7 @@ private extension MyPlaylistDetailReactor {
         return .concat([
             .just(.updateHeader(prev)),
             updateTitleAndPrivateUseCase.execute(key: key, title: text, isPrivate: nil)
-                .andThen(postNotification(notiName: .playlistRefresh))
+                .andThen(postNotification(notiName: .shouldRefreshPlaylist))
         ])
     }
 }
@@ -450,7 +450,7 @@ private extension MyPlaylistDetailReactor {
                 .just(.updateSelectedCount(0)),
                 .just(.updateHeader(prevHeader)),
                 .just(.showToast("\(removeSongs.count)개의 곡을 삭제했습니다.")),
-                postNotification(notiName: .playlistRefresh)
+                postNotification(notiName: .shouldRefreshPlaylist)
 
             ]))
             .catch { error in

@@ -498,7 +498,7 @@ private extension ListStorageReactor {
         let ids = playlists.map { $0.key }
         return deletePlayListUseCase.execute(ids: ids)
             .do(onCompleted: {
-                noti.post(name: .subscriptionPlaylistDidRemoved, object: subscribedPlaylistKeys, userInfo: nil)
+                noti.post(name: .didRemovedSubscriptionPlaylist, object: subscribedPlaylistKeys, userInfo: nil)
             })
             .andThen(
                 .concat(
