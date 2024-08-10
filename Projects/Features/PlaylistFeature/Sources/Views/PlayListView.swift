@@ -147,3 +147,11 @@ private extension PlaylistView {
         }
     }
 }
+
+extension PlaylistView {
+    func willShowSongCart(isShow: Bool) {
+        let bottom: CGFloat = isShow ? 56 : 0
+        playlistTableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: bottom, right: 0)
+        playlistTableView.contentInset = .init(top: 0, left: 0, bottom: bottom, right: 0)
+    }
+}
