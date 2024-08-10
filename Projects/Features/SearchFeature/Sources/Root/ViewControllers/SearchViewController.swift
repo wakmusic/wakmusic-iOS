@@ -230,11 +230,11 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
             .bind { owner, event in
 
                 if event == .editingDidBegin {
-                    NotificationCenter.default.post(name: .statusBarEnterDarkBackground, object: nil)
+                    NotificationCenter.default.post(name: .willStatusBarEnterDarkBackground, object: nil)
                     reactor.action.onNext(.switchTypingState(.typing))
 
                 } else if event == .editingDidEnd {
-                    NotificationCenter.default.post(name: .statusBarEnterLightBackground, object: nil)
+                    NotificationCenter.default.post(name: .willStatusBarEnterLightBackground, object: nil)
 
                 } else {
                     reactor.action.onNext(.switchTypingState(.search))

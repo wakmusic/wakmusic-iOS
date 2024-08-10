@@ -190,8 +190,8 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
         reactor.pulse(\.$refresh)
             .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                NotificationCenter.default.post(name: .playlistRefresh, object: nil)
+            .bind { _ in
+                NotificationCenter.default.post(name: .shouldRefreshPlaylist, object: nil)
             }
             .disposed(by: disposeBag)
 

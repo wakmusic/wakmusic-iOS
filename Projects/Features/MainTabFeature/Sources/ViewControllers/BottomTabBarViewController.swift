@@ -9,10 +9,10 @@ protocol BottomTabBarViewDelegate: AnyObject {
     func equalHandleTapped(index current: Int)
 }
 
-public class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
+public final class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var stackView: UIStackView!
 
-    var currentIndex = Utility.PreferenceManager.startPage ?? 0
+    private var currentIndex = Utility.PreferenceManager.startPage ?? 0
     weak var delegate: BottomTabBarViewDelegate?
 
     private lazy var tabs: [TabItemView] = {
@@ -58,12 +58,11 @@ public class BottomTabBarViewController: UIViewController, ViewControllerFromSto
         ]
     }()
 
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bindNotification()
     }
 
     public static func viewController() -> BottomTabBarViewController {
@@ -84,21 +83,6 @@ private extension BottomTabBarViewController {
             tabView.delegate = self
             self.stackView.addArrangedSubview(tabView)
         }
-    }
-
-    func bindNotification() {
-        NotificationCenter.default.rx
-            .notification(.movedTab)
-            .subscribe(onNext: { [weak self] notification in
-                guard
-                    let self = self,
-                    let index = notification.object as? Int,
-                    self.tabs.count > index
-                else { return }
-
-                self.handleTap(view: self.tabs[index])
-            })
-            .disposed(by: disposeBag)
     }
 }
 

@@ -21,7 +21,7 @@ final class DefaultStorageCommonService: StorageCommonService {
         let notificationCenter = NotificationCenter.default
         isEditingState = .init(value: false)
         loginStateDidChangedEvent = PreferenceManager.$userInfo.map(\.?.ID).distinctUntilChanged().skip(1)
-        playlistRefreshEvent = notificationCenter.rx.notification(.playlistRefresh)
-        likeListRefreshEvent = notificationCenter.rx.notification(.likeListRefresh).map { _ in () }
+        playlistRefreshEvent = notificationCenter.rx.notification(.shouldRefreshPlaylist)
+        likeListRefreshEvent = notificationCenter.rx.notification(.shouldRefreshLikeList).map { _ in () }
     }
 }
