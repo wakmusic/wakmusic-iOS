@@ -30,7 +30,14 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
+    
+    @IBOutlet weak var creditSuperView: UIView!
+    @IBOutlet weak var creditButton: UIButton!
+    @IBOutlet weak var creditCheckImageView: UIImageView!
     @IBOutlet weak var nextButton: UIButton!
+    
+
+    
 
     let selectedColor: UIColor = DesignSystemAsset.PrimaryColor.decrease.color
     let unSelectedTextColor: UIColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
@@ -97,7 +104,8 @@ extension QuestionViewController {
             self.suggestFunctionSuperView,
             self.addSongSuperView,
             self.editSongSuperView,
-            self.wakMusicFeedbackSuperView
+            self.wakMusicFeedbackSuperView,
+            self.creditSuperView
         ]
 
         let buttons: [UIButton] = [
@@ -105,7 +113,8 @@ extension QuestionViewController {
             self.suggestFunctionButton,
             self.addSongButton,
             self.editSongButton,
-            self.wakMusicFeedbackButton
+            self.wakMusicFeedbackButton,
+            self.creditButton
         ]
 
         let imageViews: [UIImageView] = [
@@ -113,7 +122,8 @@ extension QuestionViewController {
             self.suggestFunctionCheckImageView,
             self.addSongCheckImageView,
             self.editSongCheckImageView,
-            self.wakMusicFeedbackCheckImageView
+            self.wakMusicFeedbackCheckImageView,
+            self.creditCheckImageView
         ]
 
         for i in 0 ..< superViews.count {
@@ -123,25 +133,11 @@ extension QuestionViewController {
             imageViews[i].image = DesignSystemAsset.Storage.checkBox.image
             imageViews[i].isHidden = true
 
-            var title: String = ""
-            switch i {
-            case 0:
-                title = "버그 제보"
-            case 1:
-                title = "기능 제안"
-            case 2:
-                title = "노래 추가"
-            case 3:
-                title = "노래 수정"
-            case 4:
-                title = "주간차트 영상"
-            default:
-                return
-            }
-
+            guard let type = InquiryType(rawValue: i)  else  { return }
+            
             buttons[i].setAttributedTitle(
                 NSMutableAttributedString(
-                    string: title,
+                    string: type.title,
                     attributes: [
                         .font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
                         .foregroundColor: unSelectedTextColor,
@@ -163,7 +159,8 @@ extension QuestionViewController {
             suggestFunctionButton.rx.tap.map { _ -> Int in 1 },
             addSongButton.rx.tap.map { _ -> Int in 2 },
             editSongButton.rx.tap.map { _ -> Int in 3 },
-            wakMusicFeedbackButton.rx.tap.map { _ -> Int in 4 }
+            wakMusicFeedbackButton.rx.tap.map { _ -> Int in 4 },
+            creditButton.rx.tap.map { _ -> Int in 5 }
         )
         .bind(to: input.selectedIndex)
         .disposed(by: disposeBag)
@@ -184,7 +181,8 @@ extension QuestionViewController {
                     self.suggestFunctionSuperView,
                     self.addSongSuperView,
                     self.editSongSuperView,
-                    self.wakMusicFeedbackSuperView
+                    self.wakMusicFeedbackSuperView,
+                    self.creditSuperView
                 ]
 
                 let buttons: [UIButton] = [
@@ -192,7 +190,8 @@ extension QuestionViewController {
                     self.suggestFunctionButton,
                     self.addSongButton,
                     self.editSongButton,
-                    self.wakMusicFeedbackButton
+                    self.wakMusicFeedbackButton,
+                    self.creditButton
                 ]
 
                 let imageViews: [UIImageView] = [
@@ -200,28 +199,17 @@ extension QuestionViewController {
                     self.suggestFunctionCheckImageView,
                     self.addSongCheckImageView,
                     self.editSongCheckImageView,
-                    self.wakMusicFeedbackCheckImageView
+                    self.wakMusicFeedbackCheckImageView,
+                    self.creditCheckImageView
                 ]
 
                 for i in 0 ..< superViews.count {
-                    var title: String = ""
-                    switch i {
-                    case 0:
-                        title = "버그 제보"
-                    case 1:
-                        title = "기능 제안"
-                    case 2:
-                        title = "노래 추가"
-                    case 3:
-                        title = "노래 수정"
-                    case 4:
-                        title = "주간차트 영상"
-                    default:
-                        return
-                    }
+                    
+                    guard let type = InquiryType(rawValue: i)  else  { return }
+                    
                     buttons[i].setAttributedTitle(
                         NSMutableAttributedString(
-                            string: title,
+                            string: type.title,
                             attributes: [
                                 .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
                                     DesignSystemFontFamily.Pretendard.light.font(size: 16),
@@ -282,9 +270,7 @@ extension QuestionViewController {
             .subscribe(onNext: { owner, params in
                 let (text, toDismiss) = params
                 owner.showToast(
-                    text: text,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: toDismiss ? (56 + 20) : (56 + 10 + 20)
+                    text: text, options: [.tabBar]
                 )
                 guard toDismiss else { return }
                 owner.dismiss(animated: true)
