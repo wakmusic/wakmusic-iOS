@@ -250,7 +250,7 @@ extension QuestionViewController {
                 if source == .addSong {
                     let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
                     let text =
-                        "· 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘왁타버스 뮤직’으로 왁물원 채팅 부탁드립니다.\n· 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
+                        "요청하고자 하는 곡이 왁뮤에 들어갈 수 있는\n 기준을 충족하는지 먼저 확인해 주세요."
                     guard let textPopupViewController = self.textPopUpFactory.makeView(
                         text: text,
                         cancelButtonIsHidden: false,
