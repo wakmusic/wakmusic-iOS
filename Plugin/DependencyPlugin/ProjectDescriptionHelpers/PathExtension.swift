@@ -24,22 +24,3 @@ public extension ProjectDescription.Path {
     }
 }
 
-public extension TargetDependency {
-    @available(*, deprecated)
-    static func module(name: String) -> Self {
-        return .project(target: name, path: .relativeToModule(name))
-    }
-    @available(*, deprecated)
-    static func service(name: String) -> Self {
-        return .project(target: name, path: .relativeToService(name))
-    }
-    @available(*, deprecated)
-    static func feature(name: String) -> Self {
-        return .project(target: name, path: .relativeToFeature(name))
-    }
-    @available(*, deprecated)
-    static func ui(name: String) -> Self {
-        return .project(target: name, path: .relativeToUserInterfaces(name))
-    }
-
-}

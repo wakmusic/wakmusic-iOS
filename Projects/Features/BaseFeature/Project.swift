@@ -21,9 +21,9 @@ let project = Project.module(
                     .domain(target: .NoticeDomain, type: .interface),
                     .domain(target: .PriceDomain, type: .interface),
                     .module(target: .ErrorModule),
-                    .Project.Module.FeatureThirdPartyLib,
-                    .Project.UserInterfaces.DesignSystem,
-                    .Project.Module.Utility,
+                    .module(target: .FeatureThirdPartyLib),
+                    .userInterface(target: .DesignSystem),
+                    .module(target: .Utility),
                     .SPM.RxGesture,
                 ]
             )
