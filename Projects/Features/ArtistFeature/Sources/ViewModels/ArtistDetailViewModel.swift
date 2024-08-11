@@ -1,11 +1,11 @@
 import ArtistDomainInterface
 import BaseFeature
 import Foundation
+import Localization
 import LogManager
 import RxRelay
 import RxSwift
 import Utility
-import Localization
 
 public final class ArtistDetailViewModel: ViewModelType {
     let artistID: String
@@ -50,7 +50,8 @@ public final class ArtistDetailViewModel: ViewModelType {
                 return fetchArtistDetailUseCase.execute(id: id)
                     .asObservable()
                     .catch { error in
-                        output.occurredError.onNext(error.asWMError.errorDescription ?? LocalizationStrings.unknownErrorWarning)
+                        output.occurredError
+                            .onNext(error.asWMError.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                         return Observable.empty()
                     }
             }
