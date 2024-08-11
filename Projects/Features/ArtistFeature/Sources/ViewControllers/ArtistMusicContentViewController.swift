@@ -17,7 +17,8 @@ public final class ArtistMusicContentViewController:
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     @IBOutlet weak var songCartOnView: UIView!
-
+    @IBOutlet weak var songCartOnViewHeightConstraint: NSLayoutConstraint!
+    
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var containSongsFactory: ContainSongsFactory!
@@ -108,16 +109,12 @@ private extension ArtistMusicContentViewController {
                     warningView.text = "아티스트 곡이 없습니다."
                     self.tableView.tableFooterView = warningView
                 } else {
-                    if self.isFromArtistScene {
-                        self.tableView.tableFooterView = UIView(frame: CGRect(
-                            x: 0,
-                            y: 0,
-                            width: APP_WIDTH(),
-                            height: PLAYER_HEIGHT()
-                        ))
-                    } else {
-                        self.tableView.tableFooterView = nil
-                    }
+                    self.tableView.tableFooterView = UIView(frame: CGRect(
+                        x: 0,
+                        y: 0,
+                        width: APP_WIDTH(),
+                        height: PLAYER_HEIGHT()
+                    ))
                 }
                 self.activityIndidator.stopAnimating()
                 guard let songCart = self.songCartView else { return }
@@ -206,8 +203,10 @@ private extension ArtistMusicContentViewController {
         activityIndidator.type = .circleStrokeSpin
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
-        songCartOnView.alpha = .zero
         isFromArtistScene = navigationController?.viewControllers.first is ArtistViewController
+        songCartOnView.alpha = .zero
+        songCartOnViewHeightConstraint.constant = isFromArtistScene ? 
+            PLAYER_HEIGHT() : PLAYER_HEIGHT() + SAFEAREA_BOTTOM_HEIGHT()
     }
 }
 

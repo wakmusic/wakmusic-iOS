@@ -558,6 +558,7 @@
                     <connections>
                         <outlet property="activityIndidator" destination="DKc-qh-4Cf" id="uq2-Qu-Xfa"/>
                         <outlet property="songCartOnView" destination="0md-99-Zae" id="Rpk-qA-g16"/>
+                        <outlet property="songCartOnViewHeightConstraint" destination="icd-GC-lhw" id="Zul-3O-BKU"/>
                         <outlet property="tableView" destination="MPq-Ds-wcF" id="xt0-Bw-pl3"/>
                     </connections>
                 </viewController>
