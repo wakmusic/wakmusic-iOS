@@ -10,8 +10,12 @@ public final class ArtistRepositoryImpl: ArtistRepository {
         self.remoteArtistDataSource = remoteArtistDataSource
     }
 
-    public func fetchArtistList() -> Single<[ArtistListEntity]> {
+    public func fetchArtistList() -> Single<[ArtistEntity]> {
         remoteArtistDataSource.fetchArtistList()
+    }
+
+    public func fetchArtistDetail(id: String) -> Single<ArtistEntity> {
+        remoteArtistDataSource.fetchArtistDetail(id: id)
     }
 
     public func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]> {

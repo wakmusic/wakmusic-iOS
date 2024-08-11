@@ -6,6 +6,7 @@ import Moya
 
 public enum ArtistAPI {
     case fetchArtistList
+    case fetchArtistDetail(id: String)
     case fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int)
     case fetchSubscriptionStatus(id: String)
     case subscriptionArtist(id: String, on: Bool)
@@ -20,6 +21,8 @@ extension ArtistAPI: WMAPI {
         switch self {
         case .fetchArtistList:
             return "/list"
+        case let .fetchArtistDetail(id):
+            return "/\(id)"
         case let .fetchArtistSongList(id, _, _):
             return "/\(id)/songs"
         case let .fetchSubscriptionStatus(id):
@@ -32,6 +35,7 @@ extension ArtistAPI: WMAPI {
     public var method: Moya.Method {
         switch self {
         case .fetchArtistList,
+             .fetchArtistDetail,
              .fetchArtistSongList,
              .fetchSubscriptionStatus:
             return .get
@@ -43,6 +47,7 @@ extension ArtistAPI: WMAPI {
     public var task: Moya.Task {
         switch self {
         case .fetchArtistList,
+             .fetchArtistDetail,
              .fetchSubscriptionStatus,
              .subscriptionArtist:
             return .requestPlain
@@ -59,7 +64,7 @@ extension ArtistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchArtistList, .fetchArtistSongList:
+        case .fetchArtistList, .fetchArtistDetail, .fetchArtistSongList:
             return .none
         case .fetchSubscriptionStatus, .subscriptionArtist:
             return .accessToken

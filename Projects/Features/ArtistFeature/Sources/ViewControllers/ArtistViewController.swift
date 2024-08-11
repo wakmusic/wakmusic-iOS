@@ -73,12 +73,12 @@ public final class ArtistViewController:
                         }
                     } else {
                         LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                        let viewController = owner.artistDetailFactory.makeView(model: entity)
+                        let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
                         owner.navigationController?.pushViewController(viewController, animated: true)
                     }
                 #else
                     LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                    let viewController = owner.artistDetailFactory.makeView(model: entity)
+                    let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
                     owner.navigationController?.pushViewController(viewController, animated: true)
                 #endif
             }

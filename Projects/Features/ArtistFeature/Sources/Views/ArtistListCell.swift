@@ -21,7 +21,7 @@ class ArtistListCell: UICollectionViewCell {
 }
 
 extension ArtistListCell {
-    func update(model: ArtistListEntity) {
+    func update(model: ArtistEntity) {
         self.contentView.alpha = model.isHiddenItem ? 0 : 1
         let artistNameAttributedString = NSMutableAttributedString(
             string: model.krName,

@@ -4,8 +4,8 @@ import RxSwift
 
 public final class FetchArtistListUseCaseSpy: FetchArtistListUseCase {
     public private(set) var callCount = 0
-    public var handler: (() -> Single<[ArtistListEntity]>) = { .never() }
-    public func execute() -> Single<[ArtistListEntity]> {
+    public var handler: (() -> Single<[ArtistEntity]>) = { .never() }
+    public func execute() -> Single<[ArtistEntity]> {
         callCount += 1
         return handler()
     }

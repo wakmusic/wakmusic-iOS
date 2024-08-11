@@ -1,3 +1,4 @@
+import ArtistFeatureInterface
 import BaseFeature
 import CreditSongListFeatureInterface
 import DesignSystem
@@ -74,12 +75,15 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     private let wmNavigationbarView = WMNavigationBarView()
 
     private let creditSongListFactory: any CreditSongListFactory
+    private let artistDetailFactory: any ArtistDetailFactory
 
     init(
         reactor: SongCreditReactor,
-        creditSongListFactory: any CreditSongListFactory
+        creditSongListFactory: any CreditSongListFactory,
+        artistDetailFactory: any ArtistDetailFactory
     ) {
         self.creditSongListFactory = creditSongListFactory
+        self.artistDetailFactory = artistDetailFactory
         super.init(reactor: reactor)
     }
 
@@ -203,8 +207,8 @@ private extension SongCreditViewController {
             self.navigationController?.pushViewController(viewController, animated: true)
 
         case let .artist(artistID):
-            #warning("TODO: Artist Detail")
-            break
+            let viewController = artistDetailFactory.makeView(artistID: artistID)
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
     }
 }

@@ -29,6 +29,7 @@ public final class ArtistMusicContentViewController:
     lazy var input = ArtistMusicContentViewModel.Input()
     lazy var output = viewModel.transform(from: input)
     private let disposeBag = DisposeBag()
+    private var isFromArtistScene: Bool = false
 
     deinit {
         LogManager.printDebug("\(Self.self) Deinit")
@@ -101,11 +102,18 @@ private extension ArtistMusicContentViewController {
             .withLatestFrom(output.indexOfSelectedSongs) { ($0, $1) }
             .do(onNext: { [weak self] dataSource, songs in
                 guard let self = self else { return }
-                let height = self.tableView.frame.height / 3 * 2
-                let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
-                warningView.text = "아티스트 곡이 없습니다."
-                self.tableView.tableFooterView = dataSource.isEmpty ?
-                    warningView : UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+                if dataSource.isEmpty {
+                    let height = self.tableView.frame.height / 3 * 2
+                    let warningView = WarningView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: height))
+                    warningView.text = "아티스트 곡이 없습니다."
+                    self.tableView.tableFooterView = warningView
+                } else {
+                    if self.isFromArtistScene {
+                        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+                    } else {
+                        self.tableView.tableFooterView = nil
+                    }
+                }
                 self.activityIndidator.stopAnimating()
                 guard let songCart = self.songCartView else { return }
                 songCart.updateAllSelect(isAll: songs.count == dataSource.count)
@@ -144,7 +152,7 @@ private extension ArtistMusicContentViewController {
                         type: .artistSong,
                         selectedSongCount: songs.count,
                         totalSongCount: dataSource.count,
-                        useBottomSpace: false
+                        useBottomSpace: self.isFromArtistScene ? false : true
                     )
                     self.songCartView?.delegate = self
                 }
@@ -153,11 +161,18 @@ private extension ArtistMusicContentViewController {
 
         output.showToast
             .bind(with: self) { owner, message in
+                var options: WMToastOptions
+                if owner.isFromArtistScene {
+                    options = owner.output.songEntityOfSelectedSongs.value.isEmpty ?
+                        [.tabBar] : [.tabBar, .songCart]
+
+                } else {
+                    options = owner.output.songEntityOfSelectedSongs.value.isEmpty ?
+                        [.empty] : [.songCart]
+                }
                 owner.showToast(
                     text: message,
-                    options: owner.output.songEntityOfSelectedSongs.value.isEmpty ?
-                        [.tabBar] :
-                        [.tabBar, .songCart]
+                    options: options
                 )
             }
             .disposed(by: disposeBag)
@@ -187,6 +202,7 @@ private extension ArtistMusicContentViewController {
         activityIndidator.startAnimating()
         tableView.backgroundColor = .clear
         songCartOnView.alpha = .zero
+        isFromArtistScene = navigationController?.viewControllers.first is ArtistViewController
     }
 }
 

@@ -15,7 +15,7 @@ public protocol ArtistMusicDependency: Dependency {
 }
 
 public final class ArtistMusicComponent: Component<ArtistMusicDependency> {
-    public func makeView(model: ArtistListEntity?) -> ArtistMusicViewController {
+    public func makeView(model: ArtistEntity?) -> ArtistMusicViewController {
         return ArtistMusicViewController.viewController(
             model: model,
             artistMusicContentComponent: dependency.artistMusicContentComponent

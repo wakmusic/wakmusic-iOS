@@ -3,5 +3,5 @@ import Foundation
 import UIKit
 
 public protocol ArtistDetailFactory {
-    func makeView(model: ArtistListEntity) -> UIViewController
+    func makeView(artistID: String) -> UIViewController
 }

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ArtistListEntity: Equatable {
+public struct ArtistEntity: Equatable {
     public init(
         id: String,
         krName: String,
@@ -12,7 +12,7 @@ public struct ArtistListEntity: Equatable {
         roundImage: String,
         squareImage: String,
         graduated: Bool,
-        playlist: ArtistListEntity.Playlist,
+        playlist: ArtistEntity.Playlist,
         isHiddenItem: Bool
     ) {
         self.id = id
@@ -38,12 +38,12 @@ public struct ArtistListEntity: Equatable {
     public let personalColor: String
     public let roundImage, squareImage: String
     public let graduated: Bool
-    public let playlist: ArtistListEntity.Playlist
+    public let playlist: ArtistEntity.Playlist
     public var isHiddenItem: Bool = false
 }
 
-public extension ArtistListEntity {
-    struct Playlist: Decodable {
+public extension ArtistEntity {
+    struct Playlist {
         public let latest, popular, oldest: String
 
         public init(latest: String, popular: String, oldest: String) {

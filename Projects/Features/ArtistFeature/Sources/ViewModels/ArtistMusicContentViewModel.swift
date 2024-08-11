@@ -18,12 +18,12 @@ import Utility
 public final class ArtistMusicContentViewModel: ViewModelType {
     private let fetchArtistSongListUseCase: FetchArtistSongListUseCase
     var type: ArtistSongSortType
-    var model: ArtistListEntity?
+    var model: ArtistEntity?
     private let disposeBag = DisposeBag()
 
     public init(
         type: ArtistSongSortType,
-        model: ArtistListEntity?,
+        model: ArtistEntity?,
         fetchArtistSongListUseCase: any FetchArtistSongListUseCase
     ) {
         self.type = type

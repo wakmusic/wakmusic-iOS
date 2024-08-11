@@ -7,27 +7,32 @@ import RxSwift
 import Utility
 
 public final class ArtistDetailViewModel: ViewModelType {
-    let model: ArtistListEntity
+    let artistID: String
+    private let fetchArtistDetailUseCase: FetchArtistDetailUseCase
     private let fetchArtistSubscriptionStatusUseCase: FetchArtistSubscriptionStatusUseCase
     private let subscriptionArtistUseCase: SubscriptionArtistUseCase
     private let disposeBag = DisposeBag()
 
     public init(
-        model: ArtistListEntity,
+        artistID: String,
+        fetchArtistDetailUseCase: any FetchArtistDetailUseCase,
         fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase,
         subscriptionArtistUseCase: any SubscriptionArtistUseCase
     ) {
-        self.model = model
+        self.artistID = artistID
+        self.fetchArtistDetailUseCase = fetchArtistDetailUseCase
         self.fetchArtistSubscriptionStatusUseCase = fetchArtistSubscriptionStatusUseCase
         self.subscriptionArtistUseCase = subscriptionArtistUseCase
     }
 
     public struct Input {
+        let fetchArtistDetail: PublishSubject<Void> = PublishSubject()
         let fetchArtistSubscriptionStatus: PublishSubject<Void> = PublishSubject()
         let didTapSubscription: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
+        let dataSource: BehaviorRelay<ArtistEntity?> = BehaviorRelay(value: nil)
         let isSubscription: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let showToast: PublishSubject<String> = PublishSubject()
         let showLogin: PublishSubject<Void> = PublishSubject()
@@ -36,7 +41,14 @@ public final class ArtistDetailViewModel: ViewModelType {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let id = model.id
+        let id = self.artistID
+
+        input.fetchArtistDetail
+            .flatMap { [fetchArtistDetailUseCase] _ in
+                return fetchArtistDetailUseCase.execute(id: id)
+            }
+            .bind(to: output.dataSource)
+            .disposed(by: disposeBag)
 
         input.fetchArtistSubscriptionStatus
             .withLatestFrom(PreferenceManager.$userInfo)

@@ -8,11 +8,11 @@ public final class ArtistReactor: Reactor {
     }
 
     public enum Mutation {
-        case updateArtistList([ArtistListEntity])
+        case updateArtistList([ArtistEntity])
     }
 
     public struct State {
-        var artistList: [ArtistListEntity]
+        var artistList: [ArtistEntity]
     }
 
     public var initialState: State
@@ -60,7 +60,7 @@ private extension ArtistReactor {
 
                 // Waterfall Grid UI가 기본적으로 왼쪽부터 쌓이게 되기에 첫번째 Cell을 hide 시킵니다
                 if newArtistList.count == 1 {
-                    let hiddenItem: ArtistListEntity = self.makeHiddenArtistEntity()
+                    let hiddenItem: ArtistEntity = self.makeHiddenArtistEntity()
                     newArtistList.insert(hiddenItem, at: 0)
                 } else {
                     newArtistList.swapAt(0, 1)
@@ -73,8 +73,8 @@ private extension ArtistReactor {
 
 // MARK: - Reusable
 private extension ArtistReactor {
-    func makeHiddenArtistEntity() -> ArtistListEntity {
-        ArtistListEntity(
+    func makeHiddenArtistEntity() -> ArtistEntity {
+        ArtistEntity(
             id: "",
             krName: "",
             enName: "",

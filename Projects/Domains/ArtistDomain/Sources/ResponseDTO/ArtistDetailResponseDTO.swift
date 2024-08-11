@@ -1,12 +1,12 @@
 import ArtistDomainInterface
 import Foundation
 
-public struct ArtistListResponseDTO: Decodable, Equatable {
+public struct ArtistDetailResponseDTO: Decodable, Equatable {
     let id: String
-    let name: ArtistListResponseDTO.Name
-    let group: ArtistListResponseDTO.Group
-    let info: ArtistListResponseDTO.Info
-    let imageURL: ArtistListResponseDTO.ImageURL
+    let name: ArtistDetailResponseDTO.Name
+    let group: ArtistDetailResponseDTO.Group
+    let info: ArtistDetailResponseDTO.Info
+    let imageURL: ArtistDetailResponseDTO.ImageURL
     let graduated: Bool
 
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -23,7 +23,7 @@ public struct ArtistListResponseDTO: Decodable, Equatable {
     }
 }
 
-public extension ArtistListResponseDTO {
+public extension ArtistDetailResponseDTO {
     struct Name: Decodable {
         let krName: String
         let enName: String
@@ -39,10 +39,10 @@ public extension ArtistListResponseDTO {
     }
 
     struct Info: Decodable {
-        let title: ArtistListResponseDTO.Info.Title
+        let title: ArtistDetailResponseDTO.Info.Title
         let description: String
-        let color: ArtistListResponseDTO.Info.Color
-        let playlist: ArtistListResponseDTO.Info.Playlist
+        let color: ArtistDetailResponseDTO.Info.Color
+        let playlist: ArtistDetailResponseDTO.Info.Playlist
     }
 
     struct ImageURL: Decodable {
@@ -51,7 +51,7 @@ public extension ArtistListResponseDTO {
     }
 }
 
-public extension ArtistListResponseDTO.Info {
+public extension ArtistDetailResponseDTO.Info {
     struct Title: Decodable {
         let short: String
     }
@@ -65,7 +65,7 @@ public extension ArtistListResponseDTO.Info {
     }
 }
 
-public extension ArtistListResponseDTO {
+public extension ArtistDetailResponseDTO {
     func toDomain() -> ArtistEntity {
         ArtistEntity(
             id: id,
