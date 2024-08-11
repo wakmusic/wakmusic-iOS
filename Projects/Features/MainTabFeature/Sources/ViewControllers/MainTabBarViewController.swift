@@ -118,7 +118,14 @@ private extension MainTabBarViewController {
                     selectedID: selection.selectedID
                 )
                 viewController.modalPresentationStyle = .overFullScreen
-                owner.present(viewController, animated: true)
+
+                if let presentedViewController = self.presentedViewController {
+                    presentedViewController.dismiss(animated: true) {
+                        owner.present(viewController, animated: true)
+                    }
+                } else {
+                    owner.present(viewController, animated: true)
+                }
             })
             .disposed(by: disposeBag)
 
