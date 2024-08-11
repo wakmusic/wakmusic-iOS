@@ -5,6 +5,7 @@ import LogManager
 import RxRelay
 import RxSwift
 import Utility
+import Localization
 
 public final class ArtistDetailViewModel: ViewModelType {
     let artistID: String
@@ -37,6 +38,7 @@ public final class ArtistDetailViewModel: ViewModelType {
         let showToast: PublishSubject<String> = PublishSubject()
         let showLogin: PublishSubject<Void> = PublishSubject()
         let showWarningNotification: PublishSubject<Void> = PublishSubject()
+        let occurredError: PublishSubject<String> = PublishSubject()
     }
 
     public func transform(from input: Input) -> Output {
@@ -46,6 +48,11 @@ public final class ArtistDetailViewModel: ViewModelType {
         input.fetchArtistDetail
             .flatMap { [fetchArtistDetailUseCase] _ in
                 return fetchArtistDetailUseCase.execute(id: id)
+                    .asObservable()
+                    .catch { error in
+                        output.occurredError.onNext(error.asWMError.errorDescription ?? LocalizationStrings.unknownErrorWarning)
+                        return Observable.empty()
+                    }
             }
             .bind(to: output.dataSource)
             .disposed(by: disposeBag)

@@ -130,6 +130,24 @@ private extension ArtistDetailViewController {
             }
             .disposed(by: disposeBag)
 
+        output.occurredError
+            .bind(with: self) { owner, message in
+                owner.showBottomSheet(
+                    content: owner.textPopupFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.navigationController?.popViewController(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
+                )
+            }
+            .disposed(by: disposeBag)
+
         output.showWarningNotification
             .bind(with: self) { owner, _ in
                 let viewController = owner.textPopupFactory.makeView(
