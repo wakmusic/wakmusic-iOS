@@ -2,6 +2,7 @@ import ArtistDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SignInFeatureInterface
@@ -15,16 +16,14 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     @IBOutlet weak var headerContentView: UIView!
     @IBOutlet weak var headerContentViewTopConstraint: NSLayoutConstraint!
     @IBOutlet public weak var contentView: UIView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     private lazy var headerViewController: ArtistDetailHeaderViewController = {
         let header = ArtistDetailHeaderViewController.viewController()
         return header
     }()
 
-    private lazy var contentViewController: ArtistMusicViewController = {
-        let content = artistMusicComponent.makeView(model: viewModel.model)
-        return content
-    }()
+    private var contentViewController: ArtistMusicViewController?
 
     private let gradientLayer = CAGradientLayer()
     private var artistMusicComponent: ArtistMusicComponent!
@@ -53,8 +52,6 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        configureHeader()
-        configureContent()
         outputBind()
         inputBind()
     }
@@ -90,6 +87,17 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 
 private extension ArtistDetailViewController {
     func outputBind() {
+        output.dataSource
+            .filter { $0 != nil }
+            .compactMap { $0 }
+            .bind(with: self) { owner, entity in
+                owner.configureGradation(model: entity)
+                owner.configureHeader(model: entity)
+                owner.configureContent(model: entity)
+                owner.activityIndicator.stopAnimating()
+            }
+            .disposed(by: disposeBag)
+
         output.isSubscription
             .skip(1)
             .bind { [subscriptionButton] isSubscription in
@@ -122,6 +130,24 @@ private extension ArtistDetailViewController {
             }
             .disposed(by: disposeBag)
 
+        output.occurredError
+            .bind(with: self) { owner, message in
+                owner.showBottomSheet(
+                    content: owner.textPopupFactory.makeView(
+                        text: message,
+                        cancelButtonIsHidden: true,
+                        confirmButtonText: "확인",
+                        cancelButtonText: nil,
+                        completion: {
+                            owner.navigationController?.popViewController(animated: true)
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
+                )
+            }
+            .disposed(by: disposeBag)
+
         output.showWarningNotification
             .bind(with: self) { owner, _ in
                 let viewController = owner.textPopupFactory.makeView(
@@ -141,6 +167,7 @@ private extension ArtistDetailViewController {
     }
 
     func inputBind() {
+        input.fetchArtistDetail.onNext(())
         input.fetchArtistSubscriptionStatus.onNext(())
 
         subscriptionButton.rx.tap
@@ -154,8 +181,12 @@ private extension ArtistDetailViewController {
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOff.image, for: .normal)
         subscriptionButton.setImage(DesignSystemAsset.Artist.subscriptionOn.image, for: .selected)
         subscriptionButton.isHidden = true
+        activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
+        activityIndicator.type = .circleStrokeSpin
+        activityIndicator.startAnimating()
+    }
 
-        let model = viewModel.model
+    func configureGradation(model: ArtistEntity) {
         let flatColor: String = model.personalColor
         guard !flatColor.isEmpty else { return }
 
@@ -169,7 +200,7 @@ private extension ArtistDetailViewController {
         gradationView.layer.addSublayer(gradientLayer)
     }
 
-    func configureHeader() {
+    func configureHeader(model: ArtistEntity) {
         self.addChild(headerViewController)
         self.headerContentView.addSubview(headerViewController.view)
         headerViewController.didMove(toParent: self)
@@ -177,12 +208,11 @@ private extension ArtistDetailViewController {
         headerViewController.view.snp.makeConstraints {
             $0.edges.equalTo(headerContentView)
         }
-
-        let model = viewModel.model
         headerViewController.update(model: model)
     }
 
-    func configureContent() {
+    func configureContent(model: ArtistEntity) {
+        contentViewController = artistMusicComponent.makeView(model: model)
         self.add(asChildViewController: contentViewController)
     }
 }

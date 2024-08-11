@@ -2,5 +2,5 @@ import Foundation
 import RxSwift
 
 public protocol FetchArtistListUseCase {
-    func execute() -> Single<[ArtistListEntity]>
+    func execute() -> Single<[ArtistEntity]>
 }

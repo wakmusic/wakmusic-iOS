@@ -2,7 +2,7 @@ import ArtistDomainInterface
 import Foundation
 import RxSwift
 
-public struct FetchArtistListUseCaseImpl: FetchArtistListUseCase {
+public struct FetchArtistDetailUseCaseImpl: FetchArtistDetailUseCase {
     private let artistRepository: any ArtistRepository
 
     public init(
@@ -11,7 +11,7 @@ public struct FetchArtistListUseCaseImpl: FetchArtistListUseCase {
         self.artistRepository = artistRepository
     }
 
-    public func execute() -> Single<[ArtistEntity]> {
-        artistRepository.fetchArtistList()
+    public func execute(id: String) -> Single<ArtistEntity> {
+        artistRepository.fetchArtistDetail(id: id)
     }
 }

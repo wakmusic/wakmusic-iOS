@@ -19,7 +19,7 @@ public class ArtistMusicViewController: TabmanViewController, ViewControllerFrom
     }()
 
     var artistMusicContentComponent: ArtistMusicContentComponent!
-    var model: ArtistListEntity?
+    var model: ArtistEntity?
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -46,7 +46,7 @@ public class ArtistMusicViewController: TabmanViewController, ViewControllerFrom
     }
 
     public static func viewController(
-        model: ArtistListEntity?,
+        model: ArtistEntity?,
         artistMusicContentComponent: ArtistMusicContentComponent
     ) -> ArtistMusicViewController {
         let viewController = ArtistMusicViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)

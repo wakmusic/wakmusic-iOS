@@ -8,6 +8,7 @@ import UIKit
 
 public protocol ArtistDetailDependency: Dependency {
     var artistMusicComponent: ArtistMusicComponent { get }
+    var fetchArtistDetailUseCase: any FetchArtistDetailUseCase { get }
     var fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase { get }
     var subscriptionArtistUseCase: any SubscriptionArtistUseCase { get }
     var textPopUpFactory: any TextPopUpFactory { get }
@@ -15,10 +16,11 @@ public protocol ArtistDetailDependency: Dependency {
 }
 
 public final class ArtistDetailComponent: Component<ArtistDetailDependency>, ArtistDetailFactory {
-    public func makeView(model: ArtistListEntity) -> UIViewController {
+    public func makeView(artistID: String) -> UIViewController {
         return ArtistDetailViewController.viewController(
             viewModel: .init(
-                model: model,
+                artistID: artistID,
+                fetchArtistDetailUseCase: dependency.fetchArtistDetailUseCase,
                 fetchArtistSubscriptionStatusUseCase: dependency.fetchArtistSubscriptionStatusUseCase,
                 subscriptionArtistUseCase: dependency.subscriptionArtistUseCase
             ),

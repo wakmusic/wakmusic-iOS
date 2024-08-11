@@ -27,7 +27,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var introDescriptionLabel: UILabel!
 
     var disposeBag: DisposeBag = DisposeBag()
-    private var model: ArtistListEntity?
+    private var model: ArtistEntity?
 
     deinit {
         DEBUG_LOG("\(Self.self) Deinit")
@@ -49,7 +49,7 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 }
 
 extension ArtistDetailHeaderViewController {
-    func update(model: ArtistListEntity) {
+    func update(model: ArtistEntity) {
         self.model = model
         let artistName: String = model.krName
         let artistEngName: String = model.enName.capitalizingFirstLetter

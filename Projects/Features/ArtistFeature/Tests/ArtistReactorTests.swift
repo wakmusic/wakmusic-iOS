@@ -56,9 +56,9 @@ final class ArtistReactorTests: XCTestCase {
         XCTAssertEqual(sut.currentState.artistList, expectedArtistList)
     }
 
-    private func makeTwoDummyArtistList() -> [ArtistListEntity] {
+    private func makeTwoDummyArtistList() -> [ArtistEntity] {
         [
-            ArtistListEntity(
+            ArtistEntity(
                 id: "",
                 krName: "",
                 enName: "",
@@ -72,7 +72,7 @@ final class ArtistReactorTests: XCTestCase {
                 playlist: .init(latest: "", popular: "", oldest: ""),
                 isHiddenItem: false
             ),
-            ArtistListEntity(
+            ArtistEntity(
                 id: "2",
                 krName: "nam2",
                 enName: "eng2",
