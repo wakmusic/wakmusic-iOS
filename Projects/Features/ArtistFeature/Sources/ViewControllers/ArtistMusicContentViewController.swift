@@ -212,13 +212,7 @@ private extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
     func tappedThumbnail(id: String) {
-        if let presentingViewController = self.presentingViewController {
-            presentingViewController.dismiss(animated: true) { [songDetailPresenter] () in
-                songDetailPresenter?.present(id: id)
-            }
-        } else {
-            songDetailPresenter.present(id: id)
-        }
+        songDetailPresenter.present(id: id)
     }
 }
 
