@@ -18,7 +18,7 @@ public final class ArtistMusicContentViewController:
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     @IBOutlet weak var songCartOnView: UIView!
     @IBOutlet weak var songCartOnViewHeightConstraint: NSLayoutConstraint!
-    
+
     public var songCartView: SongCartView!
     public var bottomSheetView: BottomSheetView!
     private var containSongsFactory: ContainSongsFactory!
@@ -205,7 +205,7 @@ private extension ArtistMusicContentViewController {
         tableView.backgroundColor = .clear
         isFromArtistScene = navigationController?.viewControllers.first is ArtistViewController
         songCartOnView.alpha = .zero
-        songCartOnViewHeightConstraint.constant = isFromArtistScene ? 
+        songCartOnViewHeightConstraint.constant = isFromArtistScene ?
             PLAYER_HEIGHT() : PLAYER_HEIGHT() + SAFEAREA_BOTTOM_HEIGHT()
     }
 }
