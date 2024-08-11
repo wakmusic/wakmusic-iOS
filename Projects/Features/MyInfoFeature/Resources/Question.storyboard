@@ -204,8 +204,28 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OIe-P5-oQi">
                                         <rect key="frame" x="180.66666666666663" y="0.0" width="172.33333333333337" height="48"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tKN-0A-jJ9">
+                                                <rect key="frame" x="0.0" y="0.0" width="172.33333333333334" height="48"/>
+                                                <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            </button>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HLw-Ar-iFP">
+                                                <rect key="frame" x="136.33333333333334" y="12" width="24" height="24"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="24" id="6bK-rd-vWL"/>
+                                                    <constraint firstAttribute="height" constant="24" id="Beh-Ii-OMe"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="tKN-0A-jJ9" firstAttribute="top" secondItem="OIe-P5-oQi" secondAttribute="top" id="D4P-47-eiN"/>
+                                            <constraint firstItem="tKN-0A-jJ9" firstAttribute="leading" secondItem="OIe-P5-oQi" secondAttribute="leading" id="P94-7y-ixd"/>
+                                            <constraint firstItem="HLw-Ar-iFP" firstAttribute="centerY" secondItem="OIe-P5-oQi" secondAttribute="centerY" id="Qlz-4I-RfF"/>
+                                            <constraint firstAttribute="trailing" secondItem="tKN-0A-jJ9" secondAttribute="trailing" id="UaC-bS-ppF"/>
+                                            <constraint firstAttribute="trailing" secondItem="HLw-Ar-iFP" secondAttribute="trailing" constant="12" id="Ztc-yn-TC5"/>
+                                            <constraint firstAttribute="bottom" secondItem="tKN-0A-jJ9" secondAttribute="bottom" id="wco-jI-7N5"/>
                                             <constraint firstAttribute="height" constant="48" id="yIe-vG-BrJ"/>
                                         </constraints>
                                     </view>
@@ -253,6 +273,9 @@
                         <outlet property="bugReportCheckImageView" destination="WEn-7Q-J1v" id="aDn-Uv-gzk"/>
                         <outlet property="bugReportSuperView" destination="fIs-6C-Wpp" id="p7w-Da-a9Q"/>
                         <outlet property="closeButton" destination="Tup-mo-jxt" id="nTB-za-n1z"/>
+                        <outlet property="creditButton" destination="tKN-0A-jJ9" id="81G-KA-H3p"/>
+                        <outlet property="creditCheckImageView" destination="HLw-Ar-iFP" id="s5J-yD-3LP"/>
+                        <outlet property="creditSuperView" destination="OIe-P5-oQi" id="74o-Yi-ngQ"/>
                         <outlet property="descriptionLabel" destination="rds-hn-vdX" id="f5K-7z-xKs"/>
                         <outlet property="editSongButton" destination="ATa-wF-riM" id="I2e-Df-B1W"/>
                         <outlet property="editSongCheckImageView" destination="MN9-cB-NJ6" id="hu9-5O-Idn"/>

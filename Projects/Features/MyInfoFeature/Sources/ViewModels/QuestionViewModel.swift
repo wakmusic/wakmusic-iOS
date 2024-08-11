@@ -68,6 +68,7 @@ enum InquiryType: Int {
     case addSong
     case modifySong
     case weeklyChart
+    case credit
     case unknown
 }
 
@@ -91,6 +92,8 @@ extension InquiryType {
             return "노래 수정"
         case .weeklyChart:
             return "주간차트 영상"
+        case .credit:
+            return "참여정보"
         case .unknown:
             return ""
         }
@@ -115,7 +118,7 @@ extension InquiryType {
                 · 조회수가 이상한 경우는 반응 영상이 포함되어 있을 수 있습니다.
                 \n아티스트:\n\n노래 제목:\n\n유튜브 링크:\n\n내용:\n\n\n\n
             """
-        case .weeklyChart:
+        case .weeklyChart, .credit:
             return """
                 문의하실 내용을 적어주세요.\n\n\n\n\n\n
             """

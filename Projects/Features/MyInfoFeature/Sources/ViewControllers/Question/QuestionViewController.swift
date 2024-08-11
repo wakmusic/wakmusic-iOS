@@ -30,6 +30,10 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     @IBOutlet weak var wakMusicFeedbackSuperView: UIView!
     @IBOutlet weak var wakMusicFeedbackButton: UIButton!
     @IBOutlet weak var wakMusicFeedbackCheckImageView: UIImageView!
+
+    @IBOutlet weak var creditSuperView: UIView!
+    @IBOutlet weak var creditButton: UIButton!
+    @IBOutlet weak var creditCheckImageView: UIImageView!
     @IBOutlet weak var nextButton: UIButton!
 
     let selectedColor: UIColor = DesignSystemAsset.PrimaryColor.decrease.color
@@ -97,7 +101,8 @@ extension QuestionViewController {
             self.suggestFunctionSuperView,
             self.addSongSuperView,
             self.editSongSuperView,
-            self.wakMusicFeedbackSuperView
+            self.wakMusicFeedbackSuperView,
+            self.creditSuperView
         ]
 
         let buttons: [UIButton] = [
@@ -105,7 +110,8 @@ extension QuestionViewController {
             self.suggestFunctionButton,
             self.addSongButton,
             self.editSongButton,
-            self.wakMusicFeedbackButton
+            self.wakMusicFeedbackButton,
+            self.creditButton
         ]
 
         let imageViews: [UIImageView] = [
@@ -113,7 +119,8 @@ extension QuestionViewController {
             self.suggestFunctionCheckImageView,
             self.addSongCheckImageView,
             self.editSongCheckImageView,
-            self.wakMusicFeedbackCheckImageView
+            self.wakMusicFeedbackCheckImageView,
+            self.creditCheckImageView
         ]
 
         for i in 0 ..< superViews.count {
@@ -123,25 +130,11 @@ extension QuestionViewController {
             imageViews[i].image = DesignSystemAsset.Storage.checkBox.image
             imageViews[i].isHidden = true
 
-            var title: String = ""
-            switch i {
-            case 0:
-                title = "버그 제보"
-            case 1:
-                title = "기능 제안"
-            case 2:
-                title = "노래 추가"
-            case 3:
-                title = "노래 수정"
-            case 4:
-                title = "주간차트 영상"
-            default:
-                return
-            }
+            guard let type = InquiryType(rawValue: i) else { return }
 
             buttons[i].setAttributedTitle(
                 NSMutableAttributedString(
-                    string: title,
+                    string: type.title,
                     attributes: [
                         .font: DesignSystemFontFamily.Pretendard.light.font(size: 16),
                         .foregroundColor: unSelectedTextColor,
@@ -163,7 +156,8 @@ extension QuestionViewController {
             suggestFunctionButton.rx.tap.map { _ -> Int in 1 },
             addSongButton.rx.tap.map { _ -> Int in 2 },
             editSongButton.rx.tap.map { _ -> Int in 3 },
-            wakMusicFeedbackButton.rx.tap.map { _ -> Int in 4 }
+            wakMusicFeedbackButton.rx.tap.map { _ -> Int in 4 },
+            creditButton.rx.tap.map { _ -> Int in 5 }
         )
         .bind(to: input.selectedIndex)
         .disposed(by: disposeBag)
@@ -184,7 +178,8 @@ extension QuestionViewController {
                     self.suggestFunctionSuperView,
                     self.addSongSuperView,
                     self.editSongSuperView,
-                    self.wakMusicFeedbackSuperView
+                    self.wakMusicFeedbackSuperView,
+                    self.creditSuperView
                 ]
 
                 let buttons: [UIButton] = [
@@ -192,7 +187,8 @@ extension QuestionViewController {
                     self.suggestFunctionButton,
                     self.addSongButton,
                     self.editSongButton,
-                    self.wakMusicFeedbackButton
+                    self.wakMusicFeedbackButton,
+                    self.creditButton
                 ]
 
                 let imageViews: [UIImageView] = [
@@ -200,28 +196,16 @@ extension QuestionViewController {
                     self.suggestFunctionCheckImageView,
                     self.addSongCheckImageView,
                     self.editSongCheckImageView,
-                    self.wakMusicFeedbackCheckImageView
+                    self.wakMusicFeedbackCheckImageView,
+                    self.creditCheckImageView
                 ]
 
                 for i in 0 ..< superViews.count {
-                    var title: String = ""
-                    switch i {
-                    case 0:
-                        title = "버그 제보"
-                    case 1:
-                        title = "기능 제안"
-                    case 2:
-                        title = "노래 추가"
-                    case 3:
-                        title = "노래 수정"
-                    case 4:
-                        title = "주간차트 영상"
-                    default:
-                        return
-                    }
+                    guard let type = InquiryType(rawValue: i) else { return }
+
                     buttons[i].setAttributedTitle(
                         NSMutableAttributedString(
-                            string: title,
+                            string: type.title,
                             attributes: [
                                 .font: i == index ? DesignSystemFontFamily.Pretendard.medium.font(size: 16) :
                                     DesignSystemFontFamily.Pretendard.light.font(size: 16),
@@ -250,7 +234,7 @@ extension QuestionViewController {
                 if source == .addSong {
                     let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
                     let text =
-                        "· 이세돌 분들이 부르신 걸 이파리분들이 개인 소장용으로 일부 공개한 영상을 올리길 원하시면 ‘왁타버스 뮤직’으로 왁물원 채팅 부탁드립니다.\n· 왁뮤에 들어갈 수 있는 기준을 충족하는지 꼭 확인하시고 추가 요청해 주세요."
+                        "요청하고자 하는 곡이 왁뮤에 들어갈 수 있는\n 기준을 충족하는지 먼저 확인해 주세요."
                     guard let textPopupViewController = self.textPopUpFactory.makeView(
                         text: text,
                         cancelButtonIsHidden: false,
@@ -282,9 +266,7 @@ extension QuestionViewController {
             .subscribe(onNext: { owner, params in
                 let (text, toDismiss) = params
                 owner.showToast(
-                    text: text,
-                    font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                    verticalOffset: toDismiss ? (56 + 20) : (56 + 10 + 20)
+                    text: text, options: [.tabBar]
                 )
                 guard toDismiss else { return }
                 owner.dismiss(animated: true)
