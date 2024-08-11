@@ -72,7 +72,7 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let rewardFruitImageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFill
+        $0.contentMode = .scaleAspectFit
         $0.alpha = 0
     }
 
