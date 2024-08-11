@@ -17,6 +17,16 @@ public struct SongCreditsEntity {
         self.names = names
     }
 
+    public init(
+        type: String,
+        names: [String]
+    ) {
+        self.type = type
+        self.names = names.map {
+            Credit(name: $0, isArtist: false, artistID: nil)
+        }
+    }
+
     public let type: String
     public let names: [Credit]
 
