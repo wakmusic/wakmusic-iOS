@@ -231,32 +231,7 @@ extension QuestionViewController {
             .filter { $0 != .unknown }
             .subscribe(onNext: { [weak self] source in
                 guard let self = self else { return }
-                if source == .addSong {
-                    let link: String = "https://whimsical.com/E3GQxrTaafVVBrhm55BNBS"
-                    let text =
-                        "요청하고자 하는 곡이 왁뮤에 들어갈 수 있는\n 기준을 충족하는지 먼저 확인해 주세요."
-                    guard let textPopupViewController = self.textPopUpFactory.makeView(
-                        text: text,
-                        cancelButtonIsHidden: false,
-                        confirmButtonText: "다음",
-                        cancelButtonText: "충족 기준 보기",
-                        completion: {
-                            self.goToMail(source: source)
-
-                        },
-                        cancelCompletion: {
-                            guard let URL = URL(string: link) else { return }
-                            let safari = SFSafariViewController(url: URL)
-                            self.present(safari, animated: true)
-                        }
-                    ) as? TextPopupViewController else {
-                        return
-                    }
-                    self.showBottomSheet(content: textPopupViewController)
-
-                } else {
-                    self.goToMail(source: source)
-                }
+                self.goToMail(source: source)
             })
             .disposed(by: disposeBag)
 
