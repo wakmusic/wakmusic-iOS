@@ -183,8 +183,8 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
                 case .back:
                     owner.back()
 
-                case let .creditDetail(name):
-                    owner.navigateCreditDetail(name: name)
+                case let .creditDetail(worker):
+                    owner.navigateCreditDetail(worker: worker)
                 }
             }
             .disposed(by: disposeBag)
@@ -196,8 +196,15 @@ private extension SongCreditViewController {
         self.navigationController?.popViewController(animated: true)
     }
 
-    func navigateCreditDetail(name: String) {
-        let viewController = creditSongListFactory.makeViewController(workerName: name)
-        self.navigationController?.pushViewController(viewController, animated: true)
+    func navigateCreditDetail(worker: CreditModel.CreditWorker) {
+        switch worker.creditType {
+        case .default:
+            let viewController = creditSongListFactory.makeViewController(workerName: worker.name)
+            self.navigationController?.pushViewController(viewController, animated: true)
+
+        case let .artist(artistID):
+            #warning("TODO: Artist Detail")
+            break
+        }
     }
 }

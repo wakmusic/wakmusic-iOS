@@ -17,7 +17,7 @@ final class SongCreditReactor: Reactor {
 
     enum NavigateType {
         case back
-        case creditDetail(name: String)
+        case creditDetail(worker: CreditModel.CreditWorker)
     }
 
     struct State {
@@ -58,7 +58,7 @@ final class SongCreditReactor: Reactor {
             return self.navigate(to: .back)
 
         case let .creditSelected(worker):
-            return self.navigate(to: .creditDetail(name: worker.name))
+            return self.navigate(to: .creditDetail(worker: worker))
         }
     }
 
@@ -81,7 +81,7 @@ private extension SongCreditReactor {
     func viewDidLoad() -> Observable<Mutation> {
         return fetchSongCreditsUseCase.execute(id: songID)
             .map { credits in
-                credits.map { CreditModel(position: $0.type, names: $0.names) }
+                credits.map { CreditModel(creditEntity: $0) }
             }
             .map { Mutation.updateCredits($0) }
             .asObservable()
