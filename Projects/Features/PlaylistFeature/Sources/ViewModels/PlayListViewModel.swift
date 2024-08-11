@@ -123,6 +123,7 @@ final class PlaylistViewModel: ViewModelType {
                 if selectedIds.count == output.playlists.value.count {
                     output.playlists.accept([])
                     output.selectedSongIds.accept([])
+                    output.editState.send(false)
                     output.shouldClosePlaylist.send()
                 } else {
                     let removedPlaylists = output.playlists.value

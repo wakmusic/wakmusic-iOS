@@ -1,5 +1,6 @@
 import ArtistFeature
 import BaseFeature
+import Combine
 import DesignSystem
 import PlaylistFeatureInterface
 import RxSwift
@@ -20,6 +21,7 @@ open class MainContainerViewController: BaseViewController, ViewControllerFromSt
 
     var isDarkContentBackground: Bool = false
     private let disposeBag = DisposeBag()
+    private var subscription = Set<AnyCancellable>()
 
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -109,6 +111,7 @@ private extension MainContainerViewController {
             playlistViewController.modalPresentationStyle = .overFullScreen
             navigationController?.topViewController?.present(playlistViewController, animated: true)
         }
+        playlistFloatingActionButton.isHidden = PlayState.shared.isEmpty
         playlistFloatingActionButton.addAction(
             playlistButtonAction,
             for: .primaryActionTriggered
@@ -122,6 +125,11 @@ private extension MainContainerViewController {
                 navigationController?.topViewController?.present(playlistViewController, animated: true)
             }
             .disposed(by: disposeBag)
+
+        PlayState.shared.listChangedPublisher
+            .map(\.isEmpty)
+            .assign(to: \.isHidden, on: playlistFloatingActionButton)
+            .store(in: &subscription)
     }
 
     func bindNotification() {
