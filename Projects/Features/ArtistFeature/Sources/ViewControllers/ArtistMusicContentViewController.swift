@@ -109,7 +109,12 @@ private extension ArtistMusicContentViewController {
                     self.tableView.tableFooterView = warningView
                 } else {
                     if self.isFromArtistScene {
-                        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: PLAYER_HEIGHT()))
+                        self.tableView.tableFooterView = UIView(frame: CGRect(
+                            x: 0,
+                            y: 0,
+                            width: APP_WIDTH(),
+                            height: PLAYER_HEIGHT()
+                        ))
                     } else {
                         self.tableView.tableFooterView = nil
                     }

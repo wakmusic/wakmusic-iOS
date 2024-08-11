@@ -2,12 +2,12 @@ import ArtistDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import LogManager
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SignInFeatureInterface
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
     @IBOutlet weak var gradationView: UIView!
