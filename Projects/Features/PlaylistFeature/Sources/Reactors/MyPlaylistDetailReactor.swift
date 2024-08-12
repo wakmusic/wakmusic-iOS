@@ -24,6 +24,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case removeSongs
         case changeImageData(PlaylistImageKind)
         case shareButtonDidTap
+        case moreButtonDidTap
     }
 
     enum Mutation {
@@ -34,6 +35,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateImageData(PlaylistImageKind?)
+        case updateShowEditSheet(Bool)
         case showToast(String)
         case showShareLink(String)
         case postNotification(Notification.Name)
@@ -47,6 +49,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var isLoading: Bool
         var selectedCount: Int
         var imageData: PlaylistImageKind?
+        var showEditSheet: Bool
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
         @Pulse var notiName: Notification.Name?
@@ -98,6 +101,7 @@ final class MyPlaylistDetailReactor: Reactor {
             backupPlaylistModels: [],
             isLoading: true,
             selectedCount: 0,
+            showEditSheet: false,
             notiName: nil
         )
     }
@@ -142,7 +146,9 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .changeImageData(imageData):
             return updateImageData(imageData: imageData)
         case .shareButtonDidTap:
-            return .just(.showShareLink(deepLinkGenerator.generatePlaylistDeepLink(key: key)))
+            return updateShareLink()
+        case .moreButtonDidTap:
+            return updateShowEditSheet(flag: !self.currentState.showEditSheet)
         }
     }
 
@@ -177,6 +183,8 @@ final class MyPlaylistDetailReactor: Reactor {
             newState.shareLink = link
         case let .postNotification(notiName):
             newState.notiName = notiName
+        case let .updateShowEditSheet(flag):
+            newState.showEditSheet = flag
         }
 
         return newState
@@ -356,7 +364,8 @@ private extension MyPlaylistDetailReactor {
 
         return .concat([
             .just(.updateEditingState(true)),
-            .just(.updateBackUpPlaylist(currentPlaylists))
+            .just(.updateBackUpPlaylist(currentPlaylists)),
+            updateShowEditSheet(flag: false),
         ])
     }
 
@@ -467,5 +476,16 @@ private extension MyPlaylistDetailReactor {
 
     func postNotification(notiName: Notification.Name) -> Observable<Mutation> {
         .just(.postNotification(notiName))
+    }
+
+    func updateShareLink() -> Observable<Mutation> {
+        return .concat([
+            .just(.showShareLink(deepLinkGenerator.generatePlaylistDeepLink(key: key))),
+            updateShowEditSheet(flag: false)
+        ])
+    }
+
+    func updateShowEditSheet(flag: Bool) -> Observable<Mutation> {
+        return .just(.updateShowEditSheet(flag))
     }
 }

@@ -201,10 +201,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         moreButton.rx
             .tap
-            .bind(with: self) { owner, _ in
-                owner.showplaylistEditSheet(in: owner.view)
-                owner.playlisteditSheetView?.delegate = owner
-            }
+            .map { Reactor.Action.moreButtonDidTap }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         completeButton.rx
@@ -373,6 +371,19 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                         useBottomSpace: false
                     )
                     owner.songCartView.delegate = owner
+                }
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.showEditSheet)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, flag in
+
+                if flag {
+                    owner.showplaylistEditSheet(in: owner.view)
+                    owner.playlisteditSheetView?.delegate = owner
+                } else {
+                    owner.hideplaylistEditSheet()
                 }
             }
             .disposed(by: disposeBag)
@@ -597,8 +608,6 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)
             reactor?.action.onNext(.shareButtonDidTap)
         }
-
-        self.hideplaylistEditSheet()
     }
 }
 
