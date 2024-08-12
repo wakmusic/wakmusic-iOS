@@ -20,8 +20,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
     private let containSongsFactory: any ContainSongsFactory
 
-    private let textPopUpFactory: any TextPopUpFactory
-
     private let songDetailPresenter: any SongDetailPresentable
 
     private let signInFactory: any SignInFactory
@@ -63,12 +61,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     init(
         reactor: UnknownPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory,
         songDetailPresenter: any SongDetailPresentable,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
-        self.textPopUpFactory = textPopUpFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
         super.init(reactor: reactor)
@@ -192,24 +188,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .compactMap { $0 }
             .bind { _ in
                 NotificationCenter.default.post(name: .shouldRefreshPlaylist, object: nil)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$detectedNotFound)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                let vc = owner.textPopUpFactory.makeView(
-                    text: "비공개된 리스트 입니다.",
-                    cancelButtonIsHidden: true,
-                    confirmButtonText: "확인",
-                    cancelButtonText: nil,
-                    completion: {
-                        owner.navigationController?.popViewController(animated: true)
-                    },
-                    cancelCompletion: nil
-                )
-
-                owner.showBottomSheet(content: vc, dismissOnOverlayTapAndPull: false) // 드래그로 닫기 불가
             }
             .disposed(by: disposeBag)
 
