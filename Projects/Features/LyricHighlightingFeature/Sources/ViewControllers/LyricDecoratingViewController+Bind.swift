@@ -68,10 +68,7 @@ extension LyricDecoratingViewController {
                     case .success:
                         break
                     case let .failure(error):
-                        owner.showToast(
-                            text: error.localizedDescription,
-                            font: DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                        )
+                        LogManager.printError(error.localizedDescription)
                     }
                 }
             }
