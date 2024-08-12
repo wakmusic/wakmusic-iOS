@@ -237,6 +237,15 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
             .disposed(by: disposeBag)
+
+        tableView.rx.itemSelected
+            .bind(with: self) { owner, indexPath in
+
+                guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
+
+                owner.songDetailPresenter.present(id: model.id)
+            }
+            .disposed(by: disposeBag)
     }
 
     override func bindState(reactor: MyPlaylistDetailReactor) {
@@ -503,10 +512,6 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
 /// 편집모드 시 셀 선택 이벤트
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
-    func thumbnailDidTap(key: String) {
-        songDetailPresenter.present(id: key)
-    }
-
     func playButtonDidTap(key: String) {
         WakmusicYoutubePlayer(id: key).play()
     }

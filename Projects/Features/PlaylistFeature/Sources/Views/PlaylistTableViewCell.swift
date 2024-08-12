@@ -11,7 +11,6 @@ import Utility
 
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)
-    func thumbnailDidTap(key: String)
     func playButtonDidTap(key: String)
 }
 
@@ -24,8 +23,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
     }
-
-    internal lazy var thumbnailButton = UIButton()
 
     internal lazy var titleArtistStackView = UIStackView(arrangedSubviews: [titleLabel, artistLabel]).then {
         $0.axis = .vertical
@@ -90,7 +87,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.thumbnailImageView)
         self.contentView.addSubview(self.titleArtistStackView)
         self.contentView.addSubview(self.playImageView)
-        self.contentView.addSubview(self.thumbnailButton)
         self.contentView.addSubview(self.superButton)
 
         let height = 40
@@ -100,10 +96,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.left.equalTo(contentView.snp.left).offset(20)
             $0.width.equalTo(width)
             $0.height.equalTo(height)
-        }
-
-        thumbnailButton.snp.makeConstraints {
-            $0.edges.equalTo(thumbnailImageView)
         }
 
         titleArtistStackView.snp.makeConstraints {
@@ -149,15 +141,6 @@ extension PlaylistTableViewCell {
     }
 
     func bindAction() {
-        thumbnailButton.addAction { [weak self] in
-
-            guard let song = self?.model.model else {
-                return
-            }
-
-            self?.delegate?.thumbnailDidTap(key: song.id)
-        }
-
         playImageView.rx.tapGesture()
             .when(.recognized)
             .bind(with: self) { owner, _ in
