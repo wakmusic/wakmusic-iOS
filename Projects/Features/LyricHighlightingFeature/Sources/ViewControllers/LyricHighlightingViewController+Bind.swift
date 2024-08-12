@@ -68,5 +68,15 @@ extension LyricHighlightingViewController {
                 owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
+
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(
+                    text: message,
+                    options: [.tabBar],
+                    backgroundThema: .light
+                )
+            }
+            .disposed(by: disposeBag)
     }
 }
