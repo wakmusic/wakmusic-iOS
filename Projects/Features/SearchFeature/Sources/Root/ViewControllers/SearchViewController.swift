@@ -164,7 +164,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
                 let (state, text) = data
 
-                owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
+                owner.cancelButton.alpha = state != .before ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state: state, text: text)
 
