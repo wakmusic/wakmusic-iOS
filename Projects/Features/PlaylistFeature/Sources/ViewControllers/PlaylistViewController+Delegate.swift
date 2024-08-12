@@ -121,19 +121,6 @@ extension PlaylistViewController: PlayButtonGroupViewDelegate {
 }
 
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
-    func thumbnailDidTap(key: String) {
-        let currentSongs = output.playlists.value
-            .map(\.id)
-            .prefix(50)
-
-        self.dismiss(animated: true) { [songDetailPresenter] in
-            songDetailPresenter.present(
-                ids: Array(currentSongs),
-                selectedID: key
-            )
-        }
-    }
-
     func playButtonDidTap(key: String) {
         WakmusicYoutubePlayer(id: key).play()
     }

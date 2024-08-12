@@ -192,6 +192,23 @@ private extension PlaylistViewController {
             .map { $0.isEmpty }
             .bind(to: playlistView.editButton.rx.isHidden)
             .disposed(by: disposeBag)
+
+        playlistView.playlistTableView.rx.itemSelected
+            .withLatestFrom(output.playlists) { ($0, $1) }
+            .map { $0.1[$0.0.row] }
+            .bind(with: self, onNext: { [songDetailPresenter] owner, item in
+                let currentSongs = output.playlists.value
+                    .map(\.id)
+                    .prefix(50)
+
+                owner.dismiss(animated: true) {
+                    songDetailPresenter.present(
+                        ids: Array(currentSongs),
+                        selectedID: item.id
+                    )
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     private func bindSongCart(output: PlaylistViewModel.Output) {
