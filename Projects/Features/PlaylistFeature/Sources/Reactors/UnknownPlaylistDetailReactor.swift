@@ -29,7 +29,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case showToast(String)
         case updateLoginPopupState(Bool)
         case updateRefresh
-      
     }
 
     struct State {
@@ -134,7 +133,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case .updateRefresh:
             newState.refresh = ()
-
         }
 
         return newState
@@ -286,6 +284,4 @@ private extension UnknownPlaylistDetailReactor {
     func updateSendRefreshNoti() -> Observable<Mutation> {
         .just(.updateRefresh)
     }
-
-
 }

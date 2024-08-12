@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import PlaylistFeatureInterface
 import RxSwift
@@ -6,7 +7,6 @@ import SnapKit
 import Then
 import UIKit
 import Utility
-import BaseFeatureInterface
 
 final class PlaylistDetailContainerViewController: BaseReactorViewController<PlaylistDetailContainerReactor>,
     ContainerViewType {
@@ -137,7 +137,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                 }
             }
             .disposed(by: disposeBag)
-        
+
         reactor.pulse(\.$detectedNotFound)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
