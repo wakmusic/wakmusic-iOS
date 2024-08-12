@@ -85,12 +85,12 @@ private extension SingleActionButtonView {
             $0.centerY.equalTo(baseView.snp.centerY)
         }
 
-        label.snp.makeConstraints {
-            $0.center.equalToSuperview()
-        }
-
         button.snp.makeConstraints {
             $0.edges.equalTo(baseView)
+        }
+
+        label.snp.makeConstraints {
+            $0.center.equalTo(button.snp.center)
         }
     }
 }
