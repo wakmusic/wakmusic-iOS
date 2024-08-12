@@ -82,7 +82,7 @@ extension PlaylistDetailContainerReactor {
                 if wmError == .notFound {
                     return self.updateDetectedNotFound()
                 }
-                
+
                 return .just(Mutation.showToastMessagae(wmError.localizedDescription))
             }
     }
@@ -97,7 +97,7 @@ extension PlaylistDetailContainerReactor {
             Observable.just(.updateLoadingState(false))
         ])
     }
-    
+
     func updateDetectedNotFound() -> Observable<Mutation> {
         .just(.updateDetectedNotFound)
     }

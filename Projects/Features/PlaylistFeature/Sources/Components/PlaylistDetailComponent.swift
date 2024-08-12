@@ -1,7 +1,7 @@
+import BaseFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
-import BaseFeatureInterface
 import UIKit
 
 public protocol PlaylistDetailFactoryDependency: Dependency {
