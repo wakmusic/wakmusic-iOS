@@ -40,6 +40,7 @@ public final class FruitDrawViewModel: ViewModelType {
             imageURL: ""
         ))
         let showRewardNote: PublishSubject<FruitEntity> = PublishSubject()
+        let showToast: PublishSubject<String> = PublishSubject()
         let occurredError: PublishSubject<String> = PublishSubject()
     }
 
