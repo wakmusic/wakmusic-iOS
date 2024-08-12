@@ -56,18 +56,18 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
     }
 
     override func addView() {
-        view.addSubviews(creditProfileGradientContainerView, wmNavigationBar, creditProfileView)
-        wmNavigationBar.setLeftViews([dismissButton])
-
         addChild(creditSongListTabViewController)
         view.addSubviews(creditSongListTabView)
         creditSongListTabViewController.didMove(toParent: self)
+
+        view.addSubviews(creditProfileGradientContainerView, wmNavigationBar, creditProfileView)
+        wmNavigationBar.setLeftViews([dismissButton])
     }
 
     override func setLayout() {
         creditProfileGradientContainerView.snp.makeConstraints {
             $0.top.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(200)
+            $0.height.equalTo(210)
         }
 
         wmNavigationBar.snp.makeConstraints {

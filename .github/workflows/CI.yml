@@ -1,13 +1,14 @@
 name: CI
 
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/CI.yml"
+      - "**/*.swift"
   push:
     branches:
       - develop
       - master
-  pull_request:
-    branches:
-      - "*"
 
 env:
   CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/.build
