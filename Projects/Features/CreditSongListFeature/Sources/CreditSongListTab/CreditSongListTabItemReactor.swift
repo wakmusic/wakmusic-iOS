@@ -50,6 +50,7 @@ final class CreditSongListTabItemReactor: Reactor {
     private let signInIsRequiredSubject = PublishSubject<Void>()
 
     private var page: Int = 1
+    private var isLastPage: Bool = false
     let initialState: State
     private let workerName: String
     private let creditSortType: CreditSongSortType
@@ -211,7 +212,13 @@ private extension CreditSongListTabItemReactor {
     }
 
     func reachedBottom() -> Observable<Mutation> {
+        guard !isLastPage else { return .empty() }
         let initialCreditSongListObservable = fetchPaginatedCreditSongList()
+            .do(onNext: { [weak self] creditModels in
+                if creditModels.isEmpty || creditModels.count < Metric.pageLimit {
+                    self?.isLastPage = true
+                }
+            })
             .map { [weak self] in return $0 + (self?.currentState.songs ?? []) }
             .map(Mutation.updateSongs)
         return withLoadingMutation(observable: initialCreditSongListObservable)
