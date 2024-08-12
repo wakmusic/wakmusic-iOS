@@ -237,12 +237,12 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 owner.showBottomSheet(content: vc, size: .fixed(252 + SAFEAREA_BOTTOM_HEIGHT()))
             }
             .disposed(by: disposeBag)
-       
+
         tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
-                
+
                 guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
-                
+
                 owner.songDetailPresenter.present(id: model.id)
             }
             .disposed(by: disposeBag)
