@@ -13,12 +13,14 @@ final class PlaylistDetailContainerReactor: Reactor {
         case updateOwnerID(String?)
         case updateLoadingState(Bool)
         case showToastMessagae(String)
+        case updateDetectedNotFound
     }
 
     struct State {
         var isLoading: Bool
         var ownerID: String?
         @Pulse var toastMessgae: String?
+        @Pulse var detectedNotFound: Void?
     }
 
     private let requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase
@@ -50,6 +52,8 @@ final class PlaylistDetailContainerReactor: Reactor {
             newState.toastMessgae = message
         case let .updateLoadingState(flag):
             newState.isLoading = flag
+        case .updateDetectedNotFound:
+            newState.detectedNotFound = ()
         }
 
         return newState
@@ -74,6 +78,11 @@ extension PlaylistDetailContainerReactor {
             }
             .catch { error in
                 let wmError = error.asWMError
+
+                if wmError == .notFound {
+                    return self.updateDetectedNotFound()
+                }
+
                 return .just(Mutation.showToastMessagae(wmError.localizedDescription))
             }
     }
@@ -87,5 +96,9 @@ extension PlaylistDetailContainerReactor {
             Observable.just(Mutation.updateOwnerID(nil)),
             Observable.just(.updateLoadingState(false))
         ])
+    }
+
+    func updateDetectedNotFound() -> Observable<Mutation> {
+        .just(.updateDetectedNotFound)
     }
 }

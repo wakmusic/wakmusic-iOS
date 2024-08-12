@@ -29,7 +29,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case showToast(String)
         case updateLoginPopupState(Bool)
         case updateRefresh
-        case updateDetectedNotFound
     }
 
     struct State {
@@ -134,9 +133,6 @@ final class UnknownPlaylistDetailReactor: Reactor {
 
         case .updateRefresh:
             newState.refresh = ()
-
-        case .updateDetectedNotFound:
-            newState.detectedNotFound = ()
         }
 
         return newState
@@ -185,13 +181,10 @@ private extension UnknownPlaylistDetailReactor {
 
                     guard let self else { return .empty() }
 
-                    let wmErorr = error.asWMError
+                    let wmError = error.asWMError
 
-                    if wmErorr == .notFound {
-                        return self.updateDetectedNotFound()
-                    }
                     return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
+                        Mutation.showToast(wmError.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                     )
                 },
             .just(.updateLoadingState(false))
@@ -290,9 +283,5 @@ private extension UnknownPlaylistDetailReactor {
 
     func updateSendRefreshNoti() -> Observable<Mutation> {
         .just(.updateRefresh)
-    }
-
-    func updateDetectedNotFound() -> Observable<Mutation> {
-        .just(.updateDetectedNotFound)
     }
 }
