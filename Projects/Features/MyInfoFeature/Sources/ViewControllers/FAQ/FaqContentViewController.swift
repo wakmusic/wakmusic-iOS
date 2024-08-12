@@ -39,9 +39,8 @@ extension FaqContentViewController {
             x: 0,
             y: 0,
             width: APP_WIDTH(),
-            height: 56
+            height: PLAYER_HEIGHT()
         ))
-        tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         tableView.reloadData()
     }
 
