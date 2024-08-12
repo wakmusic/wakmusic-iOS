@@ -107,7 +107,6 @@ final class MyPlaylistDetailReactor: Reactor {
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
-                
         switch action {
         case .viewDidLoad:
             return viewDidLoad()
@@ -478,7 +477,7 @@ private extension MyPlaylistDetailReactor {
     func postNotification(notiName: Notification.Name) -> Observable<Mutation> {
         .just(.postNotification(notiName))
     }
-    
+
     func updateShareLink() -> Observable<Mutation> {
         return .concat([
             .just(.showShareLink(deepLinkGenerator.generatePlaylistDeepLink(key: key))),

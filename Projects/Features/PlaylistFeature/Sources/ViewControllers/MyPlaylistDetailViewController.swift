@@ -198,9 +198,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-        
 
-        
         moreButton.rx
             .tap
             .map { Reactor.Action.moreButtonDidTap }
@@ -376,12 +374,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-        
-        
+
         sharedState.map(\.showEditSheet)
             .distinctUntilChanged()
             .bind(with: self) { owner, flag in
-                
+
                 if flag {
                     owner.showplaylistEditSheet(in: owner.view)
                     owner.playlisteditSheetView?.delegate = owner
@@ -390,7 +387,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-        
     }
 }
 
