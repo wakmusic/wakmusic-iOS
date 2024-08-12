@@ -1,13 +1,13 @@
 name: CI
 
 on:
+  pull_request:
+    paths:
+      - "**/*.swift"
   push:
     branches:
       - develop
       - master
-  pull_request:
-    branches:
-      - "*"
 
 env:
   CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/.build
