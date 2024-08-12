@@ -40,6 +40,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             artist: ""
         ))
         let updateProvider: PublishSubject<String> = .init()
+        let showToast: PublishSubject<String> = .init()
     }
 
     public func transform(from input: Input) -> Output {
@@ -64,7 +65,11 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
-                return entities[index].isHighlighting || entities.filter { $0.isHighlighting }.count < 4
+                guard entities[index].isHighlighting || entities.filter({ $0.isHighlighting }).count < 4 else {
+                    output.showToast.onNext("가사는 최대 4줄까지 선택 가능합니다.")
+                    return false
+                }
+                return true
             }
             .map { index, entities in
                 var newEntities = entities
