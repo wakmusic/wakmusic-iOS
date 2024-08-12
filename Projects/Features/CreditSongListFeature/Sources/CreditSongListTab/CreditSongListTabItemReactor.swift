@@ -125,6 +125,11 @@ final class CreditSongListTabItemReactor: Reactor {
 private extension CreditSongListTabItemReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let initialCreditSongListObservable = fetchPaginatedCreditSongList()
+            .do(onNext: { [weak self] creditModels in
+                if creditModels.isEmpty || creditModels.count < Metric.pageLimit {
+                    self?.isLastPage = true
+                }
+            })
             .map(Mutation.updateSongs)
         return withLoadingMutation(observable: initialCreditSongListObservable)
     }
