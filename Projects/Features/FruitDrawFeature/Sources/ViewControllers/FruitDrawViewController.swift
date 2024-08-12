@@ -195,7 +195,7 @@ private extension FruitDrawViewController {
         output.canDraw
             .skip(1)
             .bind(with: self) { owner, canDraw in
-                owner.drawOrConfirmButton.isEnabled = canDraw
+                owner.drawOrConfirmButton.isEnabled = true
                 owner.drawOrConfirmButton.setTitle(canDraw ? "음표 열매 뽑기" : "오늘 뽑기 완료", for: .normal)
                 owner.drawOrConfirmButton.backgroundColor = canDraw ?
                     DesignSystemAsset.PrimaryColorV2.point.color :
@@ -219,6 +219,12 @@ private extension FruitDrawViewController {
                     owner.rewardDescriptioniLabel.alpha = 1
                     owner.rewardFruitImageView.alpha = 1
                 }
+            }
+            .disposed(by: disposeBag)
+
+        output.showToast
+            .bind(with: self) { owner, message in
+                owner.showToast(text: message, options: [.tabBar])
             }
             .disposed(by: disposeBag)
 
@@ -259,11 +265,16 @@ private extension FruitDrawViewController {
 
         drawOrConfirmButton.rx.tap
             .withLatestFrom(output.canDraw)
-            .withLatestFrom(output.fruitSource) { ($0, $1) }
-            .filter { $0.0 }
+            .filter { [output] canDraw in
+                guard canDraw else {
+                    output.showToast.onNext("오늘은 더 이상 뽑을 수 없어요.")
+                    return false
+                }
+                return true
+            }
             .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
-            .bind(with: self) { owner, source in
-                let (_, fruit) = source
+            .withLatestFrom(output.fruitSource)
+            .bind(with: self) { owner, fruit in
                 let drawCompleted: Bool = fruit.quantity > 0
 
                 if drawCompleted {
