@@ -103,7 +103,10 @@ internal class PlaylistTableViewCell: UITableViewCell {
         }
 
         thumbnailButton.snp.makeConstraints {
-            $0.edges.equalTo(thumbnailImageView)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalTo(playImageView.snp.left).offset(-16)
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(42)
         }
 
         titleArtistStackView.snp.makeConstraints {
