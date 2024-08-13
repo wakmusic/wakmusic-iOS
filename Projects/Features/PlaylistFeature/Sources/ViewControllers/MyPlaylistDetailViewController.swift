@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import NVActivityIndicatorView
 import PhotosUI
 import PlaylistFeatureInterface
 import ReactorKit
@@ -54,6 +55,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
     }
 
+    private var saveCompletionIndicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.color = DesignSystemAsset.PrimaryColorV2.point.color
+        $0.type = .circleStrokeSpin
+    }
+
     private var headerView: MyPlaylistHeaderView = MyPlaylistHeaderView(frame: .init(
         x: .zero,
         y: .zero,
@@ -69,7 +75,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
-    private lazy var completeButton: RectangleButton = RectangleButton().then {
+    private lazy var completionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
         $0.setTitle("완료", for: .normal)
@@ -120,9 +126,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(wmNavigationbarView, tableView)
+        self.view.addSubviews(wmNavigationbarView, tableView, saveCompletionIndicator)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton, completeButton])
+        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton, saveCompletionIndicator])
     }
 
     override func setLayout() {
@@ -139,10 +145,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        completeButton.snp.makeConstraints {
+        completionButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
             $0.bottom.equalToSuperview().offset(-5)
+        }
+
+        saveCompletionIndicator.snp.makeConstraints {
+            $0.size.equalTo(15)
         }
     }
 
@@ -206,10 +216,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        completeButton.rx
+        completionButton.rx
             .tap
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
-            .map { Reactor.Action.completeButtonDidTap }
+            .map { Reactor.Action.completionButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -298,7 +308,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, isEditing in
                 owner.lockButton.isHidden = isEditing
                 owner.moreButton.isHidden = isEditing
-                owner.completeButton.isHidden = !isEditing
                 owner.tableView.isEditing = isEditing
                 owner.headerView.updateEditState(isEditing)
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = isEditing ? owner : nil
@@ -353,6 +362,24 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                     owner.tableView.isHidden = false
                 }
             }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.isSaveCompletionLoading)
+            .distinctUntilChanged()
+            .bind(with: self) { owner, isLoading in
+
+                if isLoading {
+                    owner.saveCompletionIndicator.startAnimating()
+                } else {
+                    owner.saveCompletionIndicator.stopAnimating()
+                }
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.completionButtonVisible)
+            .distinctUntilChanged()
+            .map { !$0 }
+            .bind(to: completionButton.rx.isHidden)
             .disposed(by: disposeBag)
 
         sharedState.map(\.selectedCount)
