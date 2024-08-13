@@ -61,7 +61,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     }
 
     private func setTableView() {
-        likeStorageView.tableView.delegate = self
+        likeStorageView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
 
     override func bindState(reactor: LikeStorageReactor) {
@@ -199,6 +199,14 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        likeStorageView.tableView.rx.itemSelected
+            .withLatestFrom(reactor.state.map(\.dataSource)) { ($0, $1) }
+            .map { $0.1[$0.0.section].items[$0.0.row].songID }
+            .bind(with: self, onNext: { owner, songID in
+                owner.songDetailPresenter.present(id: songID)
+            })
+            .disposed(by: disposeBag)
     }
 }
 
@@ -258,8 +266,6 @@ extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
             self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
             self.reactor?.action.onNext(.playDidTap(song: song))
-        case let .thumbnailTapped(song):
-            songDetailPresenter.present(id: song.songID)
         }
     }
 }
