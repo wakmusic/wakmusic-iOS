@@ -14,7 +14,6 @@ public protocol LikeStorageTableViewCellDelegate: AnyObject {
 public enum LikeStorageTableViewCellDelegateConstant {
     case cellTapped(indexPath: IndexPath)
     case playTapped(song: FavoriteSongEntity)
-    case thumbnailTapped(song: FavoriteSongEntity)
 }
 
 class LikeStorageTableViewCell: UITableViewCell {
@@ -152,18 +151,10 @@ private extension LikeStorageTableViewCell {
     func setAction() {
         self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
-
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(albumImageDidTapAction))
-        self.albumImageView.addGestureRecognizer(tapGestureRecognizer)
     }
 }
 
 private extension LikeStorageTableViewCell {
-    @objc func albumImageDidTapAction() {
-        guard let model else { return }
-        delegate?.buttonTapped(type: .thumbnailTapped(song: model))
-    }
-
     @objc func playButtonAction() {
         guard let model else { return }
         delegate?.buttonTapped(type: .playTapped(song: model))
