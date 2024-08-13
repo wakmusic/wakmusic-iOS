@@ -13,7 +13,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case itemDidTap(Int)
         case editButtonDidTap
         case privateButtonDidTap
-        case completeButtonDidTap
+        case completionButtonDidTap
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
@@ -35,7 +35,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateImageData(PlaylistImageKind?)
-        case updateComplectionButtonVisible(Bool)
+        case updateCompletionButtonVisible(Bool)
         case updateIsSecondaryLoading(Bool)
         case updateShowEditSheet(Bool)
         case showToast(String)
@@ -52,7 +52,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var imageData: PlaylistImageKind?
         var showEditSheet: Bool
-        var complectionButtonVisible: Bool
+        var completionButtonVisible: Bool
         var isSecondaryLoading: Bool
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
@@ -106,7 +106,7 @@ final class MyPlaylistDetailReactor: Reactor {
             isLoading: true,
             selectedCount: 0,
             showEditSheet: false,
-            complectionButtonVisible: false,
+             completionButtonVisible: false,
             isSecondaryLoading: false,
             notiName: nil
         )
@@ -123,7 +123,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case .privateButtonDidTap:
             return updatePrivate()
 
-        case .forceSave, .completeButtonDidTap:
+        case .forceSave, .completionButtonDidTap:
             return endEditingWithSave()
 
         case .forceEndEditing:
@@ -191,8 +191,8 @@ final class MyPlaylistDetailReactor: Reactor {
             newState.notiName = notiName
         case let .updateShowEditSheet(flag):
             newState.showEditSheet = flag
-        case let .updateComplectionButtonVisible(flag):
-            newState.complectionButtonVisible = flag
+        case let .updateCompletionButtonVisible(flag):
+            newState.completionButtonVisible = flag
         case let .updateIsSecondaryLoading(flag):
             newState.isSecondaryLoading = flag
         }
@@ -507,7 +507,7 @@ private extension MyPlaylistDetailReactor {
     }
 
     func updateComplectionButtonVisible(flag: Bool) -> Observable<Mutation> {
-        return .just(.updateComplectionButtonVisible(flag))
+        return .just(.updateCompletionButtonVisible(flag))
     }
 
     func updateIsSecondaryLoading(flag: Bool) -> Observable<Mutation> {
