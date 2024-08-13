@@ -274,9 +274,11 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let playbuttonGroupView = PlayButtonGroupView()
-        playbuttonGroupView.delegate = self
-
+        
+        let view = SingleActionButtonView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 78))
+        view.delegate = self
+        view.setTitleAndImage(text: "전체재생", image: DesignSystemAsset.Chart.allPlay.image)
+        
         guard let reactor = reactor else {
             return nil
         }
@@ -284,7 +286,7 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
         if reactor.currentState.dataSource.isEmpty {
             return nil
         } else {
-            return playbuttonGroupView
+            return view
         }
     }
 
@@ -305,35 +307,25 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 }
 
+extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
+    func tappedButtonAction() {
+        #warning("추후 링크로 리다이렉트")
+        
+        // PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+        
+//        LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.
+//        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
+//        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+    }
+}
+
 extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
         songDetailPresenter.present(id: key)
     }
 }
 
-/// 전체재생 , 랜덤 재생 델리게이트
-extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
-    func play(_ event: PlayEvent) {
-        guard let reactor = reactor else {
-            return
-        }
 
-        let currentState = reactor.currentState
-        var songs = currentState.dataSource
-
-        switch event {
-        case .allPlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
-
-        case .shufflePlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
-            songs.shuffle()
-        }
-
-        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
-    }
-}
 
 /// 송카트 델리게이트
 extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
@@ -344,6 +336,8 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
 
         let currentState = reactor.currentState
         let songs = currentState.dataSource.filter { $0.isSelected }
+        let limit = 50
+
 
         switch type {
         case let .allSelect(flag: flag):
@@ -353,7 +347,16 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
-
+            
+            guard songs.count <= limit else {
+                
+                showToast(
+                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
+                )
+                return
+            }
+        
             if PreferenceManager.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)
                 return
@@ -365,6 +368,15 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
+            
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
+                )
+                return
+            }
+            
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
             showToast(
@@ -373,6 +385,15 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             )
 
         case .play:
+            
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
+                )
+                return
+            }
+            
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)

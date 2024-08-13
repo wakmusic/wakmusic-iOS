@@ -340,7 +340,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-                    options: [.tabBar]
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
@@ -371,8 +371,8 @@ extension SongSearchResultViewController: SongCartViewDelegate {
 
             guard songs.count <= limit else {
                 showToast(
-                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-                    options: [.tabBar]
+                    text: LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
@@ -388,7 +388,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
-                    options: [.tabBar]
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
