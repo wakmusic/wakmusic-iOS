@@ -163,12 +163,14 @@ private extension MusicDetailReactor {
             .map { index in
                 fetchSongUseCase.execute(id: index)
                     .map { $0.toModel() }
+                    .catchAndReturn(SongModel.notFoundModel())
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
 
         let songMutationObservable = fetchSongUseCase.execute(id: selectedSongID)
             .map { $0.toModel() }
+            .catchAndReturn(SongModel.notFoundModel())
             .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0) }
             .asObservable()
 
@@ -200,7 +202,7 @@ private extension MusicDetailReactor {
     }
 
     func playButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         if let song = currentState.selectedSong {
             let log = Log.clickPlaylistButton(
                 id: song.videoID
@@ -229,14 +231,14 @@ private extension MusicDetailReactor {
     }
 
     func singingRoomButtonDiTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickSingingRoomButton(id: song.videoID)
         LogManager.analytics(log)
         return .empty()
     }
 
     func lyricsButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickLyricsButton(id: song.videoID)
         LogManager.analytics(log)
 
@@ -249,7 +251,7 @@ private extension MusicDetailReactor {
     }
 
     func creditButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickCreditButton(id: song.videoID)
         LogManager.analytics(log)
         return navigateMutation(navigate: .credit(id: song.videoID))
@@ -267,7 +269,7 @@ private extension MusicDetailReactor {
             )
         }
 
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let isLike = currentState.selectedSong?.isLiked ?? false
         let log = Log.clickLikeMusicButton(
             id: song.videoID,
@@ -311,7 +313,7 @@ private extension MusicDetailReactor {
                 )
             )
         }
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickMusicPickButton(id: song.videoID)
         LogManager.analytics(log)
         return navigateMutation(navigate: .musicPick(id: song.videoID))
@@ -354,6 +356,7 @@ private extension MusicDetailReactor {
             .map { index in
                 fetchSongUseCase.execute(id: index)
                     .map { $0.toModel() }
+                    .catchAndReturn(SongModel.notFoundModel())
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
@@ -372,11 +375,27 @@ private extension MusicDetailReactor {
 
         let currentSongMutationObservable = fetchSongUseCase.execute(id: songID)
             .map { $0.toModel() }
+            .catchAndReturn(SongModel.notFoundModel())
             .map { Mutation.updateSongDictionary(key: songID, value: $0) }
             .asObservable()
 
         return Observable.merge(
             [currentSongMutationObservable] + prefetchingSongMutationObservable
+        )
+    }
+}
+
+private extension SongModel {
+    static func notFoundModel() -> SongModel {
+        .init(
+            videoID: "",
+            title: "해당 곡을 찾을 수 없습니다",
+            artistString: "정보를 가져올 수 없습니다",
+            date: "",
+            views: 0,
+            likes: 0,
+            isLiked: false,
+            karaokeNumber: .init(tj: nil, ky: nil)
         )
     }
 }
