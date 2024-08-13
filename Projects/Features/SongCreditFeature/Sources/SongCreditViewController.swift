@@ -203,10 +203,12 @@ private extension SongCreditViewController {
     func navigateCreditDetail(worker: CreditModel.CreditWorker) {
         switch worker.creditType {
         case .default:
+            guard !worker.name.isEmpty && !worker.name.isWhiteSpace else { return }
             let viewController = creditSongListFactory.makeViewController(workerName: worker.name)
             self.navigationController?.pushViewController(viewController, animated: true)
 
         case let .artist(artistID):
+            guard !artistID.isEmpty && !artistID.isWhiteSpace else { return }
             let viewController = artistDetailFactory.makeView(artistID: artistID)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
