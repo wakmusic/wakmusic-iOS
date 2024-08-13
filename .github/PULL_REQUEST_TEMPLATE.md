@@ -4,6 +4,8 @@
 >
 > 퍼블리싱의 경우 스크린샷/동영상도 추가해주면 좋아요!
 
+<!-- resolved issue 넘버 표기 방식 변경 시 '.github/actions/Auto_close_associate_issue/main.js' 또한 변경 필요 -->
+
 Resolves: #{이슈번호}
 
 ## 📃 작업내용
