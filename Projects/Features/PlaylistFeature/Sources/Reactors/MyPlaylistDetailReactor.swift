@@ -260,7 +260,7 @@ private extension MyPlaylistDetailReactor {
             case let .default(imageName):
                 mutations.append(
                     uploadDefaultPlaylistImageUseCase.execute(key: self.key, model: imageName)
-                        .andThen(.empty())
+                        .andThen(postNotification(notiName: .shouldRefreshPlaylist)) // 플리 이미지 갱신
                         .catch { error in
                             let wmErorr = error.asWMError
                             return Observable.just(
