@@ -263,7 +263,10 @@ private extension MyPlaylistDetailReactor {
             return $0.updateIsSelected(isSelected: false)
         }
 
-        var mutations: [Observable<Mutation>] = [updateComplectionButtonVisible(flag: false) , updateIsSecondaryLoading(flag: true)]
+        var mutations: [Observable<Mutation>] = [
+            updateComplectionButtonVisible(flag: false),
+            updateIsSecondaryLoading(flag: true)
+        ]
 
         if let imageData = state.imageData {
             switch imageData {
@@ -502,9 +505,11 @@ private extension MyPlaylistDetailReactor {
     func updateShowEditSheet(flag: Bool) -> Observable<Mutation> {
         return .just(.updateShowEditSheet(flag))
     }
+
     func updateComplectionButtonVisible(flag: Bool) -> Observable<Mutation> {
         return .just(.updateComplectionButtonVisible(flag))
     }
+
     func updateIsSecondaryLoading(flag: Bool) -> Observable<Mutation> {
         return .just(.updateIsSecondaryLoading(flag))
     }
