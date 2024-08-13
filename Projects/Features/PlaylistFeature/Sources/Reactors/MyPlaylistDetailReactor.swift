@@ -106,7 +106,7 @@ final class MyPlaylistDetailReactor: Reactor {
             isLoading: true,
             selectedCount: 0,
             showEditSheet: false,
-             completionButtonVisible: false,
+            completionButtonVisible: false,
             isSecondaryLoading: false,
             notiName: nil
         )
