@@ -53,7 +53,7 @@ final class MyPlaylistDetailReactor: Reactor {
         var imageData: PlaylistImageKind?
         var showEditSheet: Bool
         var completionButtonVisible: Bool
-        var isSecondaryLoading: Bool
+        var isSaveCompletionLoading: Bool
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
         @Pulse var notiName: Notification.Name?
@@ -107,7 +107,7 @@ final class MyPlaylistDetailReactor: Reactor {
             selectedCount: 0,
             showEditSheet: false,
             completionButtonVisible: false,
-            isSecondaryLoading: false,
+            isSaveCompletionLoading: false,
             notiName: nil
         )
     }
@@ -194,7 +194,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case let .updateCompletionButtonVisible(flag):
             newState.completionButtonVisible = flag
         case let .updateIsSecondaryLoading(flag):
-            newState.isSecondaryLoading = flag
+            newState.isSaveCompletionLoading = flag
         }
 
         return newState

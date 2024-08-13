@@ -55,7 +55,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
     }
 
-    private var secondaryIndicator = NVActivityIndicatorView(frame: .zero).then {
+    private var saveCompletionIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
         $0.type = .circleStrokeSpin
     }
@@ -126,9 +126,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     override func addView() {
         super.addView()
-        self.view.addSubviews(wmNavigationbarView, tableView, secondaryIndicator)
+        self.view.addSubviews(wmNavigationbarView, tableView, saveCompletionIndicator)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton, secondaryIndicator])
+        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton, saveCompletionIndicator])
     }
 
     override func setLayout() {
@@ -151,7 +151,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.bottom.equalToSuperview().offset(-5)
         }
 
-        secondaryIndicator.snp.makeConstraints {
+        saveCompletionIndicator.snp.makeConstraints {
             $0.size.equalTo(15)
         }
     }
@@ -364,14 +364,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.isSecondaryLoading)
+        sharedState.map(\.isSaveCompletionLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
 
                 if isLoading {
-                    owner.secondaryIndicator.startAnimating()
+                    owner.saveCompletionIndicator.startAnimating()
                 } else {
-                    owner.secondaryIndicator.stopAnimating()
+                    owner.saveCompletionIndicator.stopAnimating()
                 }
             }
             .disposed(by: disposeBag)
