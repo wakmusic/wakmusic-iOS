@@ -22,9 +22,9 @@ public struct SongCreditsEntity {
         names: [String]
     ) {
         self.type = type
-        self.names = names
-            .filter { !$0.isEmpty }
-            .map { Credit(name: $0, isArtist: false, artistID: nil) }
+        self.names = names.map {
+            Credit(name: $0, isArtist: false, artistID: nil)
+        }
     }
 
     public let type: String
