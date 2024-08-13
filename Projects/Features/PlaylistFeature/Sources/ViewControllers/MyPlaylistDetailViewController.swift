@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import Localization
 import LogManager
+import NVActivityIndicatorView
 import PhotosUI
 import PlaylistFeatureInterface
 import ReactorKit
@@ -11,7 +12,6 @@ import SongsDomainInterface
 import Then
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
     PlaylistEditSheetViewType, SongCartViewType {
@@ -54,12 +54,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     private var moreButton: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
     }
-    
+
     private var secondaryIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
         $0.type = .circleStrokeSpin
     }
-    
 
     private var headerView: MyPlaylistHeaderView = MyPlaylistHeaderView(frame: .init(
         x: .zero,
@@ -129,9 +128,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView, secondaryIndicator)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton, completeButton,secondaryIndicator])
-        
-
+        wmNavigationbarView.setRightViews([lockButton, moreButton, completeButton, secondaryIndicator])
     }
 
     override func setLayout() {
@@ -153,7 +150,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.height.equalTo(24)
             $0.bottom.equalToSuperview().offset(-5)
         }
-        
+
         secondaryIndicator.snp.makeConstraints {
             $0.size.equalTo(15)
         }
@@ -367,23 +364,22 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 }
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.isSecondaryLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
-                
+
                 if isLoading {
                     owner.secondaryIndicator.startAnimating()
                 } else {
                     owner.secondaryIndicator.stopAnimating()
                 }
-                
             }
             .disposed(by: disposeBag)
-        
+
         sharedState.map(\.complectionButtonVisible)
             .distinctUntilChanged()
-            .map{ !$0 }
+            .map { !$0 }
             .bind(to: completeButton.rx.isHidden)
             .disposed(by: disposeBag)
 
