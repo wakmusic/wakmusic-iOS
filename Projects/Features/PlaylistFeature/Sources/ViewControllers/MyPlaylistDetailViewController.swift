@@ -201,12 +201,14 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         moreButton.rx
             .tap
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.moreButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         completeButton.rx
             .tap
+            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.completeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
