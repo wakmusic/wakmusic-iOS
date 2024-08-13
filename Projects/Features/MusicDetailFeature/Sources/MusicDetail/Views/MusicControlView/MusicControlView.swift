@@ -36,7 +36,7 @@ final class MusicControlView: UIView {
     private let titleStackView = UIStackView().then {
         $0.alignment = .center
         $0.axis = .vertical
-        $0.spacing = 0
+        $0.spacing = 8
     }
 
     fileprivate let prevMusicButton = UIButton().then {
