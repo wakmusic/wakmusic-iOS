@@ -53,6 +53,10 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         $0.clipsToBounds = true
     }
 
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .light)).then {
+        $0.alpha = 0
+    }
+
     private var refreshControl = UIRefreshControl()
     private var chartFactory: ChartFactory!
     private var playlistDetailFactory: PlaylistDetailFactory!
@@ -279,6 +283,12 @@ extension HomeViewController {
                 $0.top.bottom.equalToSuperview()
             }
         }
+
+        view.addSubviews(translucentView)
+        translucentView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
     }
 
     private func configureUI() {
@@ -352,6 +362,7 @@ extension HomeViewController: UIScrollViewDelegate {
         let standard: CGFloat = offsetY / topCircleImageView.frame.height
         blurImageView.alpha = 1.0 - standard
         glassmorphismView.alpha = min(1.0, standard + 0.8)
+        translucentView.alpha = min(max(offsetY / translucentView.frame.height, 0), 1)
     }
 }
 
