@@ -75,7 +75,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
     }
 
-    private lazy var completeButton: RectangleButton = RectangleButton().then {
+    private lazy var completionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
         $0.setTitle("완료", for: .normal)
@@ -128,7 +128,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView, secondaryIndicator)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton, completeButton, secondaryIndicator])
+        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton, secondaryIndicator])
     }
 
     override func setLayout() {
@@ -145,7 +145,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.leading.trailing.bottom.equalToSuperview()
         }
 
-        completeButton.snp.makeConstraints {
+        completionButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
             $0.bottom.equalToSuperview().offset(-5)
@@ -216,10 +216,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        completeButton.rx
+        completionButton.rx
             .tap
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
-            .map { Reactor.Action.completeButtonDidTap }
+            .map { Reactor.Action.completionButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
@@ -308,7 +308,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .bind(with: self) { owner, isEditing in
                 owner.lockButton.isHidden = isEditing
                 owner.moreButton.isHidden = isEditing
-                owner.completeButton.isHidden = !isEditing
                 owner.tableView.isEditing = isEditing
                 owner.headerView.updateEditState(isEditing)
                 owner.navigationController?.interactivePopGestureRecognizer?.delegate = isEditing ? owner : nil
@@ -377,10 +376,10 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             }
             .disposed(by: disposeBag)
 
-        sharedState.map(\.complectionButtonVisible)
+        sharedState.map(\.completionButtonVisible)
             .distinctUntilChanged()
             .map { !$0 }
-            .bind(to: completeButton.rx.isHidden)
+            .bind(to: completionButton.rx.isHidden)
             .disposed(by: disposeBag)
 
         sharedState.map(\.selectedCount)
