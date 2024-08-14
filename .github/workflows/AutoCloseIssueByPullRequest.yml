@@ -1,11 +1,9 @@
 name: Auto close issue when PR is merged
 
 on:
-  pull_request_target:
+  pull_request:
     branches-ignore: ["develop"]
     types: [closed]
-    paths:
-      - "**/*.swift"
 
 jobs:
   close-issue:
