@@ -16,7 +16,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
         let creditSongListTabFactory = FakeCreditSongListTabFactory()
-        let reactor = CreditSongListReactor(workerName: "CLTH")
+        let reactor = CreditSongListReactor(
+            workerName: "CLTH",
+            fetchCreditProfileImageURLUseCase: FetchCreditProfileImageURLUseCaseSpy()
+        )
         let viewController = CreditSongListViewController(
             reactor: reactor,
             creditSongListTabFactory: creditSongListTabFactory

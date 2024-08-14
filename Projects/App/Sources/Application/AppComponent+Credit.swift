@@ -24,6 +24,12 @@ public extension AppComponent {
         }
     }
 
+    var fetchCreditProfileImageURLUseCase: any FetchCreditProfileImageURLUseCase {
+        shared {
+            FetchCreditProfileImageURLUseCaseImpl(creditRepository: creditRepository)
+        }
+    }
+
     var songCreditFactory: any SongCreditFactory {
         SongCreditComponent(parent: self)
     }

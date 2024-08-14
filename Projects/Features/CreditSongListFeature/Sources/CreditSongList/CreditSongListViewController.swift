@@ -99,6 +99,11 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
     override func configureNavigation() {}
 
     override func bindAction(reactor: CreditSongListReactor) {
+        self.rx.methodInvoked(#selector(viewDidLoad))
+            .map { _ in Reactor.Action.viewDidLoad }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         dismissButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.navigationController?.popViewController(animated: true)
@@ -112,6 +117,12 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
         sharedState.map(\.workerName)
             .bind(with: self) { owner, name in
                 owner.creditProfileView.updateProfile(name: name)
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.profileImageURL)
+            .bind(with: creditProfileView) { view, url in
+                view.updateProfileImageURL(url: url)
             }
             .disposed(by: disposeBag)
 

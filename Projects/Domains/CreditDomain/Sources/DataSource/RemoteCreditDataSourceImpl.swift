@@ -15,4 +15,10 @@ public final class RemoteCreditDataSourceImpl: BaseRemoteDataSource<CreditAPI>, 
             .map([FetchCreditSongListResponseDTO].self)
             .map { $0.toDomain() }
     }
+
+    public func fetchCreditProfileImageURL(name: String) -> Single<String> {
+        request(.fetchProfileImageURL(name: name))
+            .map(FetchCreditProfileImageURLResponseDTO.self)
+            .map(\.profileURL)
+    }
 }
