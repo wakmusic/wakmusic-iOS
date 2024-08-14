@@ -25,6 +25,9 @@ public final class ArtistViewController:
         description: LocalizationStrings.unknownErrorWarning,
         retryButtonTitle: LocalizationStrings.titleRetry
     )
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .light)).then {
+        $0.alpha = 0
+    }
 
     var artistDetailFactory: ArtistDetailFactory!
     public var disposeBag: DisposeBag = DisposeBag()
@@ -34,6 +37,7 @@ public final class ArtistViewController:
         addSubviews()
         setLayout()
         configureUI()
+        collectionView.delegate = self
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -121,7 +125,7 @@ public final class ArtistViewController:
 
 private extension ArtistViewController {
     func addSubviews() {
-        view.addSubview(retryWarningView)
+        view.addSubviews(retryWarningView, translucentView)
     }
 
     func setLayout() {
@@ -129,6 +133,11 @@ private extension ArtistViewController {
         retryWarningView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(topOffset + STATUS_BAR_HEGHIT())
+        }
+
+        translucentView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
 
@@ -152,6 +161,13 @@ private extension ArtistViewController {
 
         retryWarningView.isHidden = true
         retryWarningView.delegate = self
+    }
+}
+
+extension ArtistViewController: UICollectionViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
+        translucentView.alpha = min(max(offsetY / translucentView.frame.height, 0), 1)
     }
 }
 
