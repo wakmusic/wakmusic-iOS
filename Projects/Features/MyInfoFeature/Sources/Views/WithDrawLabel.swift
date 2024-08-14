@@ -1,7 +1,7 @@
 import DesignSystem
 import RxCocoa
-import RxSwift
 import RxGesture
+import RxSwift
 import UIKit
 
 private protocol WithDrawLabelActionProtocol {
@@ -54,15 +54,15 @@ final class WithDrawLabel: UILabel {
 
     private func isTargetTapped(at point: CGPoint) -> Bool {
         guard let attributedText = attributedText else { return false }
-        
+
         let textStorage = NSTextStorage(attributedString: attributedText)
         let layoutManager = NSLayoutManager()
         textStorage.addLayoutManager(layoutManager)
-        
+
         let textContainer = NSTextContainer(size: bounds.size)
         textContainer.lineFragmentPadding = 0
         layoutManager.addTextContainer(textContainer)
-        
+
         let index = layoutManager.characterIndex(
             for: point,
             in: textContainer,
