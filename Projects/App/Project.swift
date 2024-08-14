@@ -59,7 +59,7 @@ let targets: [Target] = [
                 .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
             ]
         ),
-        environmentVariables: ["NETWORK_LOG_LEVEL" : "short"]
+        environmentVariables: ["NETWORK_LOG_LEVEL": "short"]
     ),
     .target(
         name: "\(env.name)Tests",
