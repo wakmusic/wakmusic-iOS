@@ -3,7 +3,7 @@ import Moya
 import OSLog
 
 #if DEBUG
-    fileprivate enum NetworkLogLevel: String {
+    private enum NetworkLogLevel: String {
         case short
         case detail
     }
