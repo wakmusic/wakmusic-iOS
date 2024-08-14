@@ -15,6 +15,7 @@ public protocol MusicDetailDependency: Dependency {
     var songCreditFactory: any SongCreditFactory { get }
     var signInFactory: any SignInFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
+    var karaokeFactory: any KaraokeFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
     var addLikeSongUseCase: any AddLikeSongUseCase { get }
@@ -38,6 +39,7 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
             signInFactory: dependency.signInFactory,
             containSongsFactory: dependency.containSongsFactory,
             textPopupFactory: dependency.textPopUpFactory,
+            karaokeFactory: dependency.karaokeFactory,
             playlistPresenterGlobalState: dependency.playlistPresenterGlobalState
         )
 

@@ -43,6 +43,7 @@ final class MusicDetailReactor: Reactor {
         case dismiss
         case textPopup(text: String, completion: () -> Void)
         case signin
+        case karaoke(ky: Int?, tj: Int?)
     }
 
     struct State {
@@ -234,7 +235,7 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickSingingRoomButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+        return navigateMutation(navigate: .karaoke(ky: song.karaokeNumber.ky, tj: song.karaokeNumber.tj))
     }
 
     func lyricsButtonDidTap() -> Observable<Mutation> {
