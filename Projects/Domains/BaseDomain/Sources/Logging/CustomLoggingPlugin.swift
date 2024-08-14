@@ -91,7 +91,7 @@ import OSLog
 
     extension CustomLoggingPlugin {
         /// Environment Variables 에서 로그 레벨을 가져오는 메소드
-        /// Environment Variables 에 key : NETWORK_LOG_LEVEL, value : shrot  또는 detail
+        /// Scheme의 Environment Variables 에 key : NETWORK_LOG_LEVEL, value : short 또는 detail
         private static func getLogLevelFromArguments() -> NetworkLogLevel? {
             guard let logLevelValue = ProcessInfo.processInfo.environment["NETWORK_LOG_LEVEL"] else { return nil }
             guard let networkLogLevel = NetworkLogLevel(rawValue: logLevelValue) else { return nil }
