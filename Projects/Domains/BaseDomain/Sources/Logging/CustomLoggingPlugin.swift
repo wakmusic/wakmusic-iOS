@@ -5,7 +5,7 @@ import OSLog
 #if DEBUG
     fileprivate enum NetworkLogLevel: String {
         case short
-        case detailed
+        case detail
     }
 
     public final class CustomLoggingPlugin: PluginType {
@@ -13,7 +13,7 @@ import OSLog
         private let logLevel: NetworkLogLevel
         
         public init() {
-            self.logLevel = CustomLoggingPlugin.getLogLevelFromArguments() ?? .detailed
+            self.logLevel = CustomLoggingPlugin.getLogLevelFromArguments() ?? .detail
         }
         
         public func willSend(_ request: RequestType, target: TargetType) {
@@ -37,7 +37,7 @@ import OSLog
             case .short:
                 let log = "[🛜 Request] [\(method)] [\(target)] \(url)"
                 logger.log(level: .debug, "\(log)")
-            case .detailed:
+            case .detail:
                 logger.log(level: .debug, "\(log)")
             }
         }
@@ -70,7 +70,7 @@ import OSLog
             case .short:
                 let log = "[🛜 Response] [\(statusCode)] [\(target)] \(url)"
                 logger.log(level: .debug, "\(log)")
-            case .detailed:
+            case .detail:
                 logger.log(level: .debug, "\(log)")
             }
             
@@ -91,15 +91,12 @@ import OSLog
     }
 
     extension CustomLoggingPlugin {
-        /// Scheme Arguments에서 로그 레벨을 가져오는 함수
-        /// Arguments Passed On Launch 에 "-networkLogLevel detailed" 또는 "-networkLogLevel short" 입력
+        /// Environment Variables 에서 로그 레벨을 가져오는 함수
+        /// Environment Variables 에 key : NETWORK_LOG_LEVEL, value : shrot  또는 detail
         private static func getLogLevelFromArguments() -> NetworkLogLevel? {
-            let arguments = ProcessInfo.processInfo.arguments
-            if let logLevelIndex = arguments.firstIndex(of: "-networkLogLevel"), logLevelIndex + 1 < arguments.count {
-                let logLevelValue = arguments[logLevelIndex + 1]
-                return NetworkLogLevel(rawValue: logLevelValue)
-            }
-            return nil
+            guard let logLevelValue = ProcessInfo.processInfo.environment["NETWORK_LOG_LEVEL"] else { return nil }
+            guard let networkLogLevel = NetworkLogLevel(rawValue: logLevelValue) else { return nil }
+            return networkLogLevel
         }
     }
 
