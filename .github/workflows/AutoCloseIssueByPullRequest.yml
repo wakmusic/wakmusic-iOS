@@ -4,8 +4,6 @@ on:
   pull_request:
     branches-ignore: ["develop"]
     types: [closed]
-    paths:
-      - "**/*.swift"
 
 jobs:
   close-issue:
