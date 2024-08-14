@@ -132,30 +132,23 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$withDrawButtonDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                guard let secondConfirmVC = owner.textPopUpFactory.makeView(
-                    text: "정말 탈퇴하시겠습니까?",
-                    cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
-                    completion: {
-                        owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
+                let makeSecondConfirmVC: () -> UIViewController = {
+                    owner.textPopUpFactory.makeView(
+                        text: "정말 탈퇴하시겠습니까?",
+                        cancelButtonIsHidden: false,
+                        completion: {
+                            owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
+                        }
+                    )
                 }
-                guard let firstConfirmVC = owner.textPopUpFactory.makeView(
+                let firstConfirmVC = owner.textPopUpFactory.makeView(
                     text: "회원탈퇴 신청을 하시겠습니까?",
                     cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
                     completion: {
+                        let secondConfirmVC = makeSecondConfirmVC()
                         owner.showBottomSheet(content: secondConfirmVC)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
-                }
+                    }
+                )
                 owner.showBottomSheet(content: firstConfirmVC)
             })
             .disposed(by: disposeBag)
