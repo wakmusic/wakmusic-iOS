@@ -93,11 +93,11 @@ import OSLog
     extension CustomLoggingPlugin {
         /// Scheme Arguments에서 로그 레벨을 가져오는 함수
         /// Arguments Passed On Launch 에 "-networkLogLevel detailed" 또는 "-networkLogLevel short" 입력
-        private static func getLogLevelFromArguments() -> LogLevel? {
+        private static func getLogLevelFromArguments() -> NetworkLogLevel? {
             let arguments = ProcessInfo.processInfo.arguments
             if let logLevelIndex = arguments.firstIndex(of: "-networkLogLevel"), logLevelIndex + 1 < arguments.count {
                 let logLevelValue = arguments[logLevelIndex + 1]
-                return LogLevel(rawValue: logLevelValue)
+                return NetworkLogLevel(rawValue: logLevelValue)
             }
             return nil
         }
