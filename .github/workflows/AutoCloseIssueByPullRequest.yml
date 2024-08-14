@@ -1,16 +1,10 @@
 name: Auto close issue when PR is merged
 
 on:
-<<<<<<< Updated upstream
-  pull_request:
-    branches-ignore: ["develop"]
-    types: [closed]
-=======
   pull_request_target:
     types: [closed]
     branches:
       - "!develop"
->>>>>>> Stashed changes
 
 jobs:
   close-issue:
