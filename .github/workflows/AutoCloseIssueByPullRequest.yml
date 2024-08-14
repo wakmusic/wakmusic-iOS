@@ -1,9 +1,10 @@
 name: Auto close issue when PR is merged
 
 on:
-  pull_request:
-    branches-ignore: ["develop"]
+  pull_request_target:
     types: [closed]
+    branches:
+      - "!develop"
 
 jobs:
   close-issue:
