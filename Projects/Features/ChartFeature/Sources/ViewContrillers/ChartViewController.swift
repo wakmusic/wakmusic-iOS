@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import LogManager
 import Pageboy
 import Tabman
 import UIKit
@@ -22,11 +23,35 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         return viewControllers
     }()
 
-    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+    deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    }
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .chart)
+        LogManager.analytics(log)
+    }
+
+    public override func pageboyViewController(
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        let chartType = ChartAnalyticsLog.ChartType.allCases[safe: index] ?? .hourly
+        let log = ChartAnalyticsLog.selectChartType(type: chartType)
+        LogManager.analytics(log)
+
+        super.pageboyViewController(
+            pageboyViewController,
+            didScrollToPageAt: index,
+            direction: direction,
+            animated: animated
+        )
     }
 
     public static func viewController(chartContentComponent: ChartContentComponent) -> ChartViewController {

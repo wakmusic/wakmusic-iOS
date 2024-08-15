@@ -58,6 +58,7 @@ final class SongCreditReactor: Reactor {
             return self.navigate(to: .back)
 
         case let .creditSelected(worker):
+            
             return self.navigate(to: .creditDetail(worker: worker))
         }
     }

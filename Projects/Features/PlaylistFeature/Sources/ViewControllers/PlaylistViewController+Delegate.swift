@@ -1,6 +1,7 @@
 import BaseFeature
 import DesignSystem
 import Localization
+import LogManager
 import UIKit
 import Utility
 
@@ -105,12 +106,18 @@ extension PlaylistViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .all)
+            )
             let songIDs = output.playlists.value
                 .map(\.id)
                 .prefix(50)
             WakmusicYoutubePlayer(ids: Array(songIDs)).play()
 
         case .shufflePlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .random)
+            )
             let songIDs = output.playlists.value
                 .map(\.id)
                 .shuffled()
@@ -122,6 +129,9 @@ extension PlaylistViewController: PlayButtonGroupViewDelegate {
 
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
     func playButtonDidTap(key: String) {
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .single)
+        )
         WakmusicYoutubePlayer(id: key).play()
     }
 

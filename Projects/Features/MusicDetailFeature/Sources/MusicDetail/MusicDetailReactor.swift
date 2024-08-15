@@ -205,9 +205,7 @@ private extension MusicDetailReactor {
     func playButtonDidTap() -> Observable<Mutation> {
         guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         if let song = currentState.selectedSong {
-            let log = Log.clickPlaylistButton(
-                id: song.videoID
-            )
+            let log = CommonAnalyticsLog.clickPlayButton(location: .musicDetail, type: .single)
             LogManager.analytics(log)
         }
         PlayState.shared.append(item: PlaylistItem(id: song.videoID, title: song.title, artist: song.artistString))
