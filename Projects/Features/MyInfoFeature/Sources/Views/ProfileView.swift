@@ -1,6 +1,7 @@
 import DesignSystem
 import Kingfisher
 import RxCocoa
+import RxGesture
 import RxSwift
 import SnapKit
 import Then
@@ -22,6 +23,7 @@ final class ProfileView: UIView {
         $0.contentMode = .scaleAspectFill
         $0.layer.cornerRadius = 92 / 2.0
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = true
     }
 
     private let nameLabel = WMLabel(
@@ -48,10 +50,15 @@ final class ProfileView: UIView {
         $0.numberOfLines = .zero
     }
 
+    fileprivate let didTapProfileImageSubject = PublishSubject<Void>()
+    private let scaleDownTransform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+    private let disposeBag = DisposeBag()
+
     init() {
         super.init(frame: .zero)
         addView()
         setLayout()
+        registerGesture()
     }
 
     @available(*, unavailable)
@@ -77,7 +84,7 @@ final class ProfileView: UIView {
     }
 }
 
-extension ProfileView {
+private extension ProfileView {
     func addView() {
         self.addSubview(imageView)
         self.addSubview(nameLabel)
@@ -102,6 +109,31 @@ extension ProfileView {
             $0.horizontalEdges.equalToSuperview()
             $0.centerX.equalToSuperview()
         }
+    }
+
+    func registerGesture() {
+        imageView.rx.longPressGesture(configuration: { gestureRecognizer, delegate in
+            gestureRecognizer.minimumPressDuration = 0.0
+            delegate.selfFailureRequirementPolicy = .always
+        })
+        .bind(with: self) { owner, gesture in
+            switch gesture.state {
+            case .began:
+                UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
+                    owner.imageView.transform = owner.scaleDownTransform
+                }
+                .startAnimation()
+            case .ended, .cancelled:
+                let animator = UIViewPropertyAnimator(duration: 0.3, dampingRatio: 0.5, animations: {
+                    owner.imageView.transform = .identity
+                })
+                animator.startAnimation()
+                owner.didTapProfileImageSubject.onNext(())
+            default:
+                break
+            }
+        }
+        .disposed(by: disposeBag)
     }
 }
 
@@ -140,9 +172,7 @@ extension ProfileView: ProfileStateProtocol {
 
 extension Reactive: ProfileActionProtocol where Base: ProfileView {
     var profileImageDidTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.imageView.addGestureRecognizer(tapGestureRecognizer)
-        base.imageView.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        return base.didTapProfileImageSubject.asObserver()
+            .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
     }
 }
