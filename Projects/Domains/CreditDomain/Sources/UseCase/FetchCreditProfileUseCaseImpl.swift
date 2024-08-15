@@ -1,7 +1,7 @@
 import CreditDomainInterface
 import RxSwift
 
-public final class FetchCreditProfileImageURLUseCaseImpl: FetchCreditProfileImageURLUseCase {
+public final class FetchCreditProfileUseCaseImpl: FetchCreditProfileUseCase {
     private let creditRepository: any CreditRepository
 
     public init(
@@ -10,7 +10,7 @@ public final class FetchCreditProfileImageURLUseCaseImpl: FetchCreditProfileImag
         self.creditRepository = creditRepository
     }
 
-    public func execute(name: String) -> Single<String> {
-        creditRepository.fetchCreditProfileImageURL(name: name)
+    public func execute(name: String) -> Single<CreditProfileEntity> {
+        creditRepository.fetchCreditProfile(name: name)
     }
 }

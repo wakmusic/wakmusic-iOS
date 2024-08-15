@@ -10,5 +10,5 @@ public protocol CreditRepository {
         limit: Int
     ) -> Single<[SongEntity]>
 
-    func fetchCreditProfileImageURL(name: String) -> Single<String>
+    func fetchCreditProfile(name: String) -> Single<CreditProfileEntity>
 }

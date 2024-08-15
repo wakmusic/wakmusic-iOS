@@ -7,27 +7,28 @@ final class CreditSongListReactor: Reactor {
     }
 
     enum Mutation {
-        case updateProfileImageURL(String?)
+        case updateProfile(CreditProfileEntity)
     }
 
     struct State {
         var workerName: String
-        var profileImageURL: String?
+        var profile: CreditProfileEntity
     }
 
     let initialState: State
     internal let workerName: String
-    private let fetchCreditProfileImageURLUseCase: FetchCreditProfileImageURLUseCase
+    private let fetchCreditProfileUseCase: FetchCreditProfileUseCase
 
     init(
         workerName: String,
-        fetchCreditProfileImageURLUseCase: FetchCreditProfileImageURLUseCase
+        fetchCreditProfileUseCase: FetchCreditProfileUseCase
     ) {
         self.initialState = .init(
-            workerName: workerName
+            workerName: workerName,
+            profile: .init(name: "", imageURL: nil)
         )
         self.workerName = workerName
-        self.fetchCreditProfileImageURLUseCase = fetchCreditProfileImageURLUseCase
+        self.fetchCreditProfileUseCase = fetchCreditProfileUseCase
     }
 
     func mutate(action: Action) -> Observable<Mutation> {
@@ -41,8 +42,8 @@ final class CreditSongListReactor: Reactor {
         var newState = state
 
         switch mutation {
-        case let .updateProfileImageURL(url):
-            newState.profileImageURL = url
+        case let .updateProfile(data):
+            newState.profile = data
         }
 
         return newState
@@ -51,9 +52,9 @@ final class CreditSongListReactor: Reactor {
 
 private extension CreditSongListReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        fetchCreditProfileImageURLUseCase
+        fetchCreditProfileUseCase
             .execute(name: workerName)
-            .map { Mutation.updateProfileImageURL($0) }
+            .map { Mutation.updateProfile($0) }
             .asObservable()
     }
 }

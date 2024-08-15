@@ -1,3 +1,4 @@
+import CreditDomainInterface
 import DesignSystem
 import Kingfisher
 import Then
@@ -5,7 +6,7 @@ import UIKit
 import Utility
 
 protocol CreditProfileViewStateProtocol {
-    func updateProfileImageURL(url: String?)
+    func updateProfile(entity: CreditProfileEntity)
 }
 
 final class CreditProfileView: UIStackView {
@@ -47,15 +48,12 @@ final class CreditProfileView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    func updateProfile(name: String) {
-        creditNameLabel.text = name
-    }
 }
 
 extension CreditProfileView: CreditProfileViewStateProtocol {
-    func updateProfileImageURL(url: String?) {
-        if let url {
+    func updateProfile(entity: CreditProfileEntity) {
+        creditNameLabel.text = entity.name
+        if let url = entity.imageURL {
             creditProfilePlaceholderImageView.isHidden = true
             creditProfileImageViewContainer.kf.setImage(
                 with: URL(string: url)
