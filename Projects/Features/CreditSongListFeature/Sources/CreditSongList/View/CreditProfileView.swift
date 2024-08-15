@@ -1,9 +1,9 @@
+import CreditDomainInterface
 import DesignSystem
 import Kingfisher
 import Then
 import UIKit
 import Utility
-import CreditDomainInterface
 
 protocol CreditProfileViewStateProtocol {
     func updateProfile(entity: CreditProfileEntity)

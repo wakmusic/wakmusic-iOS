@@ -1,5 +1,5 @@
-import Foundation
 import CreditDomainInterface
+import Foundation
 
 struct FetchCreditProfileResponseDTO: Decodable {
     let name: String
@@ -10,6 +10,7 @@ struct FetchCreditProfileResponseDTO: Decodable {
         case imageURL = "profileUrl"
     }
 }
+
 extension FetchCreditProfileResponseDTO {
     func toDomain() -> CreditProfileEntity {
         return CreditProfileEntity(
