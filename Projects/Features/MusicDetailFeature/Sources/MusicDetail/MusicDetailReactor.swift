@@ -12,6 +12,10 @@ import Utility
 
 final class MusicDetailReactor: Reactor {
     private typealias Log = MusicDetailAnalyticsLog
+    private struct LikeRequest {
+        let songID: String
+        let isLiked: Bool
+    }
 
     enum Action {
         case viewDidLoad
@@ -68,6 +72,11 @@ final class MusicDetailReactor: Reactor {
     private let addLikeSongUseCase: any AddLikeSongUseCase
     private let cancelLikeSongUseCase: any CancelLikeSongUseCase
     private var shouldRefreshLikeList = false
+
+    private var pendingLikeRequests: [String: LikeRequest] = [:]
+    private var latestLikeRequests: [String: LikeRequest] = [:]
+    private let likeRequestSubject = PublishSubject<LikeRequest>()
+    private var currentLikeRequestSongID: String?
 
     init(
         songIDs: [String],
@@ -147,7 +156,65 @@ final class MusicDetailReactor: Reactor {
                 owner.navigateMutation(navigate: .signin)
             }
 
-        return Observable.merge(mutation, signInIsRequired)
+        let likeRequestObservable = likeRequestSubject
+            .flatMapLatest { [weak self] request -> Observable<Mutation> in
+                guard let self = self else { return .empty() }
+                return self.handleLikeRequest(request)
+            }
+
+        return Observable.merge(mutation, signInIsRequired, likeRequestObservable)
+    }
+
+    private func handleLikeRequest(_ request: LikeRequest) -> Observable<Mutation> {
+        let useCase: (_ id: String) -> Observable<Void> = request.isLiked
+            ? { [addLikeSongUseCase] id in
+                addLikeSongUseCase.execute(id: id)
+                    .asObservable()
+                    .map { _ in () }
+            }
+            : { [cancelLikeSongUseCase] id in
+                cancelLikeSongUseCase.execute(id: id)
+                    .asObservable()
+                    .map { _ in () }
+            }
+
+        self.latestLikeRequests[request.songID] = request
+        self.pendingLikeRequests.removeValue(forKey: request.songID)
+        return useCase(request.songID)
+            .asObservable()
+            .flatMap { [weak self] _ -> Observable<Mutation> in
+                guard let self = self else { return .empty() }
+
+                if let nextRequest = self.getNextPendingRequest() {
+                    return self.handleLikeRequest(nextRequest)
+                }
+
+                self.currentLikeRequestSongID = nil
+                return .empty()
+            }
+            .catch { [weak self] error in
+                self?.currentLikeRequestSongID = nil
+                LogManager.printError("Like request failed: \(error)")
+                return .empty()
+            }
+    }
+
+    private func getNextPendingRequest() -> LikeRequest? {
+        if let currentSongID = currentLikeRequestSongID,
+           let nextPendingRequest = pendingLikeRequests[currentSongID] {
+            let latestRequest = latestLikeRequests[currentSongID]
+            return if latestRequest == nil {
+                nextPendingRequest
+            } else if nextPendingRequest.isLiked != latestRequest?.isLiked {
+                nextPendingRequest
+            } else {
+                nil
+            }
+        }
+
+        guard let remainRequest = pendingLikeRequests.values.first else { return nil }
+
+        return remainRequest
     }
 }
 
@@ -285,22 +352,17 @@ private extension MusicDetailReactor {
         }
         LogManager.analytics(log)
 
-        shouldRefreshLikeList = true
-        return if newLike {
-            .concat(
-                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
-                addLikeSongUseCase.execute(id: newSong.videoID)
-                    .asObservable()
-                    .flatMap { _ in Observable.empty() }
-            )
-        } else {
-            .concat(
-                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
-                cancelLikeSongUseCase.execute(id: newSong.videoID)
-                    .asObservable()
-                    .flatMap { _ in Observable.empty() }
-            )
+        let request = LikeRequest(songID: song.videoID, isLiked: newLike)
+        pendingLikeRequests[song.videoID] = request
+
+        let currentLikeRequestSongID = currentLikeRequestSongID
+        self.currentLikeRequestSongID = song.videoID
+        if currentLikeRequestSongID == nil {
+            likeRequestSubject.onNext(request)
         }
+
+        shouldRefreshLikeList = true
+        return .just(.updateSongDictionary(key: newSong.videoID, value: newSong))
     }
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
