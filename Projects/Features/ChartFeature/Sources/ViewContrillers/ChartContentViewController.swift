@@ -218,11 +218,17 @@ extension ChartContentViewController: PlayButtonForChartViewDelegate {
         }
 
         if event == .allPlay {
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .all)
+            )
             let viewController = ChartPlayPopupViewController()
             viewController.delegate = self
             showBottomSheet(content: viewController, size: .fixed(192 + SAFEAREA_BOTTOM_HEIGHT()))
 
         } else {
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .random)
+            )
             input.shufflePlayTapped.onNext(())
         }
     }
@@ -230,6 +236,16 @@ extension ChartContentViewController: PlayButtonForChartViewDelegate {
 
 extension ChartContentViewController: ChartPlayPopupViewControllerDelegate {
     public func playTapped(type: HalfPlayType) {
+        switch type {
+        case .front: // 1-50
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .range1to50)
+            )
+        case .back: // 50-100
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .range50to100)
+            )
+        }
         input.halfPlayTapped.onNext(type)
     }
 }
@@ -277,6 +293,9 @@ extension ChartContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .multiple)
+            )
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
 
         case .remove:

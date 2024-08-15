@@ -1,6 +1,7 @@
 import BaseFeature
 import CreditSongListFeatureInterface
 import DesignSystem
+import LogManager
 import RxSwift
 import SnapKit
 import UIKit
@@ -35,6 +36,12 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
             workerName: reactor.workerName
         )
         super.init(reactor: reactor)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .creditSongList)
+        LogManager.analytics(log)
     }
 
     override func viewDidLayoutSubviews() {

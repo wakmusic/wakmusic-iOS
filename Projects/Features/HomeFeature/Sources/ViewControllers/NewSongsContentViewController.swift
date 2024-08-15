@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
@@ -252,6 +253,9 @@ extension NewSongsContentViewController: SingleActionButtonViewDelegate {
                 date: "\($0.date)"
             )
         }
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .recentMusic, type: .all)
+        )
         PlayState.shared.loadAndAppendSongsToPlaylist(songs)
     }
 }
@@ -299,6 +303,9 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .recentMusic, type: .multiple)
+            )
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
 
         case .remove:

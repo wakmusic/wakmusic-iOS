@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NeedleFoundation
 import ReactorKit
 import RxCocoa
@@ -50,6 +51,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .search))
     }
 
     public static func viewController(

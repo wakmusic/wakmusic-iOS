@@ -4,6 +4,7 @@ import Combine
 import DesignSystem
 import Foundation
 import Kingfisher
+import LogManager
 import RxDataSources
 import RxRelay
 import RxSwift
@@ -87,6 +88,12 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .playlist)
+        LogManager.analytics(log)
     }
 
     override public func viewWillDisappear(_ animated: Bool) {

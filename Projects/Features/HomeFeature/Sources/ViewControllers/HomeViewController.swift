@@ -414,6 +414,9 @@ extension HomeViewController: HomeChartCellDelegate {
 
     func playButtonDidTap(model: ChartRankingEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeTop100, id: model.id))
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
+        )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
         WakmusicYoutubePlayer(id: model.id).play()
     }
@@ -427,6 +430,9 @@ extension HomeViewController: HomeNewSongCellDelegate {
 
     func playButtonDidTap(model: NewSongsEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeRecent, id: model.id))
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
+        )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
         WakmusicYoutubePlayer(id: model.id).play()
     }
@@ -434,7 +440,7 @@ extension HomeViewController: HomeNewSongCellDelegate {
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlaylistEntity) {
-        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home, key: model.key))
         let viewController = playlistDetailFactory.makeWmView(key: model.key) // 왁뮤 플리
         self.navigationController?.pushViewController(viewController, animated: true)
     }

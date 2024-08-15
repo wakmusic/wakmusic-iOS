@@ -323,9 +323,15 @@ extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .all)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
 
         case .shufflePlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .random)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
         }
@@ -373,6 +379,9 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             )
 
         case .play:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
+            )
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
