@@ -83,6 +83,13 @@ public final class ArtistViewController:
                 #endif
             }
             .disposed(by: disposeBag)
+
+        collectionView.rx.didScroll
+            .bind(with: self) { owner, _ in
+                let offsetY: CGFloat = owner.collectionView.contentOffset.y + STATUS_BAR_HEGHIT()
+                owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
+            }
+            .disposed(by: disposeBag)
     }
 
     private func bindState(reactor: ArtistReactor) {
