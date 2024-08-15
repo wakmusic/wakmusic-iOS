@@ -30,7 +30,7 @@ public extension SingleChartRankingResponseDTO {
 public extension SingleChartRankingResponseDTO {
     func toDomain(type: ChartDateType) -> ChartEntity {
         return ChartEntity(
-            updatedAt: Date(timeIntervalSince1970: updatedAt).changeDateFormatForChart() + " 업데이트",
+            updatedAt: Date(timeIntervalSince1970: updatedAt / 1000).changeDateFormatForChart() + " 업데이트",
             songs: songs.map {
                 return ChartRankingEntity(
                     id: $0.songID,
