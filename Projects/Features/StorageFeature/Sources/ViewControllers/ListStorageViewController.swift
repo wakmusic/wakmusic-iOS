@@ -113,7 +113,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         reactor.pulse(\.$showDrawFruitPopup)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, message in
+            .bind(with: self, onNext: { owner, _ in
                 let vc = owner.fruitDrawFactory.makeView(delegate: owner)
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
