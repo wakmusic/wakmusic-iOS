@@ -37,7 +37,6 @@ public final class ArtistViewController:
         addSubviews()
         setLayout()
         configureUI()
-        collectionView.delegate = self
     }
 
     override public func viewDidAppear(_ animated: Bool) {
