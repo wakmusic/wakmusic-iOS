@@ -2,15 +2,15 @@ import CreditDomainInterface
 import RxSwift
 import SongsDomainInterface
 
-public final class FetchCreditProfileImageURLUseCaseSpy: FetchCreditProfileUseCase {
+public final class FetchCreditProfileUseCaseSpy: FetchCreditProfileUseCase {
     public var callCount = 0
-    public var handler: (String) -> Single<String> = { _ in fatalError() }
+    public var handler: (String) -> Single<CreditProfileEntity> = { _ in fatalError() }
 
     public init() {}
 
     public func execute(
         name: String
-    ) -> Single<String> {
+    ) -> Single<CreditProfileEntity> {
         callCount += 1
         return handler(name)
     }
