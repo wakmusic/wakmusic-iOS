@@ -30,13 +30,13 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         configureUI()
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let log = CommonAnalyticsLog.viewPage(pageName: .chart)
         LogManager.analytics(log)
     }
 
-    public override func pageboyViewController(
+    override public func pageboyViewController(
         _ pageboyViewController: PageboyViewController,
         didScrollToPageAt index: TabmanViewController.PageIndex,
         direction: PageboyViewController.NavigationDirection,

@@ -8,6 +8,7 @@ enum MainTabAnalyticsLog: AnalyticsLogType {
         case storage
         case mypage
     }
+
     case clickTabbarTab(tab: TabbarTab)
     case clickPlaylistFabButton
 }

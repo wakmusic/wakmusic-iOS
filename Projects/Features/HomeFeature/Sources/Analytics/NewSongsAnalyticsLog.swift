@@ -8,5 +8,6 @@ enum NewSongsAnalyticsLog: AnalyticsLogType {
         case gomem
         case academy
     }
+
     case selectRecentMusicType(type: RecentMusicType)
 }

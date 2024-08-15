@@ -90,7 +90,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         bindActions()
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         let log = CommonAnalyticsLog.viewPage(pageName: .playlist)
         LogManager.analytics(log)

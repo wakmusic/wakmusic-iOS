@@ -3,10 +3,10 @@ import Foundation
 public protocol AnalyticsLogEnumParametable: RawRepresentable, CustomStringConvertible
     where RawValue == String {}
 
-extension AnalyticsLogEnumParametable {
-    public var description: String {
-       self.rawValue
-   }
+public extension AnalyticsLogEnumParametable {
+    var description: String {
+        self.rawValue
+    }
 }
 
 public enum CommonAnalyticsLog: AnalyticsLogType {
