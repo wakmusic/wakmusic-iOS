@@ -3,13 +3,13 @@ import DesignSystem
 import FruitDrawFeatureInterface
 import LogManager
 import Lottie
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SnapKit
 import Then
 import UIKit
 import Utility
-import NVActivityIndicatorView
 
 public final class FruitDrawViewController: UIViewController {
     private let backgroundImageView = UIImageView().then {
