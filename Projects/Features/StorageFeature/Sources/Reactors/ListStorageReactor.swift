@@ -401,8 +401,8 @@ extension ListStorageReactor {
                 .asObservable()
                 .do(onNext: { [weak self] appendingPlaylistItems in
                     PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
-                    let firstItem = appendingPlaylistItems.first!
-                    WakmusicYoutubePlayer(id: firstItem.id).play()
+                    let ids = appendingPlaylistItems.map { $0.id }
+                    WakmusicYoutubePlayer(ids: ids).play()
                     self?.storageCommonService.isEditingState.onNext(false)
                 })
                 .flatMap { songs -> Observable<Mutation> in
