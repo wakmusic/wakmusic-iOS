@@ -24,7 +24,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        $0.bounces = false
+        $0.isHidden = true 
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(false)
@@ -121,34 +121,39 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
                 owner.headerView.updateSortState(type)
             }
             .disposed(by: disposeBag)
-
-        sharedState.map { ($0.isLoading, $0.dataSource) }
-            .bind(with: self) { owner, info in
-
-                let (isLoading, dataSource) = (info.0, info.1)
+        
+        sharedState.map(\.isLoading)
+            .bind(with: self) { owner, isLoading in
 
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
+                    owner.collectionView.isHidden = false
                     owner.indicator.stopAnimating()
-
-                    var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
-
-                    snapshot.appendSections([.list])
-
-                    snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
-
-                    let warningView = WMWarningView(
-                        text: "검색결과가 없습니다."
-                    )
-
-                    if dataSource.isEmpty {
-                        owner.collectionView.setBackgroundView(warningView, 100)
-                    } else {
-                        owner.collectionView.restore()
-                    }
                 }
+            }
+            .disposed(by: disposeBag)
+
+        sharedState.map(\.dataSource)
+            .bind(with: self) { owner, dataSource in
+
+                var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+
+                snapshot.appendSections([.list])
+
+                snapshot.appendItems(dataSource, toSection: .list)
+                owner.dataSource.apply(snapshot, animatingDifferences: false)
+
+                let warningView = WMWarningView(
+                    text: "검색결과가 없습니다."
+                )
+
+                if dataSource.isEmpty {
+                    owner.collectionView.setBackgroundView(warningView, 100)
+                } else {
+                    owner.collectionView.restore()
+                }
+                
             }
             .disposed(by: disposeBag)
     }
