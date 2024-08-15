@@ -2,7 +2,7 @@ import CreditDomainInterface
 import RxSwift
 import SongsDomainInterface
 
-public final class FetchCreditProfileImageURLUseCaseSpy: FetchCreditProfileImageURLUseCase {
+public final class FetchCreditProfileImageURLUseCaseSpy: FetchCreditProfileUseCase {
     public var callCount = 0
     public var handler: (String) -> Single<String> = { _ in fatalError() }
 

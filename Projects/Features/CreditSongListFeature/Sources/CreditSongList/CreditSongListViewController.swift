@@ -114,15 +114,9 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
     override func bindState(reactor: CreditSongListReactor) {
         let sharedState = reactor.state.share()
 
-        sharedState.map(\.workerName)
-            .bind(with: self) { owner, name in
-                owner.creditProfileView.updateProfile(name: name)
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.profileImageURL)
-            .bind(with: creditProfileView) { view, url in
-                view.updateProfileImageURL(url: url)
+        sharedState.map(\.profile)
+            .bind(with: creditProfileView) { view, entity in
+                view.updateProfile(entity: entity)
             }
             .disposed(by: disposeBag)
 
