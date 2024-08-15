@@ -17,7 +17,9 @@ final class FruitDrawButtonView: UIView {
     let backgroundView = UIView().then {
         $0.backgroundColor = .white.withAlphaComponent(0.4)
         $0.layer.borderWidth = 1
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
+        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
+            .withAlphaComponent(0.4)
+            .cgColor
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
