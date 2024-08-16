@@ -1,5 +1,3 @@
 import LogManager
 
-enum SettingAnalyticsLog: AnalyticsLogType {
-    
-}
+enum SettingAnalyticsLog: AnalyticsLogType {}
