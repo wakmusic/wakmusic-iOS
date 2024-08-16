@@ -4,7 +4,7 @@ enum ContainSongsAnalyticsLog: AnalyticsLogType {
     case clickCreatePlaylistButton(location: CreatePlaylistLocation)
 }
 
-enum CreatePlaylistLocation: String, CustomStringConvertible {
+enum CreatePlaylistLocation: String, AnalyticsLogEnumParametable {
     case addMusics = "add-musics"
 
     var description: String {

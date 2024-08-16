@@ -10,7 +10,7 @@ enum StorageAnalyticsLog: AnalyticsLogType {
     case clickMyLikeListMusicButton(id: String)
 }
 
-enum StorageTab: String, CustomStringConvertible {
+enum StorageTab: String, AnalyticsLogEnumParametable {
     case myPlaylist = "my-playlist"
     case myLikeList = "my-like-list"
 
@@ -19,7 +19,7 @@ enum StorageTab: String, CustomStringConvertible {
     }
 }
 
-enum CreatePlaylistLocation: String, CustomStringConvertible {
+enum CreatePlaylistLocation: String, AnalyticsLogEnumParametable {
     case myPlaylist = "my-playlist"
 
     var description: String {
@@ -27,7 +27,7 @@ enum CreatePlaylistLocation: String, CustomStringConvertible {
     }
 }
 
-enum FruitDrawEntryLocation: String, CustomStringConvertible {
+enum FruitDrawEntryLocation: String, AnalyticsLogEnumParametable {
     case myPlaylist = "my-playlist"
 
     var description: String {
@@ -35,7 +35,7 @@ enum FruitDrawEntryLocation: String, CustomStringConvertible {
     }
 }
 
-enum LoginLocation: String, CustomStringConvertible {
+enum LoginLocation: String, AnalyticsLogEnumParametable {
     case myPlaylist = "my-playlist"
     case myLikeList = "my-like-list"
     case addMusics = "add-musics"
