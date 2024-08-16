@@ -413,7 +413,6 @@ extension HomeViewController: HomeChartCellDelegate {
     }
 
     func playButtonDidTap(model: ChartRankingEntity) {
-        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeTop100, id: model.id))
         LogManager.analytics(
             CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
         )
@@ -429,7 +428,6 @@ extension HomeViewController: HomeNewSongCellDelegate {
     }
 
     func playButtonDidTap(model: NewSongsEntity) {
-        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeRecent, id: model.id))
         LogManager.analytics(
             CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
         )

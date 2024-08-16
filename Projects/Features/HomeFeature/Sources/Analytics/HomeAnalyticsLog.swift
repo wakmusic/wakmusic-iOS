@@ -6,12 +6,11 @@ enum HomeAnalyticsLog: AnalyticsLogType {
     case clickRecentMusicsTitleButton
     case clickAllRecentMusicsButton
     case clickMusicItem(location: MusicItemLocation, id: String)
-    case clickMusicItemPlayButton(location: MusicItemLocation, id: String)
 }
 
 enum MusicItemLocation: String, AnalyticsLogEnumParametable {
-    case homeTop100 = "home-top100"
-    case homeRecent = "home-recent"
+    case homeTop100 = "home_top100"
+    case homeRecent = "home_recent"
 
     var description: String {
         self.rawValue
