@@ -5,7 +5,7 @@ import Then
 import UIKit
 import Utility
 
-final class RandomPlayButtonGroupView: UIView {
+final class RandomPlayButtonHeaderView: UIView {
     private let randomPlayButton = RandomPlayButton()
 
     override init(frame: CGRect) {

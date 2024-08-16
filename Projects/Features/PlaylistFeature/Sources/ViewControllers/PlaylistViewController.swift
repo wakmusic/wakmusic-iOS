@@ -206,7 +206,6 @@ private extension PlaylistViewController {
             .bind(with: self, onNext: { [songDetailPresenter] owner, item in
                 let currentSongs = output.playlists.value
                     .map(\.id)
-                    .prefix(50)
 
                 owner.dismiss(animated: true) {
                     songDetailPresenter.present(
