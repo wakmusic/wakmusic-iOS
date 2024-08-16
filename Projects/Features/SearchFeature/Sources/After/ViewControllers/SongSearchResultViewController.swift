@@ -170,8 +170,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map { $0.dataSource }
+            .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
-
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
                 snapshot.appendSections([.song])
