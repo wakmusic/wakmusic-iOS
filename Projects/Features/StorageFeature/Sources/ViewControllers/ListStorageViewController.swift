@@ -56,6 +56,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storagePlaylist))
         listStorageView.resetParticeAnimation()
     }
