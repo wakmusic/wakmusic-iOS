@@ -409,6 +409,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 extension HomeViewController: HomeChartCellDelegate {
     func thumbnailDidTap(model: ChartRankingEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: model.id))
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
         songDetailPresenter.present(id: model.id)
     }
 
@@ -425,6 +426,7 @@ extension HomeViewController: HomeChartCellDelegate {
 extension HomeViewController: HomeNewSongCellDelegate {
     func thumbnailDidTap(model: NewSongsEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent, id: model.id))
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
         songDetailPresenter.present(id: model.id)
     }
 

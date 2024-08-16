@@ -189,6 +189,10 @@ private extension ChartContentViewController {
 
 extension ChartContentViewController: ChartContentTableViewCellDelegate {
     func tappedThumbnail(id: String) {
+        guard let tappedSong = output.dataSource.value
+            .first(where: { $0.id == id })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: id)
     }
 }
