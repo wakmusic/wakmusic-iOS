@@ -2,6 +2,7 @@ import Localization
 import LogManager
 import ReactorKit
 import RxSwift
+import RxCocoa
 import SearchDomainInterface
 import SongsDomainInterface
 
@@ -185,7 +186,9 @@ extension SongSearchResultReactor {
                     Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
                 )
             }
-            .bind(to: subject)
+            .bind(with: subject, onNext: { subject, mutation in
+                subject.onNext(mutation)
+            })
             .disposed(by: requestDisposeBag)
 
         return Observable.just(.updateLoadingState(false))
