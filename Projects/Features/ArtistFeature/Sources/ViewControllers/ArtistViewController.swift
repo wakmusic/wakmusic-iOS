@@ -81,7 +81,7 @@ public final class ArtistViewController:
                 owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
             }
             .disposed(by: disposeBag)
-        
+
         easterEggButton.rx.tap
             .bind(with: self) { owner, _ in
                 owner.showTextInputAlert { id in
