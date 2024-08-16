@@ -21,6 +21,7 @@ public final class ArtistViewController:
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var easterEggButton: UIButton!
     private let retryWarningView = WMRetryWarningView(
         description: LocalizationStrings.unknownErrorWarning,
         retryButtonTitle: LocalizationStrings.titleRetry
@@ -68,22 +69,9 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
-                #warning("🎉:: 디버그용 이스터에그")
-                #if DEBUG
-                    if entity.id == "gosegu" {
-                        owner.showTextInputAlert { id in
-                            owner.postNotification(id: id ?? "")
-                        }
-                    } else {
-                        LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                        let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                        owner.navigationController?.pushViewController(viewController, animated: true)
-                    }
-                #else
-                    LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                    let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                    owner.navigationController?.pushViewController(viewController, animated: true)
-                #endif
+                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
+                owner.navigationController?.pushViewController(viewController, animated: true)
             }
             .disposed(by: disposeBag)
 
@@ -91,6 +79,15 @@ public final class ArtistViewController:
             .bind(with: self) { owner, _ in
                 let offsetY: CGFloat = owner.collectionView.contentOffset.y + STATUS_BAR_HEGHIT()
                 owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
+                owner.easterEggButton.isHidden = owner.collectionView.contentOffset.y > 10
+            }
+            .disposed(by: disposeBag)
+
+        easterEggButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.showTextInputAlert { id in
+                    owner.postNotification(id: id ?? "")
+                }
             }
             .disposed(by: disposeBag)
     }
