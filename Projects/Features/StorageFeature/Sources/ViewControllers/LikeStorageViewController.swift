@@ -41,7 +41,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated: animated)
+        super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storageLike))
     }
 
