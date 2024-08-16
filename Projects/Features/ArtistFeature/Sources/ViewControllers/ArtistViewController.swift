@@ -79,6 +79,7 @@ public final class ArtistViewController:
             .bind(with: self) { owner, _ in
                 let offsetY: CGFloat = owner.collectionView.contentOffset.y + STATUS_BAR_HEGHIT()
                 owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
+                owner.easterEggButton.isHidden = owner.collectionView.contentOffset.y > 10
             }
             .disposed(by: disposeBag)
 
