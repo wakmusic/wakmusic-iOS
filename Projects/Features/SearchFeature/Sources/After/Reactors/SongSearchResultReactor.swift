@@ -3,6 +3,7 @@ import LogManager
 import ReactorKit
 import SearchDomainInterface
 import SongsDomainInterface
+import RxSwift
 
 final class SongSearchResultReactor: Reactor {
     enum Action {
@@ -41,7 +42,9 @@ final class SongSearchResultReactor: Reactor {
     private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
     private let limit: Int = 20
-
+    private var requestDisposeBag = DisposeBag()
+    private let subject = PublishSubject<Mutation>()
+    
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
             isLoading: true,
@@ -112,9 +115,29 @@ final class SongSearchResultReactor: Reactor {
 
         return newState
     }
+    
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+
+        
+//        let currentState = currentState
+//        let scrollPage = currentState.scrollPage
+        
+//        let finishTask =  Observable.concat([
+//            Observable.just(Mutation.updateScrollPage(scrollPage + 1)),
+//            Observable.just(.updateLoadingState(false))
+//        
+//        ])
+        
+        let subjectMutation =  subject.asObservable()
+        
+       
+            
+        return Observable.merge(mutation, subjectMutation)
+    }
 }
 
 extension SongSearchResultReactor {
+    
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
         let state = self.currentState
 
@@ -141,37 +164,42 @@ extension SongSearchResultReactor {
         text: String,
         scrollPage: Int
     ) -> Observable<Mutation> {
-        return .concat([
-            .just(.updateLoadingState(true)),
-            fetchSearchSongsUseCase
-                .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
-                .asObservable()
-                .map { [weak self] dataSource -> Mutation in
+        
+        requestDisposeBag = DisposeBag() // 기존 작업 캔슬
 
-                    guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
+        fetchSearchSongsUseCase
+            .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
+            .asObservable()
+            .map { [weak self] dataSource -> Mutation in
 
-                    let prev: [SongEntity] = scrollPage == 1 ? [] : self.currentState.dataSource
+                guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
 
-                    if scrollPage == 1 {
-                        LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
-                            keyword: self.text,
-                            category: "song",
-                            count: dataSource.count
-                        ))
-                    }
-
-                    return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+                let prev: [SongEntity] = scrollPage == 1 ? [] : self.currentState.dataSource
+                if scrollPage == 1 {
+                    LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
+                        keyword: self.text,
+                        category: "song",
+                        count: dataSource.count
+                    ))
                 }
-                .catch { error in
-                    let wmErorr = error.asWMError
-                    return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
-                    )
-                },
-            .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
-            .just(.updateLoadingState(false))
-        ])
+
+                return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+            }
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
+                )
+            }
+            .bind(to: subject)
+            .disposed(by: requestDisposeBag)
+
+        
+        
+        return Observable.just(.updateLoadingState(false))
     }
+    
+
 
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
