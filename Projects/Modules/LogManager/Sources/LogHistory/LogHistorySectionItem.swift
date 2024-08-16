@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || QA
     import Foundation
 
     struct LogHistorySectionItem: Hashable, Equatable {

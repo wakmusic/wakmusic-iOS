@@ -2,7 +2,7 @@ import Foundation
 import Moya
 import OSLog
 
-#if DEBUG
+#if DEBUG || QA
     private enum NetworkLogLevel: String {
         case short
         case detail
