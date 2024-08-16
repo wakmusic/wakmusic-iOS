@@ -2,13 +2,13 @@ import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
 import UIKit
 import UserDomainInterface
 import Utility
-import LogManager
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
