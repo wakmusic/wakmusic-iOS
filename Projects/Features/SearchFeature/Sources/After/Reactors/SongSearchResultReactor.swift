@@ -1,9 +1,9 @@
 import Localization
 import LogManager
 import ReactorKit
+import RxSwift
 import SearchDomainInterface
 import SongsDomainInterface
-import RxSwift
 
 final class SongSearchResultReactor: Reactor {
     enum Action {
@@ -44,7 +44,7 @@ final class SongSearchResultReactor: Reactor {
     private let limit: Int = 20
     private var requestDisposeBag = DisposeBag()
     private let subject = PublishSubject<Mutation>()
-    
+
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
             isLoading: true,
@@ -115,29 +115,24 @@ final class SongSearchResultReactor: Reactor {
 
         return newState
     }
-    
-    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 
-        
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 //        let currentState = currentState
 //        let scrollPage = currentState.scrollPage
-        
+
 //        let finishTask =  Observable.concat([
 //            Observable.just(Mutation.updateScrollPage(scrollPage + 1)),
 //            Observable.just(.updateLoadingState(false))
-//        
+//
 //        ])
-        
-        let subjectMutation =  subject.asObservable()
-        
-       
-            
+
+        let subjectMutation = subject.asObservable()
+
         return Observable.merge(mutation, subjectMutation)
     }
 }
 
 extension SongSearchResultReactor {
-    
     private func updateSortType(_ type: SortType) -> Observable<Mutation> {
         let state = self.currentState
 
@@ -164,7 +159,6 @@ extension SongSearchResultReactor {
         text: String,
         scrollPage: Int
     ) -> Observable<Mutation> {
-        
         requestDisposeBag = DisposeBag() // 기존 작업 캔슬
 
         fetchSearchSongsUseCase
@@ -194,12 +188,8 @@ extension SongSearchResultReactor {
             .bind(to: subject)
             .disposed(by: requestDisposeBag)
 
-        
-        
         return Observable.just(.updateLoadingState(false))
     }
-    
-
 
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
         let state = currentState
