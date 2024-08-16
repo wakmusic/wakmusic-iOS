@@ -1,8 +1,8 @@
 import Localization
 import LogManager
 import ReactorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 import SearchDomainInterface
 import SongsDomainInterface
 
