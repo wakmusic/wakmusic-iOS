@@ -56,6 +56,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storagePlaylist))
         listStorageView.resetParticeAnimation()
     }
 
@@ -219,6 +220,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     override func bindAction(reactor: ListStorageReactor) {
         listStorageView.rx.loginButtonDidTap
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickLoginButton(location: .myPlaylist)) })
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -229,12 +231,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         listStorageView.rx.drawFruitButtonDidTap
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickFruitDrawEntryButton(location: .myPlaylist)) })
             .map { Reactor.Action.drawFruitButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         listStorageView.rx.createListButtonDidTap
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickCreatePlaylistButton(location: .myPlaylist)) })
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -298,14 +302,16 @@ extension ListStorageViewController: SongCartViewDelegate {
 extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .listTapped(indexPath):
-            self.reactor?.action.onNext(.listDidTap(indexPath))
+        case let .listTapped(passModel):
+            LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .storage, key: passModel.key))
+            self.reactor?.action.onNext(.listDidTap(passModel.indexPath))
 
-        case let .playTapped(indexPath):
-            self.reactor?.action.onNext(.playDidTap(indexPath.row))
+        case let .playTapped(passModel):
+            LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storagePlaylist, type: .playlist))
+            self.reactor?.action.onNext(.playDidTap(passModel.indexPath.row))
 
-        case let .cellTapped(indexPath):
-            self.reactor?.action.onNext(.cellDidTap(indexPath.row))
+        case let .cellTapped(passModel):
+            self.reactor?.action.onNext(.cellDidTap(passModel.indexPath.row))
         }
     }
 }

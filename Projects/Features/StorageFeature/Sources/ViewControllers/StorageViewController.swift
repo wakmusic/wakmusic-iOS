@@ -9,6 +9,7 @@ import SignInFeatureInterface
 import Tabman
 import UIKit
 import Utility
+import LogManager
 
 final class StorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor
@@ -84,6 +85,21 @@ final class StorageViewController: TabmanViewController, View {
         self.reactor?.action.onNext(.switchTab(index))
         NotificationCenter.default.post(name: .didChangeTabInStorage, object: index)
     }
+    
+    /// 탭맨 탭 터치 이벤트 감지 함수
+    override func bar(_ bar: any TMBar, didRequestScrollTo index: PageboyViewController.PageIndex) {
+        super.bar(bar, didRequestScrollTo: index)
+        
+        guard let viewController = viewControllers[safe: index] else { return }
+        switch viewController {
+        case is ListStorageViewController:
+            LogManager.analytics(StorageAnalyticsLog.clickStorageTabbarTab(tab: .myPlaylist))
+        case is LikeStorageViewController:
+            LogManager.analytics(StorageAnalyticsLog.clickStorageTabbarTab(tab: .myLikeList))
+        default:
+            break
+        }
+    }
 }
 
 extension StorageViewController {
@@ -126,6 +142,14 @@ extension StorageViewController {
 
     func bindAction(reactor: Reactor) {
         storageView.rx.editButtonDidTap
+            .do(onNext: {
+                let tabIndex = reactor.currentState.tabIndex
+                switch tabIndex {
+                case 0: LogManager.analytics(StorageAnalyticsLog.clickMyPlaylistEditButton)
+                case 1: LogManager.analytics(StorageAnalyticsLog.clickMyLikeListEditButton)
+                default: break
+                }
+            })
             .map { Reactor.Action.editButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -179,7 +203,7 @@ extension StorageViewController: PageboyViewControllerDataSource, TMBarDataSourc
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
-        viewControllers[index]
+        return viewControllers[safe: index]
     }
 
     public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController
