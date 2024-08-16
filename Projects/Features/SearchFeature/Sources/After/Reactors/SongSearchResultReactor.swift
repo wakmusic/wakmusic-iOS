@@ -118,18 +118,18 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-//        let currentState = currentState
-//        let scrollPage = currentState.scrollPage
 
-//        let finishTask =  Observable.concat([
-//            Observable.just(Mutation.updateScrollPage(scrollPage + 1)),
-//            Observable.just(.updateLoadingState(false))
-//
-//        ])
+        let flatMapMutation = subject
+            .withUnretained(self)
+            .flatMap { owner, subjectMutation -> Observable<Mutation> in
+            return .concat([
+                .just(subjectMutation),
+                .just(Mutation.updateScrollPage(owner.currentState.scrollPage+1)),
+                .just(Mutation.updateLoadingState(false))
+            ])
+        }
 
-        let subjectMutation = subject.asObservable()
-
-        return Observable.merge(mutation, subjectMutation)
+        return Observable.merge(mutation,flatMapMutation)
     }
 }
 
@@ -161,6 +161,7 @@ extension SongSearchResultReactor {
         scrollPage: Int
     ) -> Observable<Mutation> {
         requestDisposeBag = DisposeBag() // 기존 작업 캔슬
+        
 
         fetchSearchSongsUseCase
             .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
@@ -191,7 +192,7 @@ extension SongSearchResultReactor {
             })
             .disposed(by: requestDisposeBag)
 
-        return Observable.just(.updateLoadingState(false))
+        return Observable.just(.updateLoadingState(true))
     }
 
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {
