@@ -355,6 +355,6 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
 
 extension BeforeSearchContentViewController {
     func scrollToTop() {
-        tableView.setContentOffset(.zero, animated: true)
+        collectionView.scroll(to: .top)
     }
 }
