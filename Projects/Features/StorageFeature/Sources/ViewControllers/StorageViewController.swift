@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import Pageboy
 import ReactorKit
 import RxSwift
@@ -9,7 +10,6 @@ import SignInFeatureInterface
 import Tabman
 import UIKit
 import Utility
-import LogManager
 
 final class StorageViewController: TabmanViewController, View {
     typealias Reactor = StorageReactor
@@ -85,11 +85,11 @@ final class StorageViewController: TabmanViewController, View {
         self.reactor?.action.onNext(.switchTab(index))
         NotificationCenter.default.post(name: .didChangeTabInStorage, object: index)
     }
-    
+
     /// 탭맨 탭 터치 이벤트 감지 함수
     override func bar(_ bar: any TMBar, didRequestScrollTo index: PageboyViewController.PageIndex) {
         super.bar(bar, didRequestScrollTo: index)
-        
+
         guard let viewController = viewControllers[safe: index] else { return }
         switch viewController {
         case is ListStorageViewController:
