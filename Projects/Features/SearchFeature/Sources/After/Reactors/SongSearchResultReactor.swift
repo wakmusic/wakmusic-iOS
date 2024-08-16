@@ -118,18 +118,17 @@ final class SongSearchResultReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-
         let flatMapMutation = subject
             .withUnretained(self)
             .flatMap { owner, subjectMutation -> Observable<Mutation> in
-            return .concat([
-                .just(subjectMutation),
-                .just(Mutation.updateScrollPage(owner.currentState.scrollPage+1)),
-                .just(Mutation.updateLoadingState(false))
-            ])
-        }
+                return .concat([
+                    .just(subjectMutation),
+                    .just(Mutation.updateScrollPage(owner.currentState.scrollPage + 1)),
+                    .just(Mutation.updateLoadingState(false))
+                ])
+            }
 
-        return Observable.merge(mutation,flatMapMutation)
+        return Observable.merge(mutation, flatMapMutation)
     }
 }
 
@@ -161,7 +160,6 @@ extension SongSearchResultReactor {
         scrollPage: Int
     ) -> Observable<Mutation> {
         requestDisposeBag = DisposeBag() // 기존 작업 캔슬
-        
 
         fetchSearchSongsUseCase
             .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
