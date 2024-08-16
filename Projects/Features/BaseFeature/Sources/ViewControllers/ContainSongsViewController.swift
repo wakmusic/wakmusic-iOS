@@ -8,6 +8,7 @@ import RxSwift
 import UIKit
 import UserDomainInterface
 import Utility
+import LogManager
 
 public final class ContainSongsViewController: BaseViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var closeButton: UIButton!
@@ -166,6 +167,7 @@ extension ContainSongsViewController {
                     type: .creation,
                     key: "",
                     completion: { text in
+                        LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
                         owner.input.createPlaylist.onNext(text)
                     }
                 )
