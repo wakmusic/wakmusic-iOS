@@ -167,7 +167,6 @@ extension ContainSongsViewController {
                     type: .creation,
                     key: "",
                     completion: { text in
-                        LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
                         owner.input.createPlaylist.onNext(text)
                     }
                 )
