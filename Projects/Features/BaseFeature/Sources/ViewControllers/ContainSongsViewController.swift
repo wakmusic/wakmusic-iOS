@@ -2,6 +2,7 @@ import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
@@ -216,6 +217,7 @@ extension ContainSongsViewController: UITableViewDelegate {
 
 extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     public func action() {
+        LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
         input.creationButtonDidTap.onNext(())
     }
 }
