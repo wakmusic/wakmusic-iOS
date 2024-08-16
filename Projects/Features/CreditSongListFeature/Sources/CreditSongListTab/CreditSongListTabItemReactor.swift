@@ -192,13 +192,6 @@ private extension CreditSongListTabItemReactor {
             .filter { currentState.selectedSongs.contains($0.id) }
             .map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) }
 
-        if appendingSongs.count > Metric.availableLimit {
-            return .just(.updateToastMessage(
-                Localization.LocalizationStrings
-                    .overFlowAddPlaylistWarning(appendingSongs.count - Metric.availableLimit)
-            ))
-        }
-
         PlayState.shared.append(contentsOf: appendingSongs)
         return .just(.updateToastMessage(Localization.LocalizationStrings.addList))
     }

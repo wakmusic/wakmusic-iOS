@@ -38,7 +38,6 @@ public final class PlayState {
     /// 플레이리스트에 변경사항이 생겼을 때, 로컬 DB를 덮어씁니다.
     private func subscribePlayListChanges() {
         playlist.subscribeListChanges()
-            .map { $0.suffix(50) }
             .map { Array($0) }
             .sink { [weak self] playlistItems in
                 self?.updatePlaylistChangesToLocalDB(playList: playlistItems)
