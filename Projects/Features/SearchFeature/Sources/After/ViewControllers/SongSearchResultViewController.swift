@@ -384,7 +384,9 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .play:
-
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .search, type: .multiple)
+            )
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),

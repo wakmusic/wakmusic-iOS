@@ -9,7 +9,7 @@ enum HomeAnalyticsLog: AnalyticsLogType {
     case clickMusicItemPlayButton(location: MusicItemLocation, id: String)
 }
 
-enum MusicItemLocation: String, CustomStringConvertible {
+enum MusicItemLocation: String, AnalyticsLogEnumParametable {
     case homeTop100 = "home-top100"
     case homeRecent = "home-recent"
 

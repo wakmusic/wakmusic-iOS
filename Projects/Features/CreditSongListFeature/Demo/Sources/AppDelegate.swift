@@ -18,7 +18,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         let creditSongListTabFactory = FakeCreditSongListTabFactory()
         let reactor = CreditSongListReactor(
             workerName: "CLTH",
-            fetchCreditProfileImageURLUseCase: FetchCreditProfileImageURLUseCaseSpy()
+            fetchCreditProfileUseCase: FetchCreditProfileUseCaseSpy()
         )
         let viewController = CreditSongListViewController(
             reactor: reactor,

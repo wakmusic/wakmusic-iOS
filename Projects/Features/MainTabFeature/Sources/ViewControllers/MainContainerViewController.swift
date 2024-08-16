@@ -2,6 +2,7 @@ import ArtistFeature
 import BaseFeature
 import Combine
 import DesignSystem
+import LogManager
 import PlaylistFeatureInterface
 import RxSwift
 import SnapKit
@@ -106,6 +107,7 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 private extension MainContainerViewController {
     func bind() {
         let playlistButtonAction = UIAction { [navigationController, playlistFactory] _ in
+            LogManager.analytics(MainTabAnalyticsLog.clickPlaylistFabButton)
             guard let playlistFactory else { return }
             let playlistViewController = playlistFactory.makeViewController()
             playlistViewController.modalPresentationStyle = .overFullScreen

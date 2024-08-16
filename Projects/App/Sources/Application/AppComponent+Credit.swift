@@ -24,9 +24,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchCreditProfileImageURLUseCase: any FetchCreditProfileImageURLUseCase {
+    var fetchCreditProfileUseCase: any FetchCreditProfileUseCase {
         shared {
-            FetchCreditProfileImageURLUseCaseImpl(creditRepository: creditRepository)
+            FetchCreditProfileUseCaseImpl(creditRepository: creditRepository)
         }
     }
 

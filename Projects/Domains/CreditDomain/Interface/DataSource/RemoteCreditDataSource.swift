@@ -10,5 +10,5 @@ public protocol RemoteCreditDataSource {
         limit: Int
     ) -> Single<[SongEntity]>
 
-    func fetchCreditProfileImageURL(name: String) -> Single<String>
+    func fetchCreditProfile(name: String) -> Single<CreditProfileEntity>
 }

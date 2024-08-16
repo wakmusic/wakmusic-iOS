@@ -4,6 +4,7 @@ import CreditSongListFeatureInterface
 import DesignSystem
 import Kingfisher
 import Localization
+import LogManager
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -87,6 +88,12 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         super.init(reactor: reactor)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .songCredit)
+        LogManager.analytics(log)
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if dimmedGridentLayer == nil {
@@ -141,6 +148,10 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
             .compactMap { [reactor] indexPath in
                 reactor.currentState.credits[safe: indexPath.section]?.names[safe: indexPath.row]
             }
+            .do(onNext: { worker in
+                let log = SongCreditAnalyticsLog.clickCreditItem(name: worker.name)
+                LogManager.analytics(log)
+            })
             .map(Reactor.Action.creditSelected(worker:))
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

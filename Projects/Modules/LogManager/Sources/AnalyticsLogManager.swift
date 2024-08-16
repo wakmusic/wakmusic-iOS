@@ -100,6 +100,7 @@ public extension LogManager {
         #if RELEASE
             Analytics.logEvent(log.name, parameters: log.params)
         #elseif DEBUG
+            Analytics.logEvent(log.name, parameters: log.params)
             LogHistoryStorage.shared.appendHistory(log: log)
         #endif
         let message = """

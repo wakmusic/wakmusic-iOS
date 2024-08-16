@@ -177,12 +177,8 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         }
     }
 
-    override func configureUI() {
-        super.configureUI()
-    }
-
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        LogManager.printDebug("❌ \(Self.self) 소멸")
     }
 }
 
@@ -235,7 +231,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .searchResult, key: model.key))
         navigatePlaylistDetail(key: model.key)
     }
 

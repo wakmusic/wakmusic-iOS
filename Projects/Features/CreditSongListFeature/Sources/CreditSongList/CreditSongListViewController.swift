@@ -1,6 +1,7 @@
 import BaseFeature
 import CreditSongListFeatureInterface
 import DesignSystem
+import LogManager
 import RxSwift
 import SnapKit
 import UIKit
@@ -35,6 +36,12 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
             workerName: reactor.workerName
         )
         super.init(reactor: reactor)
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .creditSongList)
+        LogManager.analytics(log)
     }
 
     override func viewDidLayoutSubviews() {
@@ -114,15 +121,9 @@ final class CreditSongListViewController: BaseReactorViewController<CreditSongLi
     override func bindState(reactor: CreditSongListReactor) {
         let sharedState = reactor.state.share()
 
-        sharedState.map(\.workerName)
-            .bind(with: self) { owner, name in
-                owner.creditProfileView.updateProfile(name: name)
-            }
-            .disposed(by: disposeBag)
-
-        sharedState.map(\.profileImageURL)
-            .bind(with: creditProfileView) { view, url in
-                view.updateProfileImageURL(url: url)
+        sharedState.map(\.profile)
+            .bind(with: creditProfileView) { view, entity in
+                view.updateProfile(entity: entity)
             }
             .disposed(by: disposeBag)
 

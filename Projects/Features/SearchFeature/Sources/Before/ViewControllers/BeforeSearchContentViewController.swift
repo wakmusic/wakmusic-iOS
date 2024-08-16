@@ -44,17 +44,12 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self)")
+        LogManager.printDebug("❌ \(Self.self)")
     }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-    }
-
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .search))
     }
 
     override public func addView() {
@@ -324,6 +319,8 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
             WakmusicYoutubePlayer(id: model.id).play()
             LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
+            let log = CommonAnalyticsLog.clickPlaylistItem(location: .search, key: model.key)
+            LogManager.analytics(log)
             navigateWmPlaylistDetail(key: model.key)
 
             #warning("추후 업데이트 시 사용")

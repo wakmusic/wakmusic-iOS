@@ -21,7 +21,7 @@ public final class CreditRepositoryImpl: CreditRepository {
         remoteCreditDataSource.fetchCreditSongList(name: name, order: order, page: page, limit: limit)
     }
 
-    public func fetchCreditProfileImageURL(name: String) -> Single<String> {
-        remoteCreditDataSource.fetchCreditProfileImageURL(name: name)
+    public func fetchCreditProfile(name: String) -> Single<CreditProfileEntity> {
+        remoteCreditDataSource.fetchCreditProfile(name: name)
     }
 }

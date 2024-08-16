@@ -5,14 +5,14 @@ import UIKit
 
 public protocol CreditSongListDependency: Dependency {
     var creditSongListTabFactory: any CreditSongListTabFactory { get }
-    var fetchCreditProfileImageURLUseCase: any FetchCreditProfileImageURLUseCase { get }
+    var fetchCreditProfileUseCase: any FetchCreditProfileUseCase { get }
 }
 
 public final class CreditSongListComponent: Component<CreditSongListDependency>, CreditSongListFactory {
     public func makeViewController(workerName: String) -> UIViewController {
         let reactor = CreditSongListReactor(
             workerName: workerName,
-            fetchCreditProfileImageURLUseCase: dependency.fetchCreditProfileImageURLUseCase
+            fetchCreditProfileUseCase: dependency.fetchCreditProfileUseCase
         )
         let viewController = CreditSongListViewController(
             reactor: reactor,

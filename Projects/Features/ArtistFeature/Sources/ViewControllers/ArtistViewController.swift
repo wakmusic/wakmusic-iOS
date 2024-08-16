@@ -21,10 +21,14 @@ public final class ArtistViewController:
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var easterEggButton: UIButton!
     private let retryWarningView = WMRetryWarningView(
         description: LocalizationStrings.unknownErrorWarning,
         retryButtonTitle: LocalizationStrings.titleRetry
     )
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .light)).then {
+        $0.alpha = 0
+    }
 
     var artistDetailFactory: ArtistDetailFactory!
     public var disposeBag: DisposeBag = DisposeBag()
@@ -65,22 +69,25 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
-                #warning("🎉:: 디버그용 이스터에그")
-                #if DEBUG
-                    if entity.id == "gosegu" {
-                        owner.showTextInputAlert { id in
-                            owner.postNotification(id: id ?? "")
-                        }
-                    } else {
-                        LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                        let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                        owner.navigationController?.pushViewController(viewController, animated: true)
-                    }
-                #else
-                    LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                    let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                    owner.navigationController?.pushViewController(viewController, animated: true)
-                #endif
+                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        collectionView.rx.didScroll
+            .bind(with: self) { owner, _ in
+                let offsetY: CGFloat = owner.collectionView.contentOffset.y + STATUS_BAR_HEGHIT()
+                owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
+                owner.easterEggButton.isHidden = owner.collectionView.contentOffset.y > 10
+            }
+            .disposed(by: disposeBag)
+
+        easterEggButton.rx.tap
+            .bind(with: self) { owner, _ in
+                owner.showTextInputAlert { id in
+                    owner.postNotification(id: id ?? "")
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -121,7 +128,7 @@ public final class ArtistViewController:
 
 private extension ArtistViewController {
     func addSubviews() {
-        view.addSubview(retryWarningView)
+        view.addSubviews(retryWarningView, translucentView)
     }
 
     func setLayout() {
@@ -129,6 +136,11 @@ private extension ArtistViewController {
         retryWarningView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(topOffset + STATUS_BAR_HEGHIT())
+        }
+
+        translucentView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
 
@@ -152,6 +164,13 @@ private extension ArtistViewController {
 
         retryWarningView.isHidden = true
         retryWarningView.delegate = self
+    }
+}
+
+extension ArtistViewController: UICollectionViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
+        translucentView.alpha = min(max(offsetY / translucentView.frame.height, 0), 1)
     }
 }
 

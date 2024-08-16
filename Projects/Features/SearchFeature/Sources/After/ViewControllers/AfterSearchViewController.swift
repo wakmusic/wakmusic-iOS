@@ -56,7 +56,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self)")
+        LogManager.printDebug("❌ \(Self.self)")
     }
 
     public func bind(reactor: AfterSearchReactor) {
