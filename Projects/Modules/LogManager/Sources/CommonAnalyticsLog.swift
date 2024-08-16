@@ -27,7 +27,8 @@ public extension CommonAnalyticsLog {
         case myPlaylistDetail = "my_playlist_detail"
         case chart
         case artist
-        case storage
+        case storagePlaylist = "storage_playlist"
+        case storageLike = "storage_like"
         case search
         case fruitDraw = "fruit_draw" // 열매 뽑기
         case playlist
@@ -58,9 +59,9 @@ public extension CommonAnalyticsLog {
         case search
         case artist
         case playlist
+        case storagePlaylist = "storage_playlist"
         case storageLike = "storage_like"
         case playlistDetail = "playlist_detail"
-        case storage
         case chart
         case recentMusic = "recent_music"
         case musicDetail = "music_detail"
