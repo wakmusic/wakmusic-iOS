@@ -11,8 +11,8 @@ enum StorageAnalyticsLog: AnalyticsLogType {
 }
 
 enum StorageTab: String, AnalyticsLogEnumParametable {
-    case myPlaylist = "my-playlist"
-    case myLikeList = "my-like-list"
+    case myPlaylist = "my_playlist"
+    case myLikeList = "my_like_list"
 
     var description: String {
         self.rawValue
@@ -20,7 +20,7 @@ enum StorageTab: String, AnalyticsLogEnumParametable {
 }
 
 enum CreatePlaylistLocation: String, AnalyticsLogEnumParametable {
-    case myPlaylist = "my-playlist"
+    case myPlaylist = "my_playlist"
 
     var description: String {
         self.rawValue
@@ -28,7 +28,7 @@ enum CreatePlaylistLocation: String, AnalyticsLogEnumParametable {
 }
 
 enum FruitDrawEntryLocation: String, AnalyticsLogEnumParametable {
-    case myPlaylist = "my-playlist"
+    case myPlaylist = "my_playlist"
 
     var description: String {
         self.rawValue
@@ -36,9 +36,8 @@ enum FruitDrawEntryLocation: String, AnalyticsLogEnumParametable {
 }
 
 enum LoginLocation: String, AnalyticsLogEnumParametable {
-    case myPlaylist = "my-playlist"
-    case myLikeList = "my-like-list"
-    case addMusics = "add-musics"
+    case myPlaylist = "my_playlist"
+    case myLikeList = "my_like_list"
 
     var description: String {
         self.rawValue

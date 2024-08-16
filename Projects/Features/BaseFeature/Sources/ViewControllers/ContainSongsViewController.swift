@@ -218,6 +218,7 @@ extension ContainSongsViewController: UITableViewDelegate {
 
 extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
     public func action() {
+        LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
         input.creationButtonDidTap.onNext(())
     }
 }

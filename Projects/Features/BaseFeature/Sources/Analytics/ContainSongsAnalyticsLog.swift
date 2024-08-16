@@ -5,7 +5,7 @@ enum ContainSongsAnalyticsLog: AnalyticsLogType {
 }
 
 enum CreatePlaylistLocation: String, AnalyticsLogEnumParametable {
-    case addMusics = "add-musics"
+    case addMusics = "add_musics"
 
     var description: String {
         self.rawValue
