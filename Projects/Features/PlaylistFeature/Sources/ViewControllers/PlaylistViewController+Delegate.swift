@@ -70,7 +70,7 @@ extension PlaylistViewController: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let randomPlayButton = RandomPlayButtonHeaderView(frame: .zero)
-        randomPlayButton.addAction { [weak self] in
+        randomPlayButton.setPlayButtonHandler { [weak self] in
             guard let self else { return }
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .random)
