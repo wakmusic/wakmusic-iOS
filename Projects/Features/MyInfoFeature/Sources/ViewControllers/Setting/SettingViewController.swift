@@ -31,6 +31,11 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         setSettingItemTableView()
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .setting))
+    }
 
     public static func viewController(
         reactor: SettingReactor,
@@ -184,6 +189,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .disposed(by: disposeBag)
 
         settingView.rx.withDrawButtonDidTap
+            .do(onNext: { 
+                LogManager.analytics(SettingAnalyticsLog.clickWithdrawButton)
+            })
             .map { Reactor.Action.withDrawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -206,16 +214,21 @@ extension SettingViewController: UITableViewDelegate {
         guard let category = cell.category else { return }
         switch category {
         case .appPush:
+            LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .serviceTerms:
+        case .serviceTerms:            LogManager.analytics(SettingAnalyticsLog.clickServiceTermsButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
+            LogManager.analytics(SettingAnalyticsLog.clickPrivacyButton)
             reactor?.action.onNext(.privacyNavigationDidTap)
         case .openSource:
+            LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
             reactor?.action.onNext(.openSourceNavigationDidTap)
         case .removeCache:
+            LogManager.analytics(SettingAnalyticsLog.clickRemoveCacheButton)
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
+            LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
             let text = "로그아웃 하시겠습니까?"
             let vc = textPopUpFactory.makeView(
                 text: text,
@@ -230,6 +243,7 @@ extension SettingViewController: UITableViewDelegate {
             )
             showBottomSheet(content: vc, size: .fixed(234))
         case .versionInfo:
+            LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)
         }
     }

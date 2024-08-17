@@ -39,14 +39,15 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         view = myInfoView
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPage))
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -221,41 +222,53 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .disposed(by: disposeBag)
 
         myInfoView.rx.profileImageDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickProfileImage) })
             .map { MyInfoReactor.Action.profileImageDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.drawButtonDidTap
+            .do(onNext: {
+                LogManager.analytics(MyInfoAnalyticsLog.clickFruitDrawEntryButton(location: .myPage))
+            })
             .map { MyInfoReactor.Action.drawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.fruitNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFruitStorageButton) })
             .map { MyInfoReactor.Action.fruitNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        #warning("자주묻는질문 qna -> faq 로 변경하기")
         myInfoView.rx.qnaNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFaqButton) })
             .map { MyInfoReactor.Action.faqNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.notiNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickNoticeButton) })
             .map { MyInfoReactor.Action.notiNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        #warning("문의하기 mail -> qna 로 변경하기")
         myInfoView.rx.mailNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickQnaButton) })
             .map { MyInfoReactor.Action.mailNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.teamNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickTeamButton) })
             .map { MyInfoReactor.Action.teamNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.settingNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickSettingButton) })
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -281,6 +294,7 @@ extension MyInfoViewController: EditSheetViewDelegate {
         case .share:
             break
         case .profile:
+            LogManager.analytics(MyInfoAnalyticsLog.clickProfileChangeButton)
             let vc = profilePopupFactory.makeView(
                 completion: { [reactor] () in
                     reactor?.action.onNext(.completedSetProfile)
@@ -289,6 +303,7 @@ extension MyInfoViewController: EditSheetViewDelegate {
             let height: CGFloat = (ProfilePopupViewController.rowHeight * 2) + 10
             showBottomSheet(content: vc, size: .fixed(190 + height + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
+            LogManager.analytics(MyInfoAnalyticsLog.clickNicknameChangeButton)
             let vc = multiPurposePopUpFactory.makeView(
                 type: .nickname,
                 key: "",
