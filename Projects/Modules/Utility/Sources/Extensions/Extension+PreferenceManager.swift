@@ -61,10 +61,14 @@ public extension PreferenceManager {
             itemCount: itemCount
         )
         Utility.PreferenceManager.userInfo = userInfo
+        LogManager.setUserProperty(property: .fruitTotal(count: userInfo.itemCount))
+        LogManager.setUserProperty(property: .loginPlatform(platform: userInfo.platform))
     }
 
     static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
         PreferenceManager.userInfo = nil
+        LogManager.clearUserProperty(property: .fruitTotal(count: -1))
+        LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
     }
 }

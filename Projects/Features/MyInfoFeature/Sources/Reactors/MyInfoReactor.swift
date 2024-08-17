@@ -22,7 +22,7 @@ final class MyInfoReactor: Reactor {
         case completedFruitDraw
         case completedSetProfile
         case changeNicknameButtonDidTap(String)
-        case requiredLogin
+        case requiredLogin(CommonAnalyticsLog.LoginButtonEntry)
     }
 
     enum Mutation {
@@ -47,7 +47,7 @@ final class MyInfoReactor: Reactor {
         case mail
         case team
         case setting
-        case login
+        case login(entry: CommonAnalyticsLog.LoginButtonEntry)
     }
 
     struct State {
@@ -113,8 +113,8 @@ final class MyInfoReactor: Reactor {
             return teamNavigationDidTap()
         case .settingNavigationDidTap:
             return settingNavigationDidTap()
-        case .requiredLogin:
-            return navigateLogin()
+        case let .requiredLogin(entry):
+            return navigateLogin(entry: entry)
         case .completedFruitDraw:
             return mutateFetchUserInfo()
         case .completedSetProfile:
@@ -265,8 +265,8 @@ private extension MyInfoReactor {
         return .just(.navigate(.setting))
     }
 
-    func navigateLogin() -> Observable<Mutation> {
-        return .just(.navigate(.login))
+    func navigateLogin(entry: CommonAnalyticsLog.LoginButtonEntry) -> Observable<Mutation> {
+        return .just(.navigate(.login(entry: entry)))
     }
 }
 

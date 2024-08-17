@@ -2,6 +2,7 @@ import BaseFeature
 import CreditDomainInterface
 import CreditSongListFeatureInterface
 import Localization
+import LogManager
 import ReactorKit
 import RxSwift
 import Utility
@@ -167,6 +168,9 @@ private extension CreditSongListTabItemReactor {
                 navigateType: .textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )

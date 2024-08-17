@@ -247,7 +247,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        LogManager.printDebug("❌ \(Self.self) 소멸")
     }
 }
 
@@ -340,6 +340,8 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         case .allSelect(_):
             break
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .search)
+            LogManager.analytics(log)
 
             guard songs.count <= limit else {
                 showToast(
@@ -356,6 +358,9 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = self.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         self.present(loginVC, animated: true)

@@ -24,6 +24,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             LogManager.setUserID(userID: nil)
         }
+        initializeUserProperty()
 
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
@@ -115,6 +116,22 @@ extension AppDelegate {
                 LogManager.printDebug("🔔:: Messaging.messaging().token: \(token)")
             }
         }
+    }
+
+    private func initializeUserProperty() {
+        if let loginPlatform = PreferenceManager.userInfo?.platform {
+            LogManager.setUserProperty(property: .loginPlatform(platform: loginPlatform))
+        } else {
+            LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
+        }
+
+        if let fruitTotal = PreferenceManager.userInfo?.itemCount {
+            LogManager.setUserProperty(property: .fruitTotal(count: fruitTotal))
+        } else {
+            LogManager.clearUserProperty(property: .fruitTotal(count: -1))
+        }
+
+        LogManager.setUserProperty(property: .playlistSongTotal(count: PlayState.shared.count))
     }
 }
 

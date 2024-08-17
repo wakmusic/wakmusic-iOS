@@ -8,6 +8,7 @@
 
 import BaseFeature
 import DesignSystem
+import LogManager
 import NoticeDomainInterface
 import RxCocoa
 import RxSwift
@@ -42,6 +43,11 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         configureUI()
         outputBind()
         inputBind()
+    }
+
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .noticePopup))
     }
 
     public static func viewController(
@@ -99,6 +105,9 @@ private extension NoticePopupViewController {
 
         output.dismissAndCallDelegate
             .bind(with: self) { owner, entity in
+                let log = NoticePopupAnalyticsLog.clickNoticeItem(id: "\(entity.id)", location: "notice_popup")
+                LogManager.analytics(log)
+
                 owner.dismiss(animated: true) {
                     owner.delegate?.noticeTapped(model: entity)
                 }

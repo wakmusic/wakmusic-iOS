@@ -219,6 +219,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         completionButton.rx
             .tap
             .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
+            .do(onNext: { _ in
+                LogManager.analytics(CommonAnalyticsLog.clickEditCompleteButton(location: .playlistDetail))
+            })
             .map { Reactor.Action.completionButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -595,6 +598,9 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
+
             let vc = containSongsFactory
                 .makeView(songs: songs.map(\.id))
             vc.modalPresentationStyle = .overFullScreen
@@ -638,7 +644,7 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
     func didTap(_ type: PlaylistEditType) {
         switch type {
         case .edit:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistEditButton)
+            LogManager.analytics(CommonAnalyticsLog.clickEditButton(location: .playlistDetail))
             reactor?.action.onNext(.editButtonDidTap)
         case .share:
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistShareButton)

@@ -169,7 +169,9 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
+            .bind(with: self, onNext: { owner, entry in
+                LogManager.analytics(CommonAnalyticsLog.clickLoginButton(entry: entry))
+
                 let loginVC = owner.signInFactory.makeView()
                 loginVC.modalPresentationStyle = .fullScreen
                 owner.present(loginVC, animated: true)

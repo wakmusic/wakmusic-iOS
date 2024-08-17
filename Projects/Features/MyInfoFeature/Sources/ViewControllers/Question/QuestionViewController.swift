@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import MessageUI
 import RxSwift
 import SafariServices
@@ -230,6 +231,10 @@ extension QuestionViewController {
             .withLatestFrom(output.mailSource)
             .filter { $0 != .unknown }
             .subscribe(onNext: { [weak self] source in
+                let logInquiryType: InquiryAnalyticsLog.LogInquiryType = .init(mailSource: source)
+                let log = InquiryAnalyticsLog.clickInquirySubmitButton(type: logInquiryType)
+                LogManager.analytics(log)
+
                 guard let self = self else { return }
                 self.goToMail(source: source)
             })

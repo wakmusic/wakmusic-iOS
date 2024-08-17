@@ -349,6 +349,9 @@ private extension MusicDetailReactor {
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .songLike)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )
@@ -384,19 +387,23 @@ private extension MusicDetailReactor {
     }
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
+        let log = CommonAnalyticsLog.clickAddMusicsButton(location: .songDetail)
+        LogManager.analytics(log)
+
         guard PreferenceManager.userInfo != nil else {
             return navigateMutation(
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )
             )
         }
         guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
-        let log = Log.clickMusicPickButton(id: song.videoID)
-        LogManager.analytics(log)
         return navigateMutation(navigate: .musicPick(id: song.videoID))
     }
 

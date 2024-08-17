@@ -187,6 +187,9 @@ private extension ArtistMusicContentViewController {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .overFullScreen
                         owner.present(loginVC, animated: true)
@@ -230,8 +233,11 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .artist)
+            LogManager.analytics(log)
+
             if PreferenceManager.userInfo == nil {
-                output.showLogin.onNext(())
+                output.showLogin.onNext(.addMusics)
                 return
             }
             guard songs.count <= limit else {

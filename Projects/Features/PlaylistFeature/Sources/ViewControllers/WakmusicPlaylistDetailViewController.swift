@@ -363,6 +363,8 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
 
             if PreferenceManager.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)

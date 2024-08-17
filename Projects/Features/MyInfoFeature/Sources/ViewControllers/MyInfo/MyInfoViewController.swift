@@ -139,6 +139,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
+                let log = CommonAnalyticsLog.clickLoginButton(entry: .mypage)
+                LogManager.analytics(log)
+
                 let vc = owner.signInFactory.makeView()
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
@@ -170,14 +173,14 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                         viewController.modalPresentationStyle = .fullScreen
                         owner.present(viewController, animated: true)
                     } else {
-                        reactor.action.onNext(.requiredLogin)
+                        reactor.action.onNext(.requiredLogin(.fruitDraw))
                     }
                 case .fruit:
                     if reactor.currentState.isLoggedIn {
                         let viewController = owner.fruitStorageFactory.makeView()
                         owner.navigationController?.pushViewController(viewController, animated: true)
                     } else {
-                        reactor.action.onNext(.requiredLogin)
+                        reactor.action.onNext(.requiredLogin(.fruitStorage))
                     }
                 case .faq:
                     let vc = owner.faqFactory.makeView()
@@ -195,13 +198,25 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 case .setting:
                     let vc = owner.settingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
-                case .login:
+                case let .login(entry):
                     let vc = owner.textPopUpFactory.makeView(
                         text: LocalizationStrings.needLoginWarning,
                         cancelButtonIsHidden: false,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: {
+                            switch entry {
+                            case .fruitDraw:
+                                let log = CommonAnalyticsLog.clickLoginButton(entry: .fruitDraw)
+                                LogManager.analytics(log)
+                            case .fruitStorage:
+                                let log = CommonAnalyticsLog.clickLoginButton(entry: .fruitStorage)
+                                LogManager.analytics(log)
+                            default:
+                                assertionFailure("예상치 못한 entry가 들어옴")
+                                LogManager.printDebug("예상치 못한 entry가 들어옴")
+                            }
+
                             let loginVC = owner.signInFactory.makeView()
                             loginVC.modalPresentationStyle = .fullScreen
                             owner.present(loginVC, animated: true)
@@ -256,7 +271,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
 
         #warning("문의하기 mail -> qna 로 변경하기")
         myInfoView.rx.mailNavigationButtonDidTap
-            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickQnaButton) })
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickInquiryButton) })
             .map { MyInfoReactor.Action.mailNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -297,6 +312,7 @@ extension MyInfoViewController: EditSheetViewDelegate {
             LogManager.analytics(MyInfoAnalyticsLog.clickProfileChangeButton)
             let vc = profilePopupFactory.makeView(
                 completion: { [reactor] () in
+                    LogManager.analytics(MyInfoAnalyticsLog.completeProfileChange)
                     reactor?.action.onNext(.completedSetProfile)
                 }
             )
@@ -308,6 +324,7 @@ extension MyInfoViewController: EditSheetViewDelegate {
                 type: .nickname,
                 key: "",
                 completion: { [reactor] text in
+                    LogManager.analytics(MyInfoAnalyticsLog.completeNicknameChange)
                     reactor?.action.onNext(.changeNicknameButtonDidTap(text))
                 }
             )

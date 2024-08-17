@@ -124,6 +124,8 @@ final class LikeStorageReactor: Reactor {
             return deleteSongs()
 
         case .loginButtonDidTap:
+            let log = CommonAnalyticsLog.clickLoginButton(entry: .storageLike)
+            LogManager.analytics(log)
             return .just(.showLoginAlert)
 
         case .presentAddToPlaylistPopup:
@@ -136,6 +138,13 @@ final class LikeStorageReactor: Reactor {
             .skip(1)
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
+                let log = if !editingState {
+                    CommonAnalyticsLog.clickEditButton(location: .playlist)
+                } else {
+                    CommonAnalyticsLog.clickEditCompleteButton(location: .playlist)
+                }
+                LogManager.analytics(log)
+
                 // 편집이 종료될 때 처리
                 if editingState == false {
                     let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.songID }

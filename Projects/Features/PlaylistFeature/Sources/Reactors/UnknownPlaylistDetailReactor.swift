@@ -1,6 +1,7 @@
 import AuthDomainInterface
 import Foundation
 import Localization
+import LogManager
 import PlaylistDomainInterface
 import ReactorKit
 import RxSwift
@@ -16,7 +17,11 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case deselectAll
         case itemDidTap(Int)
         case subscriptionButtonDidTap
-        case requestLoginRequiredAction
+        case requestLoginRequiredAction(source: LoginRequiredActionSource)
+
+        enum LoginRequiredActionSource {
+            case addMusics
+        }
     }
 
     enum Mutation {
@@ -27,7 +32,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case updateSelectingStateByIndex([SongEntity])
         case updateSubscribeState(Bool)
         case showToast(String)
-        case updateLoginPopupState(Bool)
+        case updateLoginPopupState((Bool, CommonAnalyticsLog.LoginButtonEntry?))
         case updateRefresh
     }
 
@@ -38,7 +43,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var isSubscribing: Bool
         @Pulse var toastMessage: String?
-        @Pulse var showLoginPopup: Bool
+        @Pulse var showLoginPopup: (Bool, CommonAnalyticsLog.LoginButtonEntry?)
         @Pulse var refresh: Void?
         @Pulse var detectedNotFound: Void?
     }
@@ -78,7 +83,7 @@ final class UnknownPlaylistDetailReactor: Reactor {
             isLoading: true,
             selectedCount: 0,
             isSubscribing: false,
-            showLoginPopup: false
+            showLoginPopup: (false, nil)
         )
     }
 
@@ -99,8 +104,12 @@ final class UnknownPlaylistDetailReactor: Reactor {
         case let .itemDidTap(index):
             return updateItemSelected(index)
 
-        case .requestLoginRequiredAction:
-            return .just(.updateLoginPopupState(true))
+        case let .requestLoginRequiredAction(source):
+            switch source {
+            case .addMusics:
+                return .just(.updateLoginPopupState((true, .addMusics)))
+            }
+            return .just(.updateLoginPopupState((true, nil)))
         }
     }
 
@@ -260,7 +269,7 @@ private extension UnknownPlaylistDetailReactor {
         let prev = currentState.isSubscribing
 
         if PreferenceManager.userInfo == nil {
-            return .just(.updateLoginPopupState(true))
+            return .just(.updateLoginPopupState((true, .playlistSubscribe)))
         } else {
             return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)
                 .andThen(
