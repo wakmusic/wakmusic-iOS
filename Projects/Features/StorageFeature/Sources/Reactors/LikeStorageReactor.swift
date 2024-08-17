@@ -291,17 +291,9 @@ extension LikeStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        let limit = 50
-
         let appendingPlaylisItems = currentState.dataSource
             .flatMap { $0.items.filter { $0.isSelected == true } }
             .map { PlaylistItem(id: $0.songID, title: $0.title, artist: $0.artist) }
-
-        if appendingPlaylisItems.count > limit {
-            let overFlowQuantity = appendingPlaylisItems.count - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
 
         PlayState.shared.append(contentsOf: appendingPlaylisItems)
         return .just(.showToast(LocalizationStrings.addList))

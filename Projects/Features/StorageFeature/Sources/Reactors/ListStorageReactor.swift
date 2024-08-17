@@ -340,12 +340,6 @@ extension ListStorageReactor {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
 
-        if selectedSongCount > limit {
-            let overFlowQuantity = selectedSongCount - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
-
         let keys = selectedPlaylists.map { $0.key }
 
         let observables = keys.map { key in
@@ -388,13 +382,6 @@ extension ListStorageReactor {
         if selectedPlaylist.songCount == 0 {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
-
-        if selectedPlaylist.songCount > limit {
-            let overFlowQuantity = selectedPlaylist.songCount - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
-
         return Observable.concat(
             .just(.updateIsShowActivityIndicator(true)),
             fetchPlaylistSongsUseCase.execute(key: selectedPlaylist.key)
@@ -402,7 +389,8 @@ extension ListStorageReactor {
                 .do(onNext: { [weak self] appendingPlaylistItems in
                     PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
                     let ids = appendingPlaylistItems.map { $0.id }
-                    WakmusicYoutubePlayer(ids: ids).play()
+                        .prefix(50)
+                    WakmusicYoutubePlayer(ids: Array(ids)).play()
                     self?.storageCommonService.isEditingState.onNext(false)
                 })
                 .flatMap { songs -> Observable<Mutation> in
