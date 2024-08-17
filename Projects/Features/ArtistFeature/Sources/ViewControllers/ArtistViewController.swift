@@ -229,7 +229,7 @@ extension ArtistViewController: UIGestureRecognizerDelegate {
     }
 }
 
-#if DEBUG
+#if DEBUG || QA
     #warning("🎉:: 디버그용 이스터에그")
     private extension ArtistViewController {
         func showTextInputAlert(completion: @escaping (String?) -> Void) {

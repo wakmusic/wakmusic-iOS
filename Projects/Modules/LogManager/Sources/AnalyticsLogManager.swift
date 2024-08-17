@@ -18,7 +18,7 @@ private extension LogManager {
         function: String = #function,
         line: Int = #line
     ) {
-        #if DEBUG
+        #if DEBUG || QA
             let logger = Logger(subsystem: OSLog.subSystem, category: level.category)
 
             let fileName = file.components(separatedBy: "/").last ?? "unknown.swift"
@@ -100,6 +100,8 @@ public extension LogManager {
         #if RELEASE
             Analytics.logEvent(log.name, parameters: log.params)
         #elseif DEBUG
+            LogHistoryStorage.shared.appendHistory(log: log)
+        #elseif QA
             Analytics.logEvent(log.name, parameters: log.params)
             LogHistoryStorage.shared.appendHistory(log: log)
         #endif

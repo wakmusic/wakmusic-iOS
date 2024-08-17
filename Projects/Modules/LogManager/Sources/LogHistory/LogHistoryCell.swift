@@ -1,4 +1,4 @@
-#if DEBUG
+#if DEBUG || QA
     import UIKit
 
     final class LogHistoryCell: UITableViewCell {
