@@ -49,7 +49,7 @@ final class SongSearchResultReactor: Reactor {
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
             isLoading: true,
-            sortType: .latest,
+            sortType: .relevance,
             filterType: .all,
             selectedCount: 0,
             scrollPage: 1,
