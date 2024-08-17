@@ -32,7 +32,7 @@ public extension CommonAnalyticsLog {
         case search
         case fruitDraw = "fruit_draw" // 열매 뽑기
         case playlist
-        case mypage
+        case myPage = "my_page"
         case setting
         case login
         case songCredit = "song_credit"
