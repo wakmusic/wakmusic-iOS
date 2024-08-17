@@ -208,10 +208,12 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
 
         likeStorageView.tableView.rx.itemSelected
             .withLatestFrom(reactor.state.map(\.dataSource)) { ($0, $1) }
-            .map { $0.1[$0.0.section].items[$0.0.row].songID }
-            .bind(with: self, onNext: { owner, songID in
-                LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: songID))
-                owner.songDetailPresenter.present(id: songID)
+            .compactMap { $0.1[safe: $0.0.section]?.items[safe: $0.0.row] }
+            .bind(with: self, onNext: { owner, song in
+                LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: song.songID))
+
+                PlayState.shared.append(item: .init(id: song.songID, title: song.title, artist: song.artist))
+                owner.songDetailPresenter.present(id: song.songID)
             })
             .disposed(by: disposeBag)
     }

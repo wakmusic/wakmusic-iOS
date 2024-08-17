@@ -318,6 +318,10 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 
 extension SongSearchResultViewController: SongResultCellDelegate {
     func thumbnailDidTap(key: String) {
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: key)
     }
 }

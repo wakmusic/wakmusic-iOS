@@ -212,6 +212,10 @@ private extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
     func tappedThumbnail(id: String) {
+        guard let tappedSong = output.dataSource.value
+            .first(where: { $0.songID == id })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.songID, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: id)
     }
 }
