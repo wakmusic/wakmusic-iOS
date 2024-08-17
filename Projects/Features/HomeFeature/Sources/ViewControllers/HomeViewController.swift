@@ -452,6 +452,7 @@ public extension HomeViewController {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         } else {
+            guard let scrollView = self.scrollView else { return }
             scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
     }
