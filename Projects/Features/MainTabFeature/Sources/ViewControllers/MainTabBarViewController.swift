@@ -168,7 +168,10 @@ private extension MainTabBarViewController {
             .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
-                owner.showBottomSheet(content: viewController)
+                owner.showBottomSheet(
+                    content: viewController,
+                    size: .fixed(APP_WIDTH() + 96 + SAFEAREA_BOTTOM_HEIGHT())
+                )
             }
             .disposed(by: disposeBag)
     }

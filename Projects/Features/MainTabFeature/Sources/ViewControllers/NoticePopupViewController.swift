@@ -147,7 +147,7 @@ private extension NoticePopupViewController {
         pageCountView.isHidden = true
 
         pageCountLabel.textColor = DesignSystemAsset.BlueGrayColor.gray25.color
-        pageCountLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 14)
+        pageCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
 
         collectionView.register(
             UINib(nibName: "NoticeCollectionViewCell", bundle: BaseFeatureResources.bundle),
