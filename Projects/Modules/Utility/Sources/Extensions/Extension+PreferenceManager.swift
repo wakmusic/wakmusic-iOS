@@ -8,6 +8,7 @@
 
 import Foundation
 import LogManager
+import FirebaseCrashlytics
 import RxSwift
 
 public extension PreferenceManager {
