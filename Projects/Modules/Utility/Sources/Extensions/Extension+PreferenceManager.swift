@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import FirebaseCrashlytics
 import Foundation
 import LogManager
-import FirebaseCrashlytics
 import RxSwift
 
 public extension PreferenceManager {
