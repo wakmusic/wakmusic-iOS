@@ -65,6 +65,7 @@ public extension PreferenceManager {
 
     static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
+        Crashlytics.crashlytics().setUserID(nil)
         PreferenceManager.userInfo = nil
     }
 }
