@@ -31,7 +31,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         setSettingItemTableView()
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .setting))
@@ -189,7 +189,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .disposed(by: disposeBag)
 
         settingView.rx.withDrawButtonDidTap
-            .do(onNext: { 
+            .do(onNext: {
                 LogManager.analytics(SettingAnalyticsLog.clickWithdrawButton)
             })
             .map { Reactor.Action.withDrawButtonDidTap }
@@ -216,7 +216,7 @@ extension SettingViewController: UITableViewDelegate {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .serviceTerms:            LogManager.analytics(SettingAnalyticsLog.clickServiceTermsButton)
+        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickServiceTermsButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
             LogManager.analytics(SettingAnalyticsLog.clickPrivacyButton)
