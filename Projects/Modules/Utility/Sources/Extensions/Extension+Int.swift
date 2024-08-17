@@ -54,4 +54,15 @@ public extension Int {
             return formatter.string(from: NSNumber(value: millions))! + "억"
         }
     }
+
+    func formattedWithComma() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+
+        guard let result = numberFormatter.string(from: NSNumber(value: self)) else {
+            return "0"
+        }
+
+        return result
+    }
 }
