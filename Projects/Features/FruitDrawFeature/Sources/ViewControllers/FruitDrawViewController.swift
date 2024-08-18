@@ -481,6 +481,12 @@ private extension FruitDrawViewController {
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         perform(#selector(startComponentAnimation), with: nil, afterDelay: 0.3)
+        rewardFruitImageView.addShadow(
+            offset: CGSize(width: 0, height: 2.5),
+            color: UIColor.black,
+            opacity: 0.1,
+            radius: 50
+        )
         activityIndicator.startAnimating()
     }
 }
