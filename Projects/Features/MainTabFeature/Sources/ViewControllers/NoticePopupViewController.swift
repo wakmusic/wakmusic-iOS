@@ -45,7 +45,7 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
         inputBind()
     }
 
-    public override func viewDidAppear(_ animated: Bool) {
+    override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .noticePopup))
     }

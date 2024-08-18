@@ -133,7 +133,10 @@ public final class ContainSongsViewModel: ViewModelType {
                 return self.addSongIntoPlaylistUseCase
                     .execute(key: model.key, songs: self.songs)
                     .do(onSuccess: { _ in
-                        let log = ContainSongsAnalyticsLog.completeAddMusics(playlistId: model.key, count: self.songs.count)
+                        let log = ContainSongsAnalyticsLog.completeAddMusics(
+                            playlistId: model.key,
+                            count: self.songs.count
+                        )
                         LogManager.analytics(log)
                     })
                     .catch { (error: Error) in

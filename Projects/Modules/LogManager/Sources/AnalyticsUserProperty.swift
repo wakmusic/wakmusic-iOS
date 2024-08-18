@@ -23,10 +23,10 @@ extension AnalyticsUserProperty: UserPropertyRepresentable {
 
     public var value: String? {
         switch self {
-        case .loginPlatform(let platform): return platform
-        case .fruitTotal(let count): return "\(count)"
-        case .playlistSongTotal(let count): return "\(count)"
-        case .latestSearchKeyword(let keyword): return keyword
+        case let .loginPlatform(platform): return platform
+        case let .fruitTotal(count): return "\(count)"
+        case let .playlistSongTotal(count): return "\(count)"
+        case let .latestSearchKeyword(keyword): return keyword
         }
     }
 }

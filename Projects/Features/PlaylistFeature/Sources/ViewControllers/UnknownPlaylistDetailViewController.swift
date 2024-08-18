@@ -169,7 +169,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$showLoginPopup)
-            .filter { ($0.0) }
+            .filter { $0.0 }
             .bind(with: self) { owner, param in
                 let vc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,

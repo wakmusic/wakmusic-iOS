@@ -47,7 +47,7 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
         return viewController
     }
 
-    public override func pageboyViewController(
+    override public func pageboyViewController(
         _ pageboyViewController: PageboyViewController,
         didScrollToPageAt index: TabmanViewController.PageIndex,
         direction: PageboyViewController.NavigationDirection,
