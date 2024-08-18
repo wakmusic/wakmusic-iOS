@@ -128,7 +128,8 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.addView()
         self.view.addSubviews(wmNavigationbarView, tableView, saveCompletionIndicator)
         wmNavigationbarView.setLeftViews([dismissButton])
-        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton, saveCompletionIndicator])
+        wmNavigationbarView.setRightViews([lockButton, moreButton, completionButton])
+        wmNavigationbarView.addSubview(saveCompletionIndicator)
     }
 
     override func setLayout() {
@@ -148,10 +149,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         completionButton.snp.makeConstraints {
             $0.width.equalTo(45)
             $0.height.equalTo(24)
-            $0.bottom.equalToSuperview().offset(-5)
         }
 
         saveCompletionIndicator.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-35)
+            $0.centerY.equalToSuperview()
             $0.size.equalTo(15)
         }
     }
@@ -368,7 +370,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         sharedState.map(\.isSaveCompletionLoading)
             .distinctUntilChanged()
             .bind(with: self) { owner, isLoading in
-
                 if isLoading {
                     owner.saveCompletionIndicator.startAnimating()
                 } else {
