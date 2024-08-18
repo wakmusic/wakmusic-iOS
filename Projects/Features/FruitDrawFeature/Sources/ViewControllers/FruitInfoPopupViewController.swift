@@ -122,6 +122,13 @@ private extension FruitInfoPopupViewController {
                 options: [.transition(.fade(0.2))]
             )
         }
+
+        noteImageView.addShadow(
+            offset: CGSize(width: 0, height: 2.5),
+            color: UIColor.black,
+            opacity: 0.1,
+            radius: 50
+        )
     }
 
     func addAction() {
