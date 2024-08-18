@@ -1,4 +1,6 @@
 import FirebaseAnalytics
+import FirebaseCrashlytics
+import FirebaseCrashlyticsSwift
 import Foundation
 import OSLog
 import ThirdPartyLib
@@ -70,6 +72,7 @@ public extension LogManager {
         line: Int = #line
     ) {
         Analytics.setUserID(userID)
+        Crashlytics.crashlytics().setUserID(userID)
 
         LogManager.printDebug(
             "Set Analytics UserID : \(String(describing: userID))",
@@ -120,6 +123,38 @@ public extension LogManager {
     ) {
         LogManager.log(
             message,
+            level: .error,
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func sendError(
+        message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Crashlytics.crashlytics().log(message)
+        LogManager.log(
+            message,
+            level: .error,
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func sendError(
+        error: any Error,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Crashlytics.crashlytics().record(error: error)
+        LogManager.log(
+            error,
             level: .error,
             file: file,
             function: function,

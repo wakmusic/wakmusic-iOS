@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import FirebaseCrashlytics
 import Foundation
 import LogManager
 import RxSwift
@@ -65,6 +66,7 @@ public extension PreferenceManager {
 
     static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
+        Crashlytics.crashlytics().setUserID(nil)
         PreferenceManager.userInfo = nil
     }
 }
