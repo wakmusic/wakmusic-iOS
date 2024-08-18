@@ -205,12 +205,6 @@ private extension String {
 
 private extension Character {
     var isAlphabetCharacter: Bool {
-        let alphabetRanges: [ClosedRange<Unicode.Scalar>] = [
-            Unicode.Scalar(0x0041) ... Unicode.Scalar(0x005A), // 대문자 A-Z
-            Unicode.Scalar(0x0061) ... Unicode.Scalar(0x007A) // 소문자 a-z
-        ]
-
-        guard let unicodeScalar = self.unicodeScalars.first else { return false }
-        return alphabetRanges.contains { $0.contains(unicodeScalar) }
+        return self.unicodeScalars.allSatisfy { $0.isASCII && $0.properties.isAlphabetic }
     }
 }
