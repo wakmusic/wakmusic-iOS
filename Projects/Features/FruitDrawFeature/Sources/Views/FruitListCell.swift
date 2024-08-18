@@ -73,10 +73,14 @@ extension FruitListCell {
     ) {
         self.items = model
         let notes = [firstNoteImageView, secondNoteImageView, thirdNoteImageView]
+        let shadows = [firstNoteShadowImageView, secondNoteShadowImageView, thirdNoteShadowImageView]
         notes.forEach { $0.alpha = 0 }
+        shadows.forEach { $0.alpha = 0 }
 
         for i in 0 ..< model.count {
             notes[i].alpha = 1
+            shadows[i].alpha = 1
+
             if model[i].quantity == -1 {
                 notes[i].image = totalCount > 15 ?
                     DesignSystemAsset.FruitDraw.unidentifiedNote.image :
