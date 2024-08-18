@@ -150,7 +150,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.willShowSongCart)
+            .notification(.shouldHidePlaylistFloatingButton)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 0
@@ -159,7 +159,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.willHideSongCart)
+            .notification(.shouldShowPlaylistFloatingButton)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 1
