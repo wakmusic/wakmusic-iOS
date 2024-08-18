@@ -5,13 +5,19 @@ import Then
 import UIKit
 import Utility
 
-final class RandomPlayButtonHeaderView: UIView {
+final class RandomPlayButtonHeaderView: UICollectionReusableView {
     private let randomPlayButton = RandomPlayButton()
+    private let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+    }
+
+    private var playButtonHandler: (() -> Void)?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
-        self.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        setupViews()
+        bind()
     }
 
     @available(*, unavailable)
@@ -19,17 +25,31 @@ final class RandomPlayButtonHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func addAction(didTap: @escaping () -> Void) {
-        randomPlayButton.addAction {
-            didTap()
-        }
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        layer.zPosition = 1
     }
 
-    private func setupView() {
-        addSubviews(randomPlayButton)
+    func setPlayButtonHandler(handler: @escaping () -> Void) {
+        self.playButtonHandler = handler
+    }
+
+    private func setupViews() {
+        addSubviews(blurEffectView, randomPlayButton)
+        blurEffectView.snp.makeConstraints {
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.verticalEdges.equalToSuperview().inset(8)
+        }
+
         randomPlayButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.verticalEdges.equalToSuperview().inset(8)
+        }
+    }
+
+    private func bind() {
+        randomPlayButton.addAction { [weak self] in
+            self?.playButtonHandler?()
         }
     }
 }
@@ -57,6 +77,14 @@ private final class RandomPlayButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func updateTitle(isOverMaximumNumber: Bool) {
+        playLabel.text = if isOverMaximumNumber {
+            LocalizationStrings.title50RandomPlay
+        } else {
+            LocalizationStrings.titleRandomPlay
+        }
+    }
+
     private func setupView() {
         addSubviews(randomImageView, playLabel)
 
@@ -74,6 +102,6 @@ private final class RandomPlayButton: UIButton {
         layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
             .withAlphaComponent(0.4).cgColor
         layer.cornerRadius = 8
-        backgroundColor = DesignSystemAsset.PrimaryColorV2.white.color
+        backgroundColor = DesignSystemAsset.PrimaryColorV2.white.color.withAlphaComponent(0.4)
     }
 }
