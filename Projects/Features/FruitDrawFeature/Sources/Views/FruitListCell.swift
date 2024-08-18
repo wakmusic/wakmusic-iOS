@@ -25,7 +25,7 @@ public final class FruitListCell: UICollectionViewCell {
     private let firstNoteImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
     }
-    
+
     private let firstNoteShadowImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.image = DesignSystemAsset.FruitDraw.noteShadow.image

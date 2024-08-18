@@ -72,7 +72,7 @@ private extension FruitInfoPopupViewController {
 
     func setLayout() {
         let is320 = APP_WIDTH() < 375
-        
+
         aroundView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
