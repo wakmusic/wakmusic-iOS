@@ -1,4 +1,5 @@
 import BaseFeature
+import LogManager
 import RxCocoa
 import RxRelay
 import RxSwift
@@ -111,6 +112,8 @@ extension FaqContentViewController: UITableViewDelegate {
 
         if data[indexPath.section].isOpen {
             self.scrollToBottom(indexPath: next)
+            let title = data[indexPath.section].question
+            LogManager.analytics(FAQAnalyticsLog.clickFaqItem(title: title))
         }
     }
 

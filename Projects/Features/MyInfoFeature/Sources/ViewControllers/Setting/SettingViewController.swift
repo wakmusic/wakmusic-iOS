@@ -117,6 +117,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = SettingAnalyticsLog.completeRemoveCache(size: cachSize)
+                        LogManager.analytics(log)
+
                         owner.reactor?.action.onNext(.confirmRemoveCacheButtonDidTap)
                     },
                     cancelCompletion: nil
@@ -142,6 +145,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                         text: "정말 탈퇴하시겠습니까?",
                         cancelButtonIsHidden: false,
                         completion: {
+                            let log = SettingAnalyticsLog.completeWithdraw
+                            LogManager.analytics(log)
+
                             owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
                         }
                     )
@@ -216,10 +222,10 @@ extension SettingViewController: UITableViewDelegate {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickServiceTermsButton)
+        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
-            LogManager.analytics(SettingAnalyticsLog.clickPrivacyButton)
+            LogManager.analytics(SettingAnalyticsLog.clickPrivacyPolicyButton)
             reactor?.action.onNext(.privacyNavigationDidTap)
         case .openSource:
             LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
@@ -237,6 +243,9 @@ extension SettingViewController: UITableViewDelegate {
                 cancelButtonText: "취소",
                 completion: { [weak self] in
                     guard let self else { return }
+                    let log = SettingAnalyticsLog.completeLogout
+                    LogManager.analytics(log)
+
                     self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
                 },
                 cancelCompletion: {}

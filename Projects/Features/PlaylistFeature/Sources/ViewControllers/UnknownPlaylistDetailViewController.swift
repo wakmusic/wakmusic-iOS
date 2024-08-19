@@ -169,12 +169,17 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$showLoginPopup)
-            .filter { $0 }
-            .bind(with: self) { owner, _ in
+            .filter { $0.0 }
+            .bind(with: self) { owner, param in
                 let vc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { () in
+                        if let entry = param.1 {
+                            let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                            LogManager.analytics(log)
+                        }
+
                         let vc = owner.signInFactory.makeView()
                         vc.modalPresentationStyle = .fullScreen
                         owner.present(vc, animated: true)
@@ -401,9 +406,11 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
 
             if PreferenceManager.userInfo == nil {
-                reactor.action.onNext(.requestLoginRequiredAction)
+                reactor.action.onNext(.requestLoginRequiredAction(source: .addMusics))
                 return
             }
 

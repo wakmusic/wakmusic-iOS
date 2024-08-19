@@ -11,6 +11,9 @@ extension PlaylistViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlist)
+            LogManager.analytics(log)
+
             let songs: [String] = Array(output.selectedSongIds.value)
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
@@ -24,6 +27,9 @@ extension PlaylistViewController: SongCartViewDelegate {
                     cancelButtonIsHidden: false,
                     completion: { [weak self] in
                         guard let self else { return }
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let vc = self.signInFactory.makeView()
                         vc.modalPresentationStyle = .fullScreen
                         self.present(vc, animated: true) {

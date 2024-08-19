@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import LogManager
 import SongsDomainInterface
 import Utility
 
@@ -40,6 +41,7 @@ public final class PlayState {
         playlist.subscribeListChanges()
             .map { Array($0) }
             .sink { [weak self] playlistItems in
+                LogManager.setUserProperty(property: .playlistSongTotal(count: playlistItems.count))
                 self?.updatePlaylistChangesToLocalDB(playList: playlistItems)
             }
             .store(in: &subscription)

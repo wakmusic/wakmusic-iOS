@@ -82,6 +82,38 @@ public extension LogManager {
         )
     }
 
+    static func setUserProperty(
+        property: AnalyticsUserProperty,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Analytics.setUserProperty(property.value, forName: property.key)
+
+        LogManager.printDebug(
+            "Set User Property : [ \(property.key) = \(String(describing: property.value)) ]",
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func clearUserProperty(
+        property: AnalyticsUserProperty,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Analytics.setUserProperty(nil, forName: property.key)
+
+        LogManager.printDebug(
+            "Set User Property : [ \(property.key) = nil ]",
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
     static func printDebug(
         _ message: Any,
         file: String = #file,

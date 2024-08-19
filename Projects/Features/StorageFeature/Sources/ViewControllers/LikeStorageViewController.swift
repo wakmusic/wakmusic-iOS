@@ -138,6 +138,9 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
+                let log = CommonAnalyticsLog.clickLoginButton(entry: .storageLike)
+                LogManager.analytics(log)
+
                 let loginVC = owner.signInFactory.makeView()
                 loginVC.modalPresentationStyle = .fullScreen
                 owner.present(loginVC, animated: true)
@@ -258,6 +261,9 @@ extension LikeStorageViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .storageLike)
+            LogManager.analytics(log)
+
             reactor?.action.onNext(.addToPlaylistButtonDidTap)
         case .addPlayList:
             reactor?.action.onNext(.addToCurrentPlaylistButtonDidTap)

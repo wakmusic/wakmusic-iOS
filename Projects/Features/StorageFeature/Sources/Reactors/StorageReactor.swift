@@ -1,4 +1,5 @@
 import Foundation
+import LogManager
 import ReactorKit
 import UserDomainInterface
 import Utility
@@ -15,14 +16,14 @@ final class StorageReactor: Reactor {
         case updateIsLoggedIn(Bool)
         case switchTabIndex(Int)
         case switchEditingState(Bool)
-        case showLoginAlert
+        case showLoginAlert(CommonAnalyticsLog.LoginButtonEntry)
     }
 
     struct State {
         var isLoggedIn: Bool
         var isEditing: Bool
         var tabIndex: Int
-        @Pulse var showLoginAlert: Void?
+        @Pulse var showLoginAlert: CommonAnalyticsLog.LoginButtonEntry?
     }
 
     let initialState: State
@@ -51,7 +52,7 @@ final class StorageReactor: Reactor {
                 storageCommonService.isEditingState.onNext(true)
                 return switchEditingState(true)
             } else {
-                return .just(.showLoginAlert)
+                return .just(.showLoginAlert(.myPlaylist))
             }
         case .saveButtonTap:
             storageCommonService.isEditingState.onNext(false)
@@ -84,8 +85,8 @@ final class StorageReactor: Reactor {
             newState.tabIndex = index
         case let .switchEditingState(flag):
             newState.isEditing = flag
-        case .showLoginAlert:
-            newState.showLoginAlert = ()
+        case let .showLoginAlert(entry):
+            newState.showLoginAlert = entry
         case let .updateIsLoggedIn(isLoggedIn):
             newState.isLoggedIn = isLoggedIn
         }

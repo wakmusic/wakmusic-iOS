@@ -120,13 +120,16 @@ extension StorageViewController {
 
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
+            .bind(with: self, onNext: { owner, entry in
                 guard let vc = owner.textPopUpFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         owner.present(loginVC, animated: true)

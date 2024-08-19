@@ -187,6 +187,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                     }
                     owner.showBottomSheet(content: textPopupViewController)
                 } else {
+                    LogManager.setUserProperty(property: .latestSearchKeyword(keyword: text))
                     owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)

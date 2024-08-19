@@ -68,7 +68,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     }
 
     deinit {
-        DEBUG_LOG("❌ PlaylistVC deinit")
+        LogManager.printDebug("❌ PlaylistVC deinit")
     }
 
     @available(*, unavailable)
