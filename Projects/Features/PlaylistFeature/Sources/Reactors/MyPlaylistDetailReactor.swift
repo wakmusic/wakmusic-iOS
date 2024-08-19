@@ -424,6 +424,7 @@ private extension MyPlaylistDetailReactor {
         let backUpPlaylist = state.backupPlaylistModels
 
         return .concat([
+            updateComplectionButtonVisible(flag: false),
             .just(Mutation.updateEditingState(false)),
             .just(Mutation.updatePlaylist(backUpPlaylist)),
             .just(.updateSelectedCount(0))
