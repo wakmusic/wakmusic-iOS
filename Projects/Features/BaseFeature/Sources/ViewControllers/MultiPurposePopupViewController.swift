@@ -73,7 +73,7 @@ private extension MultiPurposePopupViewController {
                 let errorColor = DesignSystemAsset.PrimaryColor.increase.color
                 let passColor = DesignSystemAsset.PrimaryColor.decrease.color
 
-                owner.countLabel.text = "\(str.count)자"
+                owner.countLabel.text = "\(str.alphabetCharacterCeilCount)자"
 
                 if str.isEmpty {
                     owner.cancelButton.isHidden = true
@@ -96,7 +96,7 @@ private extension MultiPurposePopupViewController {
                     owner.countLabel.textColor = errorColor
                     owner.saveButton.isEnabled = false
 
-                } else if str.count > owner.viewModel.type.textLimitCount {
+                } else if str.alphabetCharacterCeilCount > owner.viewModel.type.textLimitCount {
                     owner.dividerView.backgroundColor = errorColor
                     owner.confirmLabel.text = "글자 수를 초과하였습니다."
                     owner.confirmLabel.textColor = errorColor
@@ -151,6 +151,7 @@ private extension MultiPurposePopupViewController {
         cancelButton.layer.borderWidth = 1
         cancelButton.backgroundColor = .white
         cancelButton.isHidden = true
+        cancelButton.contentEdgeInsets = .init(top: 3, left: 12, bottom: 3, right: 12)
 
         confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         confirmLabel.isHidden = true
@@ -185,7 +186,25 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
         guard let char = string.cString(using: String.Encoding.utf8) else { return false }
         let isBackSpace = strcmp(char, "\\b")
 
-        guard isBackSpace == -92 || (textField.text?.count ?? 0) < viewModel.type.textLimitCount else { return false }
+        let latinCharCount = textField.text?.alphabetCharacterCeilCount ?? 0
+
+        guard isBackSpace == -92 || latinCharCount < viewModel.type.textLimitCount else { return false }
         return true
+    }
+}
+
+private extension String {
+    var alphabetCharacterCeilCount: Int {
+        let count = reduce(0) { count, char in
+            return count + (char.isAlphabetCharacter ? 0.5 : 1)
+        }
+
+        return Int(ceil(count))
+    }
+}
+
+private extension Character {
+    var isAlphabetCharacter: Bool {
+        return self.unicodeScalars.allSatisfy { $0.isASCII && $0.properties.isAlphabetic }
     }
 }
