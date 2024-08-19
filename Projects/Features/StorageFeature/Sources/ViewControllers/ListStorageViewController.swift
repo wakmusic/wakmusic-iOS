@@ -59,6 +59,12 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storagePlaylist))
         listStorageView.resetParticeAnimation()
+
+        // 플리 상세에서 내 리스트로 돌아오는 경우, 플로팅 버튼 올림
+        NotificationCenter.default.post(
+            name: .shouldMovePositionPlaylistFloatingButton,
+            object: PlaylistFloatingButtonPosition.top
+        )
     }
 
     override func configureUI() {
@@ -91,6 +97,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showDetail)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, key in
+                // 플리 상세 진입 시, 플로팅 버튼 내림
                 NotificationCenter.default.post(
                     name: .shouldMovePositionPlaylistFloatingButton,
                     object: PlaylistFloatingButtonPosition.default
