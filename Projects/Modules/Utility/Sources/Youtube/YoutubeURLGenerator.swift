@@ -7,6 +7,10 @@ public protocol YoutubeURLGeneratable {
     func generateYoutubeVideoWebURL(id: String) -> String
     func generateYoutubeVideoAppURL(ids: [String]) -> String
     func generateYoutubeVideoWebURL(ids: [String]) -> String
+    func generateYoutubeMusicVideoAppURL(id: String) -> String
+    func generateYoutubeMusicVideoWebURL(id: String) -> String
+    func generateYoutubeMusicPlaylistAppURL(id: String) -> String
+    func generateYoutubeMusicPlaylistWebURL(id: String) -> String
 }
 
 public struct YoutubeURLGenerator: YoutubeURLGeneratable {
@@ -34,5 +38,21 @@ public struct YoutubeURLGenerator: YoutubeURLGeneratable {
 
     public func generateYoutubeVideoWebURL(ids: [String]) -> String {
         "https://youtube.com/watch_videos?video_ids=\(ids.joined(separator: ","))"
+    }
+
+    public func generateYoutubeMusicVideoAppURL(id: String) -> String {
+        return "youtubemusic://watch?v=\(id)"
+    }
+
+    public func generateYoutubeMusicVideoWebURL(id: String) -> String {
+        return "https://music.youtube.com/watch?v=\(id)"
+    }
+
+    public func generateYoutubeMusicPlaylistAppURL(id: String) -> String {
+        return "youtubemusic://watch?list=\(id)"
+    }
+
+    public func generateYoutubeMusicPlaylistWebURL(id: String) -> String {
+        return "https://music.youtube.com/watch?list=\(id)"
     }
 }
