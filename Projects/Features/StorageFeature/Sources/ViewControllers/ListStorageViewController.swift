@@ -91,6 +91,10 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showDetail)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, key in
+                NotificationCenter.default.post(
+                    name: .shouldMovePositionPlaylistFloatingButton,
+                    object: PlaylistFloatingButtonPosition.default
+                )
                 owner.navigatePlaylistDetail(key: key)
             })
             .disposed(by: disposeBag)
