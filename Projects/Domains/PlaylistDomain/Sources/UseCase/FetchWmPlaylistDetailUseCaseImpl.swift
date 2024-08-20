@@ -2,7 +2,7 @@ import Foundation
 import PlaylistDomainInterface
 import RxSwift
 
-public struct FetchPlaylistDetailUseCaseImpl: FetchPlaylistDetailUseCase {
+public struct FetchWmPlaylistDetailUseCaseImpl: FetchWmPlaylistDetailUseCase {
     private let playlistRepository: any PlaylistRepository
 
     public init(
@@ -11,7 +11,7 @@ public struct FetchPlaylistDetailUseCaseImpl: FetchPlaylistDetailUseCase {
         self.playlistRepository = playlistRepository
     }
 
-    public func execute(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
-        playlistRepository.fetchPlaylistDetail(id: id, type: type)
+    public func execute(id: String) -> Single<WmPlaylistDetailEntity> {
+        playlistRepository.fetchWmPlaylistDetail(id: id)
     }
 }
