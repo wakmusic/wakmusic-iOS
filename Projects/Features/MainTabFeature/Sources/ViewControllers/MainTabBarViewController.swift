@@ -150,7 +150,7 @@ private extension MainTabBarViewController {
             // 보관함에서 플리상세 접근 시 플로팅버튼 내림
             if selectedIndex == 3 {
                 NotificationCenter.default.post(
-                    name: .shouldMovePositionPlaylistFloatingButton,
+                    name: .shouldMovePlaylistFloatingButton,
                     object: PlaylistFloatingButtonPosition.default
                 )
             }

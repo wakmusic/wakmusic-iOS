@@ -62,7 +62,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         // 플리 상세에서 내 리스트로 돌아오는 경우, 플로팅 버튼 올림
         NotificationCenter.default.post(
-            name: .shouldMovePositionPlaylistFloatingButton,
+            name: .shouldMovePlaylistFloatingButton,
             object: PlaylistFloatingButtonPosition.top
         )
     }
@@ -99,7 +99,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .bind(with: self, onNext: { owner, key in
                 // 플리 상세 진입 시, 플로팅 버튼 내림
                 NotificationCenter.default.post(
-                    name: .shouldMovePositionPlaylistFloatingButton,
+                    name: .shouldMovePlaylistFloatingButton,
                     object: PlaylistFloatingButtonPosition.default
                 )
                 owner.navigatePlaylistDetail(key: key)

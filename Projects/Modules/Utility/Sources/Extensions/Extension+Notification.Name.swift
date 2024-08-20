@@ -9,5 +9,5 @@ public extension Notification.Name {
     static let willStatusBarEnterLightBackground = Notification.Name("willStatusBarEnterLightBackground")
     static let shouldHidePlaylistFloatingButton = Notification.Name("shouldHidePlaylistFloatingButton")
     static let shouldShowPlaylistFloatingButton = Notification.Name("shouldShowPlaylistFloatingButton")
-    static let shouldMovePositionPlaylistFloatingButton = Notification.Name("shouldMovePositionPlaylistFloatingButton")
+    static let shouldMovePlaylistFloatingButton = Notification.Name("shouldMovePlaylistFloatingButton")
 }

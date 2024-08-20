@@ -172,7 +172,7 @@ private extension MainContainerViewController {
         Observable.combineLatest(
             PreferenceManager.$startPage.map { $0 ?? 0 },
             NotificationCenter.default.rx
-                .notification(.shouldMovePositionPlaylistFloatingButton)
+                .notification(.shouldMovePlaylistFloatingButton)
                 .map { $0.object as? PlaylistFloatingButtonPosition ?? .default }
         ) { startPage, pos -> (Int, PlaylistFloatingButtonPosition) in
             return (startPage, pos)
