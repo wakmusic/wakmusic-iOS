@@ -108,7 +108,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateLoginPopupState(flag):
             newState.showLoginPopup = flag
-            
+
         case let .updatePlaylistURL(URL):
             newState.playlistURL = URL
         }

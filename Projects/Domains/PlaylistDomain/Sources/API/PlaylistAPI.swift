@@ -35,7 +35,7 @@ extension PlaylistAPI: WMAPI {
 
         case let .fetchPlaylistDetail(id: id, type: type):
             return "/\(id)"
-            
+
         case let .fetchWmPlaylistDetail(id: id):
             return "/recommend/\(id)"
 
@@ -64,7 +64,8 @@ extension PlaylistAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWmPlaylistDetail, .fetchPlaylistSongs, .checkSubscription,
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWmPlaylistDetail, .fetchPlaylistSongs,
+             .checkSubscription,
              .requestPlaylistOwnerID:
             return .get
 
@@ -84,7 +85,8 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWmPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription,
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWmPlaylistDetail, .fetchPlaylistSongs,
+             .subscribePlaylist, .checkSubscription,
              .requestPlaylistOwnerID:
             return .requestPlain
 

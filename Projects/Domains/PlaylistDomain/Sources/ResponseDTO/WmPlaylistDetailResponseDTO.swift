@@ -9,7 +9,7 @@ public struct WmPlaylistDetailResponseDTO: Decodable {
     public let songs: [SingleSongResponseDTO]?
     public let imageURL: String
     public let playlistURL: String
-    
+
     enum CodingKeys: String, CodingKey {
         case key
         case title
@@ -18,7 +18,6 @@ public struct WmPlaylistDetailResponseDTO: Decodable {
         case playlistURL = "playlistUrl"
     }
 }
-
 
 public extension WmPlaylistDetailResponseDTO {
     func toDomain() -> WmPlaylistDetailEntity {

@@ -308,8 +308,8 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 
 extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
     func tappedButtonAction() {
-
-        guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL, let url = URL(string: playlistURL) else {
+        guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL,
+              let url = URL(string: playlistURL) else {
             showToast(text: "해당 기능은 준비 중입니다.", options: [.tabBar])
             return
         }

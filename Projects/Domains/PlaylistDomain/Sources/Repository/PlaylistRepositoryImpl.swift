@@ -20,7 +20,7 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
     public func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity> {
         remotePlaylistDataSource.fetchPlaylistDetail(id: id, type: type)
     }
-    
+
     public func fetchWmPlaylistDetail(id: String) -> Single<WmPlaylistDetailEntity> {
         remotePlaylistDataSource.fetchWmPlaylistDetail(id: id)
     }
