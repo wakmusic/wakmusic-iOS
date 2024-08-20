@@ -334,12 +334,6 @@ extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegat
 }
 
 
-extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
-    func thumbnailDidTap(key: String) {
-        songDetailPresenter.present(id: key)
-    }
-}
-
 /// 송카트 델리게이트
 extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
     func buttonTapped(type: SongCartSelectType) {
