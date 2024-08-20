@@ -83,7 +83,13 @@ final class StorageViewController: TabmanViewController, View {
         animated: Bool
     ) {
         self.reactor?.action.onNext(.switchTab(index))
-        NotificationCenter.default.post(name: .didChangeTabInStorage, object: index)
+        // 탭 이동 간 플로팅 버튼 위치 조정
+        NotificationCenter.default.post(
+            name: .shouldMovePlaylistFloatingButton,
+            object: index == 0 ?
+                PlaylistFloatingButtonPosition.top :
+                PlaylistFloatingButtonPosition.default
+        )
     }
 
     /// 탭맨 탭 터치 이벤트 감지 함수

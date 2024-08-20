@@ -147,6 +147,14 @@ private extension MainTabBarViewController {
             let viewController = playlistDetailFactory.makeView(key: key)
             navigationController?.pushViewController(viewController, animated: true)
 
+            // 보관함에서 플리상세 접근 시 플로팅버튼 내림
+            if selectedIndex == 3 {
+                NotificationCenter.default.post(
+                    name: .shouldMovePlaylistFloatingButton,
+                    object: PlaylistFloatingButtonPosition.default
+                )
+            }
+
         case "songDetail":
             let id = params["id"] as? String ?? ""
             songDetailPresenter.present(id: id)
