@@ -10,3 +10,23 @@ public protocol TextPopUpFactory {
         cancelCompletion: (() -> Void)?
     ) -> UIViewController
 }
+
+public extension TextPopUpFactory {
+    func makeView(
+        text: String? = nil,
+        cancelButtonIsHidden: Bool = false,
+        confirmButtonText: String? = nil,
+        cancelButtonText: String? = nil,
+        completion: (() -> Void)? = nil,
+        cancelCompletion: (() -> Void)? = nil
+    ) -> UIViewController {
+        self.makeView(
+            text: text,
+            cancelButtonIsHidden: cancelButtonIsHidden,
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: cancelButtonText,
+            completion: completion,
+            cancelCompletion: cancelCompletion
+        )
+    }
+}

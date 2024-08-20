@@ -170,8 +170,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map { $0.dataSource }
+            .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
-
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
                 snapshot.appendSections([.song])
@@ -247,7 +247,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        LogManager.printDebug("❌ \(Self.self) 소멸")
     }
 }
 
@@ -318,6 +318,10 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 
 extension SongSearchResultViewController: SongResultCellDelegate {
     func thumbnailDidTap(key: String) {
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: key)
     }
 }
@@ -336,6 +340,8 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         case .allSelect(_):
             break
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .search)
+            LogManager.analytics(log)
 
             guard songs.count <= limit else {
                 showToast(
@@ -352,6 +358,9 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = self.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         self.present(loginVC, animated: true)
@@ -384,7 +393,9 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .play:
-
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .search, type: .multiple)
+            )
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),

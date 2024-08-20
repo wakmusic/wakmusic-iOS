@@ -32,6 +32,9 @@ public final class FaqViewModel: ViewModelType {
         let zip1 = fetchFaqCategoriesUseCase.execute()
             .catchAndReturn(FaqCategoryEntity(categories: []))
             .map {
+                /*
+                 탭맨의 무언가 이상함으로 인해 임시방편으로 공백을 직접 넣어줌
+                 */
                 var result: [String] = [String("전체    ")]
 
                 result += $0.categories.map { $0.count < 6 ? $0 + String(repeating: " ", count: 6 - $0.count) : $0 }

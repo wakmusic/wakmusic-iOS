@@ -224,7 +224,7 @@
 //        withdrawButton.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
 //        withdrawButton.setAttributedTitle(withDrawAttributedString, for: .normal)
 //
-//        #if DEBUG
+//        #if DEBUG || QA
 //            self.bombSuperView.isHidden = false
 //        #else
 //            self.bombSuperView.isHidden = true

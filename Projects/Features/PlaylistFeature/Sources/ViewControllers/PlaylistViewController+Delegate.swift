@@ -1,6 +1,7 @@
 import BaseFeature
 import DesignSystem
 import Localization
+import LogManager
 import UIKit
 import Utility
 
@@ -10,6 +11,9 @@ extension PlaylistViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             self.isSelectedAllSongs.onNext(flag)
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlist)
+            LogManager.analytics(log)
+
             let songs: [String] = Array(output.selectedSongIds.value)
             guard let viewController = containSongsFactory.makeView(songs: songs) as? ContainSongsViewController else {
                 return
@@ -23,6 +27,9 @@ extension PlaylistViewController: SongCartViewDelegate {
                     cancelButtonIsHidden: false,
                     completion: { [weak self] in
                         guard let self else { return }
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let vc = self.signInFactory.makeView()
                         vc.modalPresentationStyle = .fullScreen
                         self.present(vc, animated: true) {
@@ -68,9 +75,19 @@ extension PlaylistViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let playbuttonGroupView = PlayButtonGroupView()
-        playbuttonGroupView.delegate = self
-        return playbuttonGroupView
+        let randomPlayButton = RandomPlayButtonHeaderView(frame: .zero)
+        randomPlayButton.setPlayButtonHandler { [weak self] in
+            guard let self else { return }
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .random)
+            )
+            let songIDs = output.playlists.value
+                .map(\.id)
+                .shuffled()
+                .prefix(50)
+            WakmusicYoutubePlayer(ids: Array(songIDs)).play()
+        }
+        return randomPlayButton
     }
 
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -101,27 +118,11 @@ extension PlaylistViewController: UITableViewDelegate {
     }
 }
 
-extension PlaylistViewController: PlayButtonGroupViewDelegate {
-    public func play(_ event: PlayEvent) {
-        switch event {
-        case .allPlay:
-            let songIDs = output.playlists.value
-                .map(\.id)
-                .prefix(50)
-            WakmusicYoutubePlayer(ids: Array(songIDs)).play()
-
-        case .shufflePlay:
-            let songIDs = output.playlists.value
-                .map(\.id)
-                .shuffled()
-                .prefix(50)
-            WakmusicYoutubePlayer(ids: Array(songIDs)).play()
-        }
-    }
-}
-
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
     func playButtonDidTap(key: String) {
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .single)
+        )
         WakmusicYoutubePlayer(id: key).play()
     }
 

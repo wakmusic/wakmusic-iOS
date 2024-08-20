@@ -21,7 +21,7 @@ public extension UIViewController {
         return UINavigationController(rootViewController: self)
     }
 
-    #if DEBUG
+    #if DEBUG || QA
         private struct Preview: UIViewControllerRepresentable {
             let viewController: UIViewController
 

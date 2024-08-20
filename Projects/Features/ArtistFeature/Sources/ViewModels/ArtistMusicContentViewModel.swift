@@ -43,7 +43,7 @@ public final class ArtistMusicContentViewModel: ViewModelType {
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
         let showToast: PublishSubject<String> = .init()
-        let showLogin: PublishSubject<Void> = .init()
+        let showLogin: PublishSubject<CommonAnalyticsLog.LoginButtonEntry> = .init()
     }
 
     public func transform(from input: Input) -> Output {
@@ -81,15 +81,12 @@ public final class ArtistMusicContentViewModel: ViewModelType {
             .withLatestFrom(output.indexOfSelectedSongs, resultSelector: { index, selectedSongs -> [Int] in
                 let songID: String = output.dataSource.value[index].songID
                 if selectedSongs.contains(index) {
-                    LogManager.analytics(ArtistAnalyticsLog.deselectMusicItem(id: songID, location: "artist"))
                     guard let removeTargetIndex = selectedSongs.firstIndex(where: { $0 == index })
                     else { return selectedSongs }
                     var newSelectedSongs = selectedSongs
                     newSelectedSongs.remove(at: removeTargetIndex)
                     return newSelectedSongs
-
                 } else {
-                    LogManager.analytics(ArtistAnalyticsLog.selectMusicItem(id: songID, location: "artist"))
                     return selectedSongs + [index]
                 }
             })

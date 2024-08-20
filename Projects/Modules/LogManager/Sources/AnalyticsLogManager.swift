@@ -1,4 +1,6 @@
 import FirebaseAnalytics
+import FirebaseCrashlytics
+import FirebaseCrashlyticsSwift
 import Foundation
 import OSLog
 import ThirdPartyLib
@@ -18,7 +20,7 @@ private extension LogManager {
         function: String = #function,
         line: Int = #line
     ) {
-        #if DEBUG
+        #if DEBUG || QA
             let logger = Logger(subsystem: OSLog.subSystem, category: level.category)
 
             let fileName = file.components(separatedBy: "/").last ?? "unknown.swift"
@@ -70,9 +72,42 @@ public extension LogManager {
         line: Int = #line
     ) {
         Analytics.setUserID(userID)
+        Crashlytics.crashlytics().setUserID(userID)
 
         LogManager.printDebug(
             "Set Analytics UserID : \(String(describing: userID))",
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func setUserProperty(
+        property: AnalyticsUserProperty,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Analytics.setUserProperty(property.value, forName: property.key)
+
+        LogManager.printDebug(
+            "Set User Property : [ \(property.key) = \(String(describing: property.value)) ]",
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func clearUserProperty(
+        property: AnalyticsUserProperty,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Analytics.setUserProperty(nil, forName: property.key)
+
+        LogManager.printDebug(
+            "Set User Property : [ \(property.key) = nil ]",
             file: file,
             function: function,
             line: line
@@ -101,6 +136,9 @@ public extension LogManager {
             Analytics.logEvent(log.name, parameters: log.params)
         #elseif DEBUG
             LogHistoryStorage.shared.appendHistory(log: log)
+        #elseif QA
+            Analytics.logEvent(log.name, parameters: log.params)
+            LogHistoryStorage.shared.appendHistory(log: log)
         #endif
         let message = """
         \(log.name) logged
@@ -117,6 +155,38 @@ public extension LogManager {
     ) {
         LogManager.log(
             message,
+            level: .error,
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func sendError(
+        message: String,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Crashlytics.crashlytics().log(message)
+        LogManager.log(
+            message,
+            level: .error,
+            file: file,
+            function: function,
+            line: line
+        )
+    }
+
+    static func sendError(
+        error: any Error,
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line
+    ) {
+        Crashlytics.crashlytics().record(error: error)
+        LogManager.log(
+            error,
             level: .error,
             file: file,
             function: function,

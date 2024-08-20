@@ -7,6 +7,7 @@
 //
 
 import DesignSystem
+import LogManager
 import Pageboy
 import SongsDomainInterface
 import Tabman
@@ -26,12 +27,36 @@ public class NewSongsViewController: TabmanViewController, ViewControllerFromSto
         return viewControllers
     }()
 
-    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+    deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configurePage()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .recentMusic)
+        LogManager.analytics(log)
+    }
+
+    override public func pageboyViewController(
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        let type = NewSongsAnalyticsLog.RecentMusicType.allCases[safe: index] ?? .all
+        let log = NewSongsAnalyticsLog.selectRecentMusicType(type: type)
+        LogManager.analytics(log)
+
+        super.pageboyViewController(
+            pageboyViewController,
+            didScrollToPageAt: index,
+            direction: direction,
+            animated: animated
+        )
     }
 
     public static func viewController(

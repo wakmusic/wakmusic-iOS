@@ -306,6 +306,7 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 }
 
+
 extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
     func tappedButtonAction() {
         guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL,
@@ -315,12 +316,23 @@ extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
         }
 
         let songs = currentState.dataSource
-
+      
         LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
         UIApplication.shared.open(url)
     }
 }
+
+extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
+    func thumbnailDidTap(key: String) {
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
+        songDetailPresenter.present(id: key)
+    }
+}
+
 
 extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
@@ -347,6 +359,8 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
 
             guard songs.count <= limit else {
                 showToast(
@@ -384,7 +398,9 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 )
                 return
             }
-
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
+            )
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)

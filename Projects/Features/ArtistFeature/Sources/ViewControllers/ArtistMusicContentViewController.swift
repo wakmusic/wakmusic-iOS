@@ -187,6 +187,9 @@ private extension ArtistMusicContentViewController {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .overFullScreen
                         owner.present(loginVC, animated: true)
@@ -212,6 +215,10 @@ private extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
     func tappedThumbnail(id: String) {
+        guard let tappedSong = output.dataSource.value
+            .first(where: { $0.songID == id })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.songID, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: id)
     }
 }
@@ -226,8 +233,11 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .artist)
+            LogManager.analytics(log)
+
             if PreferenceManager.userInfo == nil {
-                output.showLogin.onNext(())
+                output.showLogin.onNext(.addMusics)
                 return
             }
             guard songs.count <= limit else {
@@ -242,10 +252,6 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             }
 
         case .addPlayList:
-            guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit))
-                return
-            }
             PlayState.shared.appendSongsToPlaylist(songs)
             output.showToast.onNext(LocalizationStrings.addList)
             input.allSongSelected.onNext(false)
@@ -255,6 +261,9 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
                 output.showToast.onNext(LocalizationStrings.overFlowPlayWarning(songs.count - limit))
                 return
             }
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .artist, type: .multiple)
+            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
@@ -282,13 +291,6 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
-        LogManager.analytics(
-            ArtistAnalyticsLog.clickArtistPlayButton(
-                type: event == .allPlay ? "all" : "random",
-                artist: viewModel.model?.id ?? ""
-            )
-        )
-
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
                 id: $0.songID,
@@ -301,6 +303,9 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
 
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .artist, type: .all)
+            )
             var urlString: String = ""
             switch viewModel.type {
             case .new:

@@ -13,9 +13,9 @@ public protocol ListStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum ListStorageTableViewCellDelegateConstant {
-    case cellTapped(indexPath: IndexPath)
-    case listTapped(indexPath: IndexPath)
-    case playTapped(indexPath: IndexPath)
+    case cellTapped((indexPath: IndexPath, key: String))
+    case listTapped((indexPath: IndexPath, key: String))
+    case playTapped((indexPath: IndexPath, key: String))
 }
 
 class ListStorageTableViewCell: UITableViewCell {
@@ -184,14 +184,14 @@ extension ListStorageTableViewCell {
 
 extension ListStorageTableViewCell {
     @objc func cellSelectButtonAction() {
-        delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .cellTapped(passToModel))
     }
 
     @objc func listSelectButtonAction() {
-        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .listTapped(passToModel))
     }
 
     @objc func playButtonAction() {
-        delegate?.buttonTapped(type: .playTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .playTapped(passToModel))
     }
 }

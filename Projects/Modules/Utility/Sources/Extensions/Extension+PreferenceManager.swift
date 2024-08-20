@@ -6,6 +6,7 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import FirebaseCrashlytics
 import Foundation
 import LogManager
 import RxSwift
@@ -61,10 +62,15 @@ public extension PreferenceManager {
             itemCount: itemCount
         )
         Utility.PreferenceManager.userInfo = userInfo
+        LogManager.setUserProperty(property: .fruitTotal(count: userInfo.itemCount))
+        LogManager.setUserProperty(property: .loginPlatform(platform: userInfo.platform))
     }
 
     static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
+        Crashlytics.crashlytics().setUserID(nil)
         PreferenceManager.userInfo = nil
+        LogManager.clearUserProperty(property: .fruitTotal(count: -1))
+        LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
     }
 }

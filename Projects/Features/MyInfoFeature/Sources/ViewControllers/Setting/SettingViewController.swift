@@ -32,6 +32,11 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .setting))
+    }
+
     public static func viewController(
         reactor: SettingReactor,
         textPopUpFactory: TextPopUpFactory,
@@ -112,6 +117,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = SettingAnalyticsLog.completeRemoveCache(size: cachSize)
+                        LogManager.analytics(log)
+
                         owner.reactor?.action.onNext(.confirmRemoveCacheButtonDidTap)
                     },
                     cancelCompletion: nil
@@ -132,30 +140,26 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$withDrawButtonDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                guard let secondConfirmVC = owner.textPopUpFactory.makeView(
-                    text: "정말 탈퇴하시겠습니까?",
-                    cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
-                    completion: {
-                        owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
+                let makeSecondConfirmVC: () -> UIViewController = {
+                    owner.textPopUpFactory.makeView(
+                        text: "정말 탈퇴하시겠습니까?",
+                        cancelButtonIsHidden: false,
+                        completion: {
+                            let log = SettingAnalyticsLog.completeWithdraw
+                            LogManager.analytics(log)
+
+                            owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
+                        }
+                    )
                 }
-                guard let firstConfirmVC = owner.textPopUpFactory.makeView(
+                let firstConfirmVC = owner.textPopUpFactory.makeView(
                     text: "회원탈퇴 신청을 하시겠습니까?",
                     cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
                     completion: {
+                        let secondConfirmVC = makeSecondConfirmVC()
                         owner.showBottomSheet(content: secondConfirmVC)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
-                }
+                    }
+                )
                 owner.showBottomSheet(content: firstConfirmVC)
             })
             .disposed(by: disposeBag)
@@ -191,6 +195,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .disposed(by: disposeBag)
 
         settingView.rx.withDrawButtonDidTap
+            .do(onNext: {
+                LogManager.analytics(SettingAnalyticsLog.clickWithdrawButton)
+            })
             .map { Reactor.Action.withDrawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -213,16 +220,21 @@ extension SettingViewController: UITableViewDelegate {
         guard let category = cell.category else { return }
         switch category {
         case .appPush:
+            LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .serviceTerms:
+        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
+            LogManager.analytics(SettingAnalyticsLog.clickPrivacyPolicyButton)
             reactor?.action.onNext(.privacyNavigationDidTap)
         case .openSource:
+            LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
             reactor?.action.onNext(.openSourceNavigationDidTap)
         case .removeCache:
+            LogManager.analytics(SettingAnalyticsLog.clickRemoveCacheButton)
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
+            LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
             let text = "로그아웃 하시겠습니까?"
             let vc = textPopUpFactory.makeView(
                 text: text,
@@ -231,12 +243,16 @@ extension SettingViewController: UITableViewDelegate {
                 cancelButtonText: "취소",
                 completion: { [weak self] in
                     guard let self else { return }
+                    let log = SettingAnalyticsLog.completeLogout
+                    LogManager.analytics(log)
+
                     self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
                 },
                 cancelCompletion: {}
             )
             showBottomSheet(content: vc, size: .fixed(234))
         case .versionInfo:
+            LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)
         }
     }

@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import CreditSongListFeatureInterface
 import DesignSystem
+import LogManager
 import RxSwift
 import SignInFeatureInterface
 import Then
@@ -46,6 +47,9 @@ final class CreditSongListTabItemViewController:
             elementKind: UICollectionView.elementKindSectionHeader
         ) { [reactor] headerView, _, _ in
             headerView.setPlayButtonHandler {
+                let log = CommonAnalyticsLog.clickPlayButton(location: .creditSongList, type: .random)
+                LogManager.analytics(log)
+
                 reactor?.action.onNext(.randomPlayButtonDidTap)
             }
         }

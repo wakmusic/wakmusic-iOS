@@ -169,12 +169,17 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$showLoginPopup)
-            .filter { $0 }
-            .bind(with: self) { owner, _ in
+            .filter { $0.0 }
+            .bind(with: self) { owner, param in
                 let vc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { () in
+                        if let entry = param.1 {
+                            let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                            LogManager.analytics(log)
+                        }
+
                         let vc = owner.signInFactory.makeView()
                         vc.modalPresentationStyle = .fullScreen
                         owner.present(vc, animated: true)
@@ -345,6 +350,10 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 
 extension UnknownPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
         songDetailPresenter.present(id: key)
     }
 }
@@ -360,9 +369,15 @@ extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .all)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
 
         case .shufflePlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .random)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
         }
@@ -391,9 +406,11 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
 
             if PreferenceManager.userInfo == nil {
-                reactor.action.onNext(.requestLoginRequiredAction)
+                reactor.action.onNext(.requestLoginRequiredAction(source: .addMusics))
                 return
             }
 
@@ -411,6 +428,9 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             )
 
         case .play:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
+            )
             WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
             reactor.action.onNext(.deselectAll)
 

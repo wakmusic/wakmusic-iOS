@@ -7,6 +7,7 @@
 //
 
 import DesignSystem
+import LogManager
 import Lottie
 import SnapKit
 import UIKit
@@ -135,6 +136,10 @@ private extension TabItemView {
     @objc
     func handleGesture(_ sender: UITapGestureRecognizer) {
         self.delegate?.handleTap(view: self)
+        if let item {
+            let log = MainTabAnalyticsLog.clickTabbarTab(tab: item.analyticsTabbarType)
+            LogManager.analytics(log)
+        }
     }
 }
 
@@ -144,12 +149,21 @@ final class TabItem {
     var onImage: UIImage
     var animateImage: String
     var isSelected: Bool
+    let analyticsTabbarType: MainTabAnalyticsLog.TabbarTab
 
-    public init(title: String, offImage: UIImage, onImage: UIImage, animateImage: String, isSelected: Bool = false) {
+    public init(
+        title: String,
+        offImage: UIImage,
+        onImage: UIImage,
+        animateImage: String,
+        isSelected: Bool = false,
+        analyticsTabbarType: MainTabAnalyticsLog.TabbarTab
+    ) {
         self.title = title
         self.offImage = offImage
         self.onImage = onImage
         self.animateImage = animateImage
         self.isSelected = isSelected
+        self.analyticsTabbarType = analyticsTabbarType
     }
 }

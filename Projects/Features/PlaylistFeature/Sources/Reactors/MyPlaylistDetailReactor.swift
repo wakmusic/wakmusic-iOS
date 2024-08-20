@@ -13,7 +13,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case itemDidTap(Int)
         case editButtonDidTap
         case privateButtonDidTap
-        case completeButtonDidTap
+        case completionButtonDidTap
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
@@ -35,6 +35,8 @@ final class MyPlaylistDetailReactor: Reactor {
         case updateLoadingState(Bool)
         case updateSelectedCount(Int)
         case updateImageData(PlaylistImageKind?)
+        case updateCompletionButtonVisible(Bool)
+        case updateIsSecondaryLoading(Bool)
         case updateShowEditSheet(Bool)
         case showToast(String)
         case showShareLink(String)
@@ -50,6 +52,8 @@ final class MyPlaylistDetailReactor: Reactor {
         var selectedCount: Int
         var imageData: PlaylistImageKind?
         var showEditSheet: Bool
+        var completionButtonVisible: Bool
+        var isSaveCompletionLoading: Bool
         @Pulse var toastMessage: String?
         @Pulse var shareLink: String?
         @Pulse var notiName: Notification.Name?
@@ -102,6 +106,8 @@ final class MyPlaylistDetailReactor: Reactor {
             isLoading: true,
             selectedCount: 0,
             showEditSheet: false,
+            completionButtonVisible: false,
+            isSaveCompletionLoading: false,
             notiName: nil
         )
     }
@@ -117,7 +123,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case .privateButtonDidTap:
             return updatePrivate()
 
-        case .forceSave, .completeButtonDidTap:
+        case .forceSave, .completionButtonDidTap:
             return endEditingWithSave()
 
         case .forceEndEditing:
@@ -185,6 +191,10 @@ final class MyPlaylistDetailReactor: Reactor {
             newState.notiName = notiName
         case let .updateShowEditSheet(flag):
             newState.showEditSheet = flag
+        case let .updateCompletionButtonVisible(flag):
+            newState.completionButtonVisible = flag
+        case let .updateIsSecondaryLoading(flag):
+            newState.isSaveCompletionLoading = flag
         }
 
         return newState
@@ -253,14 +263,19 @@ private extension MyPlaylistDetailReactor {
             return $0.updateIsSelected(isSelected: false)
         }
 
-        var mutations: [Observable<Mutation>] = []
+        var mutations: [Observable<Mutation>] = [
+            updateComplectionButtonVisible(flag: false),
+            updateIsSecondaryLoading(flag: true)
+        ]
 
         if let imageData = state.imageData {
             switch imageData {
             case let .default(imageName):
                 mutations.append(
                     uploadDefaultPlaylistImageUseCase.execute(key: self.key, model: imageName)
-                        .andThen(postNotification(notiName: .shouldRefreshPlaylist)) // 플리 이미지 갱신
+                        .andThen(.concat([
+                            postNotification(notiName: .shouldRefreshPlaylist)
+                        ])) // 플리 이미지 갱신
                         .catch { error in
                             let wmErorr = error.asWMError
                             return Observable.just(
@@ -300,6 +315,7 @@ private extension MyPlaylistDetailReactor {
             )
         }
 
+        mutations.append(updateIsSecondaryLoading(flag: false))
         return .concat(mutations)
     }
 
@@ -365,6 +381,7 @@ private extension MyPlaylistDetailReactor {
         return .concat([
             .just(.updateEditingState(true)),
             .just(.updateBackUpPlaylist(currentPlaylists)),
+            updateComplectionButtonVisible(flag: true),
             updateShowEditSheet(flag: false),
         ])
     }
@@ -407,6 +424,7 @@ private extension MyPlaylistDetailReactor {
         let backUpPlaylist = state.backupPlaylistModels
 
         return .concat([
+            updateComplectionButtonVisible(flag: false),
             .just(Mutation.updateEditingState(false)),
             .just(Mutation.updatePlaylist(backUpPlaylist)),
             .just(.updateSelectedCount(0))
@@ -487,5 +505,13 @@ private extension MyPlaylistDetailReactor {
 
     func updateShowEditSheet(flag: Bool) -> Observable<Mutation> {
         return .just(.updateShowEditSheet(flag))
+    }
+
+    func updateComplectionButtonVisible(flag: Bool) -> Observable<Mutation> {
+        return .just(.updateCompletionButtonVisible(flag))
+    }
+
+    func updateIsSecondaryLoading(flag: Bool) -> Observable<Mutation> {
+        return .just(.updateIsSecondaryLoading(flag))
     }
 }

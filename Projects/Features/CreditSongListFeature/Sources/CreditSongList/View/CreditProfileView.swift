@@ -1,16 +1,22 @@
+import CreditDomainInterface
 import DesignSystem
+import Kingfisher
 import Then
 import UIKit
 import Utility
 
+protocol CreditProfileViewStateProtocol {
+    func updateProfile(entity: CreditProfileEntity)
+}
+
 final class CreditProfileView: UIStackView {
-    private let creditProfileContainer = UIView().then {
+    private let creditProfileImageViewContainer = UIImageView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
     }
 
-    private let creditProfileImageView = UIImageView().then {
+    private let creditProfilePlaceholderImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Logo.placeHolderLarge.image
         $0.contentMode = .scaleAspectFill
     }
@@ -42,25 +48,33 @@ final class CreditProfileView: UIStackView {
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    func updateProfile(name: String) {
-        creditNameLabel.text = name
+extension CreditProfileView: CreditProfileViewStateProtocol {
+    func updateProfile(entity: CreditProfileEntity) {
+        creditNameLabel.text = entity.name
+        if let url = entity.imageURL {
+            creditProfilePlaceholderImageView.isHidden = true
+            creditProfileImageViewContainer.kf.setImage(
+                with: URL(string: url)
+            )
+        }
     }
 }
 
 private extension CreditProfileView {
     func addView() {
-        self.addArrangedSubviews(creditProfileContainer, creditNameContainer)
-        creditProfileContainer.addSubview(creditProfileImageView)
+        self.addArrangedSubviews(creditProfileImageViewContainer, creditNameContainer)
+        creditProfileImageViewContainer.addSubview(creditProfilePlaceholderImageView)
         creditNameContainer.addSubview(creditNameLabel)
     }
 
     func setLayout() {
-        creditProfileContainer.snp.makeConstraints {
+        creditProfileImageViewContainer.snp.makeConstraints {
             $0.size.equalTo(140)
         }
 
-        creditProfileImageView.snp.makeConstraints {
+        creditProfilePlaceholderImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalTo(80)
         }

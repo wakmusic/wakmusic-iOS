@@ -68,6 +68,7 @@ extension LyricDecoratingViewController {
                     case .success:
                         break
                     case let .failure(error):
+                        owner.showToast(text: "알 수 없는 이유로 배경 이미지 다운로드를 실패했습니다.", options: .empty)
                         LogManager.printError(error.localizedDescription)
                     }
                 }

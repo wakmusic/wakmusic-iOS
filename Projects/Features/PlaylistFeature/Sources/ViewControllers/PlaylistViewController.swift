@@ -4,6 +4,7 @@ import Combine
 import DesignSystem
 import Foundation
 import Kingfisher
+import LogManager
 import RxDataSources
 import RxRelay
 import RxSwift
@@ -67,7 +68,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     }
 
     deinit {
-        DEBUG_LOG("❌ PlaylistVC deinit")
+        LogManager.printDebug("❌ PlaylistVC deinit")
     }
 
     @available(*, unavailable)
@@ -87,6 +88,12 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .playlist)
+        LogManager.analytics(log)
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
@@ -199,7 +206,6 @@ private extension PlaylistViewController {
             .bind(with: self, onNext: { [songDetailPresenter] owner, item in
                 let currentSongs = output.playlists.value
                     .map(\.id)
-                    .prefix(50)
 
                 owner.dismiss(animated: true) {
                     songDetailPresenter.present(
