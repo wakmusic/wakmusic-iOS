@@ -22,6 +22,12 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map { $0.toDomain() }
     }
 
+    public func fetchWmPlaylistDetail(id: String) -> Single<WmPlaylistDetailEntity> {
+        request(.fetchWmPlaylistDetail(id: id))
+            .map(WmPlaylistDetailResponseDTO.self)
+            .map { $0.toDomain() }
+    }
+
     public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {
         request(.updateTitleAndPrivate(key: key, title: title, isPrivate: isPrivate))
             .asCompletable()

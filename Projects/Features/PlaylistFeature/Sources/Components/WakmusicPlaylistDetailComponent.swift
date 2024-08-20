@@ -8,7 +8,7 @@ import SignInFeatureInterface
 import UIKit
 
 public protocol WakmusicPlaylistDetailDependency: Dependency {
-    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase { get }
+    var fetchWmPlaylistDetailUseCase: any FetchWmPlaylistDetailUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var textPopUpFactory: any TextPopUpFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
@@ -21,7 +21,7 @@ public final class WakmusicPlaylistDetailComponent: Component<WakmusicPlaylistDe
         return WakmusicPlaylistDetailViewController(
             reactor: WakmusicPlaylistDetailReactor(
                 key: key,
-                fetchPlaylistDetailUseCase: dependency.fetchPlaylistDetailUseCase
+                fetchWmPlaylistDetailUseCase: dependency.fetchWmPlaylistDetailUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
             textPopUpFactory: dependency.textPopUpFactory,

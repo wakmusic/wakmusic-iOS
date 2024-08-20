@@ -80,6 +80,12 @@ public extension AppComponent {
         }
     }
 
+    var fetchWmPlaylistDetailUseCase: any FetchWmPlaylistDetailUseCase {
+        shared {
+            FetchWmPlaylistDetailUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
     var createPlaylistUseCase: any CreatePlaylistUseCase {
         shared {
             CreatePlaylistUseCaseImpl(playlistRepository: playlistRepository)
