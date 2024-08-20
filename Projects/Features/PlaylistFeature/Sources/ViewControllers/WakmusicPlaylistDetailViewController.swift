@@ -306,7 +306,6 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 }
 
-
 extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
     func tappedButtonAction() {
         guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL,
@@ -316,7 +315,7 @@ extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
         }
 
         let songs = currentState.dataSource
-      
+
         LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
         UIApplication.shared.open(url)
@@ -332,7 +331,6 @@ extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegat
         songDetailPresenter.present(id: key)
     }
 }
-
 
 /// 송카트 델리게이트
 extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
