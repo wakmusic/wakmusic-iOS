@@ -28,6 +28,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         case updateSelectingStateByIndex([SongEntity])
         case showToast(String)
         case updateLoginPopupState(Bool)
+        case updatePlaylistURL(String)
     }
 
     struct State {
@@ -35,6 +36,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         var dataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
+        var playlistURL: String?
         @Pulse var toastMessage: String?
         @Pulse var showLoginPopup: Bool
     }
@@ -106,6 +108,9 @@ final class WakmusicPlaylistDetailReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateLoginPopupState(flag):
             newState.showLoginPopup = flag
+            
+        case let .updatePlaylistURL(URL):
+            newState.playlistURL = URL
         }
 
         return newState
@@ -130,6 +135,7 @@ private extension WakmusicPlaylistDetailReactor {
                                 songCount: data.songs.count
                             )
                         )),
+                        Observable.just(.updatePlaylistURL(data.playlistURL)),
                         Observable.just(Mutation.updateDataSource(data.songs))
                     ])
                 }

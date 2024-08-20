@@ -308,13 +308,17 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
 
 extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
     func tappedButtonAction() {
-        #warning("추후 링크로 리다이렉트")
 
-        // PlayState.shared.loadAndAppendSongsToPlaylist(songs)
+        guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL, let url = URL(string: playlistURL) else {
+            showToast(text: "해당 기능은 준비 중입니다.", options: [.tabBar])
+            return
+        }
 
-//        LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.
-//        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-//        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+        let songs = currentState.dataSource
+
+        LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
+        PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
+        UIApplication.shared.open(url)
     }
 }
 
@@ -363,14 +367,6 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
-
-            guard songs.count <= limit else {
-                showToast(
-                    text: LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit),
-                    options: [.tabBar, .songCart]
-                )
-                return
-            }
 
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
