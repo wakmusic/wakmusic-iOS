@@ -1,12 +1,12 @@
-import UIKit
 import SnapKit
 import Then
+import UIKit
 
 public final class TogglePopupViewController: UIViewController {
     let dimmView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
-    
+
     var titleString: String = ""
     var firstItemString: String = ""
     var secondItemString: String = ""
@@ -14,7 +14,7 @@ public final class TogglePopupViewController: UIViewController {
     var confirmButtonText: String = ""
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
-    
+
     init(
         titleString: String,
         firstItemString: String,
@@ -33,15 +33,13 @@ public final class TogglePopupViewController: UIViewController {
         self.completion = completion
         self.cancelCompletion = cancelCompletion
     }
-        
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
     }
-    
-    
-    
 }
