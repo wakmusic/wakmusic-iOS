@@ -1,7 +1,7 @@
+import DesignSystem
 import SnapKit
 import Then
 import UIKit
-import DesignSystem
 import Utility
 
 public final class TogglePopupViewController: UIViewController {
@@ -13,7 +13,7 @@ public final class TogglePopupViewController: UIViewController {
         $0.layer.cornerRadius = 24
         $0.backgroundColor = .white
     }
-    
+
     private let titleLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
@@ -22,15 +22,15 @@ public final class TogglePopupViewController: UIViewController {
         lineHeight: UIFont.WMFontSystem.t2().lineHeight,
         kernValue: -0.5
     )
-    
+
     private let firstItemButton = UIButton()
-    
+
     private let secondItemButton = UIButton()
-    
+
     private let dotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
-    
+
     private let descriptionLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
@@ -39,13 +39,13 @@ public final class TogglePopupViewController: UIViewController {
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
         kernValue: -0.5
     )
-    
+
     private let stackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 0
         $0.distribution = .fillEqually
     }
-    
+
     private let cancelButton = UIButton().then {
         let cancleButtonBackgroundColor = DesignSystemAsset.BlueGrayColor.blueGray400.color
         $0.setBackgroundColor(cancleButtonBackgroundColor, for: .normal)
@@ -54,7 +54,7 @@ public final class TogglePopupViewController: UIViewController {
         $0.titleLabel?.font = .setFont(.t4(weight: .medium))
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
-    
+
     private let confirmButton = UIButton().then {
         let confirmButtonBackgroundColor = DesignSystemAsset.PrimaryColorV2.point.color
         $0.setBackgroundColor(confirmButtonBackgroundColor, for: .normal)
@@ -63,7 +63,7 @@ public final class TogglePopupViewController: UIViewController {
         $0.titleLabel?.font = .setFont(.t4(weight: .medium))
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
-    
+
     var titleString: String = ""
     var firstItemString: String = ""
     var secondItemString: String = ""
@@ -109,33 +109,31 @@ public final class TogglePopupViewController: UIViewController {
         cancelButton.addTarget(nil, action: #selector(cancelButtonDidTap), for: .touchUpInside)
         confirmButton.addTarget(nil, action: #selector(confirmButtonDidTap), for: .touchUpInside)
     }
-    
-    public override func viewWillAppear(_ animated: Bool) {
+
+    override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         contentView.transform = CGAffineTransform(translationX: 0, y: self.view.frame.height)
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
             self.contentView.transform = CGAffineTransform.identity
         }, completion: nil)
     }
-    
+
     @objc func firstItemDidTap() {
         print("1")
     }
-    
+
     @objc func secondItemDidTap() {
         print("2")
     }
-    
+
     @objc func cancelButtonDidTap() {
         dismiss()
     }
-    
+
     @objc func confirmButtonDidTap() {
         print("confirm")
     }
-    
-    
 }
 
 private extension TogglePopupViewController {
@@ -154,35 +152,35 @@ private extension TogglePopupViewController {
         )
         stackView.addArrangedSubviews(cancelButton, confirmButton)
     }
-    
+
     func setLayout() {
         dimmView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         contentView.snp.makeConstraints {
             $0.width.equalTo(335)
             $0.height.equalTo(322)
             $0.center.equalToSuperview()
         }
-        
+
         titleLabel.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.top.equalToSuperview().offset(30)
         }
-        
+
         firstItemButton.snp.makeConstraints {
             $0.height.equalTo(60)
             $0.top.equalTo(titleLabel.snp.bottom).offset(20)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
-        
+
         secondItemButton.snp.makeConstraints {
             $0.height.equalTo(60)
             $0.top.equalTo(firstItemButton.snp.bottom).offset(8)
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
-        
+
         dotImageView.snp.makeConstraints {
             $0.centerY.equalTo(descriptionLabel.snp.centerY)
             $0.left.equalToSuperview().offset(20)
@@ -192,14 +190,14 @@ private extension TogglePopupViewController {
             $0.left.equalTo(dotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
-        
+
         stackView.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
         }
     }
-    
+
     func configureUI() {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
@@ -208,18 +206,18 @@ private extension TogglePopupViewController {
         firstItemButton.setTitle(self.firstItemString, for: .normal)
         secondItemButton.setTitle(self.secondItemString, for: .normal)
         descriptionLabel.text = self.descriptionText
-        cancelButton.setTitle(self.cancelButtonText , for: .normal)
+        cancelButton.setTitle(self.cancelButtonText, for: .normal)
         confirmButton.setTitle(self.confirmButtonText, for: .normal)
-        
+
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
         dimmView.addGestureRecognizer(gesture)
         dimmView.isUserInteractionEnabled = true
     }
-    
+
     @objc func tappedAround(_ sender: UITapGestureRecognizer) {
         dismiss()
     }
-    
+
     func dismiss() {
         UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
             self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.frame.height)

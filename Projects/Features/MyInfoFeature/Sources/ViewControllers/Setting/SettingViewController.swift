@@ -19,7 +19,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
     private var togglePopUpFactory: TogglePopUpFactory!
-    
+
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
 
@@ -221,7 +221,7 @@ extension SettingViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
-        
+
         let togglePopUpVC = togglePopUpFactory.makeView(
             titleString: "어떻게 재생할까요?",
             firstItemString: "YouTube",
@@ -231,7 +231,7 @@ extension SettingViewController: UITableViewDelegate {
             cancelCompletion: {}
         )
         togglePopUpVC.modalPresentationStyle = .overFullScreen
-        
+
         let textPopUpVC = textPopUpFactory.makeView(
             text: "로그아웃 하시겠습니까?",
             cancelButtonIsHidden: false,
@@ -246,7 +246,7 @@ extension SettingViewController: UITableViewDelegate {
             },
             cancelCompletion: {}
         )
-        
+
         switch category {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
