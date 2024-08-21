@@ -21,8 +21,8 @@ public final class PlaylistRepositoryImpl: PlaylistRepository {
         remotePlaylistDataSource.fetchPlaylistDetail(id: id, type: type)
     }
 
-    public func fetchWmPlaylistDetail(id: String) -> Single<WmPlaylistDetailEntity> {
-        remotePlaylistDataSource.fetchWmPlaylistDetail(id: id)
+    public func fetchWMPlaylistDetail(id: String) -> Single<WMPlaylistDetailEntity> {
+        remotePlaylistDataSource.fetchWMPlaylistDetail(id: id)
     }
 
     public func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable {

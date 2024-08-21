@@ -3,7 +3,7 @@ import PlaylistDomainInterface
 import SongsDomain
 import SongsDomainInterface
 
-public struct WmPlaylistDetailResponseDTO: Decodable {
+public struct WMPlaylistDetailResponseDTO: Decodable {
     public let key: String?
     public let title: String
     public let songs: [SingleSongResponseDTO]?
@@ -19,9 +19,9 @@ public struct WmPlaylistDetailResponseDTO: Decodable {
     }
 }
 
-public extension WmPlaylistDetailResponseDTO {
-    func toDomain() -> WmPlaylistDetailEntity {
-        WmPlaylistDetailEntity(
+public extension WMPlaylistDetailResponseDTO {
+    func toDomain() -> WMPlaylistDetailEntity {
+        WMPlaylistDetailEntity(
             key: key ?? "",
             title: title,
             songs: (songs ?? []).map { $0.toDomain() },

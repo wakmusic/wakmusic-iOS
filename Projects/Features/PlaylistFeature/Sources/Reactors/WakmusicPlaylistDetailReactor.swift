@@ -42,15 +42,15 @@ final class WakmusicPlaylistDetailReactor: Reactor {
     }
 
     var initialState: State
-    private let fetchWmPlaylistDetailUseCase: any FetchWmPlaylistDetailUseCase
+    private let fetchWMPlaylistDetailUseCase: any FetchWMPlaylistDetailUseCase
 
     init(
         key: String,
-        fetchWmPlaylistDetailUseCase: any FetchWmPlaylistDetailUseCase
+        fetchWMPlaylistDetailUseCase: any FetchWMPlaylistDetailUseCase
 
     ) {
         self.key = key
-        self.fetchWmPlaylistDetailUseCase = fetchWmPlaylistDetailUseCase
+        self.fetchWMPlaylistDetailUseCase = fetchWMPlaylistDetailUseCase
 
         self.initialState = State(
             header: PlaylistDetailHeaderModel(
@@ -121,7 +121,7 @@ private extension WakmusicPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchWmPlaylistDetailUseCase.execute(id: key)
+            fetchWMPlaylistDetailUseCase.execute(id: key)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
