@@ -72,8 +72,14 @@ private extension SettingItemTableViewCell {
         switch type {
         case let .navigate(category):
             let pushNotificationAuthorizationStatus = PreferenceManager.pushNotificationAuthorizationStatus ?? false
-            self.subTitleLabel.text = (category == .appPush) ?
-                pushNotificationAuthorizationStatus ? "켜짐" : "꺼짐" : ""
+            switch category {
+            case .appPush:
+                self.subTitleLabel.text = pushNotificationAuthorizationStatus ? "켜짐" : "꺼짐"
+            case .playType:
+                self.subTitleLabel.text = pushNotificationAuthorizationStatus ? "YouTube" : "YouTube Music"
+            default:
+                self.subTitleLabel.text = ""
+            }
         case let .description(category):
             self.subTitleLabel.text = ""
         }
@@ -84,7 +90,7 @@ private extension SettingItemTableViewCell {
         case let .navigate(category):
             rightImageView.isHidden = false
             rightLabel.isHidden = true
-            subTitleLabel.isHidden = category != .appPush
+            subTitleLabel.isHidden = !(category == .appPush || category == .playType)
         case .description:
             rightImageView.isHidden = true
             rightLabel.isHidden = false
