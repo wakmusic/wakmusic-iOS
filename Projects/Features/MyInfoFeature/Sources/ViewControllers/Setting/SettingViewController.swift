@@ -222,9 +222,9 @@ extension SettingViewController: UITableViewDelegate {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-            
+
         case .playType:
-            //let vc = selectPopUpFactory.makeView()
+            // let vc = selectPopUpFactory.makeView()
             let vc = textPopUpFactory.makeView(
                 text: "어떻게 재생할까요?",
                 cancelButtonIsHidden: false,
@@ -234,7 +234,7 @@ extension SettingViewController: UITableViewDelegate {
                 cancelCompletion: {}
             )
             showBottomSheet(content: vc, size: .fixed(234))
-            
+
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
