@@ -221,21 +221,38 @@ extension SettingViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
+        
+        let togglePopUpVC = togglePopUpFactory.makeView(
+            titleString: "어떻게 재생할까요?",
+            firstItemString: "YouTube",
+            secondItemString: "YouTube Music",
+            descriptionText: "해당 기능을 사용하려면 앱이 설치되어 있어야 합니다.",
+            completion: {},
+            cancelCompletion: {}
+        )
+        togglePopUpVC.modalPresentationStyle = .overFullScreen
+        
+        let textPopUpVC = textPopUpFactory.makeView(
+            text: "로그아웃 하시겠습니까?",
+            cancelButtonIsHidden: false,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            completion: { [weak self] in
+                guard let self else { return }
+                let log = SettingAnalyticsLog.completeLogout
+                LogManager.analytics(log)
+
+                self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
+            },
+            cancelCompletion: {}
+        )
+        
         switch category {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-
         case .playType:
-            let vc = togglePopUpFactory.makeView(
-                titleString: "",
-                firstItemString: "",
-                secondItemString: "",
-                completion: {},
-                cancelCompletion: {}
-            )
-            self.present(vc, animated: true)
-
+            self.present(togglePopUpVC, animated: false)
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
@@ -249,22 +266,7 @@ extension SettingViewController: UITableViewDelegate {
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
             LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
-            let text = "로그아웃 하시겠습니까?"
-            let vc = textPopUpFactory.makeView(
-                text: text,
-                cancelButtonIsHidden: false,
-                confirmButtonText: "확인",
-                cancelButtonText: "취소",
-                completion: { [weak self] in
-                    guard let self else { return }
-                    let log = SettingAnalyticsLog.completeLogout
-                    LogManager.analytics(log)
-
-                    self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
-                },
-                cancelCompletion: {}
-            )
-            showBottomSheet(content: vc, size: .fixed(234))
+            showBottomSheet(content: textPopUpVC, size: .fixed(234))
         case .versionInfo:
             LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)

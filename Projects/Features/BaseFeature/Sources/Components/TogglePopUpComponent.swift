@@ -9,6 +9,7 @@ public final class TogglePopUpComponent: Component<EmptyDependency>, TogglePopUp
         secondItemString: String,
         cancelButtonText: String = "취소",
         confirmButtonText: String = "확인",
+        descriptionText: String = "",
         completion: (() -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
     ) -> UIViewController {
@@ -18,6 +19,7 @@ public final class TogglePopUpComponent: Component<EmptyDependency>, TogglePopUp
             secondItemString: secondItemString,
             cancelButtonText: cancelButtonText,
             confirmButtonText: confirmButtonText,
+            descriptionText: descriptionText,
             completion: completion,
             cancelCompletion: cancelCompletion
         )
