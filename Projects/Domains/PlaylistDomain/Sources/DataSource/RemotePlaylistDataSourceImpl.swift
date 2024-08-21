@@ -22,9 +22,9 @@ public final class RemotePlaylistDataSourceImpl: BaseRemoteDataSource<PlaylistAP
             .map { $0.toDomain() }
     }
 
-    public func fetchWmPlaylistDetail(id: String) -> Single<WmPlaylistDetailEntity> {
-        request(.fetchWmPlaylistDetail(id: id))
-            .map(WmPlaylistDetailResponseDTO.self)
+    public func fetchWMPlaylistDetail(id: String) -> Single<WMPlaylistDetailEntity> {
+        request(.fetchWMPlaylistDetail(id: id))
+            .map(WMPlaylistDetailResponseDTO.self)
             .map { $0.toDomain() }
     }
 
