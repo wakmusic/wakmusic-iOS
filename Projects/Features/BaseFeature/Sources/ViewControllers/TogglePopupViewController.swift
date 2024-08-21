@@ -7,6 +7,11 @@ public final class TogglePopupViewController: UIViewController {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
 
+    let contentView = UIView().then {
+        $0.layer.cornerRadius = 24
+        $0.backgroundColor = .white
+    }
+    
     var titleString: String = ""
     var firstItemString: String = ""
     var secondItemString: String = ""
@@ -41,5 +46,27 @@ public final class TogglePopupViewController: UIViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        addViews()
+        setLayout()
+        configureUI()
+    }
+}
+
+private extension TogglePopupViewController {
+    func addViews() {
+        self.view.addSubviews(
+            contentView
+        )
+    }
+    
+    func setLayout() {
+        contentView.snp.makeConstraints {
+            $0.width.equalTo(335)
+            $0.height.equalTo(322)
+        }
+    }
+    
+    func configureUI() {
+        
     }
 }

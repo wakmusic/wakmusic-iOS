@@ -18,7 +18,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
-
+    private var togglePopUpFactory: TogglePopUpFactory!
+    
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
 
@@ -43,7 +44,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         signInFactory: SignInFactory,
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
-        openSourceLicenseFactory: OpenSourceLicenseFactory
+        openSourceLicenseFactory: OpenSourceLicenseFactory,
+        togglePopUpFactory: TogglePopUpFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -51,6 +53,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
+        viewController.togglePopUpFactory = togglePopUpFactory
         return viewController
     }
 
@@ -224,16 +227,14 @@ extension SettingViewController: UITableViewDelegate {
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
 
         case .playType:
-            // let vc = selectPopUpFactory.makeView()
-            let vc = textPopUpFactory.makeView(
-                text: "어떻게 재생할까요?",
-                cancelButtonIsHidden: false,
-                confirmButtonText: "확인",
-                cancelButtonText: "취소",
+            let vc = togglePopUpFactory.makeView(
+                titleString: "",
+                firstItemString: "",
+                secondItemString: "",
                 completion: {},
                 cancelCompletion: {}
             )
-            showBottomSheet(content: vc, size: .fixed(234))
+            self.present(vc, animated: true)
 
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
