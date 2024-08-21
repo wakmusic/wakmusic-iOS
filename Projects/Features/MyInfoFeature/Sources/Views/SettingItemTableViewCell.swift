@@ -72,11 +72,12 @@ private extension SettingItemTableViewCell {
         switch type {
         case let .navigate(category):
             let pushNotificationAuthorizationStatus = PreferenceManager.pushNotificationAuthorizationStatus ?? false
+            let playWithYoutubeMusic = PreferenceManager.playWithYoutubeMusic ?? false
             switch category {
             case .appPush:
                 self.subTitleLabel.text = pushNotificationAuthorizationStatus ? "켜짐" : "꺼짐"
             case .playType:
-                self.subTitleLabel.text = pushNotificationAuthorizationStatus ? "YouTube" : "YouTube Music"
+                self.subTitleLabel.text = playWithYoutubeMusic ? "YouTube Music" : "YouTube"
             default:
                 self.subTitleLabel.text = ""
             }
