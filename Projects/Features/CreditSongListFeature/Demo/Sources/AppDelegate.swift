@@ -1,7 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
-@testable import CreditSongListFeature
 import CreditDomainTesting
+@testable import CreditSongListFeature
 import CreditSongListFeatureInterface
 import Inject
 import RxSwift
@@ -66,7 +66,7 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
 
         let reactor = CreditSongListTabItemReactor(
             workerName: workerName,
-            creditSortType: sortType, 
+            creditSortType: sortType,
             songDetailPresenter: DummySongDetailPresenter(),
             fetchCreditSongListUseCase: fetchCreditSongListUseCase
         )
@@ -85,7 +85,7 @@ final class DummySongDetailPresenter: SongDetailPresentable {
     var presentSongDetailObservable: RxSwift.Observable<(ids: [String], selectedID: String)> {
         .empty()
     }
-    
+
     func present(id: String) {}
 
     func present(ids: [String], selectedID: String) {}
