@@ -18,7 +18,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
-    private var togglePopUpFactory: TogglePopUpFactory!
+    private var togglePopupFactory: TogglePopupFactory!
 
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
@@ -45,7 +45,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
         openSourceLicenseFactory: OpenSourceLicenseFactory,
-        togglePopUpFactory: TogglePopUpFactory
+        togglePopupFactory: TogglePopupFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -53,7 +53,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
-        viewController.togglePopUpFactory = togglePopUpFactory
+        viewController.togglePopupFactory = togglePopupFactory
         return viewController
     }
 
@@ -222,7 +222,7 @@ extension SettingViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
 
-        let togglePopUpVC = togglePopUpFactory.makeView(
+        let togglePopupVC = togglePopupFactory.makeView(
             titleString: "어떻게 재생할까요?",
             firstItemString: "YouTube",
             secondItemString: "YouTube Music",
@@ -230,7 +230,7 @@ extension SettingViewController: UITableViewDelegate {
             completion: {},
             cancelCompletion: {}
         )
-        togglePopUpVC.modalPresentationStyle = .overFullScreen
+        togglePopupVC.modalPresentationStyle = .overFullScreen
 
         let textPopUpVC = textPopUpFactory.makeView(
             text: "로그아웃 하시겠습니까?",
@@ -252,7 +252,7 @@ extension SettingViewController: UITableViewDelegate {
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
         case .playType:
-            self.present(togglePopUpVC, animated: false)
+            self.present(togglePopupVC, animated: false)
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:

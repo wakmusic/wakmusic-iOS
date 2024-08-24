@@ -11,8 +11,8 @@ public extension AppComponent {
         TextPopUpComponent(parent: self)
     }
 
-    var togglePopUpFactory: any TogglePopUpFactory {
-        TogglePopUpComponent(parent: self)
+    var togglePopupFactory: any TogglePopupFactory {
+        TogglePopupComponent(parent: self)
     }
 
     var containSongsFactory: any ContainSongsFactory {

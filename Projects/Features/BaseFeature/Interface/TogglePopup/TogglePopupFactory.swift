@@ -1,9 +1,20 @@
-import BaseFeatureInterface
-import NeedleFoundation
 import UIKit
 
-public final class TogglePopUpComponent: Component<EmptyDependency>, TogglePopUpFactory {
-    public func makeView(
+public protocol TogglePopupFactory {
+    func makeView(
+        titleString: String,
+        firstItemString: String,
+        secondItemString: String,
+        cancelButtonText: String,
+        confirmButtonText: String,
+        descriptionText: String,
+        completion: (() -> Void)?,
+        cancelCompletion: (() -> Void)?
+    ) -> UIViewController
+}
+
+public extension TogglePopupFactory {
+    func makeView(
         titleString: String,
         firstItemString: String,
         secondItemString: String,
@@ -13,7 +24,7 @@ public final class TogglePopUpComponent: Component<EmptyDependency>, TogglePopUp
         completion: (() -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
     ) -> UIViewController {
-        return TogglePopupViewController(
+        self.makeView(
             titleString: titleString,
             firstItemString: firstItemString,
             secondItemString: secondItemString,
