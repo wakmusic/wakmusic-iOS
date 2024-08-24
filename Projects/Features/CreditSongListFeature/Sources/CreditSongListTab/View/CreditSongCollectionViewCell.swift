@@ -1,6 +1,8 @@
 import DesignSystem
 import Kingfisher
 import Lottie
+import RxGesture
+import RxSwift
 import SnapKit
 import SongsDomainInterface
 import Then
@@ -45,15 +47,23 @@ final class CreditSongCollectionViewCell: UICollectionViewCell {
         $0.lineBreakMode = .byTruncatingTail
     }
 
+    private let disposeBag = DisposeBag()
+    private var handler: (() -> Void)?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
         setLayout()
+        bind()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func setThumbnailTapHandler(_ handler: @escaping () -> Void) {
+        self.handler = handler
     }
 
     func update(_ model: CreditSongModel, isSelected: Bool) {
@@ -98,5 +108,14 @@ private extension CreditSongCollectionViewCell {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
+    }
+
+    func bind() {
+        thumbnailImageView.rx.tapGesture()
+            .when(.recognized)
+            .bind { [weak self] _ in
+                self?.handler?()
+            }
+            .disposed(by: disposeBag)
     }
 }
