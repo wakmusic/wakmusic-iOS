@@ -68,7 +68,12 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
-                guard entities[index].isHighlighting || entities.filter({ $0.isHighlighting }).count < 4 else {
+                let currentTotalLineCount: Int = entities.filter { $0.isHighlighting }
+                    .map { $0.text.components(separatedBy: "\n").count }
+                    .reduce(0, +)
+                let nowSelectItemLineCount: Int = entities[index].text
+                    .components(separatedBy: "\n").count
+                guard entities[index].isHighlighting || (currentTotalLineCount + nowSelectItemLineCount <= 4) else {
                     output.showToast.onNext("가사는 최대 4줄까지 선택 가능합니다.")
                     return false
                 }
