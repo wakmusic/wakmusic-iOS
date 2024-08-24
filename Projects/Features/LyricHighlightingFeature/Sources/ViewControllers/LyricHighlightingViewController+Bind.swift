@@ -8,6 +8,16 @@ extension LyricHighlightingViewController {
     func inputBind() {
         input.fetchLyric.onNext(())
 
+        activateButton.rx.tap
+            .do(onNext: { [activateContentView] _ in
+                UIView.animate(withDuration: 0.2) {
+                    activateContentView.isHidden = true
+                }
+            })
+            .map { _ in true }
+            .bind(to: input.didTapActivateButton)
+            .disposed(by: disposeBag)
+
         collectionView.rx.itemSelected
             .bind(to: input.didTapHighlighting)
             .disposed(by: disposeBag)
@@ -39,11 +49,11 @@ extension LyricHighlightingViewController {
 
         output.dataSource
             .skip(1)
-            .do(onNext: { [indicator, warningView, collectionView, writerLabel] model in
-                indicator.stopAnimating()
+            .do(onNext: { [activityIndicator, warningView, collectionView, bottomContentStackView] model in
+                activityIndicator.stopAnimating()
                 warningView.isHidden = !model.isEmpty
-                collectionView.isHidden = !warningView.isHidden
-                writerLabel.isHidden = !warningView.isHidden
+                collectionView.isHidden = model.isEmpty
+                bottomContentStackView.isHidden = model.isEmpty
             })
             .bind(to: collectionView.rx.items) { collectionView, index, entity in
                 guard let cell = collectionView.dequeueReusableCell(
@@ -58,8 +68,11 @@ extension LyricHighlightingViewController {
             .disposed(by: disposeBag)
 
         output.isStorable
-            .map { !$0 }
-            .bind(to: completeButton.rx.isHidden)
+            .bind(with: self) { owner, isStorable in
+                UIView.animate(withDuration: 0.2) {
+                    owner.completeButton.alpha = isStorable ? 1 : 0
+                }
+            }
             .disposed(by: disposeBag)
 
         output.goDecoratingScene

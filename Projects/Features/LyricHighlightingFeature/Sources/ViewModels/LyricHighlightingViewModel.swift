@@ -26,6 +26,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
 
     public struct Input {
         let fetchLyric: PublishSubject<Void> = PublishSubject()
+        let didTapActivateButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let didTapHighlighting: BehaviorRelay<IndexPath> = BehaviorRelay(value: .init(row: -1, section: 0))
         let didTapSaveButton: PublishSubject<Void> = PublishSubject()
     }
@@ -61,7 +62,9 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.didTapHighlighting
-            .map { $0.item }
+            .withLatestFrom(input.didTapActivateButton) { ($0, $1) }
+            .filter { $0.1 }
+            .map { $0.0.item }
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
