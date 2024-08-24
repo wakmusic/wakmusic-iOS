@@ -13,7 +13,7 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory { get }
     var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
@@ -36,7 +36,7 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 requestCustomImageURLUseCase: dependency.requestCustomImageURLUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            multiPurposePopupFactory: dependency.multiPurposePopUpFactory,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
             containSongsFactory: dependency.containSongsFactory,
             textPopupFactory: dependency.textPopupFactory,
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,

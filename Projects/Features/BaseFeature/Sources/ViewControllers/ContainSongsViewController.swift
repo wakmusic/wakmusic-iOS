@@ -18,7 +18,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var songCountLabel: UILabel!
     @IBOutlet weak var subTitleLabel: UILabel!
 
-    var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    var multiPurposePopupFactory: MultiPurposePopupFactory!
     var textPopupFactory: TextPopupFactory!
 
     var viewModel: ContainSongsViewModel!
@@ -37,7 +37,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     }
 
     public static func viewController(
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         textPopupFactory: TextPopupFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
@@ -45,7 +45,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
             storyBoardName: "Base",
             bundle: Bundle.module
         )
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
         viewController.textPopupFactory = textPopupFactory
         viewController.viewModel = viewModel
         return viewController
@@ -163,14 +163,14 @@ extension ContainSongsViewController {
 
         output.showCreationPopup
             .bind(with: self) { owner, _ in
-                let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+                let multiPurposePopupVc = owner.multiPurposePopupFactory.makeView(
                     type: .creation,
                     key: "",
                     completion: { text in
                         owner.input.createPlaylist.onNext(text)
                     }
                 )
-                owner.showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
+                owner.showBottomSheet(content: multiPurposePopupVc, size: .fixed(296))
             }
             .disposed(by: disposeBag)
     }

@@ -18,7 +18,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     let myInfoView = MyInfoView()
     private var profilePopupFactory: ProfilePopupFactory!
     private var textPopupFactory: TextPopupFactory!
-    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    private var multiPurposePopupFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -60,7 +60,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor: MyInfoReactor,
         profilePopupFactory: ProfilePopupFactory,
         textPopupFactory: TextPopupFactory,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
@@ -73,7 +73,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopupFactory = profilePopupFactory
         viewController.textPopupFactory = textPopupFactory
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
         viewController.noticeFactory = noticeFactory
@@ -320,7 +320,7 @@ extension MyInfoViewController: EditSheetViewDelegate {
             showBottomSheet(content: vc, size: .fixed(190 + height + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
             LogManager.analytics(MyInfoAnalyticsLog.clickNicknameChangeButton)
-            let vc = multiPurposePopUpFactory.makeView(
+            let vc = multiPurposePopupFactory.makeView(
                 type: .nickname,
                 key: "",
                 completion: { [reactor] text in
