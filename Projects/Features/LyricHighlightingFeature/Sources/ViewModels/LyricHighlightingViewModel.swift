@@ -68,7 +68,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
-                let currentTotalLineCount: Int = entities.filter({ $0.isHighlighting })
+                let currentTotalLineCount: Int = entities.filter { $0.isHighlighting }
                     .map { $0.text.components(separatedBy: "\n").count }
                     .reduce(0, +)
                 let nowSelectItemLineCount: Int = entities[index].text
