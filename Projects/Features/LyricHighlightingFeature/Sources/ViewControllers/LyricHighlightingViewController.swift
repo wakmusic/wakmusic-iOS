@@ -48,9 +48,10 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
-    private let bottomContentStackView = UIStackView().then {
+    let bottomContentStackView = UIStackView().then {
         $0.axis = .vertical
         $0.distribution = .fill
+        $0.isHidden = true
     }
 
     let writerContentView = UIView()
@@ -63,9 +64,7 @@ public final class LyricHighlightingViewController: UIViewController {
         kernValue: -0.5
     )
 
-    let activateContentView = UIView().then {
-        $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray900.color
-    }
+    let activateContentView = UIView()
 
     let activateTopLineLabel = UILabel().then {
         $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray700.color
