@@ -23,7 +23,7 @@ public final class ArtistMusicContentViewController:
     public var bottomSheetView: BottomSheetView!
     private var containSongsFactory: ContainSongsFactory!
     private var signInFactory: SignInFactory!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
     private var viewModel: ArtistMusicContentViewModel!
@@ -52,7 +52,7 @@ public final class ArtistMusicContentViewController:
         viewModel: ArtistMusicContentViewModel,
         containSongsFactory: ContainSongsFactory,
         signInFactory: SignInFactory,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(

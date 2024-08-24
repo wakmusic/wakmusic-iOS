@@ -19,7 +19,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var subTitleLabel: UILabel!
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    var textPopupFactory: TextPopupFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -38,7 +38,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 
     public static func viewController(
         multiPurposePopUpFactory: MultiPurposePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
@@ -46,7 +46,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
             bundle: Bundle.module
         )
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -147,7 +147,7 @@ extension ContainSongsViewController {
                     return
                 }
 
-                let text = owner.textPopUpFactory.makeView(
+                let text = owner.textPopupFactory.makeView(
                     text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "\(price)개 사용",

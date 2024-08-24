@@ -19,7 +19,7 @@ public final class SettingComponentStub: SettingFactory {
                 logoutUseCase: LogoutUseCaseSpy(),
                 updateNotificationTokenUseCase: UpdateNotificationTokenUseCaseSpy()
             ),
-            textPopUpFactory: TextPopUpComponentStub(),
+            textPopupFactory: TextPopupComponentStub(),
             signInFactory: SignInComponentStub(),
             serviceTermsFactory: ServiceTermComponentStub(),
             privacyFactory: PrivacyComponentStub(),

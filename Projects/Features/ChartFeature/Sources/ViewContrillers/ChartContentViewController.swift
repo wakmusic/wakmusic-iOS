@@ -26,7 +26,7 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
@@ -47,7 +47,7 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     public static func viewController(
         viewModel: ChartContentViewModel,
         containSongsFactory: ContainSongsFactory,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> ChartContentViewController {

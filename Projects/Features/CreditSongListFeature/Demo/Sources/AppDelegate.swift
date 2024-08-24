@@ -94,7 +94,7 @@ final class DummySignInFactory: SignInFactory {
     }
 }
 
-final class DummyTextPopupFactory: TextPopUpFactory {
+final class DummyTextPopupFactory: TextPopupFactory {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,

@@ -21,7 +21,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private let songDetailPresenter: any SongDetailPresentable
     private let containSongsFactory: any ContainSongsFactory
     private let signInFactory: any SignInFactory
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let searchSortOptionComponent: SearchSortOptionComponent
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
@@ -48,14 +48,14 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         songDetailPresenter: any SongDetailPresentable,
         containSongsFactory: any ContainSongsFactory,
         signInFactory: any SignInFactory,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -352,7 +352,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             }
 
             if PreferenceManager.userInfo == nil {
-                let vc = self.textPopUpFactory.makeView(
+                let vc = self.textPopupFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,

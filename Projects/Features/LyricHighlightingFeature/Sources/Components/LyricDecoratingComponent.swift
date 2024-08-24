@@ -6,7 +6,7 @@ import NeedleFoundation
 
 public protocol LyricDecoratingDependency: Dependency {
     var fetchLyricDecoratingBackgroundUseCase: any FetchLyricDecoratingBackgroundUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
@@ -17,7 +17,7 @@ public final class LyricDecoratingComponent: Component<LyricDecoratingDependency
         )
         return LyricDecoratingViewController(
             viewModel: viewModel,
-            textPopUpFactory: dependency.textPopUpFactory
+            textPopupFactory: dependency.textPopupFactory
         )
     }
 }

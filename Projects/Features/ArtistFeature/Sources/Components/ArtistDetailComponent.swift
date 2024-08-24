@@ -11,7 +11,7 @@ public protocol ArtistDetailDependency: Dependency {
     var fetchArtistDetailUseCase: any FetchArtistDetailUseCase { get }
     var fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase { get }
     var subscriptionArtistUseCase: any SubscriptionArtistUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var signInFactory: any SignInFactory { get }
 }
 
@@ -25,7 +25,7 @@ public final class ArtistDetailComponent: Component<ArtistDetailDependency>, Art
                 subscriptionArtistUseCase: dependency.subscriptionArtistUseCase
             ),
             artistMusicComponent: dependency.artistMusicComponent,
-            textPopupFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             signInFactory: dependency.signInFactory
         )
     }

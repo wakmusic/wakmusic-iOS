@@ -1,6 +1,6 @@
 import UIKit
 
-public protocol TextPopUpFactory {
+public protocol TextPopupFactory {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
@@ -11,7 +11,7 @@ public protocol TextPopUpFactory {
     ) -> UIViewController
 }
 
-public extension TextPopUpFactory {
+public extension TextPopupFactory {
     func makeView(
         text: String? = nil,
         cancelButtonIsHidden: Bool = false,

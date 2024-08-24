@@ -21,7 +21,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     let likeStorageView = LikeStorageView()
 
     var containSongsFactory: ContainSongsFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    var textPopupFactory: TextPopupFactory!
     var signInFactory: SignInFactory!
     var songDetailPresenter: SongDetailPresentable!
 
@@ -48,13 +48,13 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     static func viewController(
         reactor: Reactor,
         containSongsFactory: ContainSongsFactory,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> LikeStorageViewController {
         let viewController = LikeStorageViewController(reactor: reactor)
         viewController.containSongsFactory = containSongsFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         viewController.songDetailPresenter = songDetailPresenter
         return viewController
@@ -119,7 +119,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
-                guard let vc = owner.textPopUpFactory.makeView(
+                guard let vc = owner.textPopupFactory.makeView(
                     text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,

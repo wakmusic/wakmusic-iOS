@@ -34,7 +34,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
     @IBOutlet weak var searchHeaderContentView: UIView!
     private var beforeSearchComponent: BeforeSearchComponent!
     private var afterSearchComponent: AfterSearchComponent!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
@@ -58,7 +58,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
         reactor: SearchReactor,
         beforeSearchComponent: BeforeSearchComponent,
         afterSearchComponent: AfterSearchComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
@@ -66,7 +66,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
         viewController.reactor = reactor
         viewController.beforeSearchComponent = beforeSearchComponent
         viewController.afterSearchComponent = afterSearchComponent
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.searchGlobalScrollState = searchGlobalScrollState
         return viewController
     }
@@ -175,7 +175,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                 }
 
                 if text.isWhiteSpace {
-                    guard let textPopupViewController = owner.textPopUpFactory.makeView(
+                    guard let textPopupViewController = owner.textPopupFactory.makeView(
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true,
                         confirmButtonText: nil,

@@ -27,7 +27,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
-    private(set) var textPopUpFactory: any TextPopUpFactory
+    private(set) var textPopupFactory: any TextPopupFactory
     private(set) var signInFactory: any SignInFactory
 
     public var songCartView: BaseFeature.SongCartView!
@@ -56,13 +56,13 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         viewModel: PlaylistViewModel,
         containSongsFactory: ContainSongsFactory,
         songDetailPresenter: any SongDetailPresentable,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

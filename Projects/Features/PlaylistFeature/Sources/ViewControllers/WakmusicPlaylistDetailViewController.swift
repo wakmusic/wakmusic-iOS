@@ -20,7 +20,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
 
     private let containSongsFactory: any ContainSongsFactory
 
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
 
     private let songDetailPresenter: any SongDetailPresentable
 
@@ -54,12 +54,12 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     init(
         reactor: WakmusicPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         songDetailPresenter: any SongDetailPresentable,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
 

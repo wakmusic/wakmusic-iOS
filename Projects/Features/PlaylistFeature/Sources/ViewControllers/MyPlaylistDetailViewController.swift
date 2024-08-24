@@ -29,7 +29,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private let containSongsFactory: any ContainSongsFactory
 
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
 
     private let playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory
 
@@ -90,7 +90,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         reactor: MyPlaylistDetailReactor,
         multiPurposePopupFactory: any MultiPurposePopupFactory,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory,
         checkPlaylistCoverFactory: any CheckPlaylistCoverFactory,
         defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory,
@@ -98,7 +98,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
     ) {
         self.multiPurposePopupFactory = multiPurposePopupFactory
         self.containSongsFactory = containSongsFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.playlistCoverOptionPopupFactory = playlistCoverOptionPopupFactory
         self.checkPlaylistCoverFactory = checkPlaylistCoverFactory
         self.defaultPlaylistCoverFactory = defaultPlaylistCoverFactory
@@ -189,7 +189,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             .withLatestFrom(sharedState.map(\.isEditing))
             .bind(with: self) { owner, isEditing in
 
-                let vc = owner.textPopUpFactory.makeView(
+                let vc = owner.textPopupFactory.makeView(
                     text: "변경된 내용을 저장할까요?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "확인",
@@ -469,7 +469,7 @@ extension MyPlaylistDetailViewController {
     func navigateToCheckPlaylistCover(imageData: Data) {
         if let navigationController = self.presentedViewController as? UINavigationController {
             if Double(imageData.count).megabytes > Limit.imageSizeLimitPerMB {
-                let textPopupVC = self.textPopUpFactory.makeView(
+                let textPopupVC = self.textPopupFactory.makeView(
                     text: "사진의 용량은 \(Int(Limit.imageSizeLimitPerMB))MB를 초과할 수 없습니다.\n다른 사진을 선택해 주세요.",
                     cancelButtonIsHidden: true,
                     confirmButtonText: nil,
@@ -623,7 +623,7 @@ extension MyPlaylistDetailViewController: SongCartViewDelegate {
             break
         case .remove:
 
-            let vc: UIViewController = textPopUpFactory.makeView(
+            let vc: UIViewController = textPopupFactory.makeView(
                 text: "\(currentState.selectedCount)곡을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false, confirmButtonText: "확인",
                 cancelButtonText: "취소",

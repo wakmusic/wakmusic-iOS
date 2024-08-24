@@ -22,7 +22,7 @@ extension PlaylistViewController: SongCartViewDelegate {
             let count = songs.count
 
             if PreferenceManager.userInfo == nil {
-                let textPopvc = TextPopupViewController.viewController(
+                let textPopupvc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { [weak self] in
@@ -37,7 +37,7 @@ extension PlaylistViewController: SongCartViewDelegate {
                         }
                     }
                 )
-                self.showBottomSheet(content: textPopvc)
+                self.showBottomSheet(content: textPopupvc)
                 return
             }
             viewController.modalPresentationStyle = .overFullScreen

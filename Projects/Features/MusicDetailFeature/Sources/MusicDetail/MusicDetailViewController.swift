@@ -18,7 +18,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     private let songCreditFactory: any SongCreditFactory
     private let signInFactory: any SignInFactory
     private let containSongsFactory: any ContainSongsFactory
-    private let textPopupFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let karaokeFactory: any KaraokeFactory
     private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
@@ -28,7 +28,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         songCreditFactory: any SongCreditFactory,
         signInFactory: any SignInFactory,
         containSongsFactory: any ContainSongsFactory,
-        textPopupFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         karaokeFactory: any KaraokeFactory,
         playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {

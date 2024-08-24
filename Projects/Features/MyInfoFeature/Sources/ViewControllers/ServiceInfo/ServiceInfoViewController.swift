@@ -14,7 +14,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
     @IBOutlet weak var tableView: UITableView!
 
     var openSourceLicenseFactory: OpenSourceLicenseFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    var textPopupFactory: TextPopupFactory!
     var viewModel: ServiceInfoViewModel!
     var disposeBag: DisposeBag = DisposeBag()
 
@@ -31,7 +31,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
     public static func viewController(
         viewModel: ServiceInfoViewModel,
         openSourceLicenseFactory: OpenSourceLicenseFactory,
-        textPopUpFactory: TextPopUpFactory
+        textPopupFactory: TextPopupFactory
     ) -> ServiceInfoViewController {
         let viewController = ServiceInfoViewController.viewController(
             storyBoardName: "OpenSourceAndServiceInfo",
@@ -39,7 +39,7 @@ public class ServiceInfoViewController: UIViewController, ViewControllerFromStor
         )
         viewController.viewModel = viewModel
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         return viewController
     }
 }
@@ -95,7 +95,7 @@ extension ServiceInfoViewController {
             .withUnretained(self)
             .subscribe(onNext: { owner, sizeString in
 
-                guard let textPopupVC = owner.textPopUpFactory.makeView(
+                guard let textPopupVC = owner.textPopupFactory.makeView(
                     text: "캐시 데이터(\(sizeString))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,

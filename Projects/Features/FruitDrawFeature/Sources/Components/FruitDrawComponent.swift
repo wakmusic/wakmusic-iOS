@@ -9,7 +9,7 @@ import UserDomainInterface
 public protocol FruitDrawDependency: Dependency {
     var fetchFruitDrawStatusUseCase: any FetchFruitDrawStatusUseCase { get }
     var drawFruitUseCase: any DrawFruitUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class FruitDrawComponent: Component<FruitDrawDependency>, FruitDrawFactory {
@@ -19,7 +19,7 @@ public final class FruitDrawComponent: Component<FruitDrawDependency>, FruitDraw
                 fetchFruitDrawStatusUseCase: dependency.fetchFruitDrawStatusUseCase,
                 drawFruitUseCase: dependency.drawFruitUseCase
             ),
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             delegate: delegate
         )
     }

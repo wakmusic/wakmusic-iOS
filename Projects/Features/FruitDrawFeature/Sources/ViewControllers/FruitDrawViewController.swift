@@ -149,7 +149,7 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let viewModel: FruitDrawViewModel
-    private let textPopUpFactory: TextPopUpFactory
+    private let textPopupFactory: TextPopupFactory
     private weak var delegate: FruitDrawViewControllerDelegate?
 
     lazy var input = FruitDrawViewModel.Input()
@@ -162,11 +162,11 @@ public final class FruitDrawViewController: UIViewController {
 
     public init(
         viewModel: FruitDrawViewModel,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         delegate: FruitDrawViewControllerDelegate
     ) {
         self.viewModel = viewModel
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -237,7 +237,7 @@ private extension FruitDrawViewController {
         output.occurredError
             .bind(with: self) { owner, message in
                 owner.showBottomSheet(
-                    content: owner.textPopUpFactory.makeView(
+                    content: owner.textPopupFactory.makeView(
                         text: message,
                         cancelButtonIsHidden: true,
                         confirmButtonText: "확인",

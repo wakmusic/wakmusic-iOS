@@ -17,7 +17,7 @@ open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
 
     private var mainContainerComponent: MainContainerComponent!
     private var permissionComponent: PermissionComponent!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
 
     private var viewModel: IntroViewModel!
     lazy var input = IntroViewModel.Input()
@@ -34,13 +34,13 @@ open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
     public static func viewController(
         mainContainerComponent: MainContainerComponent,
         permissionComponent: PermissionComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         viewModel: IntroViewModel
     ) -> IntroViewController {
         let viewController = IntroViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
         viewController.mainContainerComponent = mainContainerComponent
         viewController.permissionComponent = permissionComponent
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.viewModel = viewModel
         return viewController
     }
@@ -95,7 +95,7 @@ private extension IntroViewController {
 
                     case .offline:
                         owner.showBottomSheet(
-                            content: owner.textPopUpFactory.makeView(
+                            content: owner.textPopupFactory.makeView(
                                 text: entity.description,
                                 cancelButtonIsHidden: true,
                                 confirmButtonText: "재시도",
@@ -110,7 +110,7 @@ private extension IntroViewController {
                         return
 
                     case .event:
-                        textPopupVc = owner.textPopUpFactory.makeView(
+                        textPopupVc = owner.textPopupFactory.makeView(
                             text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
                             confirmButtonText: nil,
@@ -122,7 +122,7 @@ private extension IntroViewController {
                         )
 
                     case .update:
-                        textPopupVc = owner.textPopUpFactory.makeView(
+                        textPopupVc = owner.textPopupFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
                             confirmButtonText: "업데이트",
@@ -136,7 +136,7 @@ private extension IntroViewController {
                         )
 
                     case .forceUpdate:
-                        textPopupVc = owner.textPopUpFactory.makeView(
+                        textPopupVc = owner.textPopupFactory.makeView(
                             text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: true,
                             confirmButtonText: "업데이트",
@@ -156,7 +156,7 @@ private extension IntroViewController {
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
                     owner.showBottomSheet(
-                        content: owner.textPopUpFactory.makeView(
+                        content: owner.textPopupFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
                             cancelButtonIsHidden: true,
                             confirmButtonText: "재시도",
@@ -189,7 +189,7 @@ private extension IntroViewController {
 
             case let .failure(error):
                 owner.showBottomSheet(
-                    content: owner.textPopUpFactory.makeView(
+                    content: owner.textPopupFactory.makeView(
                         text: error.asWMError.errorDescription ?? error.localizedDescription,
                         cancelButtonIsHidden: true,
                         confirmButtonText: nil,

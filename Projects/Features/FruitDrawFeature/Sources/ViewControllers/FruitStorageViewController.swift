@@ -45,7 +45,7 @@ public final class FruitStorageViewController: UIViewController {
     }
 
     private let viewModel: FruitStorageViewModel
-    private let textPopUpFactory: TextPopUpFactory
+    private let textPopupFactory: TextPopupFactory
 
     lazy var input = FruitStorageViewModel.Input()
     lazy var output = viewModel.transform(from: input)
@@ -57,10 +57,10 @@ public final class FruitStorageViewController: UIViewController {
 
     public init(
         viewModel: FruitStorageViewModel,
-        textPopUpFactory: TextPopUpFactory
+        textPopupFactory: TextPopupFactory
     ) {
         self.viewModel = viewModel
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         super.init(nibName: nil, bundle: nil)
     }
 

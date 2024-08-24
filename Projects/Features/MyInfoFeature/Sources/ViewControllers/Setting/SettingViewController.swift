@@ -13,7 +13,7 @@ import UIKit
 import Utility
 
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
@@ -40,7 +40,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
 
     public static func viewController(
         reactor: SettingReactor,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
@@ -48,7 +48,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         togglePopUpFactory: TogglePopUpFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
@@ -114,7 +114,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$cacheSize)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, cachSize in
-                guard let textPopupVC = owner.textPopUpFactory.makeView(
+                guard let textPopupVC = owner.textPopupFactory.makeView(
                     text: "캐시 데이터(\(cachSize))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
@@ -144,7 +144,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
                 let makeSecondConfirmVC: () -> UIViewController = {
-                    owner.textPopUpFactory.makeView(
+                    owner.textPopupFactory.makeView(
                         text: "정말 탈퇴하시겠습니까?",
                         cancelButtonIsHidden: false,
                         completion: {
@@ -155,7 +155,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                         }
                     )
                 }
-                let firstConfirmVC = owner.textPopUpFactory.makeView(
+                let firstConfirmVC = owner.textPopupFactory.makeView(
                     text: "회원탈퇴 신청을 하시겠습니까?",
                     cancelButtonIsHidden: false,
                     completion: {
@@ -172,7 +172,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .bind(with: self) { owner, withDrawResult in
                 let status = withDrawResult.status
                 let description = withDrawResult.description
-                guard let textPopUpVC = owner.textPopUpFactory.makeView(
+                guard let textPopupVC = owner.textPopupFactory.makeView(
                     text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : description,
                     cancelButtonIsHidden: true,
                     confirmButtonText: nil,
@@ -186,7 +186,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                owner.showBottomSheet(content: textPopUpVC)
+                owner.showBottomSheet(content: textPopupVC)
             }
             .disposed(by: disposeBag)
     }
@@ -232,7 +232,7 @@ extension SettingViewController: UITableViewDelegate {
         )
         togglePopUpVC.modalPresentationStyle = .overFullScreen
 
-        let textPopUpVC = textPopUpFactory.makeView(
+        let textPopupVC = textPopupFactory.makeView(
             text: "로그아웃 하시겠습니까?",
             cancelButtonIsHidden: false,
             confirmButtonText: "확인",
@@ -266,7 +266,7 @@ extension SettingViewController: UITableViewDelegate {
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
             LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
-            showBottomSheet(content: textPopUpVC, size: .fixed(234))
+            showBottomSheet(content: textPopupVC, size: .fixed(234))
         case .versionInfo:
             LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)

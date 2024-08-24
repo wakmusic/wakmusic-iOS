@@ -19,7 +19,7 @@ final class StorageViewController: TabmanViewController, View {
     private var listStorageComponent: ListStorageComponent!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var likeStorageComponent: LikeStorageComponent!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
 
     private var viewControllers: [UIViewController]!
@@ -61,7 +61,7 @@ final class StorageViewController: TabmanViewController, View {
         listStorageComponent: ListStorageComponent,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         likeStorageComponent: LikeStorageComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory
     ) -> StorageViewController {
         let viewController = StorageViewController(reactor: reactor)
@@ -70,7 +70,7 @@ final class StorageViewController: TabmanViewController, View {
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.likeStorageComponent = likeStorageComponent
         viewController.viewControllers = [listStorageComponent.makeView(), likeStorageComponent.makeView()]
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         return viewController
     }
@@ -127,7 +127,7 @@ extension StorageViewController {
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, entry in
-                guard let vc = owner.textPopUpFactory.makeView(
+                guard let vc = owner.textPopupFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
