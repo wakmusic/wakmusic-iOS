@@ -8,7 +8,7 @@ let pattern = /Resolves: #\d+/;
 let issueNumber;
 
 try {
-  issueNumber = body.match(pattern)[0].replace("Resolves: #", "");
+  issueNumber = body.match(pattern)[0].replace("Resolves: #", "").trim();
 } catch {
   issueNumber = -1;
 }
