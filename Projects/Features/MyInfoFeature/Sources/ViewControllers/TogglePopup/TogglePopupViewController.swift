@@ -23,6 +23,12 @@ public final class TogglePopupViewController: UIViewController {
         kernValue: -0.5
     )
 
+    private let vStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 8
+        $0.distribution = .fillEqually
+    }
+    
     private let firstItemButton = UIButton()
 
     private let secondItemButton = UIButton()
@@ -40,7 +46,7 @@ public final class TogglePopupViewController: UIViewController {
         kernValue: -0.5
     )
 
-    private let stackView = UIStackView().then {
+    private let hStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 0
         $0.distribution = .fillEqually
@@ -63,13 +69,14 @@ public final class TogglePopupViewController: UIViewController {
         $0.titleLabel?.font = .setFont(.t4(weight: .medium))
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
-
-    var titleString: String = ""
-    var firstItemString: String = ""
-    var secondItemString: String = ""
-    var cancelButtonText: String = ""
-    var confirmButtonText: String = ""
-    var descriptionText: String = ""
+    
+    private var titleString: String
+    private var firstItemString: String
+    private var secondItemString: String
+    private var cancelButtonText: String
+    private var confirmButtonText: String
+    private var firstDescriptionText: String
+    private var secondDescriptionText: String
     var completion: (() -> Void)?
     var cancelCompletion: (() -> Void)?
 
@@ -79,19 +86,21 @@ public final class TogglePopupViewController: UIViewController {
         secondItemString: String,
         cancelButtonText: String = "취소",
         confirmButtonText: String = "확인",
-        descriptionText: String = "",
+        firstDescriptionText: String = "",
+        secondDescriptionText: String = "",
         completion: (() -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
     ) {
-        super.init(nibName: nil, bundle: nil)
         self.titleString = titleString
         self.firstItemString = firstItemString
         self.secondItemString = secondItemString
         self.cancelButtonText = cancelButtonText
         self.confirmButtonText = confirmButtonText
-        self.descriptionText = descriptionText
+        self.firstDescriptionText = firstDescriptionText
+        self.secondDescriptionText = secondDescriptionText
         self.completion = completion
         self.cancelCompletion = cancelCompletion
+        super.init(nibName: nil, bundle: nil)
     }
 
     @available(*, unavailable)
@@ -148,9 +157,9 @@ private extension TogglePopupViewController {
             secondItemButton,
             dotImageView,
             descriptionLabel,
-            stackView
+            hStackView
         )
-        stackView.addArrangedSubviews(cancelButton, confirmButton)
+        hStackView.addArrangedSubviews(cancelButton, confirmButton)
     }
 
     func setLayout() {
@@ -191,7 +200,7 @@ private extension TogglePopupViewController {
             $0.right.equalToSuperview().inset(20)
         }
 
-        stackView.snp.makeConstraints {
+        hStackView.snp.makeConstraints {
             $0.height.equalTo(56)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalToSuperview()
@@ -205,7 +214,7 @@ private extension TogglePopupViewController {
         titleLabel.text = self.titleString
         firstItemButton.setTitle(self.firstItemString, for: .normal)
         secondItemButton.setTitle(self.secondItemString, for: .normal)
-        descriptionLabel.text = self.descriptionText
+        descriptionLabel.text = self.firstDescriptionText
         cancelButton.setTitle(self.cancelButtonText, for: .normal)
         confirmButton.setTitle(self.confirmButtonText, for: .normal)
 

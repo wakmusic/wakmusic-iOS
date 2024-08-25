@@ -226,7 +226,8 @@ extension SettingViewController: UITableViewDelegate {
             titleString: "어떻게 재생할까요?",
             firstItemString: "YouTube",
             secondItemString: "YouTube Music",
-            descriptionText: "해당 기능을 사용하려면 앱이 설치되어 있어야 합니다.",
+            firstDescriptionText: "해당 기능을 사용하려면 앱이 설치되어 있어야 합니다.",
+            secondDescriptionText: "일부 노래나 쇼츠는 YouTube Music에서 지원되지 않습니다.",
             completion: {},
             cancelCompletion: {}
         )
