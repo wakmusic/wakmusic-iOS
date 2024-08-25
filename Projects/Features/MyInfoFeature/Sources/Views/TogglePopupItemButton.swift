@@ -124,7 +124,6 @@ private extension PlayTypeTogglePopupItemButtonView {
         button.addAction(buttonAction, for: .touchUpInside)
 
         installButton.addAction {
-            print("installButton did Tap")
             let youtubeMusicAppStoreURL = "itms-apps://apps.apple.com/app/id1017492454"
             if let url = URL(string: youtubeMusicAppStoreURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)

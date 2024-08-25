@@ -3,6 +3,8 @@ import SnapKit
 import Then
 import UIKit
 import Utility
+import RxSwift
+import RxCocoa
 
 public final class PlayTypeTogglePopupViewController: UIViewController {
     private let dimmView = UIView().then {
@@ -82,11 +84,11 @@ public final class PlayTypeTogglePopupViewController: UIViewController {
         $0.titleLabel?.font = .setFont(.t4(weight: .medium))
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
-
+    
+    private let disposeBag = DisposeBag()
     private var selectedItemString: String = ""
-
-    var completion: ((_ selectedItemString: String) -> Void)?
-    var cancelCompletion: (() -> Void)?
+    private var completion: ((_ selectedItemString: String) -> Void)?
+    private var cancelCompletion: (() -> Void)?
 
     init(
         completion: ((_ selectedItemString: String) -> Void)? = nil,
@@ -122,6 +124,12 @@ public final class PlayTypeTogglePopupViewController: UIViewController {
     }
 
     func setActions() {
+        NotificationCenter.default.rx.notification(UIApplication.didBecomeActiveNotification)
+            .subscribe { [weak self] _ in
+                self?.secondItemButton.checkAppIsInstalled()
+            }
+            .disposed(by: disposeBag)
+        
         let cancelAction = UIAction { [weak self] _ in
             self?.dismiss()
         }
