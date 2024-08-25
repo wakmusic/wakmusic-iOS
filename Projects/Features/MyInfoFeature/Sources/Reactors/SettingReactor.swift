@@ -37,6 +37,7 @@ final class SettingReactor: Reactor {
         case updateIsHiddenWithDrawButton(Bool)
         case changedNotificationAuthorizationStatus(Bool)
         case updateIsShowActivityIndicator(Bool)
+        case reloadTableView
     }
 
     enum NavigateType {
@@ -59,6 +60,7 @@ final class SettingReactor: Reactor {
         @Pulse var withDrawButtonDidTap: Bool?
         @Pulse var confirmRemoveCacheButtonDidTap: Bool?
         @Pulse var withDrawResult: BaseEntity?
+        @Pulse var reloadTableView: Void?
     }
 
     var initialState: State
@@ -137,6 +139,8 @@ final class SettingReactor: Reactor {
             newState.notificationAuthorizationStatus = granted
         case let .updateIsShowActivityIndicator(isShow):
             newState.isShowActivityIndicator = isShow
+        case .reloadTableView:
+            newState.reloadTableView = ()
         }
         return newState
     }
@@ -160,11 +164,19 @@ final class SettingReactor: Reactor {
             .flatMap { granted -> Observable<Mutation> in
                 return .just(.changedNotificationAuthorizationStatus(granted))
             }
-
+        
+        let updatePlayTypeMutation = PreferenceManager.$playWithYoutubeMusic
+            .distinctUntilChanged()
+            .map { $0 ?? false }
+            .flatMap { isPlayWithYoutubeMusic -> Observable<Mutation> in
+                return .just(.reloadTableView)
+            }
+        
         return Observable.merge(
             mutation,
             updateIsLoggedInMutation,
-            updatepushNotificationAuthorizationStatusMutation
+            updatepushNotificationAuthorizationStatusMutation,
+            updatePlayTypeMutation
         )
     }
 }

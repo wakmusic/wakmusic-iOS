@@ -18,7 +18,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
-    private var togglePopupFactory: TogglePopupFactory!
+    private var togglePopupFactory: PlayTypeTogglePopupFactory!
 
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
@@ -45,7 +45,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
         openSourceLicenseFactory: OpenSourceLicenseFactory,
-        togglePopupFactory: TogglePopupFactory
+        togglePopupFactory: PlayTypeTogglePopupFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -58,6 +58,14 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.pulse(\.$reloadTableView)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                print("$reloadTableView")
+                owner.settingView.settingItemTableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+        
         reactor.state.map(\.isShowActivityIndicator)
             .distinctUntilChanged()
             .bind(with: self) { owner, isShow in
@@ -224,7 +232,14 @@ extension SettingViewController: UITableViewDelegate {
 
         let togglePopupVC = togglePopupFactory.makeView(
             completion: { selectedItemString in
-                print(selectedItemString)
+                switch selectedItemString {
+                case "YouTube":
+                    PreferenceManager.playWithYoutubeMusic = false
+                case "YouTube Music":
+                    PreferenceManager.playWithYoutubeMusic = true
+                default:
+                    break
+                }
             },
             cancelCompletion: {}
         )

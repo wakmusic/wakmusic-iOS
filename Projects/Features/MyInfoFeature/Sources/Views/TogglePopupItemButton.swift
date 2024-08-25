@@ -3,11 +3,11 @@ import SnapKit
 import Then
 import UIKit
 
-protocol TogglePopupItemButtonViewDelegate: AnyObject {
+protocol PlayTypeTogglePopupItemButtonViewDelegate: AnyObject {
     func tappedButtonAction(title: String)
 }
 
-final class TogglePopupItemButtonView: UIView {
+final class PlayTypeTogglePopupItemButtonView: UIView {
     private let baseView = UIView().then {
         $0.layer.cornerRadius = 12
         $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
@@ -43,7 +43,7 @@ final class TogglePopupItemButtonView: UIView {
 
     private let button = UIButton()
 
-    private weak var delegate: TogglePopupItemButtonViewDelegate?
+    private weak var delegate: PlayTypeTogglePopupItemButtonViewDelegate?
 
     private var shouldCheckAppIsInstalled: Bool = false
 
@@ -66,7 +66,7 @@ final class TogglePopupItemButtonView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setDelegate(_ delegate: TogglePopupItemButtonViewDelegate) {
+    func setDelegate(_ delegate: PlayTypeTogglePopupItemButtonViewDelegate) {
         self.delegate = delegate
     }
 
@@ -96,7 +96,7 @@ final class TogglePopupItemButtonView: UIView {
     }
 }
 
-private extension TogglePopupItemButtonView {
+private extension PlayTypeTogglePopupItemButtonView {
     func didChangedSelection(_ isSelected: Bool) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self else { return }
@@ -125,7 +125,10 @@ private extension TogglePopupItemButtonView {
 
         installButton.addAction {
             print("installButton did Tap")
-
+            let youtubeMusicAppStoreURL = "itms-apps://apps.apple.com/app/id1017492454"
+            if let url = URL(string: youtubeMusicAppStoreURL) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
             self.installButton.isHidden = true
             self.button.isEnabled = true
         }

@@ -4,7 +4,7 @@ import Then
 import UIKit
 import Utility
 
-public final class TogglePopupViewController: UIViewController {
+public final class PlayTypeTogglePopupViewController: UIViewController {
     private let dimmView = UIView().then {
         $0.backgroundColor = .black.withAlphaComponent(0.4)
     }
@@ -29,9 +29,9 @@ public final class TogglePopupViewController: UIViewController {
         $0.distribution = .fillEqually
     }
 
-    private let firstItemButton = TogglePopupItemButtonView()
+    private let firstItemButton = PlayTypeTogglePopupItemButtonView()
 
-    private let secondItemButton = TogglePopupItemButtonView()
+    private let secondItemButton = PlayTypeTogglePopupItemButtonView()
 
     private let firstDotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
@@ -136,7 +136,7 @@ public final class TogglePopupViewController: UIViewController {
     }
 }
 
-private extension TogglePopupViewController {
+private extension PlayTypeTogglePopupViewController {
     func addViews() {
         self.view.addSubviews(
             dimmView,
@@ -245,10 +245,19 @@ private extension TogglePopupViewController {
     }
 }
 
-extension TogglePopupViewController: TogglePopupItemButtonViewDelegate {
+extension PlayTypeTogglePopupViewController: PlayTypeTogglePopupItemButtonViewDelegate {
     func tappedButtonAction(title: String) {
-        self.selectedItemString = title
-        firstItemButton.isSelected.toggle()
-        secondItemButton.isSelected.toggle()
+        switch title {
+        case "YouTube":
+            self.selectedItemString = title
+            firstItemButton.isSelected = true
+            secondItemButton.isSelected = false
+        case "YouTube Music":
+            self.selectedItemString = title
+            firstItemButton.isSelected = false
+            secondItemButton.isSelected = true
+        default:
+            break
+        }
     }
 }

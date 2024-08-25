@@ -2,12 +2,12 @@ import MyInfoFeatureInterface
 import NeedleFoundation
 import UIKit
 
-public final class TogglePopupComponent: Component<EmptyDependency>, TogglePopupFactory {
+public final class PlayTypeTogglePopupComponent: Component<EmptyDependency>, PlayTypeTogglePopupFactory {
     public func makeView(
         completion: ((_ selectedItemString: String) -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
     ) -> UIViewController {
-        return TogglePopupViewController(
+        return PlayTypeTogglePopupViewController(
             completion: completion,
             cancelCompletion: cancelCompletion
         )

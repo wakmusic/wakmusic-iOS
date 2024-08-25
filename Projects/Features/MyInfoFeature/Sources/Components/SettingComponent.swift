@@ -17,7 +17,7 @@ public protocol SettingDependency: Dependency {
     var serviceTermsFactory: any ServiceTermFactory { get }
     var privacyFactory: any PrivacyFactory { get }
     var openSourceLicenseFactory: any OpenSourceLicenseFactory { get }
-    var togglePopupFactory: any TogglePopupFactory { get }
+    var togglePopupFactory: any PlayTypeTogglePopupFactory { get }
 }
 
 public final class SettingComponent: Component<SettingDependency>, SettingFactory {

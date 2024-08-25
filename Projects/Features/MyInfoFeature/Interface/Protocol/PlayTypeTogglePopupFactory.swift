@@ -1,13 +1,13 @@
 import UIKit
 
-public protocol TogglePopupFactory {
+public protocol PlayTypeTogglePopupFactory {
     func makeView(
         completion: ((_ selectedItemString: String) -> Void)?,
         cancelCompletion: (() -> Void)?
     ) -> UIViewController
 }
 
-public extension TogglePopupFactory {
+public extension PlayTypeTogglePopupFactory {
     func makeView(
         completion: ((_ selectedItemString: String) -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
