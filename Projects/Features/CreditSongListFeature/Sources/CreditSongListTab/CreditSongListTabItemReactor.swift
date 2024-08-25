@@ -81,7 +81,9 @@ final class CreditSongListTabItemReactor: Reactor {
             return songDidTap(id: id)
         case let .songThumbnailDidTap(id):
             return navigateMutation(navigateType: .dismiss(completion: { [songDetailPresenter] in
-                songDetailPresenter.present(id: id)
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: id)
             }))
         case .randomPlayButtonDidTap:
             return randomPlayButtonDidTap()

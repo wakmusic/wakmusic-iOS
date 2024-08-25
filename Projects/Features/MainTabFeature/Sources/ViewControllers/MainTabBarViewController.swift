@@ -157,7 +157,9 @@ private extension MainTabBarViewController {
 
         case "songDetail":
             let id = params["id"] as? String ?? ""
-            songDetailPresenter.present(id: id)
+            let playlistIDs = PlayState.shared.currentPlaylist
+                .map(\.id)
+            songDetailPresenter.present(ids: playlistIDs, selectedID: id)
 
         default:
             break
