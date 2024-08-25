@@ -174,7 +174,7 @@ extension ListStorageTableViewCell {
         self.cellSelectButton.isHidden = !isEditing
         self.listSelectButton.isHidden = isEditing
         self.playButton.isHidden = isEditing
-        self.lockImageView.isHidden = model.private
+        self.lockImageView.isHidden = !model.private
 
         self.playButton.snp.updateConstraints {
             $0.right.equalToSuperview().inset(isEditing ? -24 : 20)
