@@ -219,7 +219,9 @@ extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
             .first(where: { $0.songID == id })
         else { return }
         PlayState.shared.append(item: .init(id: tappedSong.songID, title: tappedSong.title, artist: tappedSong.artist))
-        songDetailPresenter.present(id: id)
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: tappedSong.songID)
     }
 }
 
