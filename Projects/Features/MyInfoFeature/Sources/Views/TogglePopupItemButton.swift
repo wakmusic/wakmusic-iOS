@@ -27,6 +27,20 @@ final class TogglePopupItemButtonView: UIView {
         $0.contentMode = .scaleAspectFit
     }
     
+    private let installButton = UIButton().then {
+        $0.layer.cornerRadius = 4
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
+        $0.setTitle("미설치", for: .normal)
+        $0.setBackgroundColor(.white, for: .normal)
+        $0.setBackgroundColor(.lightGray, for: .highlighted)
+        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray400.color, for: .normal)
+        $0.setTitleColor(.white, for: .highlighted)
+        $0.titleLabel?.font = UIFont.WMFontSystem.t7(weight: .bold).font
+        $0.clipsToBounds = true
+        $0.isHidden = true
+    }
+    
     private let button = UIButton()
     
     private weak var delegate: TogglePopupItemButtonViewDelegate?
@@ -62,6 +76,23 @@ final class TogglePopupItemButtonView: UIView {
     ) {
         self.titleLabel.text = title
         self.shouldCheckAppIsInstalled = shouldCheckAppIsInstalled
+        if shouldCheckAppIsInstalled {
+            checkAppIsInstalled()
+        }
+    }
+    
+    @discardableResult
+    func checkAppIsInstalled() -> Bool {
+        let isInstalled: Bool
+        if let url = URL(string: "youtube-music://"), UIApplication.shared.canOpenURL(url) {
+            isInstalled = true
+        } else {
+            isInstalled = false
+        }
+        installButton.isHidden = isInstalled
+        button.isEnabled = isInstalled
+        
+        return isInstalled
     }
 }
 
@@ -91,6 +122,13 @@ private extension TogglePopupItemButtonView {
             self.delegate?.tappedButtonAction(title: titleLabel.text ?? "")
         }
         button.addAction(buttonAction, for: .touchUpInside)
+        
+        installButton.addAction {
+            print("installButton did Tap")
+            
+            self.installButton.isHidden = true
+            self.button.isEnabled = true
+        }
     }
 
     func addViews() {
@@ -98,6 +136,7 @@ private extension TogglePopupItemButtonView {
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(button)
+        addSubview(installButton)
     }
 
     func setLayout() {
@@ -119,6 +158,13 @@ private extension TogglePopupItemButtonView {
 
         button.snp.makeConstraints {
             $0.edges.equalTo(baseView)
+        }
+        
+        installButton.snp.makeConstraints {
+            $0.width.equalTo(55)
+            $0.height.equalTo(24)
+            $0.trailing.equalToSuperview().inset(20)
+            $0.centerY.equalToSuperview()
         }
     }
 }
