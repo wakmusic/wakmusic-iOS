@@ -34,12 +34,11 @@ class ListStorageTableViewCell: UITableViewCell {
     ).then {
         $0.lineBreakMode = .byTruncatingTail
     }
-    
 
     private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
     }
-    
+
     private let playButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Player.playLarge.image, for: .normal)
         $0.layer.addShadow(
@@ -51,19 +50,19 @@ class ListStorageTableViewCell: UITableViewCell {
             spread: 0
         )
     }
-    
+
     private let lockImageView: UIImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.storageClose.image
         $0.isHidden = true
     }
-    
+
     private let countLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray300.color,
         font: .t7(weight: .light),
         kernValue: -0.5
     )
-    
+
     private let countContainerView: UIView = UIView()
 
     private let cellSelectButton = UIButton()
@@ -128,7 +127,7 @@ extension ListStorageTableViewCell {
             $0.left.equalToSuperview()
             $0.right.equalTo(verticalStackView.snp.right)
         }
-        
+
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
@@ -138,7 +137,7 @@ extension ListStorageTableViewCell {
             $0.top.bottom.equalToSuperview()
             $0.leading.equalToSuperview()
         }
-        
+
         lockImageView.snp.makeConstraints {
             $0.leading.equalTo(countLabel.snp.trailing)
             $0.width.height.equalTo(16)
