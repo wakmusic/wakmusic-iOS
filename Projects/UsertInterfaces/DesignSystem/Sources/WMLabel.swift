@@ -61,7 +61,7 @@ public final class WMLabel: UILabel {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public func setFont(_ style: UIFont.WMFontSystem) {
         self.font = UIFont.setFont(style)
     }

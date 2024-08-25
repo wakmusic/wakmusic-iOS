@@ -36,7 +36,7 @@ public final class TogglePopupViewController: UIViewController {
     private let firstDotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
-    
+
     private let secondDotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
@@ -49,7 +49,7 @@ public final class TogglePopupViewController: UIViewController {
         lineHeight: UIFont.WMFontSystem.t7().lineHeight,
         kernValue: -0.5
     )
-    
+
     private let secondDescriptionLabel = WMLabel(
         text: "일부 노래나 쇼츠는 YouTube Music에서 지원되지 않습니다.",
         textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
@@ -84,10 +84,10 @@ public final class TogglePopupViewController: UIViewController {
     }
 
     private var selectedItemString: String = ""
-    
+
     var completion: ((_ selectedItemString: String) -> Void)?
     var cancelCompletion: (() -> Void)?
-    
+
     init(
         completion: ((_ selectedItemString: String) -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
@@ -125,7 +125,7 @@ public final class TogglePopupViewController: UIViewController {
         let cancelAction = UIAction { [weak self] _ in
             self?.dismiss()
         }
-        
+
         let confirmAction = UIAction { [weak self] _ in
             guard let self else { return }
             self.completion?(self.selectedItemString)
@@ -187,18 +187,18 @@ private extension TogglePopupViewController {
             $0.centerY.equalTo(firstDescriptionLabel.snp.centerY)
             $0.left.equalToSuperview().offset(20)
         }
-        
+
         firstDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(secondItemButton.snp.bottom).offset(8)
             $0.left.equalTo(firstDotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
-        
+
         secondDotImageView.snp.makeConstraints {
             $0.centerY.equalTo(secondDescriptionLabel.snp.centerY)
             $0.left.equalToSuperview().offset(20)
         }
-        
+
         secondDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(firstDescriptionLabel.snp.bottom).offset(4)
             $0.left.equalTo(secondDotImageView.snp.right)
@@ -215,16 +215,16 @@ private extension TogglePopupViewController {
     func configureUI() {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
-        
+
         let alreadySelectedYoutubeMusic = PreferenceManager.playWithYoutubeMusic ?? false
         self.selectedItemString = alreadySelectedYoutubeMusic ? "YouTube Music" : "YouTube"
-        
+
         firstItemButton.setTitleWithOption(title: "YouTube")
         secondItemButton.setTitleWithOption(title: "YouTube Music", shouldCheckAppIsInstalled: true)
-        
+
         firstItemButton.isSelected = !alreadySelectedYoutubeMusic
         secondItemButton.isSelected = alreadySelectedYoutubeMusic
-        
+
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
         dimmView.addGestureRecognizer(gesture)
         dimmView.isUserInteractionEnabled = true

@@ -1,7 +1,7 @@
+import DesignSystem
 import SnapKit
 import Then
 import UIKit
-import DesignSystem
 
 protocol TogglePopupItemButtonViewDelegate: AnyObject {
     func tappedButtonAction(title: String)
@@ -21,12 +21,12 @@ final class TogglePopupItemButtonView: UIView {
         font: .t5(weight: .light),
         alignment: .left
     )
-    
+
     private let imageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.donut.image
         $0.contentMode = .scaleAspectFit
     }
-    
+
     private let installButton = UIButton().then {
         $0.layer.cornerRadius = 4
         $0.layer.borderWidth = 1
@@ -40,19 +40,19 @@ final class TogglePopupItemButtonView: UIView {
         $0.clipsToBounds = true
         $0.isHidden = true
     }
-    
+
     private let button = UIButton()
-    
+
     private weak var delegate: TogglePopupItemButtonViewDelegate?
 
     private var shouldCheckAppIsInstalled: Bool = false
-    
+
     var isSelected: Bool = false {
         didSet {
             didChangedSelection(isSelected)
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
@@ -65,11 +65,11 @@ final class TogglePopupItemButtonView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func setDelegate(_ delegate: TogglePopupItemButtonViewDelegate) {
         self.delegate = delegate
     }
-    
+
     func setTitleWithOption(
         title: String,
         shouldCheckAppIsInstalled: Bool = false
@@ -80,7 +80,7 @@ final class TogglePopupItemButtonView: UIView {
             checkAppIsInstalled()
         }
     }
-    
+
     @discardableResult
     func checkAppIsInstalled() -> Bool {
         let isInstalled: Bool
@@ -91,7 +91,7 @@ final class TogglePopupItemButtonView: UIView {
         }
         installButton.isHidden = isInstalled
         button.isEnabled = isInstalled
-        
+
         return isInstalled
     }
 }
@@ -100,32 +100,32 @@ private extension TogglePopupItemButtonView {
     func didChangedSelection(_ isSelected: Bool) {
         UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self else { return }
-            
+
             self.baseView.layer.borderColor = isSelected ?
-            DesignSystemAsset.PrimaryColorV2.point.color.cgColor :
-            DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
+                DesignSystemAsset.PrimaryColorV2.point.color.cgColor :
+                DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
         }
-        
+
         self.imageView.image = isSelected ?
-        DesignSystemAsset.MyInfo.donutColor.image :
-        DesignSystemAsset.MyInfo.donut.image
-        
+            DesignSystemAsset.MyInfo.donutColor.image :
+            DesignSystemAsset.MyInfo.donut.image
+
         let font = isSelected ?
-        UIFont.WMFontSystem.t5(weight: .medium) :
-        UIFont.WMFontSystem.t5(weight: .light)
+            UIFont.WMFontSystem.t5(weight: .medium) :
+            UIFont.WMFontSystem.t5(weight: .light)
         self.titleLabel.setFont(font)
     }
-    
+
     func setActions() {
         let buttonAction = UIAction { [weak self] _ in
             guard let self = self else { return }
             self.delegate?.tappedButtonAction(title: titleLabel.text ?? "")
         }
         button.addAction(buttonAction, for: .touchUpInside)
-        
+
         installButton.addAction {
             print("installButton did Tap")
-            
+
             self.installButton.isHidden = true
             self.button.isEnabled = true
         }
@@ -143,13 +143,13 @@ private extension TogglePopupItemButtonView {
         baseView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(16)
             $0.trailing.equalTo(imageView.snp.trailing).offset(20)
         }
-        
+
         imageView.snp.makeConstraints {
             $0.size.equalTo(24)
             $0.trailing.equalToSuperview().inset(20)
@@ -159,7 +159,7 @@ private extension TogglePopupItemButtonView {
         button.snp.makeConstraints {
             $0.edges.equalTo(baseView)
         }
-        
+
         installButton.snp.makeConstraints {
             $0.width.equalTo(55)
             $0.height.equalTo(24)
