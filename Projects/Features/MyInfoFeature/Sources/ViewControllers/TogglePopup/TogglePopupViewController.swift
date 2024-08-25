@@ -15,7 +15,7 @@ public final class TogglePopupViewController: UIViewController {
     }
 
     private let titleLabel = WMLabel(
-        text: "",
+        text: "어떻게 재생할까요?",
         textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
         font: .t2(weight: .bold),
         alignment: .center,
@@ -29,16 +29,29 @@ public final class TogglePopupViewController: UIViewController {
         $0.distribution = .fillEqually
     }
 
-    private let firstItemButton = UIButton()
+    private let firstItemButton = TogglePopupItemButtonView()
 
-    private let secondItemButton = UIButton()
+    private let secondItemButton = TogglePopupItemButtonView()
 
-    private let dotImageView = UIImageView().then {
+    private let firstDotImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.MyInfo.dot.image
+    }
+    
+    private let secondDotImageView = UIImageView().then {
         $0.image = DesignSystemAsset.MyInfo.dot.image
     }
 
-    private let descriptionLabel = WMLabel(
-        text: "",
+    private let firstDescriptionLabel = WMLabel(
+        text: "해당 기능을 사용하려면 앱이 설치되어 있어야 합니다.",
+        textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+        font: .t7(weight: .light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    )
+    
+    private let secondDescriptionLabel = WMLabel(
+        text: "일부 노래나 쇼츠는 YouTube Music에서 지원되지 않습니다.",
         textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
         font: .t7(weight: .light),
         alignment: .left,
@@ -70,34 +83,15 @@ public final class TogglePopupViewController: UIViewController {
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
 
-    private var titleString: String
-    private var firstItemString: String
-    private var secondItemString: String
-    private var cancelButtonText: String
-    private var confirmButtonText: String
-    private var firstDescriptionText: String
-    private var secondDescriptionText: String
-    var completion: (() -> Void)?
+    private var selectedItemString: String = ""
+    
+    var completion: ((_ selectedItemString: String) -> Void)?
     var cancelCompletion: (() -> Void)?
-
+    
     init(
-        titleString: String,
-        firstItemString: String,
-        secondItemString: String,
-        cancelButtonText: String = "취소",
-        confirmButtonText: String = "확인",
-        firstDescriptionText: String = "",
-        secondDescriptionText: String = "",
-        completion: (() -> Void)? = nil,
+        completion: ((_ selectedItemString: String) -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil
     ) {
-        self.titleString = titleString
-        self.firstItemString = firstItemString
-        self.secondItemString = secondItemString
-        self.cancelButtonText = cancelButtonText
-        self.confirmButtonText = confirmButtonText
-        self.firstDescriptionText = firstDescriptionText
-        self.secondDescriptionText = secondDescriptionText
         self.completion = completion
         self.cancelCompletion = cancelCompletion
         super.init(nibName: nil, bundle: nil)
@@ -113,10 +107,9 @@ public final class TogglePopupViewController: UIViewController {
         addViews()
         setLayout()
         configureUI()
-        firstItemButton.addTarget(nil, action: #selector(firstItemDidTap), for: .touchUpInside)
-        secondItemButton.addTarget(nil, action: #selector(secondItemDidTap), for: .touchUpInside)
-        cancelButton.addTarget(nil, action: #selector(cancelButtonDidTap), for: .touchUpInside)
-        confirmButton.addTarget(nil, action: #selector(confirmButtonDidTap), for: .touchUpInside)
+        setActions()
+        firstItemButton.setDelegate(self)
+        secondItemButton.setDelegate(self)
     }
 
     override public func viewWillAppear(_ animated: Bool) {
@@ -128,20 +121,18 @@ public final class TogglePopupViewController: UIViewController {
         }, completion: nil)
     }
 
-    @objc func firstItemDidTap() {
-        print("1")
-    }
-
-    @objc func secondItemDidTap() {
-        print("2")
-    }
-
-    @objc func cancelButtonDidTap() {
-        dismiss()
-    }
-
-    @objc func confirmButtonDidTap() {
-        print("confirm")
+    func setActions() {
+        let cancelAction = UIAction { [weak self] _ in
+            self?.dismiss()
+        }
+        
+        let confirmAction = UIAction { [weak self] _ in
+            guard let self else { return }
+            self.completion?(self.selectedItemString)
+            self.dismiss()
+        }
+        cancelButton.addAction(cancelAction, for: .touchUpInside)
+        confirmButton.addAction(confirmAction, for: .touchUpInside)
     }
 }
 
@@ -155,8 +146,10 @@ private extension TogglePopupViewController {
             titleLabel,
             firstItemButton,
             secondItemButton,
-            dotImageView,
-            descriptionLabel,
+            firstDotImageView,
+            firstDescriptionLabel,
+            secondDotImageView,
+            secondDescriptionLabel,
             hStackView
         )
         hStackView.addArrangedSubviews(cancelButton, confirmButton)
@@ -169,7 +162,7 @@ private extension TogglePopupViewController {
 
         contentView.snp.makeConstraints {
             $0.width.equalTo(335)
-            $0.height.equalTo(322)
+            $0.height.equalTo(344)
             $0.center.equalToSuperview()
         }
 
@@ -190,13 +183,25 @@ private extension TogglePopupViewController {
             $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
-        dotImageView.snp.makeConstraints {
-            $0.centerY.equalTo(descriptionLabel.snp.centerY)
+        firstDotImageView.snp.makeConstraints {
+            $0.centerY.equalTo(firstDescriptionLabel.snp.centerY)
             $0.left.equalToSuperview().offset(20)
         }
-        descriptionLabel.snp.makeConstraints {
+        
+        firstDescriptionLabel.snp.makeConstraints {
             $0.top.equalTo(secondItemButton.snp.bottom).offset(8)
-            $0.left.equalTo(dotImageView.snp.right)
+            $0.left.equalTo(firstDotImageView.snp.right)
+            $0.right.equalToSuperview().inset(20)
+        }
+        
+        secondDotImageView.snp.makeConstraints {
+            $0.centerY.equalTo(secondDescriptionLabel.snp.centerY)
+            $0.left.equalToSuperview().offset(20)
+        }
+        
+        secondDescriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(firstDescriptionLabel.snp.bottom).offset(4)
+            $0.left.equalTo(secondDotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
 
@@ -210,14 +215,16 @@ private extension TogglePopupViewController {
     func configureUI() {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
-
-        titleLabel.text = self.titleString
-        firstItemButton.setTitle(self.firstItemString, for: .normal)
-        secondItemButton.setTitle(self.secondItemString, for: .normal)
-        descriptionLabel.text = self.firstDescriptionText
-        cancelButton.setTitle(self.cancelButtonText, for: .normal)
-        confirmButton.setTitle(self.confirmButtonText, for: .normal)
-
+        
+        let alreadySelectedYoutubeMusic = PreferenceManager.playWithYoutubeMusic ?? false
+        self.selectedItemString = alreadySelectedYoutubeMusic ? "YouTube Music" : "YouTube"
+        
+        firstItemButton.setTitleWithOption(title: "YouTube")
+        secondItemButton.setTitleWithOption(title: "YouTube Music", shouldCheckAppIsInstalled: true)
+        
+        firstItemButton.isSelected = !alreadySelectedYoutubeMusic
+        secondItemButton.isSelected = alreadySelectedYoutubeMusic
+        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
         dimmView.addGestureRecognizer(gesture)
         dimmView.isUserInteractionEnabled = true
@@ -234,6 +241,19 @@ private extension TogglePopupViewController {
         // 내려가는 애니메이션이 끝난 다음 dismiss 하기 위해 0.3초 딜레이
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
             self.dismiss(animated: false)
+        }
+    }
+}
+
+extension TogglePopupViewController: TogglePopupItemButtonViewDelegate {
+    func tappedButtonAction(title: String) {
+        self.selectedItemString = title
+        if firstItemButton.isSelected == true {
+            firstItemButton.isSelected = false
+            secondItemButton.isSelected = true
+        } else {
+            firstItemButton.isSelected = true
+            secondItemButton.isSelected = false
         }
     }
 }
