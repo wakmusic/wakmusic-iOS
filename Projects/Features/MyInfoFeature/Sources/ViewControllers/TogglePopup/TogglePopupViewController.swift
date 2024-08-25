@@ -28,7 +28,7 @@ public final class TogglePopupViewController: UIViewController {
         $0.spacing = 8
         $0.distribution = .fillEqually
     }
-    
+
     private let firstItemButton = UIButton()
 
     private let secondItemButton = UIButton()
@@ -69,7 +69,7 @@ public final class TogglePopupViewController: UIViewController {
         $0.titleLabel?.font = .setFont(.t4(weight: .medium))
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
     }
-    
+
     private var titleString: String
     private var firstItemString: String
     private var secondItemString: String
