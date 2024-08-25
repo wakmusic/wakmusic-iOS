@@ -50,6 +50,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private lazy var subscriptionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
+        $0.isHidden = true
         $0.setTitle("구독", for: .normal)
         $0.titleLabel?.font = .setFont(.t7(weight: .bold))
         $0.layer.borderWidth = 1
@@ -237,6 +238,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 } else {
                     owner.indicator.stopAnimating()
                     owner.tableView.isHidden = false
+                    owner.subscriptionButton.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -252,6 +254,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 }
 
                 owner.subscriptionButton.setTitle(flag ? "구독 중" : "구독", for: .normal)
+               
             }
             .disposed(by: disposeBag)
 

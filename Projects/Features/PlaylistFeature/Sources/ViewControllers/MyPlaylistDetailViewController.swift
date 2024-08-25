@@ -53,6 +53,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private var moreButton: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
+        $0.isHidden = true
     }
 
     private var saveCompletionIndicator = NVActivityIndicatorView(frame: .zero).then {
