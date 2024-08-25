@@ -248,12 +248,7 @@ private extension TogglePopupViewController {
 extension TogglePopupViewController: TogglePopupItemButtonViewDelegate {
     func tappedButtonAction(title: String) {
         self.selectedItemString = title
-        if firstItemButton.isSelected == true {
-            firstItemButton.isSelected = false
-            secondItemButton.isSelected = true
-        } else {
-            firstItemButton.isSelected = true
-            secondItemButton.isSelected = false
-        }
+        firstItemButton.isSelected.toggle()
+        secondItemButton.isSelected.toggle()
     }
 }
