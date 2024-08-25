@@ -254,7 +254,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 }
 
                 owner.subscriptionButton.setTitle(flag ? "구독 중" : "구독", for: .normal)
-               
             }
             .disposed(by: disposeBag)
 
