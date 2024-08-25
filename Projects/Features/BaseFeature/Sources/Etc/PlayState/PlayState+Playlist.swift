@@ -70,6 +70,10 @@ final class Playlist {
         return list.contains(item)
     }
 
+    func contains(id: String) -> Bool {
+        return list.contains { $0.id == id }
+    }
+
     func reorderPlaylist(from: Int, to: Int) {
         let movedData = list[from]
         list.remove(at: from)

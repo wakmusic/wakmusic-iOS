@@ -40,8 +40,9 @@ final class CreditSongListTabItemViewController:
     > { [reactor] cell, _, model in
         let isSelected = reactor?.currentState.selectedSongs.contains(model.id) ?? false
         cell.update(model, isSelected: isSelected)
-        cell.setThumbnailTapHandler { [reactor, id = model.id] in
-            reactor?.action.onNext(.songThumbnailDidTap(id: id))
+
+        cell.setThumbnailTapHandler { [reactor, model] in
+            reactor?.action.onNext(.songThumbnailDidTap(model: model))
         }
     }
 
