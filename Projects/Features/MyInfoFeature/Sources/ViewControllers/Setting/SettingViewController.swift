@@ -65,7 +65,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 owner.settingView.settingItemTableView.reloadData()
             }
             .disposed(by: disposeBag)
-        
+
         reactor.state.map(\.isShowActivityIndicator)
             .distinctUntilChanged()
             .bind(with: self) { owner, isShow in

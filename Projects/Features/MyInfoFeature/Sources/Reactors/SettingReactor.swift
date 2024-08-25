@@ -164,14 +164,14 @@ final class SettingReactor: Reactor {
             .flatMap { granted -> Observable<Mutation> in
                 return .just(.changedNotificationAuthorizationStatus(granted))
             }
-        
+
         let updatePlayTypeMutation = PreferenceManager.$playWithYoutubeMusic
             .distinctUntilChanged()
             .map { $0 ?? false }
             .flatMap { isPlayWithYoutubeMusic -> Observable<Mutation> in
                 return .just(.reloadTableView)
             }
-        
+
         return Observable.merge(
             mutation,
             updateIsLoggedInMutation,
