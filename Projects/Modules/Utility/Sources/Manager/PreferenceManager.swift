@@ -22,7 +22,7 @@ public final class PreferenceManager {
         case ignoredPopupIDs // 다시보지 않는 팝업 IDs
         case readNoticeIDs // 이미 읽은 공지 IDs
         case pushNotificationAuthorizationStatus // 기기알림 on/off 상태
-        case playWithYoutubeMusic // 유튜브뮤직으로 재생할지 여부
+        case songPlayPlatformType // 유튜브뮤직으로 재생할지 여부
     }
 
     @UserDefaultWrapper(key: Constants.recentRecords.rawValue, defaultValue: nil)
@@ -46,7 +46,7 @@ public final class PreferenceManager {
     @UserDefaultWrapper(key: Constants.pushNotificationAuthorizationStatus.rawValue, defaultValue: nil)
     public static var pushNotificationAuthorizationStatus: Bool?
 
-    @UserDefaultWrapper(key: Constants.playWithYoutubeMusic.rawValue, defaultValue: YoutubePlayType.youtube)
+    @UserDefaultWrapper(key: Constants.songPlayPlatformType.rawValue, defaultValue: YoutubePlayType.youtube)
     public static var songPlayPlatformType: YoutubePlayType?
 }
 

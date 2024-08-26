@@ -11,7 +11,7 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
     private let youtubeURLGenerator: any YoutubeURLGeneratable
     private let ids: [String]
     private var openerPlatform: OpenerPlatform {
-        let platform = PreferenceManager.playWithYoutubeMusic ?? .youtube
+        let platform = PreferenceManager.songPlayPlatformType ?? .youtube
         switch platform {
         case .youtube: return .youtube
         case .youtubeMusic: return .youtubeMusic
