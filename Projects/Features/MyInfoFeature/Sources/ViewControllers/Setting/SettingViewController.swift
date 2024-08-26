@@ -229,6 +229,33 @@ extension SettingViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
 
+        switch category {
+        case .appPush:
+            LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
+            reactor?.action.onNext(.appPushSettingNavigationDidTap)
+        case .playType:
+            showPlayTypeTogglePopup()
+        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
+            reactor?.action.onNext(.serviceTermsNavigationDidTap)
+        case .privacy:
+            LogManager.analytics(SettingAnalyticsLog.clickPrivacyPolicyButton)
+            reactor?.action.onNext(.privacyNavigationDidTap)
+        case .openSource:
+            LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
+            reactor?.action.onNext(.openSourceNavigationDidTap)
+        case .removeCache:
+            LogManager.analytics(SettingAnalyticsLog.clickRemoveCacheButton)
+            reactor?.action.onNext(.removeCacheButtonDidTap)
+        case .logout:
+            LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
+            showLogoutTextPopUp()
+        case .versionInfo:
+            LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
+            reactor?.action.onNext(.versionInfoButtonDidTap)
+        }
+    }
+    
+    private func showPlayTypeTogglePopup() {
         let togglePopupVC = playTypeTogglePopupFactory.makeView(
             completion: { selectedItemString in
                 switch selectedItemString {
@@ -243,7 +270,10 @@ extension SettingViewController: UITableViewDelegate {
             cancelCompletion: {}
         )
         togglePopupVC.modalPresentationStyle = .overFullScreen
-
+        self.present(togglePopupVC, animated: false)
+    }
+    
+    private func showLogoutTextPopUp() {
         let textPopUpVC = textPopUpFactory.makeView(
             text: "로그아웃 하시겠습니까?",
             cancelButtonIsHidden: false,
@@ -258,30 +288,6 @@ extension SettingViewController: UITableViewDelegate {
             },
             cancelCompletion: {}
         )
-
-        switch category {
-        case .appPush:
-            LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
-            reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .playType:
-            self.present(togglePopupVC, animated: false)
-        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
-            reactor?.action.onNext(.serviceTermsNavigationDidTap)
-        case .privacy:
-            LogManager.analytics(SettingAnalyticsLog.clickPrivacyPolicyButton)
-            reactor?.action.onNext(.privacyNavigationDidTap)
-        case .openSource:
-            LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
-            reactor?.action.onNext(.openSourceNavigationDidTap)
-        case .removeCache:
-            LogManager.analytics(SettingAnalyticsLog.clickRemoveCacheButton)
-            reactor?.action.onNext(.removeCacheButtonDidTap)
-        case .logout:
-            LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
-            showBottomSheet(content: textPopUpVC, size: .fixed(234))
-        case .versionInfo:
-            LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
-            reactor?.action.onNext(.versionInfoButtonDidTap)
-        }
+        showBottomSheet(content: textPopUpVC, size: .fixed(234))
     }
 }
