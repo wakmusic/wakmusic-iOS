@@ -47,7 +47,7 @@ public final class PreferenceManager {
     public static var pushNotificationAuthorizationStatus: Bool?
 
     @UserDefaultWrapper(key: Constants.playWithYoutubeMusic.rawValue, defaultValue: YoutubePlayType.youtube)
-    public static var playWithYoutubeMusic: YoutubePlayType?
+    public static var songPlayPlatformType: YoutubePlayType?
 }
 
 @propertyWrapper
