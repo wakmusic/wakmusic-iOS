@@ -60,7 +60,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     override func bindState(reactor: MusicDetailReactor) {
         let sharedState = reactor.state
             .subscribe(on: MainScheduler.asyncInstance)
-            .share(replay: 2)
+            .share(replay: 8)
         let youtubeURLGenerator = YoutubeURLGenerator()
 
         sharedState.map(\.songIDs)
@@ -117,16 +117,17 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState
             .filter { !$0.songIDs.isEmpty }
             .map(\.selectedIndex)
-            .skip(1)
-            .distinctUntilChanged()
-            .bind(onNext: musicDetailView.updateSelectedIndex(index:))
+            .skip(2)
+            .take(1)
+            .bind(onNext: musicDetailView.updateInitialSelectedIndex(index:))
             .disposed(by: disposeBag)
 
         sharedState
             .filter { !$0.songIDs.isEmpty }
             .map(\.selectedIndex)
-            .take(1)
-            .bind(onNext: musicDetailView.updateInitialSelectedIndex(index:))
+            .skip(3)
+            .distinctUntilChanged()
+            .bind(onNext: musicDetailView.updateSelectedIndex(index:))
             .disposed(by: disposeBag)
 
         sharedState.compactMap(\.navigateType)

@@ -51,10 +51,10 @@ class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStor
 extension ArtistDetailHeaderViewController {
     func update(model: ArtistEntity) {
         self.model = model
-        let artistName: String = model.krName
-        let artistEngName: String = model.enName.capitalizingFirstLetter
+        let artistKrName: String = model.krName
+        let artistEnName: String = model.enName
         let artistNameAttributedString = NSMutableAttributedString(
-            string: artistName + " " + artistEngName,
+            string: artistKrName + " " + artistEnName,
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.bold.font(size: 24),
                 .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
@@ -62,8 +62,8 @@ extension ArtistDetailHeaderViewController {
             ]
         )
 
-        let artistNameRange = (artistNameAttributedString.string as NSString).range(of: artistName)
-        let artistEngNameRange = (artistNameAttributedString.string as NSString).range(of: artistEngName)
+        let artistKrNameRange = (artistNameAttributedString.string as NSString).range(of: artistKrName)
+        let artistEnNameRange = (artistNameAttributedString.string as NSString).range(of: artistEnName)
 
         artistNameAttributedString.addAttributes(
             [
@@ -71,7 +71,7 @@ extension ArtistDetailHeaderViewController {
                 .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
                 .kern: -0.5
             ],
-            range: artistEngNameRange
+            range: artistEnNameRange
         )
 
         let margin: CGFloat = 104.0
@@ -83,7 +83,7 @@ extension ArtistDetailHeaderViewController {
 
         artistNameAttributedString.addAttributes(
             [.font: DesignSystemFontFamily.Pretendard.bold.font(size: availableWidth >= artistNameWidth ? 24 : 20)],
-            range: artistNameRange
+            range: artistKrNameRange
         )
 
         self.artistNameLabelHeight.constant =

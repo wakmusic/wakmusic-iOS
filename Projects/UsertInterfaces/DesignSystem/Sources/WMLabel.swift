@@ -1,5 +1,3 @@
-
-
 import MarqueeLabel
 import UIKit
 
@@ -62,5 +60,9 @@ public final class WMLabel: UILabel {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    public func setFont(_ style: UIFont.WMFontSystem) {
+        self.font = UIFont.setFont(style)
     }
 }

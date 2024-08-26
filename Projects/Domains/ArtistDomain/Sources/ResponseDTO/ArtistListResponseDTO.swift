@@ -29,7 +29,7 @@ public extension ArtistListResponseDTO {
         let enName: String
 
         private enum CodingKeys: String, CodingKey {
-            case krName = "krShort"
+            case krName = "kr"
             case enName = "en"
         }
     }

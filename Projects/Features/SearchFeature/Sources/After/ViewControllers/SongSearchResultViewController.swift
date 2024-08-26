@@ -322,7 +322,9 @@ extension SongSearchResultViewController: SongResultCellDelegate {
             .first(where: { $0.id == key })
         else { return }
         PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
-        songDetailPresenter.present(id: key)
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: key)
     }
 }
 

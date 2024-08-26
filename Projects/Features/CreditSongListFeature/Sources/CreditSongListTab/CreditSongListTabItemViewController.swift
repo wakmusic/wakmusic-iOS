@@ -40,6 +40,9 @@ final class CreditSongListTabItemViewController:
     > { [reactor] cell, _, model in
         let isSelected = reactor?.currentState.selectedSongs.contains(model.id) ?? false
         cell.update(model, isSelected: isSelected)
+        cell.setThumbnailTapHandler { [reactor, id = model.id] in
+            reactor?.action.onNext(.songThumbnailDidTap(id: id))
+        }
     }
 
     private lazy var creditSongHeaderRegistration = UICollectionView
@@ -159,6 +162,8 @@ final class CreditSongListTabItemViewController:
                     owner.presentTextPopup(text: text, completion: completion)
                 case .signIn:
                     owner.presentSignIn()
+                case let .dismiss(completion):
+                    owner.dismiss(completion: completion)
                 }
             }
             .disposed(by: disposeBag)
@@ -308,6 +313,10 @@ extension CreditSongListTabItemViewController {
         let viewController = signInFactory.makeView()
         viewController.modalPresentationStyle = .overFullScreen
         UIApplication.topVisibleViewController()?.present(viewController, animated: true)
+    }
+
+    private func dismiss(completion: @escaping () -> Void) {
+        UIApplication.keyRootViewController?.dismiss(animated: true, completion: completion)
     }
 }
 
