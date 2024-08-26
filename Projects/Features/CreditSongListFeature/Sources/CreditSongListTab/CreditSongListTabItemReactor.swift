@@ -16,6 +16,7 @@ final class CreditSongListTabItemReactor: Reactor {
     enum Action {
         case viewDidLoad
         case songDidTap(id: String)
+        case songThumbnailDidTap(id: String)
         case randomPlayButtonDidTap
         case allSelectButtonDidTap
         case allDeselectButtonDidTap
@@ -38,6 +39,7 @@ final class CreditSongListTabItemReactor: Reactor {
         case containSongs(ids: [String])
         case textPopup(text: String, completion: () -> Void)
         case signIn
+        case dismiss(completion: () -> Void)
     }
 
     struct State {
@@ -55,16 +57,19 @@ final class CreditSongListTabItemReactor: Reactor {
     let initialState: State
     private let workerName: String
     private let creditSortType: CreditSongSortType
+    private let songDetailPresenter: any SongDetailPresentable
     private let fetchCreditSongListUseCase: any FetchCreditSongListUseCase
 
     init(
         workerName: String,
         creditSortType: CreditSongSortType,
+        songDetailPresenter: any SongDetailPresentable,
         fetchCreditSongListUseCase: any FetchCreditSongListUseCase
     ) {
         self.initialState = .init()
         self.workerName = workerName
         self.creditSortType = creditSortType
+        self.songDetailPresenter = songDetailPresenter
         self.fetchCreditSongListUseCase = fetchCreditSongListUseCase
     }
 
@@ -74,6 +79,12 @@ final class CreditSongListTabItemReactor: Reactor {
             return viewDidLoad()
         case let .songDidTap(id):
             return songDidTap(id: id)
+        case let .songThumbnailDidTap(id):
+            return navigateMutation(navigateType: .dismiss(completion: { [songDetailPresenter] in
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: id)
+            }))
         case .randomPlayButtonDidTap:
             return randomPlayButtonDidTap()
         case .allSelectButtonDidTap:

@@ -53,6 +53,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
     private var moreButton: UIButton = UIButton().then {
         $0.setImage(DesignSystemAsset.MyInfo.more.image, for: .normal)
+        $0.isHidden = true
     }
 
     private var saveCompletionIndicator = NVActivityIndicatorView(frame: .zero).then {
@@ -259,7 +260,9 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
                 guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
 
                 PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-                owner.songDetailPresenter.present(id: model.id)
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
             }
             .disposed(by: disposeBag)
     }

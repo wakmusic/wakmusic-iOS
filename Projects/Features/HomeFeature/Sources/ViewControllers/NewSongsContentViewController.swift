@@ -221,7 +221,9 @@ extension NewSongsContentViewController: NewSongsCellDelegate {
             .first(where: { $0.id == id })
         else { return }
         PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
-        songDetailPresenter.present(id: id)
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: id)
     }
 }
 

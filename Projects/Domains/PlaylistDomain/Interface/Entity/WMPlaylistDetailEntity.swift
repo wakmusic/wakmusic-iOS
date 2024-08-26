@@ -1,7 +1,7 @@
 import Foundation
 import SongsDomainInterface
 
-public struct WmPlaylistDetailEntity: Equatable {
+public struct WMPlaylistDetailEntity: Equatable {
     public init(
         key: String,
         title: String,

@@ -82,11 +82,12 @@ private extension CreditSongListTabViewController {
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
 
-        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColorV2.point.color
         bar.indicator.overscrollBehavior = .compress
 
         addBar(bar, dataSource: self, at: .custom(view: tabContainerView, layout: nil))
+        bar.layer.zPosition = 1
     }
 }
 

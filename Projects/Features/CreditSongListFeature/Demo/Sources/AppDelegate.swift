@@ -1,8 +1,10 @@
+import BaseFeature
 import BaseFeatureInterface
 import CreditDomainTesting
 @testable import CreditSongListFeature
 import CreditSongListFeatureInterface
 import Inject
+import RxSwift
 import SignInFeatureInterface
 import UIKit
 
@@ -65,6 +67,7 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
         let reactor = CreditSongListTabItemReactor(
             workerName: workerName,
             creditSortType: sortType,
+            songDetailPresenter: DummySongDetailPresenter(),
             fetchCreditSongListUseCase: fetchCreditSongListUseCase
         )
         return Inject.ViewControllerHost(
@@ -76,6 +79,16 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
             )
         )
     }
+}
+
+final class DummySongDetailPresenter: SongDetailPresentable {
+    var presentSongDetailObservable: RxSwift.Observable<(ids: [String], selectedID: String)> {
+        .empty()
+    }
+
+    func present(id: String) {}
+
+    func present(ids: [String], selectedID: String) {}
 }
 
 final class DummyContainSongsFactory: ContainSongsFactory {

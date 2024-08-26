@@ -216,7 +216,9 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
                 LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: song.songID))
 
                 PlayState.shared.append(item: .init(id: song.songID, title: song.title, artist: song.artist))
-                owner.songDetailPresenter.present(id: song.songID)
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: song.songID)
             })
             .disposed(by: disposeBag)
     }

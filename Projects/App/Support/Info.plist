@@ -185,5 +185,10 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
+	<key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>youtube</string>
+        <string>youtubemusic</string>
+    </array>
 </dict>
 </plist>

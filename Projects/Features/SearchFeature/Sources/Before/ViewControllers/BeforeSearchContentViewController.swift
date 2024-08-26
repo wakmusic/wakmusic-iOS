@@ -321,7 +321,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         case let .recommend(model: model):
             let log = CommonAnalyticsLog.clickPlaylistItem(location: .search, key: model.key)
             LogManager.analytics(log)
-            navigateWmPlaylistDetail(key: model.key)
+            navigateWMPlaylistDetail(key: model.key)
 
             #warning("추후 업데이트 시 사용")
 //        case let .popularList(model: model):

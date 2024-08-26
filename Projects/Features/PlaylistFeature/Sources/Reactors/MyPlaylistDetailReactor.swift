@@ -347,7 +347,8 @@ private extension MyPlaylistDetailReactor {
         return updateTitleAndPrivateUseCase.execute(key: key, title: nil, isPrivate: prev.private)
             .andThen(.concat([
                 .just(.updateHeader(prev)),
-                .just(.showToast(message))
+                .just(.showToast(message)),
+                .just(.postNotification(.shouldRefreshPlaylist))
 
             ]))
             .catch { error in
