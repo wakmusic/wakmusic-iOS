@@ -17,7 +17,7 @@ final class StorageViewController: TabmanViewController, View {
 
     private var bottomSheetView: BottomSheetView!
     private var listStorageComponent: ListStorageComponent!
-    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    private var multiPurposePopupFactory: MultiPurposePopupFactory!
     private var likeStorageComponent: LikeStorageComponent!
     private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
@@ -59,7 +59,7 @@ final class StorageViewController: TabmanViewController, View {
     public static func viewController(
         reactor: Reactor,
         listStorageComponent: ListStorageComponent,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         likeStorageComponent: LikeStorageComponent,
         textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory
@@ -67,7 +67,7 @@ final class StorageViewController: TabmanViewController, View {
         let viewController = StorageViewController(reactor: reactor)
 
         viewController.listStorageComponent = listStorageComponent
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
         viewController.likeStorageComponent = likeStorageComponent
         viewController.viewControllers = [listStorageComponent.makeView(), likeStorageComponent.makeView()]
         viewController.textPopupFactory = textPopupFactory

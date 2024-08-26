@@ -11,7 +11,7 @@ import UserDomainInterface
 public protocol MyInfoDependency: Dependency {
     var signInFactory: any SignInFactory { get }
     var textPopupFactory: any TextPopupFactory { get }
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
     var faqFactory: any FaqFactory { get }
     var noticeFactory: any NoticeFactory { get }
     var questionFactory: any QuestionFactory { get }
@@ -35,7 +35,7 @@ public final class MyInfoComponent: Component<MyInfoDependency>, MyInfoFactory {
             ),
             profilePopupFactory: dependency.profilePopupFactory,
             textPopupFactory: dependency.textPopupFactory,
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
             signInFactory: dependency.signInFactory,
             faqFactory: dependency.faqFactory,
             noticeFactory: dependency.noticeFactory,

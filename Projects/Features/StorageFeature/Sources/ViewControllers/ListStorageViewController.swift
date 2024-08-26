@@ -22,7 +22,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     PlaylistDetailNavigator {
     let listStorageView = ListStorageView()
 
-    var multiPurposePopUpFactory: MultiPurposePopupFactory
+    var multiPurposePopupFactory: MultiPurposePopupFactory
     var textPopupFactory: TextPopupFactory
     var playlistDetailFactory: any PlaylistDetailFactory
     var signInFactory: SignInFactory
@@ -32,13 +32,13 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     init(
         reactor: Reactor,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         textPopupFactory: TextPopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         signInFactory: SignInFactory,
         fruitDrawFactory: FruitDrawFactory
     ) {
-        self.multiPurposePopUpFactory = multiPurposePopUpFactory
+        self.multiPurposePopupFactory = multiPurposePopupFactory
         self.textPopupFactory = textPopupFactory
         self.playlistDetailFactory = playlistDetailFactory
         self.signInFactory = signInFactory
@@ -152,7 +152,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                let vc = owner.multiPurposePopUpFactory.makeView(type: .creation, key: "") { title in
+                let vc = owner.multiPurposePopupFactory.makeView(type: .creation, key: "") { title in
                     owner.reactor?.action.onNext(.confirmCreateListButtonDidTap(title))
                 }
                 owner.showBottomSheet(content: vc, size: .fixed(296))

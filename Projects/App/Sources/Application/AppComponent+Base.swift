@@ -3,7 +3,7 @@ import BaseFeatureInterface
 import Foundation
 
 public extension AppComponent {
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory {
+    var multiPurposePopupFactory: any MultiPurposePopupFactory {
         MultiPurposePopupComponent(parent: self)
     }
 
