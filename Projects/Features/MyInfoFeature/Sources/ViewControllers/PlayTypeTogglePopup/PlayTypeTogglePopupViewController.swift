@@ -47,18 +47,14 @@ public final class PlayTypeTogglePopupViewController: UIViewController {
         text: "해당 기능을 사용하려면 앱이 설치되어 있어야 합니다.",
         textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
         font: .t7(weight: .light),
-        alignment: .left,
-        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
-        kernValue: -0.5
+        alignment: .left
     )
 
     private let secondDescriptionLabel = WMLabel(
         text: "일부 노래나 쇼츠는 YouTube Music에서 지원되지 않습니다.",
         textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
         font: .t7(weight: .light),
-        alignment: .left,
-        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
-        kernValue: -0.5
+        alignment: .left
     )
 
     private let hStackView = UIStackView().then {
