@@ -73,7 +73,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     )
                 }
             }
-            .bind(onNext: musicDetailView.updateThumbnails(thumbnailModels:))
+            .bind { [musicDetailView] thumbnailModels in
+                musicDetailView.updateThumbnails(thumbnailModels: thumbnailModels) {
+                    musicDetailView.updateInitialSelectedIndex(index: reactor.initialState.selectedIndex)
+                }
+            }
             .disposed(by: disposeBag)
 
         sharedState.map(\.isFirstSong)
@@ -112,14 +116,6 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     )
                 )
             }
-            .disposed(by: disposeBag)
-
-        sharedState
-            .filter { !$0.songIDs.isEmpty }
-            .map(\.selectedIndex)
-            .skip(2)
-            .take(1)
-            .bind(onNext: musicDetailView.updateInitialSelectedIndex(index:))
             .disposed(by: disposeBag)
 
         sharedState

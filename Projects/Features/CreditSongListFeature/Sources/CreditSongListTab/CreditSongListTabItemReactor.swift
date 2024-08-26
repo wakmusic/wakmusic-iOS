@@ -16,7 +16,7 @@ final class CreditSongListTabItemReactor: Reactor {
     enum Action {
         case viewDidLoad
         case songDidTap(id: String)
-        case songThumbnailDidTap(id: String)
+        case songThumbnailDidTap(model: CreditSongModel)
         case randomPlayButtonDidTap
         case allSelectButtonDidTap
         case allDeselectButtonDidTap
@@ -79,11 +79,12 @@ final class CreditSongListTabItemReactor: Reactor {
             return viewDidLoad()
         case let .songDidTap(id):
             return songDidTap(id: id)
-        case let .songThumbnailDidTap(id):
+        case let .songThumbnailDidTap(model):
+            PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
             return navigateMutation(navigateType: .dismiss(completion: { [songDetailPresenter] in
                 let playlistIDs = PlayState.shared.currentPlaylist
                     .map(\.id)
-                songDetailPresenter.present(ids: playlistIDs, selectedID: id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
             }))
         case .randomPlayButtonDidTap:
             return randomPlayButtonDidTap()

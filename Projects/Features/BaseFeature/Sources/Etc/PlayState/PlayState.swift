@@ -32,7 +32,7 @@ public final class PlayState {
     }
 
     deinit {
-        DEBUG_LOG("🚀:: \(Self.self) deinit")
+        LogManager.printDebug("🚀:: \(Self.self) deinit")
         NotificationCenter.default.removeObserver(self)
     }
 
@@ -121,6 +121,10 @@ public final class PlayState {
 
     public func contains(item: PlaylistItem) -> Bool {
         return playlist.contains(item)
+    }
+
+    public func contains(id: String) -> Bool {
+        return playlist.contains(id: id)
     }
 
     public func reorderPlaylist(from: Int, to: Int) {
