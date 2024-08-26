@@ -164,14 +164,16 @@ private extension PlayTypeTogglePopupViewController {
     }
 
     func setLayout() {
+        let is320 = APP_WIDTH() <= 320
+        
         dimmView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
 
         contentView.snp.makeConstraints {
-            $0.width.equalTo(335)
-            $0.height.equalTo(344)
+            $0.height.equalTo(is320 ? 364 : 344)
             $0.center.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(20)
         }
 
         titleLabel.snp.makeConstraints {
@@ -192,23 +194,25 @@ private extension PlayTypeTogglePopupViewController {
         }
 
         firstDotImageView.snp.makeConstraints {
-            $0.centerY.equalTo(firstDescriptionLabel.snp.centerY)
+            $0.size.equalTo(16)
+            $0.top.equalTo(secondItemButton.snp.bottom).offset(8)
             $0.left.equalToSuperview().offset(20)
         }
 
         firstDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(secondItemButton.snp.bottom).offset(8)
+            $0.top.equalTo(firstDotImageView)
             $0.left.equalTo(firstDotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
 
         secondDotImageView.snp.makeConstraints {
-            $0.centerY.equalTo(secondDescriptionLabel.snp.centerY)
+            $0.size.equalTo(16)
+            $0.top.equalTo(firstDescriptionLabel.snp.bottom).offset(4)
             $0.left.equalToSuperview().offset(20)
         }
 
         secondDescriptionLabel.snp.makeConstraints {
-            $0.top.equalTo(firstDescriptionLabel.snp.bottom).offset(4)
+            $0.top.equalTo(secondDotImageView)
             $0.left.equalTo(secondDotImageView.snp.right)
             $0.right.equalToSuperview().inset(20)
         }
@@ -232,7 +236,12 @@ private extension PlayTypeTogglePopupViewController {
 
         firstItemButton.isSelected = !alreadySelectedYoutubeMusic
         secondItemButton.isSelected = alreadySelectedYoutubeMusic
-
+        
+        if APP_WIDTH() <= 320 { // 두줄로 표기하기 위함
+            firstDescriptionLabel.numberOfLines = 0
+            secondDescriptionLabel.numberOfLines = 0
+        }
+        
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
         dimmView.addGestureRecognizer(gesture)
         dimmView.isUserInteractionEnabled = true

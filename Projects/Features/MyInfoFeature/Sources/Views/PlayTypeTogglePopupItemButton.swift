@@ -11,7 +11,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
     private let baseView = UIView().then {
         $0.layer.cornerRadius = 12
         $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
-        $0.layer.borderWidth = 2
+        $0.layer.borderWidth = 1
         $0.backgroundColor = .white
     }
 
@@ -104,6 +104,8 @@ private extension PlayTypeTogglePopupItemButtonView {
             self.baseView.layer.borderColor = isSelected ?
                 DesignSystemAsset.PrimaryColorV2.point.color.cgColor :
                 DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
+            
+            self.baseView.layer.borderWidth = isSelected ? 2 : 1
         }
 
         self.imageView.image = isSelected ?
@@ -149,7 +151,7 @@ private extension PlayTypeTogglePopupItemButtonView {
         titleLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(16)
-            $0.trailing.equalTo(imageView.snp.trailing).offset(20)
+            $0.trailing.equalTo(imageView.snp.leading).offset(-20)
         }
 
         imageView.snp.makeConstraints {
