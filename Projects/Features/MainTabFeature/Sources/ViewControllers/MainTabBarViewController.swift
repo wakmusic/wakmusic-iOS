@@ -1,6 +1,7 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
+import ErrorModule
 import FirebaseMessaging
 import HomeFeatureInterface
 import LogManager
@@ -157,11 +158,14 @@ private extension MainTabBarViewController {
 
         case "songDetail":
             guard let id = params["id"] as? String else {
-                songDetailPresenter.present(id: "")
+                self.showToast(text: WMError.unknown.localizedDescription, options: .tabBar)
                 return
             }
+
             if PlayState.shared.contains(id: id) {
-                songDetailPresenter.present(id: id)
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: id)
             } else {
                 Task {
                     do {
