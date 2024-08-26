@@ -17,6 +17,7 @@ public protocol SettingDependency: Dependency {
     var serviceTermsFactory: any ServiceTermFactory { get }
     var privacyFactory: any PrivacyFactory { get }
     var openSourceLicenseFactory: any OpenSourceLicenseFactory { get }
+    var playTypeTogglePopupFactory: any PlayTypeTogglePopupFactory { get }
 }
 
 public final class SettingComponent: Component<SettingDependency>, SettingFactory {
@@ -31,7 +32,8 @@ public final class SettingComponent: Component<SettingDependency>, SettingFactor
             signInFactory: dependency.signInFactory,
             serviceTermsFactory: dependency.serviceTermsFactory,
             privacyFactory: dependency.privacyFactory,
-            openSourceLicenseFactory: dependency.openSourceLicenseFactory
+            openSourceLicenseFactory: dependency.openSourceLicenseFactory,
+            playTypeTogglePopupFactory: dependency.playTypeTogglePopupFactory
         )
     }
 }

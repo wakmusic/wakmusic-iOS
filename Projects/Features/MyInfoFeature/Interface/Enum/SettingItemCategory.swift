@@ -2,6 +2,7 @@ import Foundation
 
 public enum SettingItemCategory: String {
     case appPush = "알림"
+    case playType = "재생"
     case serviceTerms = "서비스 이용약관"
     case privacy = "개인정보 처리방침"
     case openSource = "오픈소스 라이선스"

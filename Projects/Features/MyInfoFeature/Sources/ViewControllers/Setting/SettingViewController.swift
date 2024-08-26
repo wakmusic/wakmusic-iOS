@@ -18,6 +18,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
+    private var playTypeTogglePopupFactory: PlayTypeTogglePopupFactory!
 
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
@@ -43,7 +44,8 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         signInFactory: SignInFactory,
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
-        openSourceLicenseFactory: OpenSourceLicenseFactory
+        openSourceLicenseFactory: OpenSourceLicenseFactory,
+        playTypeTogglePopupFactory: PlayTypeTogglePopupFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -51,10 +53,18 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
+        viewController.playTypeTogglePopupFactory = playTypeTogglePopupFactory
         return viewController
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.pulse(\.$reloadTableView)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                owner.settingView.settingItemTableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+
         reactor.state.map(\.isShowActivityIndicator)
             .distinctUntilChanged()
             .bind(with: self) { owner, isShow in
@@ -218,10 +228,13 @@ extension SettingViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
+
         switch category {
         case .appPush:
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
+        case .playType:
+            showPlayTypeTogglePopup()
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
@@ -235,25 +248,46 @@ extension SettingViewController: UITableViewDelegate {
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
             LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
-            let text = "로그아웃 하시겠습니까?"
-            let vc = textPopUpFactory.makeView(
-                text: text,
-                cancelButtonIsHidden: false,
-                confirmButtonText: "확인",
-                cancelButtonText: "취소",
-                completion: { [weak self] in
-                    guard let self else { return }
-                    let log = SettingAnalyticsLog.completeLogout
-                    LogManager.analytics(log)
-
-                    self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
-                },
-                cancelCompletion: {}
-            )
-            showBottomSheet(content: vc, size: .fixed(234))
+            showLogoutTextPopUp()
         case .versionInfo:
             LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)
         }
+    }
+
+    private func showPlayTypeTogglePopup() {
+        let togglePopupVC = playTypeTogglePopupFactory.makeView(
+            completion: { selectedItemString in
+                switch selectedItemString {
+                case YoutubePlayType.youtube.display:
+                    PreferenceManager.playWithYoutubeMusic = .youtube
+                case YoutubePlayType.youtubeMusic.display:
+                    PreferenceManager.playWithYoutubeMusic = .youtubeMusic
+                default:
+                    break
+                }
+            },
+            cancelCompletion: {}
+        )
+        togglePopupVC.modalPresentationStyle = .overFullScreen
+        self.present(togglePopupVC, animated: false)
+    }
+
+    private func showLogoutTextPopUp() {
+        let textPopUpVC = textPopUpFactory.makeView(
+            text: "로그아웃 하시겠습니까?",
+            cancelButtonIsHidden: false,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            completion: { [weak self] in
+                guard let self else { return }
+                let log = SettingAnalyticsLog.completeLogout
+                LogManager.analytics(log)
+
+                self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
+            },
+            cancelCompletion: {}
+        )
+        showBottomSheet(content: textPopUpVC, size: .fixed(234))
     }
 }

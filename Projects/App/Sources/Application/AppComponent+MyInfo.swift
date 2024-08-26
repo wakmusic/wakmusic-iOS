@@ -34,4 +34,8 @@ extension AppComponent {
     var profilePopupFactory: any ProfilePopupFactory {
         ProfilePopupComponent(parent: self)
     }
+
+    var playTypeTogglePopupFactory: any PlayTypeTogglePopupFactory {
+        PlayTypeTogglePopupComponent(parent: self)
+    }
 }
