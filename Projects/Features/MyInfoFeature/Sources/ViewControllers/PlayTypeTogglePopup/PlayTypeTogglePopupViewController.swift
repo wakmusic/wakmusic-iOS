@@ -228,7 +228,10 @@ private extension PlayTypeTogglePopupViewController {
         self.selectedItemString = playType.display
 
         firstItemButton.setTitleWithOption(title: YoutubePlayType.youtube.display)
-        secondItemButton.setTitleWithOption(title: YoutubePlayType.youtubeMusic.display, shouldCheckAppIsInstalled: true)
+        secondItemButton.setTitleWithOption(
+            title: YoutubePlayType.youtubeMusic.display,
+            shouldCheckAppIsInstalled: true
+        )
 
         firstItemButton.isSelected = playType == .youtube
         secondItemButton.isSelected = playType == .youtubeMusic
