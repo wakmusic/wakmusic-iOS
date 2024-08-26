@@ -84,7 +84,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
     @discardableResult
     func checkAppIsInstalled() -> Bool {
         let isInstalled: Bool
-        if let url = URL(string: "youtube-music://"), UIApplication.shared.canOpenURL(url) {
+        if let url = URL(string: "youtubemusic://"), UIApplication.shared.canOpenURL(url) {
             isInstalled = true
         } else {
             isInstalled = false
@@ -130,8 +130,6 @@ private extension PlayTypeTogglePopupItemButtonView {
             if let url = URL(string: youtubeMusicAppStoreURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
-            self.installButton.isHidden = true
-            self.button.isEnabled = true
         }
     }
 
