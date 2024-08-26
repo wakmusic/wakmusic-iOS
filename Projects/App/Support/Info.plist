@@ -187,6 +187,7 @@
 	<string>Light</string>
 	<key>LSApplicationQueriesSchemes</key>
     <array>
+        <string>youtube</string>
         <string>youtubemusic</string>
     </array>
 </dict>
