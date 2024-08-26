@@ -18,7 +18,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
-    private var togglePopupFactory: PlayTypeTogglePopupFactory!
+    private var playTypeTogglePopupFactory: PlayTypeTogglePopupFactory!
 
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
@@ -45,7 +45,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
         openSourceLicenseFactory: OpenSourceLicenseFactory,
-        togglePopupFactory: PlayTypeTogglePopupFactory
+        playTypeTogglePopupFactory: PlayTypeTogglePopupFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
         viewController.textPopUpFactory = textPopUpFactory
@@ -53,7 +53,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
-        viewController.togglePopupFactory = togglePopupFactory
+        viewController.playTypeTogglePopupFactory = playTypeTogglePopupFactory
         return viewController
     }
 
@@ -230,7 +230,7 @@ extension SettingViewController: UITableViewDelegate {
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
 
-        let togglePopupVC = togglePopupFactory.makeView(
+        let togglePopupVC = playTypeTogglePopupFactory.makeView(
             completion: { selectedItemString in
                 switch selectedItemString {
                 case "YouTube":
