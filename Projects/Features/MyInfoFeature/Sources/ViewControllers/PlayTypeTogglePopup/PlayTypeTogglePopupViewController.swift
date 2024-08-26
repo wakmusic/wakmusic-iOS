@@ -121,9 +121,9 @@ public final class PlayTypeTogglePopupViewController: UIViewController {
 
     func setActions() {
         NotificationCenter.default.rx.notification(UIApplication.didBecomeActiveNotification)
-            .subscribe { [weak self] _ in
+            .subscribe(onNext: { [weak self] _ in
                 self?.secondItemButton.checkAppIsInstalled()
-            }
+            })
             .disposed(by: disposeBag)
 
         let cancelAction = UIAction { [weak self] _ in
