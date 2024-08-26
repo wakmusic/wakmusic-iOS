@@ -243,13 +243,19 @@ private extension PlayTypeTogglePopupViewController {
     }
 
     func dismiss() {
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
-            self.contentView.transform = CGAffineTransform(translationX: 0, y: self.view.frame.height)
-        }, completion: nil)
-        // 내려가는 애니메이션이 끝난 다음 dismiss 하기 위해 0.3초 딜레이
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(300)) {
-            self.dismiss(animated: false)
-        }
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            options: .curveEaseInOut,
+            animations: { [weak self] in
+                guard let self = self else { return }
+                let translationY = self.view.frame.height
+                self.contentView.transform = CGAffineTransform(translationX: 0, y: translationY)
+            },
+            completion: { [weak self] _ in
+                self?.dismiss(animated: false)
+            }
+        )
     }
 }
 
