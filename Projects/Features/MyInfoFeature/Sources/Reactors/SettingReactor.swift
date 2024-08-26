@@ -167,8 +167,8 @@ final class SettingReactor: Reactor {
 
         let updatePlayTypeMutation = PreferenceManager.$playWithYoutubeMusic
             .distinctUntilChanged()
-            .map { $0 ?? false }
-            .flatMap { isPlayWithYoutubeMusic -> Observable<Mutation> in
+            .map { $0 ?? .youtube }
+            .flatMap { playType -> Observable<Mutation> in
                 return .just(.reloadTableView)
             }
 

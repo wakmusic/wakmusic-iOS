@@ -61,7 +61,6 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$reloadTableView)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
-                print("$reloadTableView")
                 owner.settingView.settingItemTableView.reloadData()
             }
             .disposed(by: disposeBag)
@@ -233,10 +232,10 @@ extension SettingViewController: UITableViewDelegate {
         let togglePopupVC = playTypeTogglePopupFactory.makeView(
             completion: { selectedItemString in
                 switch selectedItemString {
-                case "YouTube":
-                    PreferenceManager.playWithYoutubeMusic = false
-                case "YouTube Music":
-                    PreferenceManager.playWithYoutubeMusic = true
+                case YoutubePlayType.youtube.display:
+                    PreferenceManager.playWithYoutubeMusic = .youtube
+                case YoutubePlayType.youtubeMusic.display:
+                    PreferenceManager.playWithYoutubeMusic = .youtubeMusic
                 default:
                     break
                 }

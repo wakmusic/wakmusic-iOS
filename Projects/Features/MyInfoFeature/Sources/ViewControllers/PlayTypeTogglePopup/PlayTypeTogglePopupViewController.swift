@@ -228,14 +228,14 @@ private extension PlayTypeTogglePopupViewController {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
 
-        let alreadySelectedYoutubeMusic = PreferenceManager.playWithYoutubeMusic ?? false
-        self.selectedItemString = alreadySelectedYoutubeMusic ? "YouTube Music" : "YouTube"
+        let playType = PreferenceManager.playWithYoutubeMusic ?? .youtube
+        self.selectedItemString = playType.display
 
-        firstItemButton.setTitleWithOption(title: "YouTube")
-        secondItemButton.setTitleWithOption(title: "YouTube Music", shouldCheckAppIsInstalled: true)
+        firstItemButton.setTitleWithOption(title: playType.display)
+        secondItemButton.setTitleWithOption(title: playType.display, shouldCheckAppIsInstalled: true)
 
-        firstItemButton.isSelected = !alreadySelectedYoutubeMusic
-        secondItemButton.isSelected = alreadySelectedYoutubeMusic
+        firstItemButton.isSelected = playType == .youtube
+        secondItemButton.isSelected = playType == .youtubeMusic
 
         if APP_WIDTH() <= 320 { // 두줄로 표기하기 위함
             firstDescriptionLabel.numberOfLines = 0
