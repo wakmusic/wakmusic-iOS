@@ -254,7 +254,7 @@ extension SettingViewController: UITableViewDelegate {
             reactor?.action.onNext(.versionInfoButtonDidTap)
         }
     }
-    
+
     private func showPlayTypeTogglePopup() {
         let togglePopupVC = playTypeTogglePopupFactory.makeView(
             completion: { selectedItemString in
@@ -272,7 +272,7 @@ extension SettingViewController: UITableViewDelegate {
         togglePopupVC.modalPresentationStyle = .overFullScreen
         self.present(togglePopupVC, animated: false)
     }
-    
+
     private func showLogoutTextPopUp() {
         let textPopUpVC = textPopUpFactory.makeView(
             text: "로그아웃 하시겠습니까?",
