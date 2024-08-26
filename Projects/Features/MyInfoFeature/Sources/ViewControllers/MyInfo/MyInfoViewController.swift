@@ -17,7 +17,7 @@ import Utility
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
     private var profilePopupFactory: ProfilePopupFactory!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var multiPurposePopUpFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
@@ -59,7 +59,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     public static func viewController(
         reactor: MyInfoReactor,
         profilePopupFactory: ProfilePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
@@ -72,7 +72,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopupFactory = profilePopupFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
@@ -199,7 +199,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                     let vc = owner.settingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
                 case let .login(entry):
-                    let vc = owner.textPopUpFactory.makeView(
+                    let vc = owner.textPopupFactory.makeView(
                         text: LocalizationStrings.needLoginWarning,
                         cancelButtonIsHidden: false,
                         confirmButtonText: nil,

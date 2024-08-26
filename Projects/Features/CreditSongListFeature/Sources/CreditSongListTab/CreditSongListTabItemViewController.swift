@@ -58,13 +58,13 @@ final class CreditSongListTabItemViewController:
         }
 
     private let containSongsFactory: any ContainSongsFactory
-    private let textPopupFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let signInFactory: any SignInFactory
 
     init(
         reactor: Reactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopupFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory

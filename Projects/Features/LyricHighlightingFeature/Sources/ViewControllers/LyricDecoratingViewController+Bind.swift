@@ -116,7 +116,7 @@ extension LyricDecoratingViewController {
         output.occurredError
             .bind(with: self) { owner, message in
                 owner.showBottomSheet(
-                    content: owner.textPopUpFactory.makeView(
+                    content: owner.textPopupFactory.makeView(
                         text: message,
                         cancelButtonIsHidden: true,
                         confirmButtonText: "확인",

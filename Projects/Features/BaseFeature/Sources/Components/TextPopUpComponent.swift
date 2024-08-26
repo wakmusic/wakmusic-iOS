@@ -2,7 +2,7 @@ import BaseFeatureInterface
 import NeedleFoundation
 import UIKit
 
-public final class TextPopUpComponent: Component<EmptyDependency>, TextPopUpFactory {
+public final class TextPopupComponent: Component<EmptyDependency>, TextPopupFactory {
     public func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,

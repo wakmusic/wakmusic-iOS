@@ -23,7 +23,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     let listStorageView = ListStorageView()
 
     var multiPurposePopUpFactory: MultiPurposePopupFactory
-    var textPopUpFactory: TextPopUpFactory
+    var textPopupFactory: TextPopupFactory
     var playlistDetailFactory: any PlaylistDetailFactory
     var signInFactory: SignInFactory
     var fruitDrawFactory: FruitDrawFactory
@@ -33,13 +33,13 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     init(
         reactor: Reactor,
         multiPurposePopUpFactory: MultiPurposePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         signInFactory: SignInFactory,
         fruitDrawFactory: FruitDrawFactory
     ) {
         self.multiPurposePopUpFactory = multiPurposePopUpFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.playlistDetailFactory = playlistDetailFactory
         self.signInFactory = signInFactory
         self.fruitDrawFactory = fruitDrawFactory
@@ -136,7 +136,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showCreatePricePopup)
             .compactMap { $0 }
             .bind(with: self) { owner, price in
-                let text = owner.textPopUpFactory.makeView(
+                let text = owner.textPopupFactory.makeView(
                     text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "\(price)개 사용",
@@ -162,7 +162,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
-                guard let vc = owner.textPopUpFactory.makeView(
+                guard let vc = owner.textPopupFactory.makeView(
                     text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,

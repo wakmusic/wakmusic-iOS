@@ -13,7 +13,7 @@ import Utility
 final class CheckPlaylistCoverViewController: BaseReactorViewController<CheckPlaylistCoverlReactor> {
     weak var delegate: CheckPlaylistCoverDelegate?
 
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
 
     private var wmNavigationbarView: WMNavigationBarView = WMNavigationBarView().then {
         $0.setTitle("앨범에서 고르기")
@@ -68,11 +68,11 @@ final class CheckPlaylistCoverViewController: BaseReactorViewController<CheckPla
 
     init(
         reactor: CheckPlaylistCoverlReactor,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         delegate: any CheckPlaylistCoverDelegate
     ) {
         self.delegate = delegate
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
 
         super.init(reactor: reactor)
     }

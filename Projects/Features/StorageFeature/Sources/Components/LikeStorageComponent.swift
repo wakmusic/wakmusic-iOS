@@ -14,7 +14,7 @@ public protocol LikeStorageDependency: Dependency {
     var editFavoriteSongsOrderUseCase: any EditFavoriteSongsOrderUseCase { get }
     var deleteFavoriteListUseCase: any DeleteFavoriteListUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var signInFactory: any SignInFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
 }
@@ -29,7 +29,7 @@ public final class LikeStorageComponent: Component<LikeStorageDependency> {
                 editFavoriteSongsOrderUseCase: dependency.editFavoriteSongsOrderUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             signInFactory: dependency.signInFactory,
             songDetailPresenter: dependency.songDetailPresenter
         )

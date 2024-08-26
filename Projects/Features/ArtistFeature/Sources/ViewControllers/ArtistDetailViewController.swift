@@ -27,7 +27,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 
     private let gradientLayer = CAGradientLayer()
     private var artistMusicComponent: ArtistMusicComponent!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
 
     private var viewModel: ArtistDetailViewModel!
@@ -69,7 +69,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     public static func viewController(
         viewModel: ArtistDetailViewModel,
         artistMusicComponent: ArtistMusicComponent,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory
     ) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)

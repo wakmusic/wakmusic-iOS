@@ -13,7 +13,7 @@ public protocol ContainSongsDependency: Dependency {
     var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase { get }
     var createPlaylistUseCase: any CreatePlaylistUseCase { get }
     var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var logoutUseCase: any LogoutUseCase { get }
 }
 
@@ -21,7 +21,7 @@ public final class ContainSongsComponent: Component<ContainSongsDependency>, Con
     public func makeView(songs: [String]) -> UIViewController {
         return ContainSongsViewController.viewController(
             multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             viewModel: .init(
                 songs: songs,
                 createPlaylistUseCase: dependency.createPlaylistUseCase,

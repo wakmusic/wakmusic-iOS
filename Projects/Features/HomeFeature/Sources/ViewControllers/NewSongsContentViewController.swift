@@ -21,7 +21,7 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
@@ -46,7 +46,7 @@ public class NewSongsContentViewController: UIViewController, ViewControllerFrom
     public static func viewController(
         viewModel: NewSongsContentViewModel,
         containSongsFactory: ContainSongsFactory,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> NewSongsContentViewController {

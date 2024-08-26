@@ -23,7 +23,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let key: String
     lazy var unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: key)
     lazy var myPlaylistVC = myPlaylistDetailFactory.makeView(key: key)
@@ -33,12 +33,12 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         key: String,
         unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
         myPlaylistDetailFactory: any MyPlaylistDetailFactory,
-        textPopUpFactory: any TextPopUpFactory
+        textPopupFactory: any TextPopupFactory
     ) {
         self.key = key
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
         self.myPlaylistDetailFactory = myPlaylistDetailFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
 
         super.init(reactor: reactor)
     }
@@ -141,7 +141,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         reactor.pulse(\.$detectedNotFound)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
-                let vc = owner.textPopUpFactory.makeView(
+                let vc = owner.textPopupFactory.makeView(
                     text: "존재하지 않거나 비공개된 리스트입니다.",
                     cancelButtonIsHidden: true,
                     confirmButtonText: "확인",

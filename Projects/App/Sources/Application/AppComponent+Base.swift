@@ -7,8 +7,8 @@ public extension AppComponent {
         MultiPurposePopupComponent(parent: self)
     }
 
-    var textPopUpFactory: any TextPopUpFactory {
-        TextPopUpComponent(parent: self)
+    var textPopupFactory: any TextPopupFactory {
+        TextPopupComponent(parent: self)
     }
 
     var containSongsFactory: any ContainSongsFactory {

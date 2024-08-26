@@ -11,7 +11,7 @@ public protocol NewSongsContentDependency: Dependency {
     var fetchNewSongsPlaylistUseCase: any FetchNewSongsPlaylistUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var signInFactory: any SignInFactory { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
@@ -24,7 +24,7 @@ public final class NewSongsContentComponent: Component<NewSongsContentDependency
                 fetchNewSongsPlaylistUseCase: dependency.fetchNewSongsPlaylistUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
-            textPopupFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             signInFactory: dependency.signInFactory,
             songDetailPresenter: dependency.songDetailPresenter
         )

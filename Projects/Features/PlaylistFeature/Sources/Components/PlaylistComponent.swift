@@ -8,7 +8,7 @@ import UIKit
 public protocol PlaylistDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var signInFactory: any SignInFactory { get }
 }
 
@@ -19,7 +19,7 @@ public final class PlaylistComponent: Component<PlaylistDependency>, PlaylistFac
             viewModel: viewModel,
             containSongsFactory: dependency.containSongsFactory,
             songDetailPresenter: dependency.songDetailPresenter,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             signInFactory: dependency.signInFactory
         )
         return viewController

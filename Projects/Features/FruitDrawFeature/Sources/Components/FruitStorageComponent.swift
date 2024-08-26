@@ -7,7 +7,7 @@ import UserDomainInterface
 
 public protocol FruitStorageDependency: Dependency {
     var fetchFruitListUseCase: any FetchFruitListUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class FruitStorageComponent: Component<FruitStorageDependency>, FruitStorageFactory {
@@ -16,7 +16,7 @@ public final class FruitStorageComponent: Component<FruitStorageDependency>, Fru
             viewModel: .init(
                 fetchFruitListUseCase: dependency.fetchFruitListUseCase
             ),
-            textPopUpFactory: dependency.textPopUpFactory
+            textPopupFactory: dependency.textPopupFactory
         )
     }
 }

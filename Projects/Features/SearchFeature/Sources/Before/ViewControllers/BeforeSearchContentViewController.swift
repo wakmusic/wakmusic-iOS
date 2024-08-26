@@ -15,7 +15,7 @@ import Utility
 
 final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
-    private let textPopUpFactory: TextPopUpFactory
+    private let textPopupFactory: TextPopupFactory
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
@@ -33,11 +33,11 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
 
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         playlistDetailFactory: any PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
         self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
@@ -195,7 +195,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
         // 최근 검색어 전체 삭제 버튼 클릭 이벤트 받는 통로
         recentRecordHeaderView.completionHandler = { [weak self] in
 
-            guard let self = self, let textPopupViewController = self.textPopUpFactory.makeView(
+            guard let self = self, let textPopupViewController = self.textPopupFactory.makeView(
                 text: "전체 내역을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false,
                 confirmButtonText: nil,
