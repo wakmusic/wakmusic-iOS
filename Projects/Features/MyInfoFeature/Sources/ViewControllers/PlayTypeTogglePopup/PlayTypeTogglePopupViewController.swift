@@ -165,7 +165,7 @@ private extension PlayTypeTogglePopupViewController {
 
     func setLayout() {
         let is320 = APP_WIDTH() <= 320
-        
+
         dimmView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -236,12 +236,12 @@ private extension PlayTypeTogglePopupViewController {
 
         firstItemButton.isSelected = !alreadySelectedYoutubeMusic
         secondItemButton.isSelected = alreadySelectedYoutubeMusic
-        
+
         if APP_WIDTH() <= 320 { // 두줄로 표기하기 위함
             firstDescriptionLabel.numberOfLines = 0
             secondDescriptionLabel.numberOfLines = 0
         }
-        
+
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
         dimmView.addGestureRecognizer(gesture)
         dimmView.isUserInteractionEnabled = true

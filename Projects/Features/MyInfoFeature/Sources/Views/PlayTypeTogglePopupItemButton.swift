@@ -104,7 +104,7 @@ private extension PlayTypeTogglePopupItemButtonView {
             self.baseView.layer.borderColor = isSelected ?
                 DesignSystemAsset.PrimaryColorV2.point.color.cgColor :
                 DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
-            
+
             self.baseView.layer.borderWidth = isSelected ? 2 : 1
         }
 
