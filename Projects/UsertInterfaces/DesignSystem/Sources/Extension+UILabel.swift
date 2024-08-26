@@ -77,11 +77,18 @@ public extension UILabel {
         paragraphStyle.alignment = alignment
 
         let baselineOffset: CGFloat
-
+        let offsetDivisor: CGFloat
+        
+        if #available(iOS 16.4, *) { // 16.4 부터 잠수함 패치로 고쳐졌다고 합니다.
+            offsetDivisor = 2
+        } else {
+            offsetDivisor = 4
+        }
+        
         if let lineHeight {
             paragraphStyle.maximumLineHeight = lineHeight
             paragraphStyle.minimumLineHeight = lineHeight
-            baselineOffset = (lineHeight - font.lineHeight) / 2
+            baselineOffset = (lineHeight - font.lineHeight) / offsetDivisor
         } else {
             baselineOffset = 0
         }
@@ -111,11 +118,18 @@ public extension UILabel {
         paragraphStyle.alignment = alignment
 
         let baselineOffset: CGFloat
-
+        let offsetDivisor: CGFloat
+        
+        if #available(iOS 16.4, *) { // 16.4 부터 잠수함 패치로 고쳐졌다고 합니다.
+            offsetDivisor = 2
+        } else {
+            offsetDivisor = 4
+        }
+        
         if let lineHeight {
             paragraphStyle.maximumLineHeight = lineHeight
             paragraphStyle.minimumLineHeight = lineHeight
-            baselineOffset = (lineHeight - font.lineHeight) / 2
+            baselineOffset = (lineHeight - font.lineHeight) / offsetDivisor
         } else {
             baselineOffset = 0
         }
