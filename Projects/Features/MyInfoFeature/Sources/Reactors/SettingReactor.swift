@@ -165,7 +165,7 @@ final class SettingReactor: Reactor {
                 return .just(.changedNotificationAuthorizationStatus(granted))
             }
 
-        let updatePlayTypeMutation = PreferenceManager.$playWithYoutubeMusic
+        let updatePlayTypeMutation = PreferenceManager.$songPlayPlatformType
             .distinctUntilChanged()
             .map { $0 ?? .youtube }
             .flatMap { playType -> Observable<Mutation> in

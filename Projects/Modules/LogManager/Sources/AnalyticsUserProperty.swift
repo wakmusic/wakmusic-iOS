@@ -10,6 +10,7 @@ public enum AnalyticsUserProperty {
     case fruitTotal(count: Int)
     case playlistSongTotal(count: Int)
     case latestSearchKeyword(keyword: String)
+    case songPlayPlatform(platform: String)
 }
 
 extension AnalyticsUserProperty: UserPropertyRepresentable {
@@ -27,6 +28,7 @@ extension AnalyticsUserProperty: UserPropertyRepresentable {
         case let .fruitTotal(count): return "\(count)"
         case let .playlistSongTotal(count): return "\(count)"
         case let .latestSearchKeyword(keyword): return keyword
+        case let .songPlayPlatform(platform): return platform
         }
     }
 }

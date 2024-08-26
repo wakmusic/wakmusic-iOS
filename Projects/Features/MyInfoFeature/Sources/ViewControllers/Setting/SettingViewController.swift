@@ -234,6 +234,7 @@ extension SettingViewController: UITableViewDelegate {
             LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
         case .playType:
+            LogManager.analytics(SettingAnalyticsLog.clickSongPlayPlatform)
             showPlayTypeTogglePopup()
         case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
@@ -260,9 +261,23 @@ extension SettingViewController: UITableViewDelegate {
             completion: { selectedItemString in
                 switch selectedItemString {
                 case YoutubePlayType.youtube.display:
-                    PreferenceManager.playWithYoutubeMusic = .youtube
+                    PreferenceManager.songPlayPlatformType = .youtube
+                    LogManager.analytics(
+                        SettingAnalyticsLog.completeSelectSongPlayPlatform(platform: YoutubePlayType.youtube.display)
+                    )
+                    LogManager.setUserProperty(
+                        property: .songPlayPlatform(platform: YoutubePlayType.youtube.display)
+                    )
                 case YoutubePlayType.youtubeMusic.display:
-                    PreferenceManager.playWithYoutubeMusic = .youtubeMusic
+                    PreferenceManager.songPlayPlatformType = .youtubeMusic
+                    LogManager.analytics(
+                        SettingAnalyticsLog.completeSelectSongPlayPlatform(
+                            platform: YoutubePlayType.youtubeMusic.display
+                        )
+                    )
+                    LogManager.setUserProperty(
+                        property: .songPlayPlatform(platform: YoutubePlayType.youtubeMusic.display)
+                    )
                 default:
                     break
                 }

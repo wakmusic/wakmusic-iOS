@@ -224,11 +224,14 @@ private extension PlayTypeTogglePopupViewController {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
 
-        let playType = PreferenceManager.playWithYoutubeMusic ?? .youtube
+        let playType = PreferenceManager.songPlayPlatformType ?? .youtube
         self.selectedItemString = playType.display
 
-        firstItemButton.setTitleWithOption(title: playType.display)
-        secondItemButton.setTitleWithOption(title: playType.display, shouldCheckAppIsInstalled: true)
+        firstItemButton.setTitleWithOption(title: YoutubePlayType.youtube.display)
+        secondItemButton.setTitleWithOption(
+            title: YoutubePlayType.youtubeMusic.display,
+            shouldCheckAppIsInstalled: true
+        )
 
         firstItemButton.isSelected = playType == .youtube
         secondItemButton.isSelected = playType == .youtubeMusic

@@ -131,6 +131,10 @@ extension AppDelegate {
             LogManager.clearUserProperty(property: .fruitTotal(count: -1))
         }
 
+        if let playPlatform = PreferenceManager.songPlayPlatformType {
+            LogManager.setUserProperty(property: .songPlayPlatform(platform: playPlatform.display))
+        }
+
         LogManager.setUserProperty(property: .playlistSongTotal(count: PlayState.shared.count))
     }
 }
