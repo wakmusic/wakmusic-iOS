@@ -544,12 +544,16 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         let currentState = reactor.currentState
         var songs = currentState.playlistModels
 
+        let playlistName = reactor.currentState.header.title
+        let title: String
+
         switch event {
         case .allPlay:
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .all)
             )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
+            title = "\(playlistName) (전체)"
 
         case .shufflePlay:
             LogManager.analytics(
@@ -557,10 +561,12 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
             )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
+            title = "\(playlistName) (랜덤)"
         }
 
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+
+        WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: title).play()
     }
 }
 

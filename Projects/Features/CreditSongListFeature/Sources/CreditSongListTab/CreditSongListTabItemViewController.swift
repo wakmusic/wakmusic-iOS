@@ -288,7 +288,9 @@ extension CreditSongListTabItemViewController {
     }
 
     private func playYoutube(ids: [String]) {
-        WakmusicYoutubePlayer(ids: ids).play()
+        let worker = reactor?.workerName ?? "작업자"
+        let title = "\(worker)님과 함께하는 랜뮤"
+        WakmusicYoutubePlayer(ids: ids, title: title).play()
     }
 
     private func presentContainSongs(ids: [String]) {

@@ -55,7 +55,7 @@ final class CreditSongListTabItemReactor: Reactor {
     private var page: Int = 1
     private var isLastPage: Bool = false
     let initialState: State
-    private let workerName: String
+    let workerName: String
     private let creditSortType: CreditSongSortType
     private let songDetailPresenter: any SongDetailPresentable
     private let fetchCreditSongListUseCase: any FetchCreditSongListUseCase

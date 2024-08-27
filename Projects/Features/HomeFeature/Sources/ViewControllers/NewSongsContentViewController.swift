@@ -317,7 +317,7 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .recentMusic, type: .multiple)
             )
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
 
         case .remove:
             return
