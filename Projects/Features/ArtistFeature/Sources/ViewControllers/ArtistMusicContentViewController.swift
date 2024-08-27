@@ -322,7 +322,10 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
                 return
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-            UIApplication.shared.open(url)
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+               let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
+              WakmusicYoutubePlayer(listID: listID).play()
+            }
 
         case .shufflePlay: // 미사용
             break

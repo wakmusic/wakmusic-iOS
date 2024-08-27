@@ -251,7 +251,10 @@ extension NewSongsContentViewController: SingleActionButtonViewDelegate {
             output.showToast.onNext("해당 기능은 준비 중입니다.")
             return
         }
-        UIApplication.shared.open(url)
+      if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+         let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
+        WakmusicYoutubePlayer(listID: listID).play()
+      }
 
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
