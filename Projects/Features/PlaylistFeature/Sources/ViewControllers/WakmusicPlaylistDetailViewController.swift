@@ -318,10 +318,10 @@ extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
 
         LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-      if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-         let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
-        WakmusicYoutubePlayer(listID: listID).play()
-      }
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
+            WakmusicYoutubePlayer(listID: listID).play()
+        }
     }
 }
 

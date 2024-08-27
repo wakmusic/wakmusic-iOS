@@ -8,8 +8,8 @@ private enum OpenerPlatform {
 }
 
 private enum VideoPlayType {
-  case videos(ids: [String])
-  case playlist(listID: String)
+    case videos(ids: [String])
+    case playlist(listID: String)
 }
 
 public struct WakmusicYoutubePlayer: WakmusicPlayer {
@@ -39,21 +39,21 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
-  public init(
-      listID: String,
-      youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
-  ) {
-      self.youtubeVideoType = .playlist(listID: listID)
-      self.youtubeURLGenerator = youtubeURLGenerator
-  }
+    public init(
+        listID: String,
+        youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
+    ) {
+        self.youtubeVideoType = .playlist(listID: listID)
+        self.youtubeURLGenerator = youtubeURLGenerator
+    }
 
     public func play() {
-      switch youtubeVideoType {
-      case let .videos(ids):
-        playYoutube(ids: ids)
-      case let .playlist(listID):
-        playPlaylistYoutube(listID: listID)
-      }
+        switch youtubeVideoType {
+        case let .videos(ids):
+            playYoutube(ids: ids)
+        case let .playlist(listID):
+            playPlaylistYoutube(listID: listID)
+        }
     }
 }
 
@@ -68,10 +68,10 @@ private extension WakmusicYoutubePlayer {
     }
 
     func playPlaylistYoutube(listID: String) {
-      guard let url = urlForYoutubePlaylist(listID: listID) else {
-        return
-      }
-      UIApplication.shared.open(url)
+        guard let url = urlForYoutubePlaylist(listID: listID) else {
+            return
+        }
+        UIApplication.shared.open(url)
     }
 }
 
@@ -146,37 +146,36 @@ private extension WakmusicYoutubePlayer {
 
 private extension WakmusicYoutubePlayer {
     func urlForYoutubePlaylist(listID: String) -> URL? {
-      switch openerPlatform {
-      case .youtube:
-        let appURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistAppURL(id: listID))
-        let webURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistWebURL(id: listID))
-        return appURL ?? webURL
-        
-        
-      case .youtubeMusic:
-        let appURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistAppURL(id: listID))
-        let webURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistWebURL(id: listID))
-        return appURL ?? webURL
-      }
-  }
+        switch openerPlatform {
+        case .youtube:
+            let appURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistAppURL(id: listID))
+            let webURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistWebURL(id: listID))
+            return appURL ?? webURL
+
+        case .youtubeMusic:
+            let appURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistAppURL(id: listID))
+            let webURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistWebURL(id: listID))
+            return appURL ?? webURL
+        }
+    }
 }
 
 private extension WakmusicYoutubePlayer {
-  func openableURL(_ urlString: String) -> URL? {
-      guard let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) else { return nil }
-      return url
-  }
+    func openableURL(_ urlString: String) -> URL? {
+        guard let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) else { return nil }
+        return url
+    }
 
-  @MainActor
-  func redirectedYoutubeURL(_ urlString: String) async throws -> URL? {
-      guard let url = URL(string: urlString) else { return nil }
+    @MainActor
+    func redirectedYoutubeURL(_ urlString: String) async throws -> URL? {
+        guard let url = URL(string: urlString) else { return nil }
 
-      let provider = LPMetadataProvider()
-      let metadata = try await provider.startFetchingMetadata(for: url)
-      guard let redirectedURL = metadata.url,
-            UIApplication.shared.canOpenURL(redirectedURL)
-      else { return nil }
+        let provider = LPMetadataProvider()
+        let metadata = try await provider.startFetchingMetadata(for: url)
+        guard let redirectedURL = metadata.url,
+              UIApplication.shared.canOpenURL(redirectedURL)
+        else { return nil }
 
-      return redirectedURL
-  }
+        return redirectedURL
+    }
 }
