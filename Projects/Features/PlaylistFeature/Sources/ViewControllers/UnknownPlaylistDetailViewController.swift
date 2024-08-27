@@ -371,12 +371,16 @@ extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         let currentState = reactor.currentState
         var songs = currentState.dataSource
 
+        let playlistName = reactor.currentState.header.title
+        let title: String
+
         switch event {
         case .allPlay:
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .all)
             )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
+            title = "\(playlistName) (전체)"
 
         case .shufflePlay:
             LogManager.analytics(
@@ -384,10 +388,11 @@ extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
             )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
+            title = "\(playlistName) (랜덤)"
         }
 
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+        WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: title).play()
     }
 }
 
@@ -435,7 +440,7 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
             )
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
             reactor.action.onNext(.deselectAll)
 
         case .remove:

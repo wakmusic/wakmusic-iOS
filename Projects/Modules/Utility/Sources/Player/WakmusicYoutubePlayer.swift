@@ -15,6 +15,7 @@ private enum VideoPlayType {
 public struct WakmusicYoutubePlayer: WakmusicPlayer {
     private let youtubeURLGenerator: any YoutubeURLGeneratable
     private let youtubeVideoType: VideoPlayType
+    private let title: String?
     private var openerPlatform: OpenerPlatform {
         let platform = PreferenceManager.songPlayPlatformType ?? .youtube
         switch platform {
@@ -25,17 +26,21 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
 
     public init(
         id: String,
+        title: String? = nil,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .videos(ids: [id])
+        self.title = title
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
     public init(
         ids: [String],
+        title: String? = nil,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .videos(ids: ids)
+        self.title = title
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
@@ -44,6 +49,7 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .playlist(listID: listID)
+        self.title = nil
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
@@ -63,7 +69,11 @@ private extension WakmusicYoutubePlayer {
             guard let url = await urlForYoutube(ids: ids) else {
                 return
             }
-            await UIApplication.shared.open(url)
+            if let title, !title.isEmpty, let titledURL = url.appendingTitleParam(title: title) {
+                await UIApplication.shared.open(titledURL)
+            } else {
+                await UIApplication.shared.open(url)
+            }
         }
     }
 
@@ -177,5 +187,13 @@ private extension WakmusicYoutubePlayer {
         else { return nil }
 
         return redirectedURL
+    }
+}
+
+private extension URL {
+    func appendingTitleParam(title: String) -> URL? {
+        guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else { return nil }
+        components.queryItems?.append(URLQueryItem(name: "title", value: title))
+        return components.url
     }
 }

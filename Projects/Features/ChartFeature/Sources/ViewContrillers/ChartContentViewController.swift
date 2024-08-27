@@ -141,12 +141,12 @@ private extension ChartContentViewController {
 
         output.groupPlaySongs
             .bind(with: self, onNext: { owner, source in
-                guard !source.isEmpty else {
+                guard !source.songs.isEmpty else {
                     owner.output.showToast.onNext("차트 데이터가 없습니다.")
                     return
                 }
-                PlayState.shared.loadAndAppendSongsToPlaylist(source)
-                WakmusicYoutubePlayer(ids: source.map { $0.id }).play()
+                PlayState.shared.loadAndAppendSongsToPlaylist(source.songs)
+                WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle).play()
             })
             .disposed(by: disposeBag)
 
@@ -303,7 +303,7 @@ extension ChartContentViewController: SongCartViewDelegate {
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .chart, type: .multiple)
             )
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
 
         case .remove:
             return
