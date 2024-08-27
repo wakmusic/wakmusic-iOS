@@ -7,6 +7,9 @@ public protocol YoutubeURLGeneratable {
     func generateYoutubeVideoWebURL(id: String) -> String
     func generateYoutubeVideoAppURL(ids: [String]) -> String
     func generateYoutubeVideoWebURL(ids: [String]) -> String
+    func generateYoutubePlaylistAppURL(id: String) -> String
+    func generateYoutubePlaylistWebURL(id: String) -> String
+
     func generateYoutubeMusicVideoAppURL(id: String) -> String
     func generateYoutubeMusicVideoWebURL(id: String) -> String
     func generateYoutubeMusicPlaylistAppURL(id: String) -> String
@@ -15,6 +18,8 @@ public protocol YoutubeURLGeneratable {
 
 public struct YoutubeURLGenerator: YoutubeURLGeneratable {
     public init() {}
+
+    // MARK: Youtube
 
     public func generateThumbnailURL(id: String) -> String {
         "https://i.ytimg.com/vi/\(id)/mqdefault.jpg"
@@ -39,6 +44,16 @@ public struct YoutubeURLGenerator: YoutubeURLGeneratable {
     public func generateYoutubeVideoWebURL(ids: [String]) -> String {
         "https://youtube.com/watch_videos?video_ids=\(ids.joined(separator: ","))"
     }
+
+    public func generateYoutubePlaylistAppURL(id: String) -> String {
+        "youtube://playlist?list=\(id)"
+    }
+
+    public func generateYoutubePlaylistWebURL(id: String) -> String {
+        "https://youtube.com/playlist?list=\(id)"
+    }
+
+    // MARK: Youtube Music
 
     public func generateYoutubeMusicVideoAppURL(id: String) -> String {
         return "youtubemusic://watch?v=\(id)"

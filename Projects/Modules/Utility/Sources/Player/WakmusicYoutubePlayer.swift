@@ -7,9 +7,14 @@ private enum OpenerPlatform {
     case youtubeMusic
 }
 
+private enum VideoPlayType {
+    case videos(ids: [String])
+    case playlist(listID: String)
+}
+
 public struct WakmusicYoutubePlayer: WakmusicPlayer {
     private let youtubeURLGenerator: any YoutubeURLGeneratable
-    private let ids: [String]
+    private let youtubeVideoType: VideoPlayType
     private var openerPlatform: OpenerPlatform {
         let platform = PreferenceManager.songPlayPlatformType ?? .youtube
         switch platform {
@@ -22,7 +27,7 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         id: String,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
-        self.ids = [id]
+        self.youtubeVideoType = .videos(ids: [id])
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
@@ -30,12 +35,25 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         ids: [String],
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
-        self.ids = ids
+        self.youtubeVideoType = .videos(ids: ids)
+        self.youtubeURLGenerator = youtubeURLGenerator
+    }
+
+    public init(
+        listID: String,
+        youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
+    ) {
+        self.youtubeVideoType = .playlist(listID: listID)
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
     public func play() {
-        playYoutube(ids: ids)
+        switch youtubeVideoType {
+        case let .videos(ids):
+            playYoutube(ids: ids)
+        case let .playlist(listID):
+            playPlaylistYoutube(listID: listID)
+        }
     }
 }
 
@@ -47,6 +65,13 @@ private extension WakmusicYoutubePlayer {
             }
             await UIApplication.shared.open(url)
         }
+    }
+
+    func playPlaylistYoutube(listID: String) {
+        guard let url = urlForYoutubePlaylist(listID: listID) else {
+            return
+        }
+        UIApplication.shared.open(url)
     }
 }
 
@@ -117,7 +142,25 @@ private extension WakmusicYoutubePlayer {
         }
         return nil
     }
+}
 
+private extension WakmusicYoutubePlayer {
+    func urlForYoutubePlaylist(listID: String) -> URL? {
+        switch openerPlatform {
+        case .youtube:
+            let appURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistAppURL(id: listID))
+            let webURL = openableURL(youtubeURLGenerator.generateYoutubePlaylistWebURL(id: listID))
+            return appURL ?? webURL
+
+        case .youtubeMusic:
+            let appURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistAppURL(id: listID))
+            let webURL = openableURL(youtubeURLGenerator.generateYoutubeMusicPlaylistWebURL(id: listID))
+            return appURL ?? webURL
+        }
+    }
+}
+
+private extension WakmusicYoutubePlayer {
     func openableURL(_ urlString: String) -> URL? {
         guard let url = URL(string: urlString), UIApplication.shared.canOpenURL(url) else { return nil }
         return url
