@@ -285,6 +285,7 @@ extension SettingViewController: UITableViewDelegate {
             cancelCompletion: {}
         )
         togglePopupVC.modalPresentationStyle = .overFullScreen
+        togglePopupVC.modalTransitionStyle = .crossDissolve
         self.present(togglePopupVC, animated: false)
     }
 

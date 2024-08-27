@@ -113,10 +113,18 @@ public final class PlayTypeTogglePopupViewController: UIViewController {
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        contentView.transform = CGAffineTransform(translationX: 0, y: self.view.frame.height)
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+        contentView.transform = CGAffineTransform(translationX: 0, y: 80)
+        contentView.alpha = 0
+        dimmView.alpha = 0
+        let animator = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut)
+        animator.addAnimations {
             self.contentView.transform = CGAffineTransform.identity
-        }, completion: nil)
+        }
+        animator.addAnimations {
+            self.contentView.alpha = 1
+            self.dimmView.alpha = 1
+        }
+        animator.startAnimation()
     }
 
     func setActions() {
@@ -251,19 +259,7 @@ private extension PlayTypeTogglePopupViewController {
     }
 
     func dismiss() {
-        UIView.animate(
-            withDuration: 0.3,
-            delay: 0,
-            options: .curveEaseInOut,
-            animations: { [weak self] in
-                guard let self = self else { return }
-                let translationY = self.view.frame.height
-                self.contentView.transform = CGAffineTransform(translationX: 0, y: translationY)
-            },
-            completion: { [weak self] _ in
-                self?.dismiss(animated: false)
-            }
-        )
+        self.dismiss(animated: false)
     }
 }
 
