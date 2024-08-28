@@ -7,6 +7,7 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         case youtube
         case youtubeMusic
     }
+
     private enum VideoPlayType {
         case videos(ids: [String])
         case playlist(listID: String)

@@ -296,7 +296,10 @@ private extension MusicDetailReactor {
             LogManager.analytics(log)
         }
         PlayState.shared.append(item: PlaylistItem(id: song.videoID, title: song.title, artist: song.artistString))
-        return navigateMutation(navigate: .youtube(id: song.videoID, playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic))
+        return navigateMutation(navigate: .youtube(
+            id: song.videoID,
+            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+        ))
     }
 
     func nextButtonDidTap() -> Observable<Mutation> {
