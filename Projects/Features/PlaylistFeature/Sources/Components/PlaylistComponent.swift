@@ -16,6 +16,20 @@ public final class PlaylistComponent: Component<PlaylistDependency>, PlaylistFac
     public func makeViewController() -> UIViewController {
         let viewModel = PlaylistViewModel()
         let viewController = PlaylistViewController(
+            currentSongID: nil,
+            viewModel: viewModel,
+            containSongsFactory: dependency.containSongsFactory,
+            songDetailPresenter: dependency.songDetailPresenter,
+            textPopupFactory: dependency.textPopupFactory,
+            signInFactory: dependency.signInFactory
+        )
+        return viewController
+    }
+
+    public func makeViewController(currentSongID: String) -> UIViewController {
+        let viewModel = PlaylistViewModel()
+        let viewController = PlaylistViewController(
+            currentSongID: currentSongID,
             viewModel: viewModel,
             containSongsFactory: dependency.containSongsFactory,
             songDetailPresenter: dependency.songDetailPresenter,

@@ -119,7 +119,8 @@ final class DummyTextPopupFactory: TextPopupFactory {
 }
 
 final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
-    var presentPlayListObservable: RxSwift.Observable<Void> { .empty() }
+    var presentPlayListObservable: RxSwift.Observable<String?> { .empty() }
+    func presentPlayList(currentSongID: String?) {}
     func presentPlayList() {}
 }
 

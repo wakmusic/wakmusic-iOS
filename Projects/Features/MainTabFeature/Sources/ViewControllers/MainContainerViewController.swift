@@ -122,9 +122,13 @@ private extension MainContainerViewController {
         )
 
         playlistPresenterGlobalState.presentPlayListObservable
-            .bind { [navigationController, playlistFactory] _ in
+            .bind { [navigationController, playlistFactory] currentSongID in
                 guard let playlistFactory else { return }
-                let playlistViewController = playlistFactory.makeViewController()
+                let playlistViewController = if let currentSongID {
+                    playlistFactory.makeViewController(currentSongID: currentSongID)
+                } else {
+                    playlistFactory.makeViewController()
+                }
                 playlistViewController.modalPresentationStyle = .overFullScreen
                 navigationController?.topViewController?.present(playlistViewController, animated: true)
             }
