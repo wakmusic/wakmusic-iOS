@@ -52,13 +52,17 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     )
     lazy var output = self.viewModel.transform(from: input)
 
+    private let currentSongID: String?
+
     init(
+        currentSongID: String?,
         viewModel: PlaylistViewModel,
         containSongsFactory: ContainSongsFactory,
         songDetailPresenter: any SongDetailPresentable,
         textPopupFactory: any TextPopupFactory,
         signInFactory: any SignInFactory
     ) {
+        self.currentSongID = currentSongID
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
@@ -178,6 +182,20 @@ private extension PlaylistViewController {
 
         output.playlists
             .map { [PlayListSectionModel.init(model: 0, items: $0)] }
+            .do(afterNext: { [currentSongID, tableView = playlistView.playlistTableView] playListSectionModel in
+                guard let currentSongID else { return }
+                guard
+                    let sectionIndex = playListSectionModel.firstIndex(where: { model in
+                        model.items.contains(where: { $0.id == currentSongID })
+                    }),
+                    let itemIndex = playListSectionModel[safe: sectionIndex]?.items
+                    .firstIndex(where: { $0.id == currentSongID })
+                else { return }
+                let index = IndexPath(row: itemIndex, section: sectionIndex)
+                DispatchQueue.main.async {
+                    tableView.scrollToRow(at: index, at: .middle, animated: false)
+                }
+            })
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
 

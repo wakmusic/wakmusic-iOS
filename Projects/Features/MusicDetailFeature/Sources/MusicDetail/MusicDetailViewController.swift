@@ -137,8 +137,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.navigateLyricsHighlighing(model: model)
                 case let .musicPick(id):
                     owner.presentMusicPick(id: id)
-                case .playlist:
-                    owner.presentPlaylist()
+                case let .playlist(id):
+                    owner.presentPlaylist(id: id)
                 case let .textPopup(text, completion):
                     owner.presentTextPopup(text: text, completion: completion)
                 case .signin:
@@ -240,9 +240,9 @@ private extension MusicDetailViewController {
         self.present(viewController, animated: true)
     }
 
-    func presentPlaylist() {
+    func presentPlaylist(id: String) {
         self.dismiss(animated: true) { [playlistPresenterGlobalState] in
-            playlistPresenterGlobalState.presentPlayList()
+            playlistPresenterGlobalState.presentPlayList(currentSongID: id)
         }
     }
 

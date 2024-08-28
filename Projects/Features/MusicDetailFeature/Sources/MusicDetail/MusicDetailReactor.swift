@@ -43,7 +43,7 @@ final class MusicDetailReactor: Reactor {
         case credit(id: String)
         case lyricsHighlighting(model: LyricHighlightingRequiredModel)
         case musicPick(id: String)
-        case playlist
+        case playlist(id: String)
         case dismiss
         case textPopup(text: String, completion: () -> Void)
         case signin
@@ -414,7 +414,7 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickPlaylistButton(id: song.videoID)
         LogManager.analytics(log)
-        return navigateMutation(navigate: .playlist)
+        return navigateMutation(navigate: .playlist(id: song.videoID))
     }
 }
 
