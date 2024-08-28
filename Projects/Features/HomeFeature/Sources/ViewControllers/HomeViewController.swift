@@ -420,7 +420,10 @@ extension HomeViewController: HomeChartCellDelegate {
             CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
         )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-        WakmusicYoutubePlayer(id: model.id).play()
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 }
 
@@ -438,7 +441,10 @@ extension HomeViewController: HomeNewSongCellDelegate {
             CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
         )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-        WakmusicYoutubePlayer(id: model.id).play()
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 }
 

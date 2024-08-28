@@ -311,7 +311,10 @@ extension LikeStorageReactor {
     func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
         let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
         PlayState.shared.append(item: appendingPlaylisItem)
-        WakmusicYoutubePlayer(id: song.songID).play()
+        WakmusicYoutubePlayer(
+            id: song.songID,
+            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
         return .empty()
     }
 

@@ -2,54 +2,59 @@ import Foundation
 import LinkPresentation
 import UIKit
 
-private enum OpenerPlatform {
-    case youtube
-    case youtubeMusic
-}
-
-private enum VideoPlayType {
-    case videos(ids: [String])
-    case playlist(listID: String)
-}
-
 public struct WakmusicYoutubePlayer: WakmusicPlayer {
+    fileprivate enum OpenerPlatform {
+        case youtube
+        case youtubeMusic
+    }
+    private enum VideoPlayType {
+        case videos(ids: [String])
+        case playlist(listID: String)
+    }
+
+    public enum PlayPlatform {
+        case youtube
+        case youtubeMusic
+        case automatic
+    }
+
     private let youtubeURLGenerator: any YoutubeURLGeneratable
     private let youtubeVideoType: VideoPlayType
     private let title: String?
-    private var openerPlatform: OpenerPlatform {
-        let platform = PreferenceManager.songPlayPlatformType ?? .youtube
-        switch platform {
-        case .youtube: return .youtube
-        case .youtubeMusic: return .youtubeMusic
-        }
-    }
+    private let openerPlatform: OpenerPlatform
 
     public init(
         id: String,
         title: String? = nil,
+        playPlatform: PlayPlatform = .automatic,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .videos(ids: [id])
         self.title = title
+        self.openerPlatform = playPlatform.toOpenerPlatform
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
     public init(
         ids: [String],
         title: String? = nil,
+        playPlatform: PlayPlatform = .automatic,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .videos(ids: ids)
         self.title = title
+        self.openerPlatform = playPlatform.toOpenerPlatform
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
     public init(
         listID: String,
+        playPlatform: PlayPlatform = .automatic,
         youtubeURLGenerator: any YoutubeURLGeneratable = YoutubeURLGenerator()
     ) {
         self.youtubeVideoType = .playlist(listID: listID)
         self.title = nil
+        self.openerPlatform = playPlatform.toOpenerPlatform
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
@@ -195,5 +200,24 @@ private extension URL {
         guard var components = URLComponents(url: self, resolvingAgainstBaseURL: false) else { return nil }
         components.queryItems?.append(URLQueryItem(name: "title", value: title))
         return components.url
+    }
+}
+
+private extension WakmusicYoutubePlayer.PlayPlatform {
+    var toOpenerPlatform: WakmusicYoutubePlayer.OpenerPlatform {
+        switch self {
+        case .youtube: return .youtube
+        case .youtubeMusic: return .youtubeMusic
+        case .automatic: return PreferenceManager.songPlayPlatformType?.toOpnerPlatform ?? .youtube
+        }
+    }
+}
+
+private extension YoutubePlayType {
+    var toOpnerPlatform: WakmusicYoutubePlayer.OpenerPlatform {
+        switch self {
+        case .youtube: return .youtube
+        case .youtubeMusic: return .youtubeMusic
+        }
     }
 }
