@@ -11,7 +11,7 @@ class ContainPlaylistHeaderView: UIView {
     @IBOutlet weak var buttonImageView: UIImageView!
 
     @IBOutlet weak var blurEffectViews: UIVisualEffectView!
-    
+
     weak var delegate: ContainPlaylistHeaderViewDelegate?
 
     @IBAction func buttonAction(_ sender: Any) {
@@ -52,10 +52,10 @@ class ContainPlaylistHeaderView: UIView {
         superView.layer.cornerRadius = 8
         superView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         superView.layer.borderWidth = 1
-        
+
         blurEffectViews.layer.cornerRadius = 8
         blurEffectViews.clipsToBounds = true
-        
+
         self.button.setAttributedTitle(attr, for: .normal)
     }
 }

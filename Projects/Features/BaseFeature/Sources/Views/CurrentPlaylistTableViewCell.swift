@@ -8,7 +8,7 @@ class CurrentPlaylistTableViewCell: UITableViewCell {
     @IBOutlet weak var playlistNameLabel: UILabel!
     @IBOutlet weak var playlistCountLabel: UILabel!
     @IBOutlet weak var lockImageView: UIImageView!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
