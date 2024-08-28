@@ -97,9 +97,9 @@ extension ContainSongsViewController {
             })
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "CurrentPlayListTableViewCell",
+                    withIdentifier: "CurrentPlaylistTableViewCell",
                     for: IndexPath(row: index, section: 0)
-                ) as? CurrentPlayListTableViewCell
+                ) as? CurrentPlaylistTableViewCell
                 else {
                     return UITableViewCell()
                 }
@@ -128,8 +128,7 @@ extension ContainSongsViewController {
 
         output.onLogout
             .bind(with: self) { owner, error in
-                let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                owner.showToast(text: error.localizedDescription, font: toastFont)
+                owner.showToast(text: error.localizedDescription, options: [.tabBar])
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
@@ -143,7 +142,7 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.empty])
+                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar])
                     return
                 }
 
@@ -205,7 +204,7 @@ extension ContainSongsViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = ContainPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+        let header = ContainPlaylistHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
         header.delegate = self
         return header
     }
@@ -215,7 +214,7 @@ extension ContainSongsViewController: UITableViewDelegate {
     }
 }
 
-extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
+extension ContainSongsViewController: ContainPlaylistHeaderViewDelegate {
     public func action() {
         LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
         input.creationButtonDidTap.onNext(())
