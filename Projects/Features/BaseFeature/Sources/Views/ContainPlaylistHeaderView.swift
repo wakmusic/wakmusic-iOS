@@ -1,7 +1,7 @@
 import DesignSystem
 import UIKit
 
-public protocol ContainPlayListHeaderViewDelegate: AnyObject {
+public protocol ContainPlaylistHeaderViewDelegate: AnyObject {
     func action()
 }
 
@@ -10,7 +10,9 @@ class ContainPlaylistHeaderView: UIView {
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var buttonImageView: UIImageView!
 
-    weak var delegate: ContainPlayListHeaderViewDelegate?
+    @IBOutlet weak var blurEffectViews: UIVisualEffectView!
+    
+    weak var delegate: ContainPlaylistHeaderViewDelegate?
 
     @IBAction func buttonAction(_ sender: Any) {
         self.delegate?.action()
@@ -28,7 +30,7 @@ class ContainPlaylistHeaderView: UIView {
     }
 
     private func setupView() {
-        if let view = Bundle.module.loadNibNamed("ContainPlayListHeaderView", owner: self, options: nil)!
+        if let view = Bundle.module.loadNibNamed("ContainPlaylistHeaderView", owner: self, options: nil)!
             .first as? UIView {
             view.frame = self.bounds
             view.layoutIfNeeded() // 드로우 사이클을 호출할 때 쓰임
@@ -45,11 +47,15 @@ class ContainPlaylistHeaderView: UIView {
                 .kern: -0.5
             ]
         )
-
+        self.backgroundColor = .clear
         superView.backgroundColor = .white.withAlphaComponent(0.4)
         superView.layer.cornerRadius = 8
-        superView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
+        superView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.withAlphaComponent(0.7).cgColor
         superView.layer.borderWidth = 1
+        
+        blurEffectViews.layer.cornerRadius = 8
+        blurEffectViews.clipsToBounds = true
+        
         self.button.setAttributedTitle(attr, for: .normal)
     }
 }
