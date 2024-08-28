@@ -180,7 +180,7 @@
                                 <rect key="frame" x="0.0" y="159" width="393" height="693"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrentPlayListTableViewCell" rowHeight="60" id="PfK-35-YMP" customClass="CurrentPlayListTableViewCell" customModule="BaseFeature">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrentPlaylistTableViewCell" rowHeight="60" id="PfK-35-YMP" customClass="CurrentPlaylistTableViewCell" customModule="BaseFeature">
                                         <rect key="frame" x="0.0" y="50" width="393" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PfK-35-YMP" id="e0W-SB-sNM">
@@ -206,15 +206,35 @@
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xki-GZ-3xs">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sWy-0L-2Bk">
                                                             <rect key="frame" x="0.0" y="24" width="305" height="18"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xki-GZ-3xs">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="41.333333333333336" height="18"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="18" id="LiX-XK-QFL"/>
+                                                                    </constraints>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                                    <nil key="textColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="storage_close" translatesAutoresizingMaskIntoConstraints="NO" id="mj0-LX-DnV">
+                                                                    <rect key="frame" x="41.333333333333329" y="1" width="16" height="16"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="height" constant="16" id="1mb-iZ-doI"/>
+                                                                        <constraint firstAttribute="width" constant="16" id="kip-d5-7EK"/>
+                                                                    </constraints>
+                                                                </imageView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="18" id="LiX-XK-QFL"/>
+                                                                <constraint firstItem="xki-GZ-3xs" firstAttribute="leading" secondItem="sWy-0L-2Bk" secondAttribute="leading" id="HtR-fF-T0j"/>
+                                                                <constraint firstAttribute="bottom" secondItem="xki-GZ-3xs" secondAttribute="bottom" id="JxG-iC-fUu"/>
+                                                                <constraint firstItem="mj0-LX-DnV" firstAttribute="leading" secondItem="xki-GZ-3xs" secondAttribute="trailing" id="ZTt-NQ-rp8"/>
+                                                                <constraint firstItem="xki-GZ-3xs" firstAttribute="top" secondItem="sWy-0L-2Bk" secondAttribute="top" id="cBc-Hz-GlG"/>
+                                                                <constraint firstAttribute="bottom" secondItem="mj0-LX-DnV" secondAttribute="bottom" constant="1" id="rSl-sM-RGj"/>
                                                             </constraints>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
+                                                        </view>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
@@ -227,9 +247,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="playListCountLabel" destination="xki-GZ-3xs" id="3o9-6v-e1i"/>
-                                            <outlet property="playListImageView" destination="3tk-Py-ttY" id="VYb-w0-tw5"/>
-                                            <outlet property="playListNameLabel" destination="cYf-c6-Ung" id="3a9-aj-V0o"/>
+                                            <outlet property="lockImageView" destination="mj0-LX-DnV" id="IZt-TQ-ZU3"/>
+                                            <outlet property="playlistCountLabel" destination="xki-GZ-3xs" id="3o9-6v-e1i"/>
+                                            <outlet property="playlistImageView" destination="3tk-Py-ttY" id="VYb-w0-tw5"/>
+                                            <outlet property="playlistNameLabel" destination="cYf-c6-Ung" id="3a9-aj-V0o"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -488,6 +509,7 @@
     </scenes>
     <resources>
         <image name="cross_close" width="32" height="32"/>
+        <image name="storage_close" width="16" height="16"/>
         <namedColor name="POINT">
             <color red="0.035294117647058823" green="0.78431372549019607" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

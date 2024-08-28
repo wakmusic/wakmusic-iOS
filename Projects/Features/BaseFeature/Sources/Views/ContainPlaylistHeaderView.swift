@@ -1,11 +1,3 @@
-//
-//  ContainPlayListHeaderView.swift
-//  CommonFeature
-//
-//  Created by yongbeomkwak on 2023/03/11.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import DesignSystem
 import UIKit
 
@@ -13,7 +5,7 @@ public protocol ContainPlayListHeaderViewDelegate: AnyObject {
     func action()
 }
 
-class ContainPlayListHeaderView: UIView {
+class ContainPlaylistHeaderView: UIView {
     @IBOutlet weak var superView: UIView!
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var buttonImageView: UIImageView!
@@ -49,14 +41,14 @@ class ContainPlayListHeaderView: UIView {
             string: "새 리스트 만들기",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color,
                 .kern: -0.5
             ]
         )
 
         superView.backgroundColor = .white.withAlphaComponent(0.4)
         superView.layer.cornerRadius = 8
-        superView.layer.borderColor = DesignSystemAsset.GrayColor.gray200.color.cgColor
+        superView.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
         superView.layer.borderWidth = 1
         self.button.setAttributedTitle(attr, for: .normal)
     }
