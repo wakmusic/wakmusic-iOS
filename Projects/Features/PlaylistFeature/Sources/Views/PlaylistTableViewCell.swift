@@ -11,7 +11,7 @@ import Utility
 
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func superButtonTapped(index: Int)
-    func playButtonDidTap(key: String)
+    func playButtonDidTap(model: PlaylistItemModel)
 }
 
 internal class PlaylistTableViewCell: UITableViewCell {
@@ -148,7 +148,7 @@ extension PlaylistTableViewCell {
                     return
                 }
 
-                owner.delegate?.playButtonDidTap(key: song.id)
+                owner.delegate?.playButtonDidTap(model: song)
             }
             .disposed(by: disposeBag)
 

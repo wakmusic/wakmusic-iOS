@@ -119,11 +119,14 @@ extension PlaylistViewController: UITableViewDelegate {
 }
 
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
-    func playButtonDidTap(key: String) {
+    func playButtonDidTap(model: PlaylistItemModel) {
         LogManager.analytics(
             CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .single)
         )
-        WakmusicYoutubePlayer(id: key).play()
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 
     func superButtonTapped(index: Int) {

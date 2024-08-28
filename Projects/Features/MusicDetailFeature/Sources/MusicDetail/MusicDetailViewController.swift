@@ -129,8 +129,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState.compactMap(\.navigateType)
             .bind(with: self) { owner, navigate in
                 switch navigate {
-                case let .youtube(id):
-                    owner.openYoutube(id: id)
+                case let .youtube(id, playPlatform):
+                    owner.openYoutube(id: id, playPlatform: playPlatform)
                 case let .credit(id):
                     owner.navigateCredits(id: id)
                 case let .lyricsHighlighting(model):
@@ -218,8 +218,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
 }
 
 private extension MusicDetailViewController {
-    func openYoutube(id: String) {
-        WakmusicYoutubePlayer(id: id).play()
+    func openYoutube(id: String, playPlatform: WakmusicYoutubePlayer.PlayPlatform = .automatic) {
+        WakmusicYoutubePlayer(id: id, playPlatform: playPlatform).play()
     }
 
     func navigateCredits(id: String) {

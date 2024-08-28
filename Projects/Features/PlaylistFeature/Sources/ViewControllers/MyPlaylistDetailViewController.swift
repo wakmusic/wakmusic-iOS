@@ -572,8 +572,14 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
 /// 편집모드 시 셀 선택 이벤트
 extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
-    func playButtonDidTap(key: String) {
-        WakmusicYoutubePlayer(id: key).play()
+    func playButtonDidTap(model: PlaylistItemModel) {
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .playlist, type: .single)
+        )
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 
     func superButtonTapped(index: Int) {

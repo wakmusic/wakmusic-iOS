@@ -39,7 +39,7 @@ final class MusicDetailReactor: Reactor {
     }
 
     enum NavigateType {
-        case youtube(id: String)
+        case youtube(id: String, playPlatform: WakmusicYoutubePlayer.PlayPlatform)
         case credit(id: String)
         case lyricsHighlighting(model: LyricHighlightingRequiredModel)
         case musicPick(id: String)
@@ -296,7 +296,10 @@ private extension MusicDetailReactor {
             LogManager.analytics(log)
         }
         PlayState.shared.append(item: PlaylistItem(id: song.videoID, title: song.title, artist: song.artistString))
-        return navigateMutation(navigate: .youtube(id: song.videoID))
+        return navigateMutation(navigate: .youtube(
+            id: song.videoID,
+            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+        ))
     }
 
     func nextButtonDidTap() -> Observable<Mutation> {
