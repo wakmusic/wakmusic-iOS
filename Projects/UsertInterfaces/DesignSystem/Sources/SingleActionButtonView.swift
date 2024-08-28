@@ -14,6 +14,12 @@ public final class SingleActionButtonView: UIView {
         $0.backgroundColor = .white.withAlphaComponent(0.4)
     }
 
+    
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true 
+    }
+
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
     }
@@ -34,7 +40,7 @@ public final class SingleActionButtonView: UIView {
     public init(frame: CGRect, topSpacing: CGFloat = 16) {
         self.topSpacing = topSpacing
         super.init(frame: frame)
-        backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+        backgroundColor = .clear
         addView()
         setLayout()
         addAction()
@@ -66,6 +72,7 @@ private extension SingleActionButtonView {
     }
 
     func addView() {
+        addSubview(translucentView)
         addSubview(baseView)
         addSubview(imageView)
         addSubview(label)
@@ -91,6 +98,10 @@ private extension SingleActionButtonView {
 
         label.snp.makeConstraints {
             $0.center.equalTo(button.snp.center)
+        }
+        
+        translucentView.snp.makeConstraints {
+            $0.edges.equalTo(baseView)
         }
     }
 }
