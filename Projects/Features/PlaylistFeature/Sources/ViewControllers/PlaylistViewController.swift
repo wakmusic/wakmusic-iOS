@@ -189,7 +189,7 @@ private extension PlaylistViewController {
                         model.items.contains(where: { $0.id == currentSongID })
                     }),
                     let itemIndex = playListSectionModel[safe: sectionIndex]?.items
-                        .firstIndex(where: { $0.id == currentSongID })
+                    .firstIndex(where: { $0.id == currentSongID })
                 else { return }
                 let index = IndexPath(row: itemIndex, section: sectionIndex)
                 DispatchQueue.main.async {
