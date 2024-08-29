@@ -181,7 +181,7 @@ private extension PlaylistViewController {
         }.store(in: &subscription)
 
         output.playlists
-            .map { [PlayListSectionModel.init(model: 0, items: $0)] }
+            .map { [PlaylistSectionModel.init(model: 0, items: $0)] }
             .do(afterNext: { [currentSongID, tableView = playlistView.playlistTableView] playListSectionModel in
                 guard let currentSongID else { return }
                 guard
@@ -277,8 +277,8 @@ extension PlaylistViewController {
     private func createDatasources(
         output: PlaylistViewModel
             .Output
-    ) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(
+    ) -> RxTableViewSectionedReloadDataSource<PlaylistSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlaylistSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self else { return UITableViewCell() }
                 guard let cell = tableView.dequeueReusableCell(
