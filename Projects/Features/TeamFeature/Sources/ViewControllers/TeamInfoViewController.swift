@@ -151,6 +151,7 @@ private extension TeamInfoViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 0
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in

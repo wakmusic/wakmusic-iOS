@@ -74,6 +74,7 @@ private extension CreditSongListTabViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 0
 
         bar.buttons.customize { button in
             button.tintColor = DesignSystemAsset.BlueGrayColor.blueGray400.color
