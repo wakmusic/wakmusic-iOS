@@ -80,19 +80,32 @@ extension ArtistDetailHeaderViewController {
         DEBUG_LOG("availableWidth: \(availableWidth)")
         DEBUG_LOG("\(model.krName): \(artistNameWidth)")
 
-        artistNameAttributedString.addAttributes(
-            [
-                .font: availableWidth >= artistNameWidth ?
-                    UIFont.WMFontSystem.t1(weight: .bold).font : UIFont.WMFontSystem.t3(weight: .bold).font
-            ],
-            range: artistKrNameRange
-        )
+        if availableWidth >= artistNameWidth {
+            artistNameAttributedString.addAttributes(
+                [.font: UIFont.WMFontSystem.t1(weight: .bold).font],
+                range: artistKrNameRange
+            )
+        } else {
+            if model.krName.count >= 10 { // ex: 김치만두
+                artistNameAttributedString.addAttributes(
+                    [.font: UIFont.WMFontSystem.t4(weight: .bold).font],
+                    range: artistKrNameRange
+                )
+            } else {
+                artistNameAttributedString.addAttributes(
+                    [.font: UIFont.WMFontSystem.t3(weight: .bold).font],
+                    range: artistKrNameRange
+                )
+
+            }
+        }
 
         artistNameLabelHeight.constant = (availableWidth >= artistNameWidth) ?
             36 : ceil(artistNameAttributedString.height(containerWidth: availableWidth))
         artistNameLabel.attributedText = artistNameAttributedString
 
-        artistGroupLabel.text = (model.id == "woowakgood") ? "" : model.groupName + (model.graduated ? " · 졸업" : "")
+        artistGroupLabel.text = (model.id == "woowakgood") ?
+            "" : model.groupName + (model.graduated ? " · 졸업" : "")
         artistGroupLabel.setTextWithAttributes(
             lineHeight: UIFont.WMFontSystem.t6(weight: .medium).lineHeight,
             lineBreakMode: .byCharWrapping
