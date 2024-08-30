@@ -15,9 +15,9 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    @IBOutlet weak var songCountLabel: UILabel!
-    @IBOutlet weak var subTitleLabel: UILabel!
-
+    let containerView = UIView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: 48))
+    let songCountLabel: UILabel = UILabel()
+    let subTitleLabel: UILabel = UILabel()
     var multiPurposePopupFactory: MultiPurposePopupFactory!
     var textPopupFactory: TextPopupFactory!
 
@@ -30,6 +30,8 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setLayout()
         configureUI()
         inputBind()
         outputBind()
@@ -53,6 +55,23 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 }
 
 extension ContainSongsViewController {
+    private func addSubviews() {
+        containerView.addSubviews(songCountLabel, subTitleLabel)
+        tableView.tableHeaderView = containerView
+    }
+
+    private func setLayout() {
+        subTitleLabel.snp.makeConstraints {
+            $0.leading.equalTo(songCountLabel.snp.trailing)
+            $0.centerY.equalTo(songCountLabel.snp.centerY)
+        }
+
+        songCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(closeButton.snp.leading)
+            $0.centerY.equalToSuperview()
+        }
+    }
+
     private func inputBind() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
@@ -182,6 +201,7 @@ extension ContainSongsViewController {
         titleLabel.text = "리스트에 담기"
         titleLabel.setTextWithAttributes(kernValue: -0.5)
 
+        // 24 , 12
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         songCountLabel.text = "\(viewModel.songs.count)"

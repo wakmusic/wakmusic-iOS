@@ -7,7 +7,7 @@ import RxRelay
 import RxSwift
 import Utility
 
-internal typealias PlayListSectionModel = SectionModel<Int, PlaylistItemModel>
+internal typealias PlaylistSectionModel = SectionModel<Int, PlaylistItemModel>
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
