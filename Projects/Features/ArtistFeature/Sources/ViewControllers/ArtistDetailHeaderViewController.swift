@@ -64,10 +64,12 @@ extension ArtistDetailHeaderViewController {
         let artistKrNameRange = (artistNameAttributedString.string as NSString).range(of: artistKrName)
         let artistEnNameRange = (artistNameAttributedString.string as NSString).range(of: artistEnName)
 
-        artistNameAttributedString.addAttributes([
-            .font: UIFont.WMFontSystem.t6(weight: .light).font,
-            .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
-            .kern: -0.5],
+        artistNameAttributedString.addAttributes(
+            [
+                .font: UIFont.WMFontSystem.t6(weight: .light).font,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color.withAlphaComponent(0.6),
+                .kern: -0.5
+            ],
             range: artistEnNameRange
         )
 
@@ -79,8 +81,10 @@ extension ArtistDetailHeaderViewController {
         DEBUG_LOG("\(model.krName): \(artistNameWidth)")
 
         artistNameAttributedString.addAttributes(
-            [.font: availableWidth >= artistNameWidth ?
-             UIFont.WMFontSystem.t1(weight: .bold).font : UIFont.WMFontSystem.t3(weight: .bold).font],
+            [
+                .font: availableWidth >= artistNameWidth ?
+                    UIFont.WMFontSystem.t1(weight: .bold).font : UIFont.WMFontSystem.t3(weight: .bold).font
+            ],
             range: artistKrNameRange
         )
 

@@ -119,7 +119,7 @@ public extension UILabel {
 
         paragraphStyle.lineBreakMode = lineBreakMode
         paragraphStyle.alignment = alignment
-        
+
         if hangulWordPriority {
             paragraphStyle.lineBreakStrategy = .hangulWordPriority
         }
