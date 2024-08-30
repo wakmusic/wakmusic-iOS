@@ -153,7 +153,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="6pV-f7-nxC">
-                                <rect key="frame" x="0.0" y="123" width="393" height="729"/>
+                                <rect key="frame" x="0.0" y="107" width="393" height="745"/>
                                 <color key="backgroundColor" name="gray100"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CurrentPlaylistTableViewCell" rowHeight="60" id="PfK-35-YMP" customClass="CurrentPlaylistTableViewCell" customModule="BaseFeature">
@@ -247,7 +247,7 @@
                             <constraint firstAttribute="bottom" secondItem="6pV-f7-nxC" secondAttribute="bottom" id="Qbj-D5-NOD"/>
                             <constraint firstItem="V2Y-fc-egg" firstAttribute="centerX" secondItem="tNr-su-wp3" secondAttribute="centerX" id="U3W-E0-KdH"/>
                             <constraint firstItem="6pV-f7-nxC" firstAttribute="leading" secondItem="Kfn-Yf-bFq" secondAttribute="leading" id="U3X-oS-uhs"/>
-                            <constraint firstItem="6pV-f7-nxC" firstAttribute="top" secondItem="uvF-5l-2QF" secondAttribute="bottom" constant="16" id="UWZ-gz-9mC"/>
+                            <constraint firstItem="6pV-f7-nxC" firstAttribute="top" secondItem="uvF-5l-2QF" secondAttribute="bottom" id="UWZ-gz-9mC"/>
                             <constraint firstItem="uvF-5l-2QF" firstAttribute="top" secondItem="Kfn-Yf-bFq" secondAttribute="top" id="VCZ-Wj-phy"/>
                             <constraint firstItem="Kfn-Yf-bFq" firstAttribute="trailing" secondItem="6pV-f7-nxC" secondAttribute="trailing" id="qwZ-Xk-Ld2"/>
                             <constraint firstItem="V2Y-fc-egg" firstAttribute="centerY" secondItem="tNr-su-wp3" secondAttribute="centerY" id="uch-vR-wTA"/>

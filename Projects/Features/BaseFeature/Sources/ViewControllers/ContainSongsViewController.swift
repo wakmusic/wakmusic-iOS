@@ -15,7 +15,7 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    let containerView = UIView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: 36))
+    let containerView = UIView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: 48))
     let songCountLabel: UILabel = UILabel()
     let subTitleLabel: UILabel = UILabel()
     var multiPurposePopupFactory: MultiPurposePopupFactory!
