@@ -96,7 +96,6 @@ extension ArtistDetailHeaderViewController {
                     [.font: UIFont.WMFontSystem.t3(weight: .bold).font],
                     range: artistKrNameRange
                 )
-
             }
         }
 
