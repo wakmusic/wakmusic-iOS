@@ -86,7 +86,7 @@ extension ArtistDetailHeaderViewController {
                 range: artistKrNameRange
             )
         } else {
-            if model.krName.count >= 10 { // ex: 김치만두
+            if model.krName.count >= 9 { // ex: 김치만두번영택사스가, 캘리칼리 데이비슨
                 artistNameAttributedString.addAttributes(
                     [.font: UIFont.WMFontSystem.t4(weight: .bold).font],
                     range: artistKrNameRange
