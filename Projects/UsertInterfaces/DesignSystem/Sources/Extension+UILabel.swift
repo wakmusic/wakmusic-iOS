@@ -63,6 +63,7 @@ public extension UILabel {
     /// - Parameter lineHeightMultiple: 줄 간격의 배수 (lineSpacing *  lineHeightMultiple)
     func getTextWithAttributes(
         lineHeight: CGFloat? = nil,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail,
         kernValue: Double? = nil,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
@@ -73,7 +74,7 @@ public extension UILabel {
         if let lineSpacing { paragraphStyle.lineSpacing = lineSpacing }
         if let lineHeightMultiple { paragraphStyle.lineHeightMultiple = lineHeightMultiple }
 
-        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.lineBreakMode = lineBreakMode
         paragraphStyle.alignment = alignment
 
         let baselineOffset: CGFloat
@@ -104,18 +105,24 @@ public extension UILabel {
 
     func setTextWithAttributes(
         lineHeight: CGFloat? = nil,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail,
         kernValue: Double? = -0.5,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
-        alignment: NSTextAlignment = .left
+        alignment: NSTextAlignment = .left,
+        hangulWordPriority: Bool = false
     ) {
         let paragraphStyle = NSMutableParagraphStyle()
 
         if let lineSpacing { paragraphStyle.lineSpacing = lineSpacing }
         if let lineHeightMultiple { paragraphStyle.lineHeightMultiple = lineHeightMultiple }
 
-        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.lineBreakMode = lineBreakMode
         paragraphStyle.alignment = alignment
+        
+        if hangulWordPriority {
+            paragraphStyle.lineBreakStrategy = .hangulWordPriority
+        }
 
         let baselineOffset: CGFloat
         let offsetDivisor: CGFloat
