@@ -102,11 +102,11 @@ private extension PlayTypeTogglePopupItemButtonView {
             self.baseView.layer.borderColor = isSelected ?
                 DesignSystemAsset.PrimaryColorV2.decrease.color.cgColor :
                 DesignSystemAsset.BlueGrayColor.blueGray200.color.withAlphaComponent(0.4).cgColor
-            
+
             self.baseView.layer.shadowOpacity = isSelected ? 0.08 : 0
         }
 
-        self.imageView.image = isSelected ? 
+        self.imageView.image = isSelected ?
             DesignSystemAsset.Storage.checkBox.image : nil
 
         let font = isSelected ?
@@ -116,7 +116,6 @@ private extension PlayTypeTogglePopupItemButtonView {
         self.titleLabel.textColor = isSelected ?
             DesignSystemAsset.PrimaryColorV2.decrease.color :
             DesignSystemAsset.BlueGrayColor.blueGray900.color
-
     }
 
     func setActions() {
