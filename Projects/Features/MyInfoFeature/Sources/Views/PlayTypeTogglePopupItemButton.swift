@@ -27,7 +27,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         $0.contentMode = .scaleAspectFit
     }
 
-    private let installButtonView = InstallButtonView().then {
+    private let installButton = InstallButton().then {
         $0.isHidden = true
     }
 
@@ -79,7 +79,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         } else {
             isInstalled = false
         }
-        installButtonView.isHidden = isInstalled
+        installButton.isHidden = isInstalled
         button.isEnabled = isInstalled
 
         return isInstalled
@@ -115,7 +115,7 @@ private extension PlayTypeTogglePopupItemButtonView {
         }
         button.addAction(buttonAction, for: .touchUpInside)
 
-        installButtonView.button.addAction {
+        installButton.addAction {
             let youtubeMusicAppStoreURL = "itms-apps://apps.apple.com/app/id1017492454"
             if let url = URL(string: youtubeMusicAppStoreURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -128,7 +128,7 @@ private extension PlayTypeTogglePopupItemButtonView {
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(button)
-        addSubview(installButtonView)
+        addSubview(installButton)
     }
 
     func setLayout() {
@@ -152,15 +152,15 @@ private extension PlayTypeTogglePopupItemButtonView {
             $0.edges.equalTo(baseView)
         }
 
-        installButtonView.snp.makeConstraints {
+        installButton.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
 }
 
 private extension PlayTypeTogglePopupItemButtonView {
-    class InstallButtonView: UIView {
-        private let titleLabel = WMLabel(
+    class InstallButton: UIButton {
+        private let messageLabel = WMLabel(
             text: "미설치",
             textColor: DesignSystemAsset.BlueGrayColor.gray400.color,
             font: .t7(weight: .bold),
@@ -172,8 +172,6 @@ private extension PlayTypeTogglePopupItemButtonView {
             $0.backgroundColor = .white
             $0.clipsToBounds = true
         }
-
-        let button = UIButton()
 
         init() {
             super.init(frame: .zero)
@@ -187,19 +185,15 @@ private extension PlayTypeTogglePopupItemButtonView {
         }
 
         func addViews() {
-            addSubviews(titleLabel, button)
+            addSubviews(messageLabel)
         }
 
         func setLayout() {
-            titleLabel.snp.makeConstraints {
+            messageLabel.snp.makeConstraints {
                 $0.width.equalTo(55)
                 $0.height.equalTo(24)
                 $0.trailing.equalToSuperview().inset(20)
                 $0.centerY.equalToSuperview()
-            }
-
-            button.snp.makeConstraints {
-                $0.edges.equalToSuperview()
             }
         }
     }
