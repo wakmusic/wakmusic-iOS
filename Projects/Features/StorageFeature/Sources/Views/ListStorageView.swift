@@ -66,6 +66,13 @@ final class ListStorageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = drawFruitButton.bounds
+    }
+}
+
+private extension ListStorageView {
     func addView() {
         self.addSubviews(
             tableView,
@@ -78,7 +85,7 @@ final class ListStorageView: UIView {
 
     func setLayout() {
         tableView.snp.makeConstraints {
-            $0.top.equalTo(safeAreaLayoutGuide).offset(68)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(68 - 16)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(drawFruitButton.snp.top)
         }
@@ -129,11 +136,6 @@ final class ListStorageView: UIView {
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         drawFruitButton.layer.addSublayer(gradientLayer)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = drawFruitButton.bounds
     }
 }
 
