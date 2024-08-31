@@ -67,16 +67,6 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C0Y-l0-5hD">
-                                <rect key="frame" x="333" y="59" width="40" height="40"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="81B-uC-Z7e"/>
-                                    <constraint firstAttribute="width" constant="40" id="eyc-7O-f4h"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain"/>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nKI-M3-PEL" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
                                 <rect key="frame" x="181.66666666666666" y="411" width="30" height="30"/>
                                 <constraints>
@@ -91,10 +81,8 @@
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="fkE-Zx-Mb6" secondAttribute="bottom" id="2U1-Bg-TdX"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="fkE-Zx-Mb6" secondAttribute="trailing" id="4CI-0P-BNL"/>
                             <constraint firstItem="fkE-Zx-Mb6" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="Afs-H6-ZxN"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="C0Y-l0-5hD" secondAttribute="trailing" constant="20" id="Jih-WE-Knh"/>
                             <constraint firstItem="nKI-M3-PEL" firstAttribute="centerX" secondItem="5EZ-qb-Rvc" secondAttribute="centerX" id="Jk1-Hm-JCZ"/>
                             <constraint firstItem="nKI-M3-PEL" firstAttribute="centerY" secondItem="5EZ-qb-Rvc" secondAttribute="centerY" id="h5A-Xk-4FS"/>
-                            <constraint firstItem="C0Y-l0-5hD" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="kDO-DH-JXt"/>
                             <constraint firstItem="fkE-Zx-Mb6" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="s29-DB-PNi"/>
                         </constraints>
                     </view>
@@ -103,7 +91,6 @@
                     <connections>
                         <outlet property="activityIndicator" destination="nKI-M3-PEL" id="Ug9-hb-UEy"/>
                         <outlet property="collectionView" destination="fkE-Zx-Mb6" id="qrS-zx-gK3"/>
-                        <outlet property="easterEggButton" destination="C0Y-l0-5hD" id="RKf-eI-Qte"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
