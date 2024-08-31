@@ -199,7 +199,7 @@ private extension PlayTypeTogglePopupViewController {
 
         firstDotImageView.snp.makeConstraints {
             $0.size.equalTo(16)
-            $0.top.equalTo(secondItemButton.snp.bottom).offset(8)
+            $0.top.equalTo(secondItemButton.snp.bottom).offset(12)
             $0.left.equalToSuperview().offset(20)
         }
 
