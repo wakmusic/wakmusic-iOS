@@ -27,17 +27,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         $0.contentMode = .scaleAspectFit
     }
 
-    private let installButton = UIButton().then {
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
-        $0.setTitle("미설치", for: .normal)
-        $0.setBackgroundColor(.white, for: .normal)
-        $0.setBackgroundColor(.lightGray, for: .highlighted)
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray400.color, for: .normal)
-        $0.setTitleColor(.white, for: .highlighted)
-        $0.titleLabel?.font = UIFont.WMFontSystem.t7(weight: .bold).font
-        $0.clipsToBounds = true
+    private let installButton = InstallButton().then {
         $0.isHidden = true
     }
 
@@ -163,10 +153,48 @@ private extension PlayTypeTogglePopupItemButtonView {
         }
 
         installButton.snp.makeConstraints {
-            $0.width.equalTo(55)
-            $0.height.equalTo(24)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.centerY.equalToSuperview()
+            $0.edges.equalToSuperview()
+        }
+    }
+}
+
+private extension PlayTypeTogglePopupItemButtonView {
+    class InstallButton: UIButton {
+        private let messageLabel = WMLabel(
+            text: "미설치",
+            textColor: DesignSystemAsset.BlueGrayColor.gray400.color,
+            font: .t7(weight: .bold),
+            alignment: .center
+        ).then {
+            $0.layer.cornerRadius = 4
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
+            $0.backgroundColor = .white
+            $0.clipsToBounds = true
+        }
+
+        init() {
+            super.init(frame: .zero)
+            addViews()
+            setLayout()
+        }
+
+        @available(*, unavailable)
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        func addViews() {
+            addSubviews(messageLabel)
+        }
+
+        func setLayout() {
+            messageLabel.snp.makeConstraints {
+                $0.width.equalTo(55)
+                $0.height.equalTo(24)
+                $0.trailing.equalToSuperview().inset(20)
+                $0.centerY.equalToSuperview()
+            }
         }
     }
 }
