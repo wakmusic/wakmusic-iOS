@@ -27,17 +27,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         $0.contentMode = .scaleAspectFit
     }
 
-    private let installButton = UIButton().then {
-        $0.layer.cornerRadius = 4
-        $0.layer.borderWidth = 1
-        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
-        $0.setTitle("미설치", for: .normal)
-        $0.setBackgroundColor(.white, for: .normal)
-        $0.setBackgroundColor(.lightGray, for: .highlighted)
-        $0.setTitleColor(DesignSystemAsset.BlueGrayColor.gray400.color, for: .normal)
-        $0.setTitleColor(.white, for: .highlighted)
-        $0.titleLabel?.font = UIFont.WMFontSystem.t7(weight: .bold).font
-        $0.clipsToBounds = true
+    private let installButtonView = InstallButtonView().then {
         $0.isHidden = true
     }
 
@@ -89,7 +79,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         } else {
             isInstalled = false
         }
-        installButton.isHidden = isInstalled
+        installButtonView.isHidden = isInstalled
         button.isEnabled = isInstalled
 
         return isInstalled
@@ -125,7 +115,7 @@ private extension PlayTypeTogglePopupItemButtonView {
         }
         button.addAction(buttonAction, for: .touchUpInside)
 
-        installButton.addAction {
+        installButtonView.button.addAction {
             let youtubeMusicAppStoreURL = "itms-apps://apps.apple.com/app/id1017492454"
             if let url = URL(string: youtubeMusicAppStoreURL) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -138,7 +128,7 @@ private extension PlayTypeTogglePopupItemButtonView {
         addSubview(titleLabel)
         addSubview(imageView)
         addSubview(button)
-        addSubview(installButton)
+        addSubview(installButtonView)
     }
 
     func setLayout() {
@@ -162,11 +152,56 @@ private extension PlayTypeTogglePopupItemButtonView {
             $0.edges.equalTo(baseView)
         }
 
-        installButton.snp.makeConstraints {
-            $0.width.equalTo(55)
-            $0.height.equalTo(24)
-            $0.trailing.equalToSuperview().inset(20)
-            $0.centerY.equalToSuperview()
+        installButtonView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
+}
+
+private extension PlayTypeTogglePopupItemButtonView {
+    class InstallButtonView: UIView {
+        private let titleLabel = WMLabel(
+            text: "미설치",
+            textColor: DesignSystemAsset.BlueGrayColor.gray400.color,
+            font: .t7(weight: .bold),
+            alignment: .center
+        ).then {
+            $0.layer.cornerRadius = 4
+            $0.layer.borderWidth = 1
+            $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray300.color.cgColor
+            $0.backgroundColor = .white
+            $0.clipsToBounds = true
+        }
+        
+        let button = UIButton()
+        
+        init() {
+            super.init(frame: .zero)
+            addViews()
+            setLayout()
+        }
+        
+        @available(*, unavailable)
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+        
+        func addViews() {
+            addSubviews(titleLabel, button)
+        }
+        
+        func setLayout() {
+            titleLabel.snp.makeConstraints {
+                $0.width.equalTo(55)
+                $0.height.equalTo(24)
+                $0.trailing.equalToSuperview().inset(20)
+                $0.centerY.equalToSuperview()
+            }
+            
+            button.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+            }
+        } 
+    }
+    
 }
