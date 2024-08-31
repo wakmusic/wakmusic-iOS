@@ -21,7 +21,7 @@ final class CreateListButton: UIButton {
         alignment: .center,
         kernValue: -0.5
     )
-    
+
     init() {
         super.init(frame: .zero)
         addView()
@@ -45,7 +45,7 @@ final class CreateListButton: UIButton {
         translucentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         image.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalToSuperview()

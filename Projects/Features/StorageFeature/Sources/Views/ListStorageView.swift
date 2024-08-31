@@ -109,7 +109,7 @@ final class ListStorageView: UIView {
         tableView.refreshControl = refreshControl
         tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
         tableView.sectionHeaderTopPadding = 0
-        
+
         loginWarningView.isHidden = true
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
