@@ -16,7 +16,7 @@ final class UnknownPlaylistHeaderView: UIView {
         $0.clipsToBounds = true
         $0.contentMode = .scaleAspectFill
     }
-    
+
     private let scrollView: UIScrollView = UIScrollView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray25.color.withAlphaComponent(0.4)
         $0.layer.borderWidth = 1
@@ -25,13 +25,13 @@ final class UnknownPlaylistHeaderView: UIView {
         $0.clipsToBounds = true
         $0.verticalScrollIndicatorInsets = .init(top: 20, left: .zero, bottom: 12, right: 6)
     }
-    
+
     private let stackView: UIStackView = UIStackView().then {
         $0.axis = .vertical
     }
 
     private let containerView: UIView = UIView()
-    
+
     private let titleLabel: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color,
@@ -47,7 +47,7 @@ final class UnknownPlaylistHeaderView: UIView {
         font: .t6_1(weight: .light),
         lineHeight: UIFont.WMFontSystem.t6_1(weight: .light).lineHeight
     )
-    
+
     let nickNameLabel: WMLabel = WMLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.blueGray600.color,
@@ -56,7 +56,6 @@ final class UnknownPlaylistHeaderView: UIView {
     ).then {
         $0.numberOfLines = .zero
     }
-    
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,7 +90,7 @@ extension UnknownPlaylistHeaderView {
             $0.verticalEdges.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
         }
-        
+
         stackView.snp.makeConstraints {
             $0.verticalEdges.equalToSuperview()
             $0.width.equalTo(scrollView.snp.width)
@@ -110,12 +109,11 @@ extension UnknownPlaylistHeaderView {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
             $0.horizontalEdges.equalTo(titleLabel)
         }
-        
+
         nickNameLabel.snp.makeConstraints {
             $0.top.lessThanOrEqualTo(countLabel.snp.bottom).offset(2)
             $0.horizontalEdges.equalTo(titleLabel)
             $0.bottom.greaterThanOrEqualToSuperview().inset(12)
-           
         }
     }
 }
@@ -126,6 +124,5 @@ extension UnknownPlaylistHeaderView: UnknownPlaylistHeaderStateProtocol {
         thumbnailImageView.kf.setImage(with: URL(string: model.image))
         countLabel.text = "\(model.songCount)곡"
         nickNameLabel.text = model.userName
-
     }
 }
