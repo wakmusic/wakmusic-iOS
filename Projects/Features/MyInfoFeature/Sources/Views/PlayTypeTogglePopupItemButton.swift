@@ -13,6 +13,14 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
         $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.gray200.color.cgColor
         $0.layer.borderWidth = 1
         $0.backgroundColor = .white
+        $0.layer.addShadow(
+            color: UIColor(hex: "#080F34"),
+            alpha: 0.08,
+            x: 0,
+            y: 2,
+            blur: 4,
+            spread: 0
+        )
     }
 
     private let titleLabel = WMLabel(
@@ -23,7 +31,7 @@ final class PlayTypeTogglePopupItemButtonView: UIView {
     )
 
     private let imageView = UIImageView().then {
-        $0.image = DesignSystemAsset.MyInfo.donut.image
+        $0.image = DesignSystemAsset.Storage.checkBox.image
         $0.contentMode = .scaleAspectFit
     }
 
@@ -92,20 +100,23 @@ private extension PlayTypeTogglePopupItemButtonView {
             guard let self else { return }
 
             self.baseView.layer.borderColor = isSelected ?
-                DesignSystemAsset.PrimaryColorV2.point.color.cgColor :
-                DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor
-
-            self.baseView.layer.borderWidth = isSelected ? 2 : 1
+                DesignSystemAsset.PrimaryColorV2.decrease.color.cgColor :
+                DesignSystemAsset.BlueGrayColor.blueGray200.color.withAlphaComponent(0.4).cgColor
+            
+            self.baseView.layer.shadowOpacity = isSelected ? 0.08 : 0
         }
 
-        self.imageView.image = isSelected ?
-            DesignSystemAsset.MyInfo.donutColor.image :
-            DesignSystemAsset.MyInfo.donut.image
+        self.imageView.image = isSelected ? 
+            DesignSystemAsset.Storage.checkBox.image : nil
 
         let font = isSelected ?
             UIFont.WMFontSystem.t5(weight: .medium) :
             UIFont.WMFontSystem.t5(weight: .light)
         self.titleLabel.setFont(font)
+        self.titleLabel.textColor = isSelected ?
+            DesignSystemAsset.PrimaryColorV2.decrease.color :
+            DesignSystemAsset.BlueGrayColor.blueGray900.color
+
     }
 
     func setActions() {
