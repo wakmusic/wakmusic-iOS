@@ -5,6 +5,11 @@ import UIKit
 import Utility
 
 final class CreateListButton: UIButton {
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
+    }
+
     private let image = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
     }
@@ -16,9 +21,9 @@ final class CreateListButton: UIButton {
         alignment: .center,
         kernValue: -0.5
     )
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    init() {
+        super.init(frame: .zero)
         addView()
         setLayout()
         configureUI()
@@ -30,12 +35,17 @@ final class CreateListButton: UIButton {
 
     private func addView() {
         self.addSubviews(
+            translucentView,
             image,
             title
         )
     }
 
     private func setLayout() {
+        translucentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
         image.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalToSuperview()

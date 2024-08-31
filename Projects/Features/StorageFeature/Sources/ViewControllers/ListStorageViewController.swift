@@ -20,7 +20,8 @@ typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
 final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType,
     PlaylistDetailNavigator {
-    let listStorageView = ListStorageView()
+    private let createListButton = CreateListButton()
+    private let listStorageView = ListStorageView()
 
     var multiPurposePopupFactory: MultiPurposePopupFactory
     var textPopupFactory: TextPopupFactory
@@ -250,7 +251,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        listStorageView.rx.createListButtonDidTap
+        createListButton.rx.tap
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
             .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickCreatePlaylistButton(location: .myPlaylist)) })
             .map { Reactor.Action.createListButtonDidTap }
@@ -331,6 +332,14 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
 }
 
 extension ListStorageViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 56
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return createListButton
+    }
+    
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
