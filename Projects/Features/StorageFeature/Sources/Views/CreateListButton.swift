@@ -12,7 +12,7 @@ final class CreateListButtonView: UIView {
         $0.backgroundColor = .white.withAlphaComponent(0.4)
         $0.clipsToBounds = true
     }
-    
+
     private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
         $0.layer.cornerRadius = 8
     }
@@ -28,11 +28,11 @@ final class CreateListButtonView: UIView {
         alignment: .center,
         kernValue: -0.5
     )
-    
+
     let button = UIButton()
-    
+
     private let padding: UIEdgeInsets
-    
+
     init(padding: UIEdgeInsets = .zero) {
         self.padding = padding
         super.init(frame: .zero)
@@ -40,7 +40,7 @@ final class CreateListButtonView: UIView {
         setLayout()
         configureUI()
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -63,7 +63,7 @@ final class CreateListButtonView: UIView {
             $0.trailing.equalToSuperview().inset(padding.right)
             $0.bottom.equalToSuperview().inset(padding.bottom)
         }
-        
+
         translucentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -77,7 +77,7 @@ final class CreateListButtonView: UIView {
         title.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
-        
+
         button.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
