@@ -172,24 +172,24 @@ private extension PlayTypeTogglePopupItemButtonView {
             $0.backgroundColor = .white
             $0.clipsToBounds = true
         }
-        
+
         let button = UIButton()
-        
+
         init() {
             super.init(frame: .zero)
             addViews()
             setLayout()
         }
-        
+
         @available(*, unavailable)
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
-        
+
         func addViews() {
             addSubviews(titleLabel, button)
         }
-        
+
         func setLayout() {
             titleLabel.snp.makeConstraints {
                 $0.width.equalTo(55)
@@ -197,11 +197,10 @@ private extension PlayTypeTogglePopupItemButtonView {
                 $0.trailing.equalToSuperview().inset(20)
                 $0.centerY.equalToSuperview()
             }
-            
+
             button.snp.makeConstraints {
                 $0.edges.equalToSuperview()
             }
-        } 
+        }
     }
-    
 }
