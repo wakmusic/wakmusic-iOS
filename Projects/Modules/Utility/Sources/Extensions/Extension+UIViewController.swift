@@ -54,7 +54,6 @@ public extension UIViewController {
         )
     }
 
-    @_disfavoredOverload
     func showToast(
         text: String,
         font: UIFont = UIFont(name: "Pretendard-Light", size: 14) ??
@@ -80,44 +79,6 @@ public extension UIViewController {
         let style = EKProperty.LabelStyle(
             font: font,
             color: backgroundThema == .dark ? EKColor(rgb: 0xFCFCFD) : EKColor(rgb: 0x191A1C),
-            alignment: .center
-        )
-        let labelContent = EKProperty.LabelContent(
-            text: text,
-            style: style
-        )
-
-        let contentView = EKNoteMessageView(with: labelContent)
-        contentView.verticalOffset = 10
-        SwiftEntryKit.display(entry: contentView, using: attributes)
-    }
-
-    @available(*, deprecated, message: "토스트 위치 조정 버전으로 개선")
-    func showToast(
-        text: String,
-        font: UIFont = UIFont(name: "Pretendard-Light", size: 14) ??
-            .systemFont(ofSize: 14, weight: .light),
-        verticalOffset: CGFloat? = nil
-    ) {
-        var attributes = EKAttributes.bottomFloat
-        attributes.displayDuration = 2
-        attributes.entryBackground = .color(color: EKColor(rgb: 0x101828).with(alpha: 0.8))
-        attributes.roundCorners = .all(radius: 20)
-        attributes.entranceAnimation = EKAttributes.Animation.init(
-            translate: .init(duration: 0.3),
-            fade: .init(from: 0, to: 1, duration: 0.3)
-        )
-        attributes.exitAnimation = EKAttributes.Animation.init(
-            fade: .init(from: 1, to: 0, duration: 0.3)
-        )
-
-        if let verticalOffset = verticalOffset {
-            attributes.positionConstraints.verticalOffset = verticalOffset
-        }
-
-        let style = EKProperty.LabelStyle(
-            font: font,
-            color: EKColor(rgb: 0xFCFCFD),
             alignment: .center
         )
         let labelContent = EKProperty.LabelContent(
