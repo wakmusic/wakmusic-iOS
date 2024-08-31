@@ -25,14 +25,11 @@ private protocol ListStorageStateProtocol {
 
 private protocol ListStorageActionProtocol {
     var loginButtonDidTap: Observable<Void> { get }
-    var createListButtonDidTap: Observable<Void> { get }
     var refreshControlValueChanged: Observable<Void> { get }
     var drawFruitButtonDidTap: Observable<Void> { get }
 }
 
 final class ListStorageView: UIView {
-    let createListButton = CreateListButton(frame: .zero)
-
     let tableView = UITableView().then {
         $0.backgroundColor = .clear
         $0.register(ListStorageTableViewCell.self, forCellReuseIdentifier: ListStorageTableViewCell.reuseIdentifer)
@@ -69,9 +66,15 @@ final class ListStorageView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = drawFruitButton.bounds
+    }
+}
+
+private extension ListStorageView {
     func addView() {
         self.addSubviews(
-            createListButton,
             tableView,
             drawFruitButton,
             particleAnimationView,
@@ -81,13 +84,8 @@ final class ListStorageView: UIView {
     }
 
     func setLayout() {
-        createListButton.snp.makeConstraints {
-            $0.height.equalTo(52)
-            $0.top.equalTo(safeAreaLayoutGuide).offset(68)
-            $0.horizontalEdges.equalToSuperview().inset(20)
-        }
         tableView.snp.makeConstraints {
-            $0.top.equalTo(createListButton.snp.bottom).offset(12)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(68 - 16)
             $0.horizontalEdges.equalToSuperview()
             $0.bottom.equalTo(drawFruitButton.snp.top)
         }
@@ -104,7 +102,7 @@ final class ListStorageView: UIView {
         loginWarningView.snp.makeConstraints {
             $0.width.equalTo(164)
             $0.height.equalTo(176)
-            $0.top.equalTo(createListButton.snp.bottom).offset(80)
+            $0.top.equalTo(tableView.snp.top).offset(56 + 80)
             $0.centerX.equalToSuperview()
         }
         activityIndicator.snp.makeConstraints {
@@ -117,6 +115,7 @@ final class ListStorageView: UIView {
         backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         tableView.refreshControl = refreshControl
         tableView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 56, right: 0)
+        tableView.sectionHeaderTopPadding = 0
 
         loginWarningView.isHidden = true
         activityIndicator.isHidden = true
@@ -137,11 +136,6 @@ final class ListStorageView: UIView {
         gradientLayer.startPoint = CGPoint(x: 0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1, y: 0.5)
         drawFruitButton.layer.addSublayer(gradientLayer)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = drawFruitButton.bounds
     }
 }
 
@@ -201,9 +195,5 @@ extension Reactive: ListStorageActionProtocol where Base: ListStorageView {
 
     var refreshControlValueChanged: Observable<Void> {
         base.refreshControl.rx.controlEvent(.valueChanged).map { () }.asObservable()
-    }
-
-    var createListButtonDidTap: Observable<Void> {
-        base.createListButton.rx.tap.asObservable()
     }
 }

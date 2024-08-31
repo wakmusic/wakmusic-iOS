@@ -4,7 +4,19 @@ import Then
 import UIKit
 import Utility
 
-final class CreateListButton: UIButton {
+final class CreateListButtonView: UIView {
+    private let baseView = UIView().then {
+        $0.layer.cornerRadius = 8
+        $0.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.withAlphaComponent(0.4).cgColor
+        $0.layer.borderWidth = 1
+        $0.backgroundColor = .white.withAlphaComponent(0.4)
+        $0.clipsToBounds = true
+    }
+
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+        $0.layer.cornerRadius = 8
+    }
+
     private let image = UIImageView().then {
         $0.image = DesignSystemAsset.Storage.storageNewPlaylistAdd.image
     }
@@ -17,25 +29,45 @@ final class CreateListButton: UIButton {
         kernValue: -0.5
     )
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    let button = UIButton()
+
+    private let padding: UIEdgeInsets
+
+    init(padding: UIEdgeInsets = .zero) {
+        self.padding = padding
+        super.init(frame: .zero)
         addView()
         setLayout()
         configureUI()
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     private func addView() {
-        self.addSubviews(
+        self.addSubview(baseView)
+        baseView.addSubviews(
+            translucentView,
             image,
-            title
+            title,
+            button
         )
     }
 
     private func setLayout() {
+        baseView.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(padding.top)
+            $0.leading.equalToSuperview().inset(padding.left)
+            $0.trailing.equalToSuperview().inset(padding.right)
+            $0.bottom.equalToSuperview().inset(padding.bottom)
+        }
+
+        translucentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+
         image.snp.makeConstraints {
             $0.width.height.equalTo(32)
             $0.centerY.equalToSuperview()
@@ -45,14 +77,13 @@ final class CreateListButton: UIButton {
         title.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
+
+        button.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
     }
 
     private func configureUI() {
-        self.layer.cornerRadius = 8
-        self.layer.borderWidth = 1
-        self.setBackgroundColor(.white.withAlphaComponent(0.4), for: .normal)
-        self.setBackgroundColor(.lightGray, for: .selected)
-        self.layer.borderColor = DesignSystemAsset.BlueGrayColor.blueGray200.color.cgColor.copy(alpha: 0.4)
-        self.clipsToBounds = true
+        self.backgroundColor = .clear
     }
 }
