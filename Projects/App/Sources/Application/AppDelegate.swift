@@ -73,6 +73,7 @@ extension AppDelegate {
 
         return UIBackgroundFetchResult.newData
     }
+
     // [END receive_message]
 
     func application(
