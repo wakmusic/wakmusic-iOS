@@ -66,13 +66,18 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storagePlaylist))
-        listStorageView.resetParticeAnimation()
+        listStorageView.startParticeAnimation()
 
         // 플리 상세에서 내 리스트로 돌아오는 경우, 플로팅 버튼 올림
         NotificationCenter.default.post(
             name: .shouldMovePlaylistFloatingButton,
             object: PlaylistFloatingButtonPosition.top
         )
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        listStorageView.removeParticeAnimation()
     }
 
     override func configureUI() {

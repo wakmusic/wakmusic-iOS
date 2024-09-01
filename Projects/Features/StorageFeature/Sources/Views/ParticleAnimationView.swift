@@ -152,11 +152,6 @@ private extension ParticleAnimationView {
 }
 
 extension ParticleAnimationView: ParticleAnimationStateProtocol {
-    @objc func resetAnimation() {
-        removeAnimation()
-        startAnimation()
-    }
-
     @objc func removeAnimation() {
         self.subviews.forEach { $0.removeAllAnimations() }
     }
