@@ -107,7 +107,15 @@ private extension BaseRemoteDataSource {
     }
 
     func reissueToken() -> Completable {
-        let provider = refreshProvider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain), CustomLoggingPlugin()])
+        #if DEBUG || QA
+            let provider = refreshProvider ?? MoyaProvider(plugins: [
+                JwtPlugin(keychain: keychain),
+                CustomLoggingPlugin()
+            ])
+        #else
+            let provider = refreshProvider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
+        #endif
+
         if refreshProvider == nil {
             refreshProvider = provider
         }
