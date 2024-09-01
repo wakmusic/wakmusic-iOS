@@ -229,7 +229,7 @@ private extension Character {
         return self.unicodeScalars.allSatisfy { $0.isASCII && $0.properties.isAlphabetic }
     }
 
-    // 완성되지 않은 한글 여부
+    /// 완성되지 않은 한글 여부
     var isIncompleteHangul: Bool {
         guard let scalar = unicodeScalars.first else { return false }
 
@@ -244,10 +244,10 @@ private extension Character {
         }
 
         // 완성되지 않은 자모나 조합 중인 경우
-        return (scalar.value >= 0x1100 && scalar.value <= 0x11FF) ||  // 초성 자모 (현대 한글에서 사용하는 초성, 중성, 종성 등의 조합용 자모)
-               (scalar.value >= 0x3130 && scalar.value <= 0x318F) ||  // 호환용 자모 (구성된 한글 자모, 옛 한글 자모 등)
-               (scalar.value >= 0xA960 && scalar.value <= 0xA97F) ||  // 확장 A (옛 한글 자모의 일부)
-               (scalar.value >= 0xD7B0 && scalar.value <= 0xD7FF)     // 확장 B (옛 한글 자모의 일부)
+        return (scalar.value >= 0x1100 && scalar.value <= 0x11FF) || // 초성 자모 (현대 한글에서 사용하는 초성, 중성, 종성 등의 조합용 자모)
+            (scalar.value >= 0x3130 && scalar.value <= 0x318F) || // 호환용 자모 (구성된 한글 자모, 옛 한글 자모 등)
+            (scalar.value >= 0xA960 && scalar.value <= 0xA97F) || // 확장 A (옛 한글 자모의 일부)
+            (scalar.value >= 0xD7B0 && scalar.value <= 0xD7FF) // 확장 B (옛 한글 자모의 일부)
     }
 
     /// 한글 음절이 종성을 가졌으나 추가적인 종성이 더 결합될 수 있는지 여부 확인
