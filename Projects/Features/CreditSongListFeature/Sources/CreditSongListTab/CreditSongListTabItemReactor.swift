@@ -228,8 +228,8 @@ private extension CreditSongListTabItemReactor {
         }
 
         let isOnlyShorts = currentState.songs
-            .filter({ currentState.selectedSongs.contains($0.id) })
-            .allSatisfy({ $0.title.isContainShortsTagTitle })
+            .filter { currentState.selectedSongs.contains($0.id) }
+            .allSatisfy { $0.title.isContainShortsTagTitle }
         let playPlatform = if isOnlyShorts {
             WakmusicYoutubePlayer.PlayPlatform.youtube
         } else {
