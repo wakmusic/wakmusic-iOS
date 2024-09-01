@@ -188,7 +188,8 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
         let currentText = textField.text ?? ""
         let latinCharCount: Double = currentText.alphabetCharacterCount
 
-        if let lastChar = currentText.last {
+        if let lastChar = currentText.last,
+            latinCharCount <= Double(viewModel.type.textLimitCount) {
             // 완성되지 않은 한글인 경우
             if lastChar.isIncompleteHangul {
                 return true
@@ -196,8 +197,7 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
 
             // 완성된 한글이지만, 추가로 자음이 결합될 수 있는 경우
             if !lastChar.isIncompleteHangul &&
-                lastChar.canAddAdditionalJongseong &&
-                latinCharCount <= Double(viewModel.type.textLimitCount) {
+                lastChar.canAddAdditionalJongseong {
                 return true
             }
         }
