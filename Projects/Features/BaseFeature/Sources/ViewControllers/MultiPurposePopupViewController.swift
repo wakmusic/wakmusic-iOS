@@ -189,7 +189,7 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
         let latinCharCount: Double = currentText.alphabetCharacterCount
 
         if let lastChar = currentText.last,
-            latinCharCount <= Double(viewModel.type.textLimitCount) {
+           latinCharCount <= Double(viewModel.type.textLimitCount) {
             // 완성되지 않은 한글인 경우
             if lastChar.isIncompleteHangul {
                 return true
