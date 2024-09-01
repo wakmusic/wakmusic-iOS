@@ -151,7 +151,6 @@ private extension MultiPurposePopupViewController {
         cancelButton.layer.borderWidth = 1
         cancelButton.backgroundColor = .white
         cancelButton.isHidden = true
-        cancelButton.contentEdgeInsets = .init(top: 3, left: 12, bottom: 3, right: 12)
 
         confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         confirmLabel.isHidden = true
@@ -184,21 +183,43 @@ extension MultiPurposePopupViewController: UITextFieldDelegate {
         replacementString string: String
     ) -> Bool {
         guard let char = string.cString(using: String.Encoding.utf8) else { return false }
-        let isBackSpace = strcmp(char, "\\b")
+        let isBackSpace: Bool = strcmp(char, "\\b") == -92
 
-        let latinCharCount = textField.text?.alphabetCharacterCeilCount ?? 0
+        let currentText = textField.text ?? ""
+        let latinCharCount: Double = currentText.alphabetCharacterCount
 
-        guard isBackSpace == -92 || latinCharCount < viewModel.type.textLimitCount else { return false }
+        if let lastChar = currentText.last,
+           latinCharCount <= Double(viewModel.type.textLimitCount) {
+            // 완성되지 않은 한글인 경우
+            if lastChar.isIncompleteHangul {
+                return true
+            }
+
+            // 완성된 한글이지만, 추가로 자음이 결합될 수 있는 경우
+            if !lastChar.isIncompleteHangul &&
+                lastChar.canAddAdditionalJongseong {
+                return true
+            }
+        }
+
+        guard isBackSpace || latinCharCount < Double(viewModel.type.textLimitCount) else { return false }
+
         return true
     }
 }
 
 private extension String {
+    var alphabetCharacterCount: Double {
+        let count = reduce(0) { count, char in
+            return count + (char.isAlphabetCharacter ? 0.5 : 1)
+        }
+        return count
+    }
+
     var alphabetCharacterCeilCount: Int {
         let count = reduce(0) { count, char in
             return count + (char.isAlphabetCharacter ? 0.5 : 1)
         }
-
         return Int(ceil(count))
     }
 }
@@ -206,5 +227,61 @@ private extension String {
 private extension Character {
     var isAlphabetCharacter: Bool {
         return self.unicodeScalars.allSatisfy { $0.isASCII && $0.properties.isAlphabetic }
+    }
+
+    /// 완성되지 않은 한글 여부
+    var isIncompleteHangul: Bool {
+        guard let scalar = unicodeScalars.first else { return false }
+
+        // 한글 범위에 있는지 확인 (유니코드 값 범위 체크)
+        let hangulBase: UInt32 = 0xAC00
+        let hangulEnd: UInt32 = 0xD7A3
+
+        if scalar.value >= hangulBase && scalar.value <= hangulEnd {
+            let syllableIndex = (scalar.value - hangulBase)
+            let isCompleted = syllableIndex % 28 != 0
+            return !isCompleted
+        }
+
+        // 완성되지 않은 자모나 조합 중인 경우
+        return (scalar.value >= 0x1100 && scalar.value <= 0x11FF) || // 초성 자모 (현대 한글에서 사용하는 초성, 중성, 종성 등의 조합용 자모)
+            (scalar.value >= 0x3130 && scalar.value <= 0x318F) || // 호환용 자모 (구성된 한글 자모, 옛 한글 자모 등)
+            (scalar.value >= 0xA960 && scalar.value <= 0xA97F) || // 확장 A (옛 한글 자모의 일부)
+            (scalar.value >= 0xD7B0 && scalar.value <= 0xD7FF) // 확장 B (옛 한글 자모의 일부)
+    }
+
+    /// 한글 음절이 종성을 가졌으나 추가적인 종성이 더 결합될 수 있는지 여부 확인
+    var canAddAdditionalJongseong: Bool {
+        guard let scalar = unicodeScalars.first else { return false }
+
+        // 한글 음절 유니코드 범위: U+AC00 ~ U+D7A3
+        let hangulBase: UInt32 = 0xAC00
+        let hangulEnd: UInt32 = 0xD7A3
+
+        guard scalar.value >= hangulBase && scalar.value <= hangulEnd else {
+            return false
+        }
+
+        // 종성에 해당하는 인덱스를 계산
+        let syllableIndex = scalar.value - hangulBase
+        let jongseongIndex = Int(syllableIndex % 28)
+
+        // 종성이 있을 때 추가 종성을 가질 수 있는 경우를 판별
+        let canHaveDoubleJongseong: Bool
+
+        switch jongseongIndex {
+        case 1: // ㄱ (U+11A8)
+            canHaveDoubleJongseong = true
+        case 4: // ㄴ (U+11AB)
+            canHaveDoubleJongseong = true
+        case 8: // ㄹ (U+11AF)
+            canHaveDoubleJongseong = true
+        case 17: // ㅂ (U+11B7)
+            canHaveDoubleJongseong = true
+        default:
+            canHaveDoubleJongseong = false
+        }
+
+        return canHaveDoubleJongseong
     }
 }

@@ -385,13 +385,17 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cfO-nl-nfD">
-                                        <rect key="frame" x="20" y="145" width="316" height="18.666666666666657"/>
+                                        <rect key="frame" x="20" y="145" width="303" height="18.666666666666657"/>
                                         <color key="textColor" name="gray800"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O6b-uG-uWT">
-                                        <rect key="frame" x="341" y="137.33333333333334" width="32" height="34"/>
+                                        <rect key="frame" x="328" y="142.33333333333334" width="45" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="XQd-rR-LNT"/>
+                                            <constraint firstAttribute="width" constant="45" id="laI-2j-1tT"/>
+                                        </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                         <state key="normal" title="취소">
                                             <color key="titleColor" name="gray400"/>
