@@ -227,7 +227,16 @@ private extension CreditSongListTabItemReactor {
             ))
         }
 
-        return navigateMutation(navigateType: .playYoutube(ids: containTargetSongIDs))
+        let isOnlyShorts = currentState.songs
+            .filter({ currentState.selectedSongs.contains($0.id) })
+            .allSatisfy({ $0.title.isContainShortsTagTitle })
+        let playPlatform = if isOnlyShorts {
+            WakmusicYoutubePlayer.PlayPlatform.youtube
+        } else {
+            WakmusicYoutubePlayer.PlayPlatform.automatic
+        }
+
+        return navigateMutation(navigateType: .playYoutube(ids: containTargetSongIDs, playPlatform: playPlatform))
     }
 
     func reachedBottom() -> Observable<Mutation> {
