@@ -155,8 +155,8 @@ final class CreditSongListTabItemViewController:
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
                 switch navigate {
-                case let .playYoutube(ids):
-                    owner.playYoutube(ids: ids)
+                case let .playYoutube(ids, playPlatform):
+                    owner.playYoutube(ids: ids, playPlatform: playPlatform)
                 case let .containSongs(ids):
                     owner.presentContainSongs(ids: ids)
                 case let .textPopup(text, completion):
@@ -287,10 +287,10 @@ extension CreditSongListTabItemViewController {
         return dataSource
     }
 
-    private func playYoutube(ids: [String]) {
+    private func playYoutube(ids: [String], playPlatform: WakmusicYoutubePlayer.PlayPlatform) {
         let worker = reactor?.workerName ?? "작업자"
         let title = "\(worker)님과 함께하는 랜뮤"
-        WakmusicYoutubePlayer(ids: ids, title: title).play()
+        WakmusicYoutubePlayer(ids: ids, title: title, playPlatform: playPlatform).play()
     }
 
     private func presentContainSongs(ids: [String]) {

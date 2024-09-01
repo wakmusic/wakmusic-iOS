@@ -407,7 +407,11 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             }
 
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
             reactor.action.onNext(.deselectAll)
 
         case .remove:

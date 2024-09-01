@@ -85,7 +85,11 @@ extension PlaylistViewController: UITableViewDelegate {
                 .map(\.id)
                 .shuffled()
                 .prefix(50)
-            WakmusicYoutubePlayer(ids: Array(songIDs), title: "왁타버스 뮤직 재생목록 (랜덤)").play()
+            if output.playlists.value.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: Array(songIDs), title: "왁타버스 뮤직 재생목록 (랜덤)", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: Array(songIDs), title:"왁타버스 뮤직 재생목록 (랜덤)").play()
+            }
         }
         return randomPlayButton
     }

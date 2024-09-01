@@ -35,7 +35,7 @@ final class CreditSongListTabItemReactor: Reactor {
     }
 
     enum NavigateType {
-        case playYoutube(ids: [String])
+        case playYoutube(ids: [String], playPlatform: WakmusicYoutubePlayer.PlayPlatform)
         case containSongs(ids: [String])
         case textPopup(text: String, completion: () -> Void)
         case signIn
@@ -162,7 +162,12 @@ private extension CreditSongListTabItemReactor {
             .shuffled()
             .prefix(50)
         let songs = Array(randomSongs)
-        return navigateMutation(navigateType: .playYoutube(ids: songs))
+        let playPlatform = if currentState.songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+            WakmusicYoutubePlayer.PlayPlatform.youtube
+        } else {
+            WakmusicYoutubePlayer.PlayPlatform.automatic
+        }
+        return navigateMutation(navigateType: .playYoutube(ids: songs, playPlatform: playPlatform))
     }
 
     func allSelectButtonDidTap() -> Observable<Mutation> {

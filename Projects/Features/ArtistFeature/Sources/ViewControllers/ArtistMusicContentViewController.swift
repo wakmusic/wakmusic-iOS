@@ -268,7 +268,11 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
 
         default: return
         }
