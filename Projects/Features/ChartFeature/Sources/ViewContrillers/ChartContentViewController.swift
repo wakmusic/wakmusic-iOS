@@ -147,7 +147,11 @@ private extension ChartContentViewController {
                 }
                 PlayState.shared.loadAndAppendSongsToPlaylist(source.songs)
                 if source.songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
-                    WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle, playPlatform: .youtube).play()
+                    WakmusicYoutubePlayer(
+                        ids: source.songs.map { $0.id },
+                        title: source.playlistTitle,
+                        playPlatform: .youtube
+                    ).play()
                 } else {
                     WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle).play()
                 }
