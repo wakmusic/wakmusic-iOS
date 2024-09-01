@@ -63,7 +63,7 @@ private final class RandomPlayButton: UIButton {
         randomImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(32)
-            $0.size.equalTo(24)
+            $0.size.equalTo(32)
         }
 
         playLabel.snp.makeConstraints {
