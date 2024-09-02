@@ -71,6 +71,26 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         $0.clipsToBounds = true
     }
 
+    private let warningView = UIView().then {
+        $0.isHidden = true
+    }
+
+    private let warningImageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFit
+        $0.image = DesignSystemAsset.LyricHighlighting.errorDark.image
+    }
+
+    private let warningLabel = WMLabel(
+        text: "참여 정보가 없습니다.",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray200.color,
+        font: .t6(weight: .light),
+        alignment: .center,
+        lineHeight: UIFont.WMFontSystem.t6(weight: .light).lineHeight
+    ).then {
+        $0.numberOfLines = 0
+        $0.preferredMaxLayoutWidth = APP_WIDTH() - 40
+    }
+
     private let dimmedBackgroundView = UIView()
     private var dimmedGridentLayer: DimmedGradientLayer?
     private let wmNavigationbarView = WMNavigationBarView()
@@ -104,7 +124,14 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
     }
 
     override func addView() {
-        view.addSubviews(backgroundImageView, dimmedBackgroundView, songCreditCollectionView, wmNavigationbarView)
+        view.addSubviews(
+            backgroundImageView,
+            dimmedBackgroundView,
+            songCreditCollectionView,
+            wmNavigationbarView,
+            warningView
+        )
+        warningView.addSubviews(warningImageView, warningLabel)
     }
 
     override func setLayout() {
@@ -125,6 +152,23 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
             $0.top.equalToSuperview().offset(STATUS_BAR_HEGHIT())
             $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(48)
+        }
+
+        warningView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(APP_HEIGHT() * ((294.0 - 6.0) / 812.0))
+            $0.centerX.equalToSuperview()
+        }
+
+        warningImageView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.centerX.equalToSuperview()
+        }
+
+        warningLabel.snp.makeConstraints {
+            $0.top.equalTo(warningImageView.snp.bottom).offset(-2)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
 
@@ -161,8 +205,10 @@ final class SongCreditViewController: BaseReactorViewController<SongCreditReacto
         let sharedState = reactor.state.share()
 
         sharedState.map(\.credits)
+            .skip(1)
             .distinctUntilChanged()
-            .bind { [creditDiffableDataSource] credits in
+            .bind { [creditDiffableDataSource, warningView] credits in
+                warningView.isHidden = !credits.isEmpty
                 var snapshot = NSDiffableDataSourceSnapshot<SectionType, ItemType>()
                 snapshot.appendSections(credits.map(\.position))
                 credits.forEach { snapshot.appendItems($0.names, toSection: $0.position) }
