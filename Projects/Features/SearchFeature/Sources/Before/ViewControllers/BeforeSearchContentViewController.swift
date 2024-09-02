@@ -317,7 +317,7 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
         switch model {
         case let .youtube(model: model):
             // 주간 왁뮤
-            WakmusicYoutubePlayer(id: model.id).play()
+            WakmusicYoutubePlayer(id: model.id, playPlatform: .youtube).play()
             LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
             let log = CommonAnalyticsLog.clickPlaylistItem(location: .search, key: model.key)

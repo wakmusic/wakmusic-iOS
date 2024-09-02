@@ -566,7 +566,11 @@ extension MyPlaylistDetailViewController: PlayButtonGroupViewDelegate {
 
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) })
 
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: title).play()
+        if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+        } else {
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+        }
     }
 }
 

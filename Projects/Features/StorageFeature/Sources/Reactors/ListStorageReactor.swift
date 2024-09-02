@@ -401,7 +401,11 @@ extension ListStorageReactor {
                     PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
                     let ids = appendingPlaylistItems.map { $0.id }
                         .prefix(50)
-                    WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직").play()
+                    if appendingPlaylistItems.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직", playPlatform: .youtube).play()
+                    } else {
+                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직").play()
+                    }
                     self?.storageCommonService.isEditingState.onNext(false)
                 })
                 .flatMap { songs -> Observable<Mutation> in

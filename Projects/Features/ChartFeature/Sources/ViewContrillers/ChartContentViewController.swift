@@ -146,7 +146,15 @@ private extension ChartContentViewController {
                     return
                 }
                 PlayState.shared.loadAndAppendSongsToPlaylist(source.songs)
-                WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle).play()
+                if source.songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                    WakmusicYoutubePlayer(
+                        ids: source.songs.map { $0.id },
+                        title: source.playlistTitle,
+                        playPlatform: .youtube
+                    ).play()
+                } else {
+                    WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle).play()
+                }
             })
             .disposed(by: disposeBag)
 
@@ -303,7 +311,11 @@ extension ChartContentViewController: SongCartViewDelegate {
             LogManager.analytics(
                 CommonAnalyticsLog.clickPlayButton(location: .chart, type: .multiple)
             )
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
 
         case .remove:
             return
