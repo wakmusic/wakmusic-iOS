@@ -55,8 +55,8 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>naversearchapp</string>
-		<string>naversearchthirdlogin</string>
+		<string>youtube</string>
+		<string>youtubemusic</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -70,10 +70,10 @@
 	<dict>
 		<key>BASE_DEV_URL</key>
 		<string>$(BASE_DEV_URL)</string>
-		<key>BASE_IMAGE_URL</key>
-		<string>$(BASE_IMAGE_URL)</string>
 		<key>BASE_PROD_URL</key>
 		<string>$(BASE_PROD_URL)</string>
+        <key>CDN_DOMAIN_URL</key>
+        <string>$(CDN_DOMAIN_URL)</string>
 		<key>GOOGLE_CLIENT_ID</key>
 		<string>$(GOOGLE_CLIENT_ID)</string>
 		<key>GOOGLE_URL_SCHEME</key>
@@ -100,22 +100,6 @@
 		<string>$(WMDOMAIN_FAQ)</string>
 		<key>WMDOMAIN_IMAGE</key>
 		<string>$(WMDOMAIN_IMAGE)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_SQUARE)</string>
-		<key>WMDOMAIN_IMAGE_NEWS</key>
-		<string>$(WMDOMAIN_IMAGE_NEWS)</string>
-		<key>WMDOMAIN_IMAGE_NOTICE</key>
-		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
-		<key>WMDOMAIN_IMAGE_PLAYLIST</key>
-		<string>$(WMDOMAIN_IMAGE_PLAYLIST)</string>
-		<key>WMDOMAIN_IMAGE_PROFILE</key>
-		<string>$(WMDOMAIN_IMAGE_PROFILE)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
 		<key>WMDOMAIN_LIKE</key>
 		<string>$(WMDOMAIN_LIKE)</string>
 		<key>WMDOMAIN_NOTICE</key>
@@ -185,10 +169,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Light</string>
-	<key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>youtube</string>
-        <string>youtubemusic</string>
-    </array>
 </dict>
 </plist>
