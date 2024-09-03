@@ -34,9 +34,9 @@ extension ContractType {
     var url: String {
         switch self {
         case .privacy:
-            return "\(BASE_IMAGE_URL())/static/document/privacy.pdf"
+            return "\(CDN_DOMAIN_URL())/document/privacy.pdf"
         case .service:
-            return "\(BASE_IMAGE_URL())/static/document/terms.pdf"
+            return "\(CDN_DOMAIN_URL())/document/terms.pdf"
         }
     }
 }
