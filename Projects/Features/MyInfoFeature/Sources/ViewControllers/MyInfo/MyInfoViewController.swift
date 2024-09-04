@@ -247,7 +247,7 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .map { MyInfoReactor.Action.fruitNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
-        
+
         myInfoView.rx.drawButtonDidTap
             .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFruitDrawEntryButton(location: .myPage)) })
             .map { MyInfoReactor.Action.drawButtonDidTap }

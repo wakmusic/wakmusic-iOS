@@ -40,9 +40,9 @@ final class FruitDrawButtonView: UIView {
         lineHeight: UIFont.WMFontSystem.t5().lineHeight,
         kernValue: -0.5
     )
-    
+
     let fruitStorageButton = UIButton()
-    
+
     let drawButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTitle("뽑기", for: .normal)
@@ -94,7 +94,7 @@ extension FruitDrawButtonView {
             $0.leading.equalTo(backgroundView.snp.leading)
             $0.trailing.equalTo(drawButton.snp.leading)
         }
-        
+
         drawButton.snp.makeConstraints {
             $0.verticalEdges.equalTo(backgroundView.snp.verticalEdges)
             $0.trailing.equalTo(backgroundView.snp.trailing)
