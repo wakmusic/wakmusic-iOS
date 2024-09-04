@@ -137,13 +137,7 @@ extension ArtistDetailHeaderViewController {
 
 private extension ArtistDetailHeaderViewController {
     func bind() {
-        let mergeObservable = Observable.merge(
-            descriptionFrontButton.rx.tap.map { _ in () },
-            descriptionBackButton.rx.tap.map { _ in () },
-            flipButton.rx.tap.map { _ in () }
-        )
-
-        mergeObservable
+        flipButton.rx.tap
             .bind(with: self) { owner, _ in
                 LogManager.analytics(
                     ArtistAnalyticsLog.clickArtistDescriptionButton(artist: owner.model?.id ?? "")
