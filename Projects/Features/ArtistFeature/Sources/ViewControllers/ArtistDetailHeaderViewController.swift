@@ -9,6 +9,7 @@ import Utility
 class ArtistDetailHeaderViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var artistImageView: UIImageView!
     @IBOutlet weak var descriptionView: UIView!
+    @IBOutlet weak var flipButton: UIButton!
 
     /// Description Front
     @IBOutlet weak var descriptionFrontView: UIView!
@@ -138,7 +139,8 @@ private extension ArtistDetailHeaderViewController {
     func bind() {
         let mergeObservable = Observable.merge(
             descriptionFrontButton.rx.tap.map { _ in () },
-            descriptionBackButton.rx.tap.map { _ in () }
+            descriptionBackButton.rx.tap.map { _ in () },
+            flipButton.rx.tap.map { _ in () }
         )
 
         mergeObservable
