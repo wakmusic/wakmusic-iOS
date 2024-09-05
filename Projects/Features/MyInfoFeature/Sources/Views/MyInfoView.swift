@@ -17,6 +17,7 @@ private protocol MyInfoActionProtocol {
     var scrollViewDidTap: Observable<Void> { get }
     var loginButtonDidTap: Observable<Void> { get }
     var profileImageDidTap: Observable<Void> { get }
+    var fruitStorageButtonDidTap: Observable<Void> { get }
     var drawButtonDidTap: Observable<Void> { get }
     var fruitNavigationButtonDidTap: Observable<Void> { get }
     var qnaNavigationButtonDidTap: Observable<Void> { get }
@@ -204,6 +205,7 @@ extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
 
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
+    var fruitStorageButtonDidTap: Observable<Void> { base.fruitDrawButtonView.rx.fruitStorageButtonDidTap }
     var drawButtonDidTap: Observable<Void> { base.fruitDrawButtonView.rx.drawButtonDidTap }
     var fruitNavigationButtonDidTap: Observable<Void> { base.fruitNavigationButton.rx.tap.asObservable() }
     var qnaNavigationButtonDidTap: Observable<Void> { base.qnaNavigationButton.rx.tap.asObservable() }

@@ -10,6 +10,7 @@ private protocol FruitDrawStateProtocol {
 }
 
 private protocol FruitDrawActionProtocol {
+    var fruitStorageButtonDidTap: Observable<Void> { get }
     var drawButtonDidTap: Observable<Void> { get }
 }
 
@@ -40,6 +41,8 @@ final class FruitDrawButtonView: UIView {
         kernValue: -0.5
     )
 
+    let fruitStorageButton = UIButton()
+
     let drawButton = UIButton().then {
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         $0.setTitle("뽑기", for: .normal)
@@ -66,6 +69,7 @@ extension FruitDrawButtonView {
             backgroundView,
             titleLabel,
             countLabel,
+            fruitStorageButton,
             drawButton
         )
     }
@@ -85,6 +89,12 @@ extension FruitDrawButtonView {
             $0.left.equalTo(titleLabel.snp.right).offset(8)
         }
 
+        fruitStorageButton.snp.makeConstraints {
+            $0.verticalEdges.equalTo(backgroundView.snp.verticalEdges)
+            $0.leading.equalTo(backgroundView.snp.leading)
+            $0.trailing.equalTo(drawButton.snp.leading)
+        }
+
         drawButton.snp.makeConstraints {
             $0.verticalEdges.equalTo(backgroundView.snp.verticalEdges)
             $0.trailing.equalTo(backgroundView.snp.trailing)
@@ -100,5 +110,6 @@ extension FruitDrawButtonView: FruitDrawStateProtocol {
 }
 
 extension Reactive: FruitDrawActionProtocol where Base: FruitDrawButtonView {
+    var fruitStorageButtonDidTap: Observable<Void> { base.fruitStorageButton.rx.tap.asObservable() }
     var drawButtonDidTap: Observable<Void> { base.drawButton.rx.tap.asObservable() }
 }
