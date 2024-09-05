@@ -233,15 +233,23 @@
                                                     <constraint firstAttribute="trailing" secondItem="oAc-YA-UoU" secondAttribute="trailing" constant="16" id="qJd-Ra-vi3"/>
                                                 </constraints>
                                             </view>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WTb-dR-dVK">
+                                                <rect key="frame" x="0.0" y="0.0" width="198.33333333333334" height="40"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                            </button>
                                         </subviews>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="6eV-FK-IbB" secondAttribute="trailing" id="8cy-j8-g8s"/>
                                             <constraint firstAttribute="bottom" secondItem="6eV-FK-IbB" secondAttribute="bottom" id="9Oc-00-15I"/>
+                                            <constraint firstItem="WTb-dR-dVK" firstAttribute="top" secondItem="FNn-dd-tDU" secondAttribute="top" id="C52-Wi-fl6"/>
                                             <constraint firstItem="FNn-dd-tDU" firstAttribute="top" secondItem="Xk9-8B-9HP" secondAttribute="top" id="DFo-m4-ZDB"/>
                                             <constraint firstItem="6eV-FK-IbB" firstAttribute="leading" secondItem="Xk9-8B-9HP" secondAttribute="leading" id="DZv-yN-mqJ"/>
+                                            <constraint firstItem="WTb-dR-dVK" firstAttribute="bottom" secondItem="4gB-Rq-DeW" secondAttribute="bottom" id="Dl4-aH-RNb"/>
                                             <constraint firstAttribute="bottom" secondItem="FNn-dd-tDU" secondAttribute="bottom" id="Hai-R9-yyc"/>
+                                            <constraint firstItem="WTb-dR-dVK" firstAttribute="leading" secondItem="FNn-dd-tDU" secondAttribute="leading" id="MOj-Wq-Axf"/>
                                             <constraint firstItem="6eV-FK-IbB" firstAttribute="top" secondItem="Xk9-8B-9HP" secondAttribute="top" id="Pd2-QJ-5lr"/>
                                             <constraint firstAttribute="trailing" secondItem="FNn-dd-tDU" secondAttribute="trailing" id="YJM-3A-S9S"/>
+                                            <constraint firstItem="WTb-dR-dVK" firstAttribute="trailing" secondItem="FNn-dd-tDU" secondAttribute="trailing" id="sz9-Bs-Gou"/>
                                             <constraint firstItem="FNn-dd-tDU" firstAttribute="leading" secondItem="Xk9-8B-9HP" secondAttribute="leading" id="wmN-QK-UQS"/>
                                         </constraints>
                                     </view>
@@ -277,6 +285,7 @@
                         <outlet property="descriptionFrontButton" destination="4gB-Rq-DeW" id="Dtw-9j-o0K"/>
                         <outlet property="descriptionFrontView" destination="FNn-dd-tDU" id="HhE-11-Vrb"/>
                         <outlet property="descriptionView" destination="Xk9-8B-9HP" id="5Uk-95-pN3"/>
+                        <outlet property="flipButton" destination="WTb-dR-dVK" id="1f8-oS-7zT"/>
                         <outlet property="introDescriptionLabel" destination="Sd9-6x-4Kf" id="HFj-NG-Q0F"/>
                         <outlet property="introTitleLabel" destination="cYZ-24-Z5e" id="cgp-o6-sZO"/>
                         <outlet property="scrollView" destination="msH-8e-y5Q" id="mUr-SR-OYU"/>
