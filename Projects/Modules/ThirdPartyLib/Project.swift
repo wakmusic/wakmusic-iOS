@@ -19,7 +19,6 @@ let project = Project.module(
                 .SPM.FirebaseCrashlytics,
                 .SPM.CryptoSwift,
                 .SPM.FirebaseMessaging
-                
             ]
         )
     ]
