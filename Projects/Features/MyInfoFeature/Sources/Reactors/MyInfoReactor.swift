@@ -295,10 +295,14 @@ private extension MyInfoReactor {
             )
             .catch { error in
                 let error = error.asWMError
-                return .concat(
-                    .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning)),
-                    .just(.dismissEditSheet)
-                )
+                if error == .conflict {
+                    return .just(.showToast("키워드 혹은 중복된 닉네임은 사용할 수 없습니다."))
+                } else {
+                    return .concat(
+                        .just(.showToast(error.errorDescription ?? LocalizationStrings.unknownErrorWarning)),
+                        .just(.dismissEditSheet)
+                    )
+                }
             }
     }
 

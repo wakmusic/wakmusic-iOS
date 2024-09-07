@@ -141,7 +141,9 @@ extension UserAPI: WMAPI {
             return [
                 400: .badRequest,
                 401: .tokenExpired,
+                403: .forbidden,
                 404: .notFound,
+                409: .conflict,
                 429: .tooManyRequest,
                 500: .internalServerError
             ]
