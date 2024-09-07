@@ -8,6 +8,7 @@ let settinges: Settings =
         base: env.baseSetting,
         configurations: [
             .debug(name: .debug),
+            .debug(name: .qa),
             .release(name: .release)
         ],
         defaultSettings: .recommended
@@ -56,9 +57,11 @@ let targets: [Target] = [
             base: env.baseSetting,
             configurations: [
                 .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
+                .debug(name: .qa, xcconfig: "XCConfig/Secrets.xcconfig"),
                 .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
             ]
-        )
+        ),
+        environmentVariables: ["NETWORK_LOG_LEVEL": "short"]
     ),
     .target(
         name: "\(env.name)Tests",
@@ -76,7 +79,7 @@ let targets: [Target] = [
 
 let schemes: [Scheme] = [
     .scheme(
-        name: "\(env.name)Tests-DEBUG",
+        name: "\(env.name)-DEBUG",
         shared: true,
         buildAction: .buildAction(targets: ["\(env.name)"]),
         testAction: TestAction.targets(
@@ -91,6 +94,16 @@ let schemes: [Scheme] = [
         archiveAction: .archiveAction(configuration: .debug),
         profileAction: .profileAction(configuration: .debug),
         analyzeAction: .analyzeAction(configuration: .debug)
+    ),
+    .scheme(
+        name: "\(env.name)-QA",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.name)"]),
+        testAction: nil,
+        runAction: .runAction(configuration: .qa),
+        archiveAction: .archiveAction(configuration: .qa),
+        profileAction: .profileAction(configuration: .qa),
+        analyzeAction: .analyzeAction(configuration: .qa)
     ),
     .scheme(
         name: "\(env.name)-RELEASE",

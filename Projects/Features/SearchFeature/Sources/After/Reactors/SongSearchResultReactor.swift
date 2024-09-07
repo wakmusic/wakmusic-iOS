@@ -1,6 +1,8 @@
 import Localization
 import LogManager
 import ReactorKit
+import RxCocoa
+import RxSwift
 import SearchDomainInterface
 import SongsDomainInterface
 
@@ -41,11 +43,13 @@ final class SongSearchResultReactor: Reactor {
     private let fetchSearchSongsUseCase: any FetchSearchSongsUseCase
     private let text: String
     private let limit: Int = 20
+    private var requestDisposeBag = DisposeBag()
+    private let subject = PublishSubject<Mutation>()
 
     init(text: String, fetchSearchSongsUseCase: any FetchSearchSongsUseCase) {
         self.initialState = State(
             isLoading: true,
-            sortType: .latest,
+            sortType: .relevance,
             filterType: .all,
             selectedCount: 0,
             scrollPage: 1,
@@ -112,6 +116,20 @@ final class SongSearchResultReactor: Reactor {
 
         return newState
     }
+
+    func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+        let flatMapMutation = subject
+            .withUnretained(self)
+            .flatMap { owner, subjectMutation -> Observable<Mutation> in
+                return .concat([
+                    .just(subjectMutation),
+                    .just(Mutation.updateScrollPage(owner.currentState.scrollPage + 1)),
+                    .just(Mutation.updateLoadingState(false))
+                ])
+            }
+
+        return Observable.merge(mutation, flatMapMutation)
+    }
 }
 
 extension SongSearchResultReactor {
@@ -121,7 +139,7 @@ extension SongSearchResultReactor {
         return .concat([
             .just(.updateSelectedCount(0)),
             .just(.updateSortType(type)),
-            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1, byOption: true)
+            updateDataSource(order: type, filter: state.filterType, text: self.text, scrollPage: 1)
         ])
     }
 
@@ -131,7 +149,7 @@ extension SongSearchResultReactor {
         return .concat([
             .just(.updateSelectedCount(0)),
             .just(.updateFilterType(type)),
-            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1, byOption: true)
+            updateDataSource(order: state.sortType, filter: type, text: self.text, scrollPage: 1)
         ])
     }
 
@@ -139,39 +157,40 @@ extension SongSearchResultReactor {
         order: SortType,
         filter: FilterType,
         text: String,
-        scrollPage: Int,
-        byOption: Bool = false // 필터또는 옵션으로 리프래쉬 하나 , 아니면 스크롤이냐
+        scrollPage: Int
     ) -> Observable<Mutation> {
-        return .concat([
-            .just(.updateLoadingState(true)),
-            fetchSearchSongsUseCase
-                .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
-                .asObservable()
-                .map { [weak self] dataSource -> Mutation in
+        requestDisposeBag = DisposeBag() // 기존 작업 캔슬
 
-                    guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
+        fetchSearchSongsUseCase
+            .execute(order: order, filter: filter, text: text, page: scrollPage, limit: limit)
+            .asObservable()
+            .map { [weak self] dataSource -> Mutation in
 
-                    let prev: [SongEntity] = byOption ? [] : self.currentState.dataSource
+                guard let self else { return .updateDataSource(dataSource: [], canLoad: false) }
 
-                    if scrollPage == 1 {
-                        LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
-                            keyword: self.text,
-                            category: "song",
-                            count: dataSource.count
-                        ))
-                    }
-
-                    return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+                let prev: [SongEntity] = scrollPage == 1 ? [] : self.currentState.dataSource
+                if scrollPage == 1 {
+                    LogManager.analytics(SearchAnalyticsLog.viewSearchResult(
+                        keyword: self.text,
+                        category: "song",
+                        count: dataSource.count
+                    ))
                 }
-                .catch { error in
-                    let wmErorr = error.asWMError
-                    return Observable.just(
-                        Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
-                    )
-                },
-            .just(Mutation.updateScrollPage(scrollPage + 1)), // 스크롤 페이지 증가
-            .just(.updateLoadingState(false))
-        ])
+
+                return Mutation.updateDataSource(dataSource: prev + dataSource, canLoad: dataSource.count == limit)
+            }
+            .catch { error in
+                let wmErorr = error.asWMError
+                return Observable.just(
+                    Mutation.showToast(wmErorr.errorDescription ?? LocalizationStrings.unknownErrorWarning)
+                )
+            }
+            .bind(with: subject, onNext: { subject, mutation in
+                subject.onNext(mutation)
+            })
+            .disposed(by: requestDisposeBag)
+
+        return Observable.just(.updateLoadingState(true))
     }
 
     func updateItemSelected(_ index: Int) -> Observable<Mutation> {

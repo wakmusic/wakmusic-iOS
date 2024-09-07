@@ -1,6 +1,7 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
+import ErrorModule
 import FirebaseMessaging
 import HomeFeatureInterface
 import LogManager
@@ -147,9 +148,37 @@ private extension MainTabBarViewController {
             let viewController = playlistDetailFactory.makeView(key: key)
             navigationController?.pushViewController(viewController, animated: true)
 
+            // 보관함에서 플리상세 접근 시 플로팅버튼 내림
+            if selectedIndex == 3 {
+                NotificationCenter.default.post(
+                    name: .shouldMovePlaylistFloatingButton,
+                    object: PlaylistFloatingButtonPosition.default
+                )
+            }
+
         case "songDetail":
-            let id = params["id"] as? String ?? ""
-            songDetailPresenter.present(id: id)
+            guard let id = params["id"] as? String else {
+                self.showToast(text: WMError.unknown.localizedDescription, options: .tabBar)
+                return
+            }
+
+            if PlayState.shared.contains(id: id) {
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: id)
+            } else {
+                Task {
+                    do {
+                        let song = try await viewModel.fetchSong(id: id)
+                        PlayState.shared.append(item: .init(id: song.id, title: song.title, artist: song.artist))
+                        let playlistIDs = PlayState.shared.currentPlaylist
+                            .map(\.id)
+                        songDetailPresenter?.present(ids: playlistIDs, selectedID: id)
+                    } catch {
+                        self.showToast(text: error.asWMError.localizedDescription, options: .tabBar)
+                    }
+                }
+            }
 
         default:
             break
@@ -168,7 +197,10 @@ private extension MainTabBarViewController {
             .bind(with: self) { owner, model in
                 let viewController = owner.noticePopupComponent.makeView(model: model)
                 viewController.delegate = owner
-                owner.showBottomSheet(content: viewController)
+                owner.showBottomSheet(
+                    content: viewController,
+                    size: .fixed(APP_WIDTH() + 96 + SAFEAREA_BOTTOM_HEIGHT())
+                )
             }
             .disposed(by: disposeBag)
     }

@@ -12,6 +12,7 @@ public enum CreditAPI {
         page: Int,
         limit: Int
     )
+    case fetchProfile(name: String)
 }
 
 extension CreditAPI: WMAPI {
@@ -23,12 +24,14 @@ extension CreditAPI: WMAPI {
         switch self {
         case let .fetchCreditSongList(name, _, _, _):
             return "/\(name)/songs"
+        case let .fetchProfile(name):
+            return "/\(name)"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .fetchCreditSongList:
+        case .fetchCreditSongList, .fetchProfile:
             return .get
         }
     }
@@ -41,12 +44,15 @@ extension CreditAPI: WMAPI {
                 "page": page,
                 "limit": limit
             ], encoding: URLEncoding.queryString)
+
+        case .fetchProfile:
+            return .requestPlain
         }
     }
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchCreditSongList:
+        case .fetchCreditSongList, .fetchProfile:
             return .none
         }
     }

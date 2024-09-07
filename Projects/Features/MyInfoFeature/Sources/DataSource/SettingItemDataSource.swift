@@ -4,6 +4,7 @@ import UIKit
 class SettingItemDataSource: NSObject, UITableViewDataSource {
     private let nonLoginSettingItems: [SettingItemType] = [
         .navigate(.appPush),
+        .navigate(.playType),
         .navigate(.serviceTerms),
         .navigate(.privacy),
         .navigate(.openSource),
@@ -13,6 +14,7 @@ class SettingItemDataSource: NSObject, UITableViewDataSource {
 
     private let loginSettingItems: [SettingItemType] = [
         .navigate(.appPush),
+        .navigate(.playType),
         .navigate(.serviceTerms),
         .navigate(.privacy),
         .navigate(.openSource),

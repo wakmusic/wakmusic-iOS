@@ -2,6 +2,7 @@ import ArtistFeature
 import BaseFeature
 import Combine
 import DesignSystem
+import LogManager
 import PlaylistFeatureInterface
 import RxSwift
 import SnapKit
@@ -55,7 +56,9 @@ private extension MainContainerViewController {
         view.addSubview(playlistFloatingActionButton)
 
         let startPage: Int = PreferenceManager.startPage ?? 0
-        let bottomOffset: Int = startPage == 3 ? -80 : -20
+        let bottomOffset: CGFloat = startPage == 3 ?
+            PlaylistFloatingButtonPosition.top.bottomOffset :
+            PlaylistFloatingButtonPosition.default.bottomOffset
         playlistFloatingActionButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(20)
             $0.bottom.equalTo(bottomContainerView.snp.top).offset(bottomOffset)
@@ -106,6 +109,7 @@ extension MainContainerViewController: BottomTabBarViewDelegate {
 private extension MainContainerViewController {
     func bind() {
         let playlistButtonAction = UIAction { [navigationController, playlistFactory] _ in
+            LogManager.analytics(MainTabAnalyticsLog.clickPlaylistFabButton)
             guard let playlistFactory else { return }
             let playlistViewController = playlistFactory.makeViewController()
             playlistViewController.modalPresentationStyle = .overFullScreen
@@ -118,9 +122,13 @@ private extension MainContainerViewController {
         )
 
         playlistPresenterGlobalState.presentPlayListObservable
-            .bind { [navigationController, playlistFactory] _ in
+            .bind { [navigationController, playlistFactory] currentSongID in
                 guard let playlistFactory else { return }
-                let playlistViewController = playlistFactory.makeViewController()
+                let playlistViewController = if let currentSongID {
+                    playlistFactory.makeViewController(currentSongID: currentSongID)
+                } else {
+                    playlistFactory.makeViewController()
+                }
                 playlistViewController.modalPresentationStyle = .overFullScreen
                 navigationController?.topViewController?.present(playlistViewController, animated: true)
             }
@@ -148,7 +156,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.willShowSongCart)
+            .notification(.shouldHidePlaylistFloatingButton)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 0
@@ -157,7 +165,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         NotificationCenter.default.rx
-            .notification(.willHideSongCart)
+            .notification(.shouldShowPlaylistFloatingButton)
             .subscribe(onNext: { [playlistFloatingActionButton] _ in
                 UIView.animate(withDuration: 0.2) {
                     playlistFloatingActionButton.alpha = 1
@@ -167,13 +175,21 @@ private extension MainContainerViewController {
 
         Observable.combineLatest(
             PreferenceManager.$startPage.map { $0 ?? 0 },
-            NotificationCenter.default.rx.notification(.didChangeTabInStorage).map { $0.object as? Int ?? 0 }
-        ) { startPage, storagePage -> (Int, Int) in
-            return (startPage, storagePage)
+            NotificationCenter.default.rx
+                .notification(.shouldMovePlaylistFloatingButton)
+                .map { $0.object as? PlaylistFloatingButtonPosition ?? .default }
+        ) { startPage, pos -> (Int, PlaylistFloatingButtonPosition) in
+            return (startPage, pos)
         }
         .bind(with: self, onNext: { owner, params in
-            let (startPage, storagePage) = params
-            let bottomOffset: Int = (startPage == 3) ? ((storagePage == 0) ? -80 : -20) : -20
+            let (startPage, pos) = params
+            var bottomOffset: CGFloat
+            switch startPage {
+            case 3:
+                bottomOffset = pos.bottomOffset
+            default:
+                bottomOffset = PlaylistFloatingButtonPosition.default.bottomOffset
+            }
             owner.playlistFloatingActionButton.snp.updateConstraints {
                 $0.trailing.equalToSuperview().inset(20)
                 $0.bottom.equalTo(owner.bottomContainerView.snp.top).offset(bottomOffset)

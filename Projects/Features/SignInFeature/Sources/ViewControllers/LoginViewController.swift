@@ -114,21 +114,34 @@ private extension LoginViewController {
             .disposed(by: disposeBag)
 
         naverLoginButton.rx.tap
+            .do(onNext: {
+                let log = SigninAnalyticsLog.clickSocialLoginButton(type: .naver)
+                LogManager.analytics(log)
+            })
             .bind(to: input.didTapNaverLoginButton)
             .disposed(by: disposeBag)
 
         googleLoginButton.rx.tap
             .bind {
+                let log = SigninAnalyticsLog.clickSocialLoginButton(type: .google)
+                LogManager.analytics(log)
                 GoogleLoginManager.shared.googleLoginRequest()
             }
             .disposed(by: disposeBag)
 
         appleLoginButton.rx.tap
+            .do(onNext: {
+                let log = SigninAnalyticsLog.clickSocialLoginButton(type: .apple)
+                LogManager.analytics(log)
+            })
             .bind(to: input.didTapAppleLoginButton)
             .disposed(by: disposeBag)
 
         serviceButton.rx.tap
             .bind(with: self) { owner, _ in
+                let log = SigninAnalyticsLog.clickTermsOfServiceButton
+                LogManager.analytics(log)
+
                 let vc = ContractViewController.viewController(type: .service)
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
@@ -137,6 +150,9 @@ private extension LoginViewController {
 
         privacyButton.rx.tap
             .bind(with: self) { owner, _ in
+                let log = SigninAnalyticsLog.clickPrivacyPolicyButton
+                LogManager.analytics(log)
+
                 let vc = ContractViewController.viewController(type: .privacy)
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)

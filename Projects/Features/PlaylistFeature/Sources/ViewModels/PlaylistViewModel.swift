@@ -1,12 +1,13 @@
 import BaseFeature
 import Combine
 import Foundation
+import LogManager
 import RxDataSources
 import RxRelay
 import RxSwift
 import Utility
 
-internal typealias PlayListSectionModel = SectionModel<Int, PlaylistItemModel>
+internal typealias PlaylistSectionModel = SectionModel<Int, PlaylistItemModel>
 
 final class PlaylistViewModel: ViewModelType {
     struct Input {
@@ -37,11 +38,11 @@ final class PlaylistViewModel: ViewModelType {
     private var disposeBag = DisposeBag()
 
     init() {
-        DEBUG_LOG("✅ PlaylistViewModel 생성")
+        LogManager.printDebug("✅ PlaylistViewModel 생성")
     }
 
     deinit {
-        DEBUG_LOG("❌ PlaylistViewModel deinit")
+        LogManager.printDebug("❌ PlaylistViewModel deinit")
     }
 
     func transform(from input: Input) -> Output {
@@ -72,6 +73,13 @@ final class PlaylistViewModel: ViewModelType {
 
         input.editButtonDidTapEvent.sink { [weak self] _ in
             guard let self else { return }
+            let log = if !self.isEditing {
+                CommonAnalyticsLog.clickEditButton(location: .playlist)
+            } else {
+                CommonAnalyticsLog.clickEditCompleteButton(location: .playlist)
+            }
+            LogManager.analytics(log)
+
             self.isEditing.toggle()
             output.editState.send(self.isEditing)
         }.store(in: &subscription)

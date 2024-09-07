@@ -21,7 +21,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     let likeStorageView = LikeStorageView()
 
     var containSongsFactory: ContainSongsFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    var textPopupFactory: TextPopupFactory!
     var signInFactory: SignInFactory!
     var songDetailPresenter: SongDetailPresentable!
 
@@ -40,16 +40,21 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         setTableView()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storageLike))
+    }
+
     static func viewController(
         reactor: Reactor,
         containSongsFactory: ContainSongsFactory,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> LikeStorageViewController {
         let viewController = LikeStorageViewController(reactor: reactor)
         viewController.containSongsFactory = containSongsFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         viewController.songDetailPresenter = songDetailPresenter
         return viewController
@@ -61,7 +66,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
     }
 
     private func setTableView() {
-        likeStorageView.tableView.delegate = self
+        likeStorageView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
     }
 
     override func bindState(reactor: LikeStorageReactor) {
@@ -114,7 +119,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
-                guard let vc = owner.textPopUpFactory.makeView(
+                guard let vc = owner.textPopupFactory.makeView(
                     text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
@@ -133,6 +138,9 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
+                let log = CommonAnalyticsLog.clickLoginButton(entry: .storageLike)
+                LogManager.analytics(log)
+
                 let loginVC = owner.signInFactory.makeView()
                 loginVC.modalPresentationStyle = .fullScreen
                 owner.present(loginVC, animated: true)
@@ -186,6 +194,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         super.bindAction(reactor: reactor)
 
         likeStorageView.rx.loginButtonDidTap
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickLoginButton(location: .myLikeList)) })
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -198,6 +207,19 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         likeStorageView.tableView.rx.itemMoved
             .map { Reactor.Action.itemMoved($0) }
             .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
+        likeStorageView.tableView.rx.itemSelected
+            .withLatestFrom(reactor.state.map(\.dataSource)) { ($0, $1) }
+            .compactMap { $0.1[safe: $0.0.section]?.items[safe: $0.0.row] }
+            .bind(with: self, onNext: { owner, song in
+                LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: song.songID))
+
+                PlayState.shared.append(item: .init(id: song.songID, title: song.title, artist: song.artist))
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: song.songID)
+            })
             .disposed(by: disposeBag)
     }
 }
@@ -241,6 +263,9 @@ extension LikeStorageViewController: SongCartViewDelegate {
         case let .allSelect(flag):
             reactor?.action.onNext(.tapAll(isSelecting: flag))
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .storageLike)
+            LogManager.analytics(log)
+
             reactor?.action.onNext(.addToPlaylistButtonDidTap)
         case .addPlayList:
             reactor?.action.onNext(.addToCurrentPlaylistButtonDidTap)
@@ -257,9 +282,8 @@ extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
         case let .cellTapped(indexPath):
             self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
+            LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storageLike, type: .single))
             self.reactor?.action.onNext(.playDidTap(song: song))
-        case let .thumbnailTapped(song):
-            songDetailPresenter.present(id: song.songID)
         }
     }
 }

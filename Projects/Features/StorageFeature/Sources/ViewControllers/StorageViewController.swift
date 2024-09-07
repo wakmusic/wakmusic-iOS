@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import Pageboy
 import ReactorKit
 import RxSwift
@@ -16,9 +17,9 @@ final class StorageViewController: TabmanViewController, View {
 
     private var bottomSheetView: BottomSheetView!
     private var listStorageComponent: ListStorageComponent!
-    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    private var multiPurposePopupFactory: MultiPurposePopupFactory!
     private var likeStorageComponent: LikeStorageComponent!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
 
     private var viewControllers: [UIViewController]!
@@ -58,18 +59,18 @@ final class StorageViewController: TabmanViewController, View {
     public static func viewController(
         reactor: Reactor,
         listStorageComponent: ListStorageComponent,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         likeStorageComponent: LikeStorageComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory
     ) -> StorageViewController {
         let viewController = StorageViewController(reactor: reactor)
 
         viewController.listStorageComponent = listStorageComponent
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
         viewController.likeStorageComponent = likeStorageComponent
         viewController.viewControllers = [listStorageComponent.makeView(), likeStorageComponent.makeView()]
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         return viewController
     }
@@ -82,7 +83,28 @@ final class StorageViewController: TabmanViewController, View {
         animated: Bool
     ) {
         self.reactor?.action.onNext(.switchTab(index))
-        NotificationCenter.default.post(name: .didChangeTabInStorage, object: index)
+        // 탭 이동 간 플로팅 버튼 위치 조정
+        NotificationCenter.default.post(
+            name: .shouldMovePlaylistFloatingButton,
+            object: index == 0 ?
+                PlaylistFloatingButtonPosition.top :
+                PlaylistFloatingButtonPosition.default
+        )
+    }
+
+    /// 탭맨 탭 터치 이벤트 감지 함수
+    override func bar(_ bar: any TMBar, didRequestScrollTo index: PageboyViewController.PageIndex) {
+        super.bar(bar, didRequestScrollTo: index)
+
+        guard let viewController = viewControllers[safe: index] else { return }
+        switch viewController {
+        case is ListStorageViewController:
+            LogManager.analytics(StorageAnalyticsLog.clickStorageTabbarTab(tab: .myPlaylist))
+        case is LikeStorageViewController:
+            LogManager.analytics(StorageAnalyticsLog.clickStorageTabbarTab(tab: .myLikeList))
+        default:
+            break
+        }
     }
 }
 
@@ -104,13 +126,16 @@ extension StorageViewController {
 
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
-                guard let vc = owner.textPopUpFactory.makeView(
+            .bind(with: self, onNext: { owner, entry in
+                guard let vc = owner.textPopupFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         owner.present(loginVC, animated: true)
@@ -126,6 +151,14 @@ extension StorageViewController {
 
     func bindAction(reactor: Reactor) {
         storageView.rx.editButtonDidTap
+            .do(onNext: {
+                let tabIndex = reactor.currentState.tabIndex
+                switch tabIndex {
+                case 0: LogManager.analytics(StorageAnalyticsLog.clickMyPlaylistEditButton)
+                case 1: LogManager.analytics(StorageAnalyticsLog.clickMyLikeListEditButton)
+                default: break
+                }
+            })
             .map { Reactor.Action.editButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -179,7 +212,7 @@ extension StorageViewController: PageboyViewControllerDataSource, TMBarDataSourc
         for pageboyViewController: Pageboy.PageboyViewController,
         at index: Pageboy.PageboyViewController.PageIndex
     ) -> UIViewController? {
-        viewControllers[index]
+        return viewControllers[safe: index]
     }
 
     public func defaultPage(for pageboyViewController: Pageboy.PageboyViewController) -> Pageboy.PageboyViewController

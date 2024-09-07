@@ -24,6 +24,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             LogManager.setUserID(userID: nil)
         }
+        initializeUserProperty()
 
         Analytics.logEvent(AnalyticsEventAppOpen, parameters: nil)
 
@@ -56,20 +57,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate {
-    func application(
-        _ application: UIApplication,
-        didReceiveRemoteNotification userInfo: [AnyHashable: Any]
-    ) {
-        // If you are receiving a notification message while your app is in the background,
-        // this callback will not be fired till the user taps on the notification launching the application.
-
-        // With swizzling disabled you must let Messaging know about the message, for Analytics
-        Messaging.messaging().appDidReceiveMessage(userInfo)
-
-        // Print full message.
-        LogManager.printDebug("🔔:: \(userInfo)")
-    }
-
     /// [START receive_message]
     func application(
         _ application: UIApplication,
@@ -116,9 +103,29 @@ extension AppDelegate {
             }
         }
     }
+
+    private func initializeUserProperty() {
+        if let loginPlatform = PreferenceManager.userInfo?.platform {
+            LogManager.setUserProperty(property: .loginPlatform(platform: loginPlatform))
+        } else {
+            LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
+        }
+
+        if let fruitTotal = PreferenceManager.userInfo?.itemCount {
+            LogManager.setUserProperty(property: .fruitTotal(count: fruitTotal))
+        } else {
+            LogManager.clearUserProperty(property: .fruitTotal(count: -1))
+        }
+
+        if let playPlatform = PreferenceManager.songPlayPlatformType {
+            LogManager.setUserProperty(property: .songPlayPlatform(platform: playPlatform.display))
+        }
+
+        LogManager.setUserProperty(property: .playlistSongTotal(count: PlayState.shared.count))
+    }
 }
 
-#if DEBUG
+#if DEBUG || QA
     extension UIWindow {
         override open func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
             super.motionEnded(motion, with: event)

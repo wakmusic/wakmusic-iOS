@@ -12,10 +12,6 @@ import SongsDomainInterface
 import Utility
 
 final class Playlist {
-    private enum Const {
-        static let maximumListCount = 50
-    }
-
     @Published private(set) var list: [PlaylistItem] = []
 
     init(list: [PlaylistItem] = []) {
@@ -31,26 +27,18 @@ final class Playlist {
 
     func append(_ item: PlaylistItem) {
         list.append(item)
-
-        processListMaximumCount()
     }
 
     func append(_ items: [PlaylistItem]) {
         list.append(contentsOf: items)
-
-        processListMaximumCount()
     }
 
     func insert(_ newElement: PlaylistItem, at: Int) {
         list.insert(newElement, at: at)
-
-        processListMaximumCount()
     }
 
     func update(contentsOf items: [PlaylistItem]) {
         list = items
-
-        processListMaximumCount()
     }
 
     func remove(at index: Int) {
@@ -82,6 +70,10 @@ final class Playlist {
         return list.contains(item)
     }
 
+    func contains(id: String) -> Bool {
+        return list.contains { $0.id == id }
+    }
+
     func reorderPlaylist(from: Int, to: Int) {
         let movedData = list[from]
         list.remove(at: from)
@@ -91,13 +83,5 @@ final class Playlist {
     /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
     func uniqueIndex(of item: PlaylistItem) -> Int? {
         return list.firstIndex(of: item)
-    }
-}
-
-private extension Playlist {
-    func processListMaximumCount() {
-        if list.count > Const.maximumListCount {
-            list = Array(list.suffix(Const.maximumListCount))
-        }
     }
 }

@@ -17,6 +17,7 @@ let project = Project.module(
                 .SPM.Moya,
                 .SPM.FirebaseAnalytics,
                 .SPM.FirebaseCrashlytics,
+                .SPM.CryptoSwift,
                 .SPM.FirebaseMessaging
             ]
         )

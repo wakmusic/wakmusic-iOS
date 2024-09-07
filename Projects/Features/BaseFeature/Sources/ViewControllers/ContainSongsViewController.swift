@@ -2,6 +2,7 @@ import BaseDomainInterface
 import BaseFeatureInterface
 import DesignSystem
 import Localization
+import LogManager
 import NVActivityIndicatorView
 import PlaylistDomainInterface
 import RxSwift
@@ -14,11 +15,11 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
-    @IBOutlet weak var songCountLabel: UILabel!
-    @IBOutlet weak var subTitleLabel: UILabel!
-
-    var multiPurposePopUpFactory: MultiPurposePopupFactory!
-    var textPopUpFactory: TextPopUpFactory!
+    let containerView = UIView(frame: CGRect(x: .zero, y: .zero, width: APP_WIDTH(), height: 48))
+    let songCountLabel: UILabel = UILabel()
+    let subTitleLabel: UILabel = UILabel()
+    var multiPurposePopupFactory: MultiPurposePopupFactory!
+    var textPopupFactory: TextPopupFactory!
 
     var viewModel: ContainSongsViewModel!
     lazy var input = ContainSongsViewModel.Input()
@@ -29,6 +30,8 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        addSubviews()
+        setLayout()
         configureUI()
         inputBind()
         outputBind()
@@ -36,22 +39,39 @@ public final class ContainSongsViewController: BaseViewController, ViewControlle
     }
 
     public static func viewController(
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
+        textPopupFactory: TextPopupFactory,
         viewModel: ContainSongsViewModel
     ) -> ContainSongsViewController {
         let viewController = ContainSongsViewController.viewController(
             storyBoardName: "Base",
             bundle: Bundle.module
         )
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
 extension ContainSongsViewController {
+    private func addSubviews() {
+        containerView.addSubviews(songCountLabel, subTitleLabel)
+        tableView.tableHeaderView = containerView
+    }
+
+    private func setLayout() {
+        subTitleLabel.snp.makeConstraints {
+            $0.leading.equalTo(songCountLabel.snp.trailing)
+            $0.centerY.equalTo(songCountLabel.snp.centerY)
+        }
+
+        songCountLabel.snp.makeConstraints {
+            $0.leading.equalTo(closeButton.snp.leading)
+            $0.centerY.equalToSuperview()
+        }
+    }
+
     private func inputBind() {
         tableView.rx.setDelegate(self).disposed(by: disposeBag)
 
@@ -96,9 +116,9 @@ extension ContainSongsViewController {
             })
             .bind(to: tableView.rx.items) { tableView, index, model -> UITableViewCell in
                 guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "CurrentPlayListTableViewCell",
+                    withIdentifier: "CurrentPlaylistTableViewCell",
                     for: IndexPath(row: index, section: 0)
-                ) as? CurrentPlayListTableViewCell
+                ) as? CurrentPlaylistTableViewCell
                 else {
                     return UITableViewCell()
                 }
@@ -127,8 +147,7 @@ extension ContainSongsViewController {
 
         output.onLogout
             .bind(with: self) { owner, error in
-                let toastFont = DesignSystemFontFamily.Pretendard.light.font(size: 14)
-                owner.showToast(text: error.localizedDescription, font: toastFont)
+                owner.showToast(text: error.localizedDescription, options: [.tabBar])
                 owner.dismiss(animated: true)
             }
             .disposed(by: disposeBag)
@@ -142,11 +161,11 @@ extension ContainSongsViewController {
                 let (user, price) = (info.0, info.1)
 
                 if user.itemCount < price {
-                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.empty])
+                    owner.showToast(text: LocalizationStrings.lackOfMoney(price - user.itemCount), options: [.tabBar])
                     return
                 }
 
-                let text = owner.textPopUpFactory.makeView(
+                let text = owner.textPopupFactory.makeView(
                     text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "\(price)개 사용",
@@ -162,14 +181,14 @@ extension ContainSongsViewController {
 
         output.showCreationPopup
             .bind(with: self) { owner, _ in
-                let multiPurposePopVc = owner.multiPurposePopUpFactory.makeView(
+                let multiPurposePopupVc = owner.multiPurposePopupFactory.makeView(
                     type: .creation,
                     key: "",
                     completion: { text in
                         owner.input.createPlaylist.onNext(text)
                     }
                 )
-                owner.showBottomSheet(content: multiPurposePopVc, size: .fixed(296))
+                owner.showBottomSheet(content: multiPurposePopupVc, size: .fixed(296))
             }
             .disposed(by: disposeBag)
     }
@@ -182,6 +201,7 @@ extension ContainSongsViewController {
         titleLabel.text = "리스트에 담기"
         titleLabel.setTextWithAttributes(kernValue: -0.5)
 
+        // 24 , 12
         songCountLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
         songCountLabel.textColor = DesignSystemAsset.PrimaryColor.point.color
         songCountLabel.text = "\(viewModel.songs.count)"
@@ -204,7 +224,7 @@ extension ContainSongsViewController: UITableViewDelegate {
     }
 
     public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = ContainPlayListHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
+        let header = ContainPlaylistHeaderView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 140))
         header.delegate = self
         return header
     }
@@ -214,8 +234,9 @@ extension ContainSongsViewController: UITableViewDelegate {
     }
 }
 
-extension ContainSongsViewController: ContainPlayListHeaderViewDelegate {
+extension ContainSongsViewController: ContainPlaylistHeaderViewDelegate {
     public func action() {
+        LogManager.analytics(ContainSongsAnalyticsLog.clickCreatePlaylistButton(location: .addMusics))
         input.creationButtonDidTap.onNext(())
     }
 }

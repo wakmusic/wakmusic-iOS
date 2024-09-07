@@ -57,7 +57,7 @@ final class MyPlaylistHeaderView: UIView {
 
     let countLabel: WMLabel = WMLabel(
         text: "",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.6),
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray600.color,
         font: .t6_1(weight: .light),
         lineHeight: UIFont.WMFontSystem.t6_1(weight: .light).lineHeight
     )

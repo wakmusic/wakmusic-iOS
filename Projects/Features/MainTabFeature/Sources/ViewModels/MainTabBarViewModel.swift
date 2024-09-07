@@ -5,6 +5,7 @@ import NoticeDomainInterface
 import NotificationDomainInterface
 import RxRelay
 import RxSwift
+import SongsDomainInterface
 import Utility
 
 private typealias Observer = (
@@ -17,16 +18,19 @@ public final class MainTabBarViewModel {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
     private let fetchNoticeIDListUseCase: FetchNoticeIDListUseCase
     private let updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
+    private let fetchSongUseCase: FetchSongUseCase
     private let disposeBag = DisposeBag()
 
     public init(
         fetchNoticePopupUseCase: any FetchNoticePopupUseCase,
         fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase,
-        updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase
+        updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase,
+        fetchSongUseCase: any FetchSongUseCase
     ) {
         self.fetchNoticePopupUseCase = fetchNoticePopupUseCase
         self.fetchNoticeIDListUseCase = fetchNoticeIDListUseCase
         self.updateNotificationTokenUseCase = updateNotificationTokenUseCase
+        self.fetchSongUseCase = fetchSongUseCase
     }
 
     public struct Input {
@@ -114,5 +118,9 @@ public final class MainTabBarViewModel {
         .disposed(by: disposeBag)
 
         return output
+    }
+
+    func fetchSong(id: String) async throws -> SongDetailEntity {
+        return try await fetchSongUseCase.execute(id: id).value
     }
 }

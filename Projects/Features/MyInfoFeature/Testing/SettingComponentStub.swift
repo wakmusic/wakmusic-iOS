@@ -19,11 +19,24 @@ public final class SettingComponentStub: SettingFactory {
                 logoutUseCase: LogoutUseCaseSpy(),
                 updateNotificationTokenUseCase: UpdateNotificationTokenUseCaseSpy()
             ),
-            textPopUpFactory: TextPopUpComponentStub(),
+            textPopupFactory: TextPopupComponentStub(),
             signInFactory: SignInComponentStub(),
             serviceTermsFactory: ServiceTermComponentStub(),
             privacyFactory: PrivacyComponentStub(),
-            openSourceLicenseFactory: OpenSourceLicenseComponentStub()
+            openSourceLicenseFactory: OpenSourceLicenseComponentStub(),
+            playTypeTogglePopupFactory: PlayTypeTogglePopupComponentStub()
+        )
+    }
+}
+
+final class PlayTypeTogglePopupComponentStub: PlayTypeTogglePopupFactory {
+    public func makeView(
+        completion: ((_ selectedItemString: String) -> Void)? = nil,
+        cancelCompletion: (() -> Void)? = nil
+    ) -> UIViewController {
+        return PlayTypeTogglePopupViewController(
+            completion: completion,
+            cancelCompletion: cancelCompletion
         )
     }
 }

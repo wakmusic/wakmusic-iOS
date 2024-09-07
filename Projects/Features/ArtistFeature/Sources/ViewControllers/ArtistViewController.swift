@@ -1,7 +1,6 @@
 import ArtistFeatureInterface
 import BaseFeature
 import DesignSystem
-import KeychainModule
 import Localization
 import LogManager
 import NeedleFoundation
@@ -25,6 +24,9 @@ public final class ArtistViewController:
         description: LocalizationStrings.unknownErrorWarning,
         retryButtonTitle: LocalizationStrings.titleRetry
     )
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .light)).then {
+        $0.alpha = 0
+    }
 
     var artistDetailFactory: ArtistDetailFactory!
     public var disposeBag: DisposeBag = DisposeBag()
@@ -65,22 +67,16 @@ public final class ArtistViewController:
             .delay(RxTimeInterval.milliseconds(100), scheduler: MainScheduler.instance)
             .map { $0.1[$0.0.row] }
             .bind(with: self) { owner, entity in
-                #warning("🎉:: 디버그용 이스터에그")
-                #if DEBUG
-                    if entity.id == "gosegu" {
-                        owner.showTextInputAlert { id in
-                            owner.postNotification(id: id ?? "")
-                        }
-                    } else {
-                        LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                        let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                        owner.navigationController?.pushViewController(viewController, animated: true)
-                    }
-                #else
-                    LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
-                    let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
-                    owner.navigationController?.pushViewController(viewController, animated: true)
-                #endif
+                LogManager.analytics(ArtistAnalyticsLog.clickArtistItem(artist: entity.id))
+                let viewController = owner.artistDetailFactory.makeView(artistID: entity.id)
+                owner.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .disposed(by: disposeBag)
+
+        collectionView.rx.didScroll
+            .bind(with: self) { owner, _ in
+                let offsetY: CGFloat = owner.collectionView.contentOffset.y + STATUS_BAR_HEGHIT()
+                owner.translucentView.alpha = min(max(offsetY / owner.translucentView.frame.height, 0), 1)
             }
             .disposed(by: disposeBag)
     }
@@ -121,7 +117,7 @@ public final class ArtistViewController:
 
 private extension ArtistViewController {
     func addSubviews() {
-        view.addSubview(retryWarningView)
+        view.addSubviews(retryWarningView, translucentView)
     }
 
     func setLayout() {
@@ -129,6 +125,11 @@ private extension ArtistViewController {
         retryWarningView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().offset(topOffset + STATUS_BAR_HEGHIT())
+        }
+
+        translucentView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
 
@@ -152,6 +153,13 @@ private extension ArtistViewController {
 
         retryWarningView.isHidden = true
         retryWarningView.delegate = self
+    }
+}
+
+extension ArtistViewController: UICollectionViewDelegate {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY: CGFloat = scrollView.contentOffset.y + STATUS_BAR_HEGHIT()
+        translucentView.alpha = min(max(offsetY / translucentView.frame.height, 0), 1)
     }
 }
 
@@ -209,64 +217,3 @@ extension ArtistViewController: UIGestureRecognizerDelegate {
         return false
     }
 }
-
-#if DEBUG
-    #warning("🎉:: 디버그용 이스터에그")
-    private extension ArtistViewController {
-        func showTextInputAlert(completion: @escaping (String?) -> Void) {
-            let alertController = UIAlertController(
-                title: "푸시발송",
-                message: "songID를 입력하세요.",
-                preferredStyle: .alert
-            )
-
-            alertController.addTextField { textField in
-                textField.placeholder = "songID를 입력하세요."
-            }
-
-            let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-                let textField = alertController.textFields?.first
-                let inputText = textField?.text
-                completion(inputText)
-            }
-
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            alertController.addAction(okAction)
-            alertController.addAction(cancelAction)
-
-            present(alertController, animated: true, completion: nil)
-        }
-
-        func postNotification(id: String) {
-            let urlString = "U5l/gXs0ZmvBbJC8Lj4REKUhMpiYZByzM3MgyVD4Bk+LR+6IMoZBaEDwQB47DcpH"
-            guard let url = URL(string: AES256.decrypt(encoded: urlString)) else {
-                return
-            }
-
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-            let keychain = KeychainImpl()
-            request.addValue("bearer \(keychain.load(type: .accessToken))", forHTTPHeaderField: "Authorization")
-
-            let parameters: [String: String] = [
-                "page": "songDetail",
-                "songId": id
-            ]
-
-            if let bodyData = try? JSONSerialization.data(withJSONObject: parameters, options: []) {
-                request.httpBody = bodyData
-            }
-
-            let task = URLSession.shared.dataTask(with: request) { _, response, error in
-                if let error = error {
-                    LogManager.printDebug("Error: \(error.localizedDescription)")
-                    return
-                }
-                LogManager.printDebug("response: \(String(describing: response))")
-            }
-            task.resume()
-        }
-    }
-#endif

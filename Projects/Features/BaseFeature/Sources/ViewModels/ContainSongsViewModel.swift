@@ -3,6 +3,7 @@ import BaseDomainInterface
 import ErrorModule
 import Foundation
 import Localization
+import LogManager
 import PlaylistDomainInterface
 import PriceDomainInterface
 import RxRelay
@@ -131,6 +132,13 @@ public final class ContainSongsViewModel: ViewModelType {
 
                 return self.addSongIntoPlaylistUseCase
                     .execute(key: model.key, songs: self.songs)
+                    .do(onSuccess: { _ in
+                        let log = ContainSongsAnalyticsLog.completeAddMusics(
+                            playlistId: model.key,
+                            count: self.songs.count
+                        )
+                        LogManager.analytics(log)
+                    })
                     .catch { (error: Error) in
                         let wmError = error.asWMError
 

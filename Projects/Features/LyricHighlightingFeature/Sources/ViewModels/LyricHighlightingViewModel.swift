@@ -26,6 +26,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
 
     public struct Input {
         let fetchLyric: PublishSubject<Void> = PublishSubject()
+        let didTapActivateButton: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let didTapHighlighting: BehaviorRelay<IndexPath> = BehaviorRelay(value: .init(row: -1, section: 0))
         let didTapSaveButton: PublishSubject<Void> = PublishSubject()
     }
@@ -40,6 +41,7 @@ public final class LyricHighlightingViewModel: ViewModelType {
             artist: ""
         ))
         let updateProvider: PublishSubject<String> = .init()
+        let showToast: PublishSubject<String> = .init()
     }
 
     public func transform(from input: Input) -> Output {
@@ -60,11 +62,22 @@ public final class LyricHighlightingViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.didTapHighlighting
-            .map { $0.item }
+            .withLatestFrom(input.didTapActivateButton) { ($0, $1) }
+            .filter { $0.1 }
+            .map { $0.0.item }
             .filter { $0 >= 0 }
             .withLatestFrom(output.dataSource) { ($0, $1) }
             .filter { index, entities in
-                return entities[index].isHighlighting || entities.filter { $0.isHighlighting }.count < 4
+                let currentTotalLineCount: Int = entities.filter { $0.isHighlighting }
+                    .map { $0.text.components(separatedBy: "\n").count }
+                    .reduce(0, +)
+                let nowSelectItemLineCount: Int = entities[index].text
+                    .components(separatedBy: "\n").count
+                guard entities[index].isHighlighting || (currentTotalLineCount + nowSelectItemLineCount <= 4) else {
+                    output.showToast.onNext("가사는 최대 4줄까지 선택 가능합니다.")
+                    return false
+                }
+                return true
             }
             .map { index, entities in
                 var newEntities = entities

@@ -5,6 +5,7 @@ import LikeDomainInterface
 import LikeDomainTesting
 import LyricHighlightingFeatureInterface
 @testable import MusicDetailFeature
+import MusicDetailFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SongCreditFeatureInterface
@@ -68,6 +69,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     signInFactory: DummySignInFactory(),
                     containSongsFactory: DummyContainSongsFactory(),
                     textPopupFactory: DummyTextPopupFactory(),
+                    karaokeFactory: DummyKaraokeFactory(),
                     playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
                 )
             )
@@ -103,7 +105,7 @@ final class DummySignInFactory: SignInFactory {
     }
 }
 
-final class DummyTextPopupFactory: TextPopUpFactory {
+final class DummyTextPopupFactory: TextPopupFactory {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
@@ -117,6 +119,13 @@ final class DummyTextPopupFactory: TextPopUpFactory {
 }
 
 final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
-    var presentPlayListObservable: RxSwift.Observable<Void> { .empty() }
+    var presentPlayListObservable: RxSwift.Observable<String?> { .empty() }
+    func presentPlayList(currentSongID: String?) {}
     func presentPlayList() {}
+}
+
+final class DummyKaraokeFactory: KaraokeFactory {
+    func makeViewController(ky: Int?, tj: Int?) -> UIViewController {
+        UIViewController()
+    }
 }

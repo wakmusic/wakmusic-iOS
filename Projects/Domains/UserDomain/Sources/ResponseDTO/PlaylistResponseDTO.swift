@@ -16,6 +16,7 @@ public struct PlaylistResponseDTO: Decodable {
     public let user: PlaylistResponseDTO.User
     public let imageUrl: String
     public let songCount: Int
+    public let `private`: Bool
 
     public struct User: Decodable {
         public let handle: String
@@ -30,7 +31,8 @@ public extension PlaylistResponseDTO {
             title: title,
             image: imageUrl,
             songCount: songCount,
-            userId: user.handle
+            userId: user.handle,
+            private: `private`
         )
     }
 }

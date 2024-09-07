@@ -9,8 +9,8 @@ import UserDomainInterface
 
 public protocol StorageDependency: Dependency {
     var signInFactory: any SignInFactory { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
     var listStorageComponent: ListStorageComponent { get }
     var likeStorageComponent: LikeStorageComponent { get }
 }
@@ -22,9 +22,9 @@ public final class StorageComponent: Component<StorageDependency>, StorageFactor
                 storageCommonService: DefaultStorageCommonService.shared
             ),
             listStorageComponent: dependency.listStorageComponent,
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
             likeStorageComponent: dependency.likeStorageComponent,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             signInFactory: dependency.signInFactory
         )
     }

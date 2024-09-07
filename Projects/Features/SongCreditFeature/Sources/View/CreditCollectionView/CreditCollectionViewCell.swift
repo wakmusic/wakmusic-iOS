@@ -35,9 +35,16 @@ final class CreditCollectionViewCell: UICollectionViewCell {
     ) -> UICollectionViewLayoutAttributes {
         setNeedsLayout()
         layoutIfNeeded()
+        let collectionViewWidth = superview?.bounds.width ?? UIScreen.main.bounds.width
+
+        let maxWidth = collectionViewWidth * 0.6
+
         let size = contentView.systemLayoutSizeFitting(layoutAttributes.size)
         var newFrame = layoutAttributes.frame
-        newFrame.size = size
+        newFrame.size = .init(
+            width: min(maxWidth, size.width),
+            height: size.height
+        )
         layoutAttributes.frame = newFrame
         return layoutAttributes
     }

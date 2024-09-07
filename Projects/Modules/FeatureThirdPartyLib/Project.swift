@@ -20,7 +20,6 @@ let project = Project.module(
             .SPM.RxDataSources,
             .SPM.RxKeyboard,
             .SPM.SwiftEntryKit,
-            .SPM.CryptoSwift,
             .SPM.NVActivityIndicatorView
         ])
     ]

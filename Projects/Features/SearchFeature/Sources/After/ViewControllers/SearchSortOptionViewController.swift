@@ -16,7 +16,7 @@ final class SearchSortOptionViewController: BaseViewController {
 
     private var disposeBag = DisposeBag()
 
-    private let options: [SortType] = [.latest, .oldest, .alphabetical, .popular]
+    private let options: [SortType] = [.relevance, .latest, .oldest, .popular]
 
     private var selectedModel: SortType
 

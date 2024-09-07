@@ -1,4 +1,5 @@
 import BaseFeature
+import BaseFeatureInterface
 import DesignSystem
 import PlaylistFeatureInterface
 import RxSwift
@@ -22,6 +23,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
 
     private let unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory
     private let myPlaylistDetailFactory: any MyPlaylistDetailFactory
+    private let textPopupFactory: any TextPopupFactory
     private let key: String
     lazy var unknownPlaylistVC = unknownPlaylistDetailFactory.makeView(key: key)
     lazy var myPlaylistVC = myPlaylistDetailFactory.makeView(key: key)
@@ -30,11 +32,13 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         reactor: PlaylistDetailContainerReactor,
         key: String,
         unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory,
-        myPlaylistDetailFactory: any MyPlaylistDetailFactory
+        myPlaylistDetailFactory: any MyPlaylistDetailFactory,
+        textPopupFactory: any TextPopupFactory
     ) {
         self.key = key
         self.unknownPlaylistDetailFactory = unknownPlaylistDetailFactory
         self.myPlaylistDetailFactory = myPlaylistDetailFactory
+        self.textPopupFactory = textPopupFactory
 
         super.init(reactor: reactor)
     }
@@ -131,6 +135,24 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
                 } else {
                     owner.add(asChildViewController: owner.unknownPlaylistVC)
                 }
+            }
+            .disposed(by: disposeBag)
+
+        reactor.pulse(\.$detectedNotFound)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                let vc = owner.textPopupFactory.makeView(
+                    text: "존재하지 않거나 비공개된 리스트입니다.",
+                    cancelButtonIsHidden: true,
+                    confirmButtonText: "확인",
+                    cancelButtonText: nil,
+                    completion: {
+                        owner.navigationController?.popViewController(animated: true)
+                    },
+                    cancelCompletion: nil
+                )
+
+                owner.showBottomSheet(content: vc, dismissOnOverlayTapAndPull: false) // 드래그로 닫기 불가
             }
             .disposed(by: disposeBag)
     }

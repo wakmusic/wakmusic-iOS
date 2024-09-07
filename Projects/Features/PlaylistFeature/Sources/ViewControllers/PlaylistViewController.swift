@@ -4,6 +4,7 @@ import Combine
 import DesignSystem
 import Foundation
 import Kingfisher
+import LogManager
 import RxDataSources
 import RxRelay
 import RxSwift
@@ -26,7 +27,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
-    private(set) var textPopUpFactory: any TextPopUpFactory
+    private(set) var textPopupFactory: any TextPopupFactory
     private(set) var signInFactory: any SignInFactory
 
     public var songCartView: BaseFeature.SongCartView!
@@ -51,23 +52,27 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     )
     lazy var output = self.viewModel.transform(from: input)
 
+    private let currentSongID: String?
+
     init(
+        currentSongID: String?,
         viewModel: PlaylistViewModel,
         containSongsFactory: ContainSongsFactory,
         songDetailPresenter: any SongDetailPresentable,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         signInFactory: any SignInFactory
     ) {
+        self.currentSongID = currentSongID
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
     deinit {
-        DEBUG_LOG("❌ PlaylistVC deinit")
+        LogManager.printDebug("❌ PlaylistVC deinit")
     }
 
     @available(*, unavailable)
@@ -87,6 +92,12 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
         bindViewModel()
         bindActions()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .playlist)
+        LogManager.analytics(log)
     }
 
     override public func viewWillDisappear(_ animated: Bool) {
@@ -170,7 +181,21 @@ private extension PlaylistViewController {
         }.store(in: &subscription)
 
         output.playlists
-            .map { [PlayListSectionModel.init(model: 0, items: $0)] }
+            .map { [PlaylistSectionModel.init(model: 0, items: $0)] }
+            .do(afterNext: { [currentSongID, tableView = playlistView.playlistTableView] playListSectionModel in
+                guard let currentSongID else { return }
+                guard
+                    let sectionIndex = playListSectionModel.firstIndex(where: { model in
+                        model.items.contains(where: { $0.id == currentSongID })
+                    }),
+                    let itemIndex = playListSectionModel[safe: sectionIndex]?.items
+                    .firstIndex(where: { $0.id == currentSongID })
+                else { return }
+                let index = IndexPath(row: itemIndex, section: sectionIndex)
+                DispatchQueue.main.async {
+                    tableView.scrollToRow(at: index, at: .middle, animated: false)
+                }
+            })
             .bind(to: playlistView.playlistTableView.rx.items(dataSource: createDatasources(output: output)))
             .disposed(by: disposeBag)
 
@@ -191,6 +216,22 @@ private extension PlaylistViewController {
         output.playlists
             .map { $0.isEmpty }
             .bind(to: playlistView.editButton.rx.isHidden)
+            .disposed(by: disposeBag)
+
+        playlistView.playlistTableView.rx.itemSelected
+            .withLatestFrom(output.playlists) { ($0, $1) }
+            .map { $0.1[$0.0.row] }
+            .bind(with: self, onNext: { [songDetailPresenter] owner, item in
+                let currentSongs = output.playlists.value
+                    .map(\.id)
+
+                owner.dismiss(animated: true) {
+                    songDetailPresenter.present(
+                        ids: Array(currentSongs),
+                        selectedID: item.id
+                    )
+                }
+            })
             .disposed(by: disposeBag)
     }
 
@@ -236,8 +277,8 @@ extension PlaylistViewController {
     private func createDatasources(
         output: PlaylistViewModel
             .Output
-    ) -> RxTableViewSectionedReloadDataSource<PlayListSectionModel> {
-        let datasource = RxTableViewSectionedReloadDataSource<PlayListSectionModel>(
+    ) -> RxTableViewSectionedReloadDataSource<PlaylistSectionModel> {
+        let datasource = RxTableViewSectionedReloadDataSource<PlaylistSectionModel>(
             configureCell: { [weak self] _, tableView, indexPath, model -> UITableViewCell in
                 guard let self else { return UITableViewCell() }
                 guard let cell = tableView.dequeueReusableCell(

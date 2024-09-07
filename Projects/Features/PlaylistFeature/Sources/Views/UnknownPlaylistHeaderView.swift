@@ -17,13 +17,20 @@ final class UnknownPlaylistHeaderView: UIView {
         $0.contentMode = .scaleAspectFill
     }
 
-    private let containerView: UIView = UIView().then {
+    private let scrollView: UIScrollView = UIScrollView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray25.color.withAlphaComponent(0.4)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 8
         $0.layer.borderColor = UIColor.white.cgColor
         $0.clipsToBounds = true
+        $0.verticalScrollIndicatorInsets = .init(top: 20, left: .zero, bottom: 12, right: 6)
     }
+
+    private let stackView: UIStackView = UIStackView().then {
+        $0.axis = .vertical
+    }
+
+    private let containerView: UIView = UIView()
 
     private let titleLabel: WMLabel = WMLabel(
         text: "",
@@ -31,15 +38,24 @@ final class UnknownPlaylistHeaderView: UIView {
         font: .t3(weight: .bold),
         lineHeight: UIFont.WMFontSystem.t3(weight: .bold).lineHeight
     ).then {
-        $0.numberOfLines = 0
+        $0.numberOfLines = .zero
     }
 
-    let subtitleLabel: WMLabel = WMLabel(
+    let countLabel: WMLabel = WMLabel(
         text: "",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray900.color.withAlphaComponent(0.6),
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray600.color,
         font: .t6_1(weight: .light),
         lineHeight: UIFont.WMFontSystem.t6_1(weight: .light).lineHeight
     )
+
+    let nickNameLabel: WMLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray600.color,
+        font: .t6_1(weight: .medium),
+        lineHeight: UIFont.WMFontSystem.t6(weight: .medium).lineHeight
+    ).then {
+        $0.numberOfLines = .zero
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -56,8 +72,10 @@ final class UnknownPlaylistHeaderView: UIView {
 
 extension UnknownPlaylistHeaderView {
     private func addView() {
-        self.addSubviews(thumbnailImageView, containerView)
-        containerView.addSubviews(titleLabel, subtitleLabel)
+        self.addSubviews(thumbnailImageView, scrollView)
+        scrollView.addSubview(stackView)
+        stackView.addArrangedSubview(containerView)
+        containerView.addSubviews(titleLabel, countLabel, nickNameLabel)
     }
 
     private func setLayout() {
@@ -67,10 +85,19 @@ extension UnknownPlaylistHeaderView {
             $0.leading.equalToSuperview().inset(20)
         }
 
-        containerView.snp.makeConstraints {
+        scrollView.snp.makeConstraints {
             $0.leading.equalTo(thumbnailImageView.snp.trailing).offset(8)
-            $0.top.bottom.equalToSuperview()
+            $0.verticalEdges.equalToSuperview()
             $0.trailing.equalToSuperview().inset(20)
+        }
+
+        stackView.snp.makeConstraints {
+            $0.verticalEdges.equalToSuperview()
+            $0.width.equalTo(scrollView.snp.width)
+        }
+
+        containerView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
 
         titleLabel.snp.makeConstraints {
@@ -78,9 +105,15 @@ extension UnknownPlaylistHeaderView {
             $0.horizontalEdges.equalToSuperview().inset(16)
         }
 
-        subtitleLabel.snp.makeConstraints {
+        countLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
-            $0.leading.equalTo(titleLabel.snp.leading)
+            $0.horizontalEdges.equalTo(titleLabel)
+        }
+
+        nickNameLabel.snp.makeConstraints {
+            $0.top.lessThanOrEqualTo(countLabel.snp.bottom).offset(2)
+            $0.horizontalEdges.equalTo(titleLabel)
+            $0.bottom.greaterThanOrEqualToSuperview().inset(12)
         }
     }
 }
@@ -89,16 +122,7 @@ extension UnknownPlaylistHeaderView: UnknownPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel) {
         titleLabel.text = model.title
         thumbnailImageView.kf.setImage(with: URL(string: model.image))
-
-        let attributedString = NSMutableAttributedString(string: "\(model.songCount)곡")
-
-        let padding = NSTextAttachment()
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = DesignSystemAsset.Playlist.smallGrayDot.image
-        imageAttachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
-        attributedString.append(NSAttributedString(string: model.userName))
-
-        subtitleLabel.attributedText = attributedString
+        countLabel.text = "\(model.songCount)곡"
+        nickNameLabel.text = model.userName
     }
 }

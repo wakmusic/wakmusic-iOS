@@ -7,10 +7,12 @@
 //
 
 import DesignSystem
+import LogManager
 import NVActivityIndicatorView
 import PDFKit
 import RxCocoa
 import RxSwift
+import SnapKit
 import UIKit
 import Utility
 
@@ -32,9 +34,9 @@ extension ContractType {
     var url: String {
         switch self {
         case .privacy:
-            return "\(BASE_IMAGE_URL())/static/document/privacy.pdf"
+            return "\(CDN_DOMAIN_URL())/document/privacy.pdf"
         case .service:
-            return "\(BASE_IMAGE_URL())/static/document/terms.pdf"
+            return "\(CDN_DOMAIN_URL())/document/terms.pdf"
         }
     }
 }
@@ -47,16 +49,17 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
 
     var type: ContractType = .privacy
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+
+    deinit {
+        LogManager.printDebug("❌ \(Self.self) deinit")
+    }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         bindRx()
-    }
-
-    deinit {
-        DEBUG_LOG("❌ \(Self.self) deinit")
+        loadPDF()
     }
 
     public static func viewController(type: ContractType) -> ContractViewController {
@@ -66,8 +69,8 @@ public final class ContractViewController: UIViewController, ViewControllerFromS
     }
 }
 
-extension ContractViewController {
-    private func bindRx() {
+private extension ContractViewController {
+    func bindRx() {
         Observable.merge(
             closeButton.rx.tap.map { _ in () },
             confirmButton.rx.tap.map { _ in () }
@@ -79,19 +82,9 @@ extension ContractViewController {
         .disposed(by: disposeBag)
     }
 
-    private func loadPdf(document: PDFDocument) {
-        let pdfView = PDFView(frame: self.fakeView.bounds)
-        pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        pdfView.autoScales = true
-        pdfView.displayMode = .singlePageContinuous
-        pdfView.displayDirection = .vertical
-        pdfView.document = document
-        self.fakeView.addSubview(pdfView)
-        activityIndicator.stopAnimating()
-    }
-
-    private func configureUI() {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+    func configureUI() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
 
         activityIndicator.type = .circleStrokeSpin
         activityIndicator.color = DesignSystemAsset.PrimaryColor.point.color
@@ -104,22 +97,52 @@ extension ContractViewController {
             string: "확인",
             attributes: [
                 .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
                 .kern: -0.5
             ]
         ), for: .normal)
-        closeButton.setImage(DesignSystemAsset.Navigation.crossClose.image, for: .normal)
 
         titleLabel.text = type.title
-        titleLabel.textColor = DesignSystemAsset.GrayColor.gray900.color
+        titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
         titleLabel.setTextWithAttributes(kernValue: -0.5)
+    }
+}
 
+private extension ContractViewController {
+    func loadPDF() {
         DispatchQueue.global(qos: .default).async {
-            if let url = URL(string: self.type.url), let document = PDFDocument(url: url) {
-                DispatchQueue.main.async {
-                    self.loadPdf(document: document) // UI 작업이라 main 스레드로
-                }
+            guard let url = URL(string: self.type.url),
+                  let document = PDFDocument(url: url) else {
+                self.loadFailPDF()
+                return
+            }
+            self.configurePDF(document: document)
+        }
+    }
+
+    func configurePDF(document: PDFDocument) {
+        DispatchQueue.main.async {
+            let pdfView = PDFView(frame: self.fakeView.bounds)
+            pdfView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            pdfView.autoScales = true
+            pdfView.displayMode = .singlePageContinuous
+            pdfView.displayDirection = .vertical
+            pdfView.document = document
+            self.fakeView.addSubview(pdfView)
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
+    func loadFailPDF() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+            self.fakeView.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+            let warningView = WMWarningView(text: "파일을 불러오는 데 문제가 발생했습니다.")
+            self.view.addSubview(warningView)
+            warningView.snp.makeConstraints {
+                $0.top.equalTo(self.view.frame.height / 3)
+                $0.centerX.equalToSuperview()
             }
         }
     }

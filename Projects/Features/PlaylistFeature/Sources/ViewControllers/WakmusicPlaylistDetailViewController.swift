@@ -20,7 +20,7 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
 
     private let containSongsFactory: any ContainSongsFactory
 
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
 
     private let songDetailPresenter: any SongDetailPresentable
 
@@ -54,12 +54,12 @@ final class WakmusicPlaylistDetailViewController: BaseReactorViewController<Wakm
     init(
         reactor: WakmusicPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         songDetailPresenter: any SongDetailPresentable,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
 
@@ -274,8 +274,9 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let playbuttonGroupView = PlayButtonGroupView()
-        playbuttonGroupView.delegate = self
+        let view = SingleActionButtonView(frame: CGRect(x: 0, y: 0, width: APP_WIDTH(), height: 78))
+        view.delegate = self
+        view.setTitleAndImage(text: "전체재생", image: DesignSystemAsset.Chart.allPlay.image)
 
         guard let reactor = reactor else {
             return nil
@@ -284,7 +285,7 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
         if reactor.currentState.dataSource.isEmpty {
             return nil
         } else {
-            return playbuttonGroupView
+            return view
         }
     }
 
@@ -305,33 +306,34 @@ extension WakmusicPlaylistDetailViewController: UITableViewDelegate {
     }
 }
 
-extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
-    func thumbnailDidTap(key: String) {
-        songDetailPresenter.present(id: key)
-    }
-}
-
-/// 전체재생 , 랜덤 재생 델리게이트
-extension WakmusicPlaylistDetailViewController: PlayButtonGroupViewDelegate {
-    func play(_ event: PlayEvent) {
-        guard let reactor = reactor else {
+extension WakmusicPlaylistDetailViewController: SingleActionButtonViewDelegate {
+    func tappedButtonAction() {
+        guard let currentState = self.reactor?.currentState, let playlistURL = currentState.playlistURL,
+              let url = URL(string: playlistURL) else {
+            showToast(text: "해당 기능은 준비 중입니다.", options: [.tabBar])
             return
         }
 
-        let currentState = reactor.currentState
-        var songs = currentState.dataSource
+        let songs = currentState.dataSource
 
-        switch event {
-        case .allPlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
-
-        case .shufflePlay:
-            LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
-            songs.shuffle()
-        }
-
+        LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor?.key ?? ""))
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+           let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
+            WakmusicYoutubePlayer(listID: listID).play()
+        }
+    }
+}
+
+extension WakmusicPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
+    func thumbnailDidTap(key: String) {
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: key)
     }
 }
 
@@ -344,6 +346,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
 
         let currentState = reactor.currentState
         let songs = currentState.dataSource.filter { $0.isSelected }
+        let limit = 50
 
         switch type {
         case let .allSelect(flag: flag):
@@ -353,6 +356,16 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
+
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
+                )
+                return
+            }
 
             if PreferenceManager.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)
@@ -365,6 +378,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .addPlayList:
+
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
             reactor.action.onNext(.deselectAll)
             showToast(
@@ -373,8 +387,23 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
             )
 
         case .play:
+
+            guard songs.count <= limit else {
+                showToast(
+                    text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
+                )
+                return
+            }
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
+            )
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
             reactor.action.onNext(.deselectAll)
 
         case .remove:

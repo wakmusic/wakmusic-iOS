@@ -6,6 +6,7 @@ import SongsDomainInterface
 public protocol RemotePlaylistDataSource {
     func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]>
     func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity>
+    func fetchWMPlaylistDetail(id: String) -> Single<WMPlaylistDetailEntity>
     func updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) -> Completable
     func createPlaylist(title: String) -> Single<PlaylistBaseEntity>
     func fetchPlaylistSongs(key: String) -> Single<[SongEntity]>

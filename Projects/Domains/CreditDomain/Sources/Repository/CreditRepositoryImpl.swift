@@ -20,4 +20,8 @@ public final class CreditRepositoryImpl: CreditRepository {
     ) -> Single<[SongEntity]> {
         remoteCreditDataSource.fetchCreditSongList(name: name, order: order, page: page, limit: limit)
     }
+
+    public func fetchCreditProfile(name: String) -> Single<CreditProfileEntity> {
+        remoteCreditDataSource.fetchCreditProfile(name: name)
+    }
 }

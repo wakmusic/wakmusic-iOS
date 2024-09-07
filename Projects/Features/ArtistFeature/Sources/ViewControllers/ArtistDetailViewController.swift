@@ -27,7 +27,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
 
     private let gradientLayer = CAGradientLayer()
     private var artistMusicComponent: ArtistMusicComponent!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
 
     private var viewModel: ArtistDetailViewModel!
@@ -69,7 +69,7 @@ public final class ArtistDetailViewController: UIViewController, ViewControllerF
     public static func viewController(
         viewModel: ArtistDetailViewModel,
         artistMusicComponent: ArtistMusicComponent,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory
     ) -> ArtistDetailViewController {
         let viewController = ArtistDetailViewController.viewController(storyBoardName: "Artist", bundle: Bundle.module)
@@ -107,13 +107,15 @@ private extension ArtistDetailViewController {
             .disposed(by: disposeBag)
 
         output.showLogin
-            .bind(with: self) { owner, _ in
+            .bind(with: self) { owner, entry in
                 let viewController = owner.textPopupFactory.makeView(
                     text: "로그인이 필요한 서비스입니다.\n로그인 하시겠습니까?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                        LogManager.analytics(log)
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         owner.present(loginVC, animated: true)

@@ -43,7 +43,7 @@ extension SongDetailEntity {
             isLiked: self.isLiked,
             karaokeNumber: SongModel.KaraokeNumber(
                 tj: self.karaokeNumber.tj,
-                ky: self.karaokeNumber.tj
+                ky: self.karaokeNumber.ky
             )
         )
     }

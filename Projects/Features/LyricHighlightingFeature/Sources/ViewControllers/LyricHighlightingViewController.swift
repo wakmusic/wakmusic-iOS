@@ -48,6 +48,14 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.backgroundColor = .clear
     }
 
+    let bottomContentStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.distribution = .fill
+        $0.isHidden = true
+    }
+
+    let writerContentView = UIView()
+
     let writerLabel = WMLabel(
         text: "",
         textColor: .white.withAlphaComponent(0.5),
@@ -55,6 +63,19 @@ public final class LyricHighlightingViewController: UIViewController {
         alignment: .center,
         kernValue: -0.5
     )
+
+    let activateContentView = UIView()
+
+    let activateTopLineLabel = UILabel().then {
+        $0.backgroundColor = DesignSystemAsset.NewGrayColor.gray700.color
+    }
+
+    let activateButton = UIButton(type: .system).then {
+        $0.setImage(
+            DesignSystemAsset.LyricHighlighting.lyricHighlightSaveOff.image.withRenderingMode(.alwaysOriginal),
+            for: .normal
+        )
+    }
 
     let warningView = UIView().then {
         $0.isHidden = true
@@ -85,10 +106,10 @@ public final class LyricHighlightingViewController: UIViewController {
         $0.setTitleColor(DesignSystemAsset.PrimaryColorV2.point.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.bold.font(size: 12)
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
-        $0.isHidden = true
+        $0.alpha = 0
     }
 
-    let indicator = NVActivityIndicatorView(frame: .zero).then {
+    let activityIndicator = NVActivityIndicatorView(frame: .zero).then {
         $0.type = .circleStrokeSpin
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color
     }
@@ -151,14 +172,19 @@ private extension LyricHighlightingViewController {
             thumbnailImageView,
             dimmedBackgroundView,
             collectionView,
-            writerLabel,
+            bottomContentStackView,
             warningView,
             navigationBarView,
-            indicator
+            activityIndicator
         )
+
         navigationBarView.addSubviews(backButton, navigationTitleStackView, completeButton)
         navigationTitleStackView.addArrangedSubview(songLabel)
         navigationTitleStackView.addArrangedSubview(artistLabel)
+
+        bottomContentStackView.addArrangedSubviews(writerContentView, activateContentView)
+        writerContentView.addSubview(writerLabel)
+        activateContentView.addSubviews(activateTopLineLabel, activateButton)
         warningView.addSubviews(warningImageView, warningLabel)
     }
 
@@ -209,11 +235,34 @@ private extension LyricHighlightingViewController {
             $0.horizontalEdges.equalToSuperview()
         }
 
+        bottomContentStackView.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(19)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        writerContentView.snp.makeConstraints {
+            $0.height.equalTo(51)
+        }
+
         writerLabel.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).offset(18)
+            $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(20)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-30)
             $0.height.equalTo(22)
+        }
+
+        activateContentView.snp.makeConstraints {
+            $0.height.equalTo(56)
+        }
+
+        activateTopLineLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(1)
+        }
+
+        activateButton.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
 
         warningView.snp.makeConstraints {
@@ -233,8 +282,8 @@ private extension LyricHighlightingViewController {
             $0.bottom.equalToSuperview()
         }
 
-        indicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        activityIndicator.snp.makeConstraints {
+            $0.center.equalTo(warningView.snp.center)
             $0.size.equalTo(30)
         }
     }
@@ -262,7 +311,7 @@ private extension LyricHighlightingViewController {
                 .alternativeSources(alternativeSources)
             ]
         )
-        indicator.startAnimating()
+        activityIndicator.startAnimating()
     }
 
     func createLayout() -> UICollectionViewLayout {

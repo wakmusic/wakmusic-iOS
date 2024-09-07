@@ -32,7 +32,7 @@ public final class ChartContentViewModel: ViewModelType {
         let updateTime: BehaviorRelay<String> = BehaviorRelay(value: "")
         let indexOfSelectedSongs: BehaviorRelay<[Int]> = BehaviorRelay(value: [])
         let songEntityOfSelectedSongs: BehaviorRelay<[SongEntity]> = BehaviorRelay(value: [])
-        let groupPlaySongs: PublishSubject<[SongEntity]> = PublishSubject()
+        let groupPlaySongs: PublishSubject<(playlistTitle: String, songs: [SongEntity])> = PublishSubject()
         let showToast: PublishSubject<String> = PublishSubject()
         let showLogin: PublishSubject<Void> = .init()
     }
@@ -123,13 +123,13 @@ public final class ChartContentViewModel: ViewModelType {
 
         input.halfPlayTapped
             .withLatestFrom(output.dataSource) { ($0, $1) }
-            .map { [weak self] type, source -> [ChartRankingEntity] in
-                self?.halfSplitArray(array: source, type: type) ?? []
+            .bind(with: self) { owner, tuple in
+                let (type, songs) = tuple
+                let chartsArray = owner.halfSplitArray(array: songs, type: type)
+                let songsArray = owner.toSongEntities(array: chartsArray)
+                let title = type.playlistTitleString
+                output.groupPlaySongs.onNext((title, songsArray))
             }
-            .map { [weak self] entities -> [SongEntity] in
-                self?.toSongEntities(array: entities) ?? []
-            }
-            .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
 
         input.shufflePlayTapped
@@ -140,6 +140,7 @@ public final class ChartContentViewModel: ViewModelType {
             .map { [weak self] entities -> [SongEntity] in
                 self?.toSongEntities(array: entities) ?? []
             }
+            .map { ("왁뮤차트 TOP100 랜덤", $0) }
             .bind(to: output.groupPlaySongs)
             .disposed(by: disposeBag)
 

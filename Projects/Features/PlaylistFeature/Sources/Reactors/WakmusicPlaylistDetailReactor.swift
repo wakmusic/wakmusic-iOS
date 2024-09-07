@@ -28,6 +28,7 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         case updateSelectingStateByIndex([SongEntity])
         case showToast(String)
         case updateLoginPopupState(Bool)
+        case updatePlaylistURL(String)
     }
 
     struct State {
@@ -35,20 +36,21 @@ final class WakmusicPlaylistDetailReactor: Reactor {
         var dataSource: [SongEntity]
         var isLoading: Bool
         var selectedCount: Int
+        var playlistURL: String?
         @Pulse var toastMessage: String?
         @Pulse var showLoginPopup: Bool
     }
 
     var initialState: State
-    private let fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
+    private let fetchWMPlaylistDetailUseCase: any FetchWMPlaylistDetailUseCase
 
     init(
         key: String,
-        fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase
+        fetchWMPlaylistDetailUseCase: any FetchWMPlaylistDetailUseCase
 
     ) {
         self.key = key
-        self.fetchPlaylistDetailUseCase = fetchPlaylistDetailUseCase
+        self.fetchWMPlaylistDetailUseCase = fetchWMPlaylistDetailUseCase
 
         self.initialState = State(
             header: PlaylistDetailHeaderModel(
@@ -106,6 +108,9 @@ final class WakmusicPlaylistDetailReactor: Reactor {
             newState.dataSource = dataSource
         case let .updateLoginPopupState(flag):
             newState.showLoginPopup = flag
+
+        case let .updatePlaylistURL(URL):
+            newState.playlistURL = URL
         }
 
         return newState
@@ -116,7 +121,7 @@ private extension WakmusicPlaylistDetailReactor {
     func updateDataSource() -> Observable<Mutation> {
         return .concat([
             .just(.updateLoadingState(true)),
-            fetchPlaylistDetailUseCase.execute(id: key, type: .wmRecommend)
+            fetchWMPlaylistDetailUseCase.execute(id: key)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
                     return .concat([
@@ -125,11 +130,12 @@ private extension WakmusicPlaylistDetailReactor {
                                 key: data.key,
                                 title: data.title,
                                 image: data.image,
-                                userName: data.userName,
-                                private: data.private,
+                                userName: "Wakmu",
+                                private: false,
                                 songCount: data.songs.count
                             )
                         )),
+                        Observable.just(.updatePlaylistURL(data.playlistURL)),
                         Observable.just(Mutation.updateDataSource(data.songs))
                     ])
                 }

@@ -6,6 +6,7 @@ import UserDomainInterface
 import Utility
 
 public final class FruitInfoPopupViewController: UIViewController {
+    private let aroundView = UIView()
     private let popupContentView = UIView()
 
     private let backgroundImageView = UIImageView().then {
@@ -60,7 +61,7 @@ public final class FruitInfoPopupViewController: UIViewController {
 
 private extension FruitInfoPopupViewController {
     func addSubViews() {
-        view.addSubview(popupContentView)
+        view.addSubviews(aroundView, popupContentView)
         popupContentView.addSubviews(
             backgroundImageView,
             descriptionLabel,
@@ -71,6 +72,10 @@ private extension FruitInfoPopupViewController {
 
     func setLayout() {
         let is320 = APP_WIDTH() < 375
+
+        aroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
 
         popupContentView.snp.makeConstraints {
             $0.width.equalTo(is320 ? APP_WIDTH() - 40 : 335)
@@ -122,6 +127,21 @@ private extension FruitInfoPopupViewController {
                 options: [.transition(.fade(0.2))]
             )
         }
+
+        noteImageView.addShadow(
+            offset: CGSize(width: 0, height: 2.5),
+            color: UIColor.black,
+            opacity: 0.1,
+            radius: 50
+        )
+
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(tappedAround(_:)))
+        aroundView.addGestureRecognizer(gesture)
+        aroundView.isUserInteractionEnabled = true
+    }
+
+    @objc func tappedAround(_ sender: UITapGestureRecognizer) {
+        dismiss(animated: true)
     }
 
     func addAction() {

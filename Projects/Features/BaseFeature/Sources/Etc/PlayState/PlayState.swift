@@ -8,6 +8,7 @@
 
 import Combine
 import Foundation
+import LogManager
 import SongsDomainInterface
 import Utility
 
@@ -31,16 +32,16 @@ public final class PlayState {
     }
 
     deinit {
-        DEBUG_LOG("🚀:: \(Self.self) deinit")
+        LogManager.printDebug("🚀:: \(Self.self) deinit")
         NotificationCenter.default.removeObserver(self)
     }
 
     /// 플레이리스트에 변경사항이 생겼을 때, 로컬 DB를 덮어씁니다.
     private func subscribePlayListChanges() {
         playlist.subscribeListChanges()
-            .map { $0.suffix(50) }
             .map { Array($0) }
             .sink { [weak self] playlistItems in
+                LogManager.setUserProperty(property: .playlistSongTotal(count: playlistItems.count))
                 self?.updatePlaylistChangesToLocalDB(playList: playlistItems)
             }
             .store(in: &subscription)
@@ -120,6 +121,10 @@ public final class PlayState {
 
     public func contains(item: PlaylistItem) -> Bool {
         return playlist.contains(item)
+    }
+
+    public func contains(id: String) -> Bool {
+        return playlist.contains(id: id)
     }
 
     public func reorderPlaylist(from: Int, to: Int) {

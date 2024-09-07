@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import LogManager
 import Pageboy
 import Tabman
 import UIKit
@@ -22,11 +23,35 @@ public final class ChartViewController: TabmanViewController, ViewControllerFrom
         return viewControllers
     }()
 
-    deinit { DEBUG_LOG("❌ \(Self.self) Deinit") }
+    deinit { LogManager.printDebug("❌ \(Self.self) Deinit") }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let log = CommonAnalyticsLog.viewPage(pageName: .chart)
+        LogManager.analytics(log)
+    }
+
+    override public func pageboyViewController(
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        let chartType = ChartAnalyticsLog.ChartType.allCases[safe: index] ?? .hourly
+        let log = ChartAnalyticsLog.selectChartType(type: chartType)
+        LogManager.analytics(log)
+
+        super.pageboyViewController(
+            pageboyViewController,
+            didScrollToPageAt: index,
+            direction: direction,
+            animated: animated
+        )
     }
 
     public static func viewController(chartContentComponent: ChartContentComponent) -> ChartViewController {
@@ -61,6 +86,7 @@ private extension ChartViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 0
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in

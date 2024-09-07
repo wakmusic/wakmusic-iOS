@@ -45,7 +45,7 @@ public extension PurposeType {
         case .creation, .updatePlaylistTitle:
             return 12
         case .nickname:
-            return 8
+            return 12
         }
     }
 

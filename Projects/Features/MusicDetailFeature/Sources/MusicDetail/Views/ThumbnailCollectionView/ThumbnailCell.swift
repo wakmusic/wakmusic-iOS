@@ -25,6 +25,7 @@ final class ThumbnailCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         thumbnailImageView.kf.cancelDownloadTask()
+        thumbnailImageView.image = nil
     }
 
     func configure(thumbnailModel: ThumbnailModel) {

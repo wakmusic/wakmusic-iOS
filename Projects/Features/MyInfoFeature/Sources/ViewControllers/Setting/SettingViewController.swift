@@ -13,11 +13,12 @@ import UIKit
 import Utility
 
 final class SettingViewController: BaseReactorViewController<SettingReactor> {
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
     private var serviceTermsFactory: ServiceTermFactory!
     private var privacyFactory: PrivacyFactory!
     private var openSourceLicenseFactory: OpenSourceLicenseFactory!
+    private var playTypeTogglePopupFactory: PlayTypeTogglePopupFactory!
 
     let settingView = SettingView()
     let settingItemDataSource = SettingItemDataSource()
@@ -32,24 +33,38 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         view.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .setting))
+    }
+
     public static func viewController(
         reactor: SettingReactor,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         serviceTermsFactory: ServiceTermFactory,
         privacyFactory: PrivacyFactory,
-        openSourceLicenseFactory: OpenSourceLicenseFactory
+        openSourceLicenseFactory: OpenSourceLicenseFactory,
+        playTypeTogglePopupFactory: PlayTypeTogglePopupFactory
     ) -> SettingViewController {
         let viewController = SettingViewController(reactor: reactor)
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.signInFactory = signInFactory
         viewController.serviceTermsFactory = serviceTermsFactory
         viewController.privacyFactory = privacyFactory
         viewController.openSourceLicenseFactory = openSourceLicenseFactory
+        viewController.playTypeTogglePopupFactory = playTypeTogglePopupFactory
         return viewController
     }
 
     override func bindState(reactor: SettingReactor) {
+        reactor.pulse(\.$reloadTableView)
+            .compactMap { $0 }
+            .bind(with: self) { owner, _ in
+                owner.settingView.settingItemTableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+
         reactor.state.map(\.isShowActivityIndicator)
             .distinctUntilChanged()
             .bind(with: self) { owner, isShow in
@@ -106,12 +121,15 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$cacheSize)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, cachSize in
-                guard let textPopupVC = owner.textPopUpFactory.makeView(
+                guard let textPopupVC = owner.textPopupFactory.makeView(
                     text: "캐시 데이터(\(cachSize))를 지우시겠습니까?",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = SettingAnalyticsLog.completeRemoveCache(size: cachSize)
+                        LogManager.analytics(log)
+
                         owner.reactor?.action.onNext(.confirmRemoveCacheButtonDidTap)
                     },
                     cancelCompletion: nil
@@ -132,30 +150,26 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
         reactor.pulse(\.$withDrawButtonDidTap)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                guard let secondConfirmVC = owner.textPopUpFactory.makeView(
-                    text: "정말 탈퇴하시겠습니까?",
-                    cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
-                    completion: {
-                        owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
+                let makeSecondConfirmVC: () -> UIViewController = {
+                    owner.textPopupFactory.makeView(
+                        text: "정말 탈퇴하시겠습니까?",
+                        cancelButtonIsHidden: false,
+                        completion: {
+                            let log = SettingAnalyticsLog.completeWithdraw
+                            LogManager.analytics(log)
+
+                            owner.reactor?.action.onNext(.confirmWithDrawButtonDidTap)
+                        }
+                    )
                 }
-                guard let firstConfirmVC = owner.textPopUpFactory.makeView(
+                let firstConfirmVC = owner.textPopupFactory.makeView(
                     text: "회원탈퇴 신청을 하시겠습니까?",
                     cancelButtonIsHidden: false,
-                    confirmButtonText: nil,
-                    cancelButtonText: nil,
                     completion: {
+                        let secondConfirmVC = makeSecondConfirmVC()
                         owner.showBottomSheet(content: secondConfirmVC)
-                    },
-                    cancelCompletion: nil
-                ) as? TextPopupViewController else {
-                    return
-                }
+                    }
+                )
                 owner.showBottomSheet(content: firstConfirmVC)
             })
             .disposed(by: disposeBag)
@@ -165,7 +179,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .bind(with: self) { owner, withDrawResult in
                 let status = withDrawResult.status
                 let description = withDrawResult.description
-                guard let textPopUpVC = owner.textPopUpFactory.makeView(
+                guard let textPopupVC = owner.textPopupFactory.makeView(
                     text: (status == 200) ? "회원탈퇴가 완료되었습니다.\n이용해주셔서 감사합니다." : description,
                     cancelButtonIsHidden: true,
                     confirmButtonText: nil,
@@ -179,7 +193,7 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
                 ) as? TextPopupViewController else {
                     return
                 }
-                owner.showBottomSheet(content: textPopUpVC)
+                owner.showBottomSheet(content: textPopupVC)
             }
             .disposed(by: disposeBag)
     }
@@ -191,6 +205,9 @@ final class SettingViewController: BaseReactorViewController<SettingReactor> {
             .disposed(by: disposeBag)
 
         settingView.rx.withDrawButtonDidTap
+            .do(onNext: {
+                LogManager.analytics(SettingAnalyticsLog.clickWithdrawButton)
+            })
             .map { Reactor.Action.withDrawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -211,33 +228,82 @@ extension SettingViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? SettingItemTableViewCell else { return }
         guard let category = cell.category else { return }
+
         switch category {
         case .appPush:
+            LogManager.analytics(SettingAnalyticsLog.clickNotificationButton)
             reactor?.action.onNext(.appPushSettingNavigationDidTap)
-        case .serviceTerms:
+        case .playType:
+            LogManager.analytics(SettingAnalyticsLog.clickSongPlayPlatform)
+            showPlayTypeTogglePopup()
+        case .serviceTerms: LogManager.analytics(SettingAnalyticsLog.clickTermsOfServiceButton)
             reactor?.action.onNext(.serviceTermsNavigationDidTap)
         case .privacy:
+            LogManager.analytics(SettingAnalyticsLog.clickPrivacyPolicyButton)
             reactor?.action.onNext(.privacyNavigationDidTap)
         case .openSource:
+            LogManager.analytics(SettingAnalyticsLog.clickOpensourceButton)
             reactor?.action.onNext(.openSourceNavigationDidTap)
         case .removeCache:
+            LogManager.analytics(SettingAnalyticsLog.clickRemoveCacheButton)
             reactor?.action.onNext(.removeCacheButtonDidTap)
         case .logout:
-            let text = "로그아웃 하시겠습니까?"
-            let vc = textPopUpFactory.makeView(
-                text: text,
-                cancelButtonIsHidden: false,
-                confirmButtonText: "확인",
-                cancelButtonText: "취소",
-                completion: { [weak self] in
-                    guard let self else { return }
-                    self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
-                },
-                cancelCompletion: {}
-            )
-            showBottomSheet(content: vc, size: .fixed(234))
+            LogManager.analytics(SettingAnalyticsLog.clickLogoutButton)
+            showLogoutTextPopup()
         case .versionInfo:
+            LogManager.analytics(SettingAnalyticsLog.clickVersionButton)
             reactor?.action.onNext(.versionInfoButtonDidTap)
         }
+    }
+
+    private func showPlayTypeTogglePopup() {
+        let togglePopupVC = playTypeTogglePopupFactory.makeView(
+            completion: { selectedItemString in
+                switch selectedItemString {
+                case YoutubePlayType.youtube.display:
+                    PreferenceManager.songPlayPlatformType = .youtube
+                    LogManager.analytics(
+                        SettingAnalyticsLog.completeSelectSongPlayPlatform(platform: YoutubePlayType.youtube.display)
+                    )
+                    LogManager.setUserProperty(
+                        property: .songPlayPlatform(platform: YoutubePlayType.youtube.display)
+                    )
+                case YoutubePlayType.youtubeMusic.display:
+                    PreferenceManager.songPlayPlatformType = .youtubeMusic
+                    LogManager.analytics(
+                        SettingAnalyticsLog.completeSelectSongPlayPlatform(
+                            platform: YoutubePlayType.youtubeMusic.display
+                        )
+                    )
+                    LogManager.setUserProperty(
+                        property: .songPlayPlatform(platform: YoutubePlayType.youtubeMusic.display)
+                    )
+                default:
+                    break
+                }
+            },
+            cancelCompletion: {}
+        )
+        togglePopupVC.modalPresentationStyle = .overFullScreen
+        togglePopupVC.modalTransitionStyle = .crossDissolve
+        self.present(togglePopupVC, animated: false)
+    }
+
+    private func showLogoutTextPopup() {
+        let textPopUpVC = textPopupFactory.makeView(
+            text: "로그아웃 하시겠습니까?",
+            cancelButtonIsHidden: false,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            completion: { [weak self] in
+                guard let self else { return }
+                let log = SettingAnalyticsLog.completeLogout
+                LogManager.analytics(log)
+
+                self.reactor?.action.onNext(.confirmLogoutButtonDidTap)
+            },
+            cancelCompletion: {}
+        )
+        showBottomSheet(content: textPopUpVC, size: .fixed(234))
     }
 }

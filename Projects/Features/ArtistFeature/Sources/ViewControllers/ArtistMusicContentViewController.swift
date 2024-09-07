@@ -23,7 +23,7 @@ public final class ArtistMusicContentViewController:
     public var bottomSheetView: BottomSheetView!
     private var containSongsFactory: ContainSongsFactory!
     private var signInFactory: SignInFactory!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
     private var viewModel: ArtistMusicContentViewModel!
@@ -52,7 +52,7 @@ public final class ArtistMusicContentViewController:
         viewModel: ArtistMusicContentViewModel,
         containSongsFactory: ContainSongsFactory,
         signInFactory: SignInFactory,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> ArtistMusicContentViewController {
         let viewController = ArtistMusicContentViewController.viewController(
@@ -187,6 +187,9 @@ private extension ArtistMusicContentViewController {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .overFullScreen
                         owner.present(loginVC, animated: true)
@@ -212,7 +215,13 @@ private extension ArtistMusicContentViewController {
 
 extension ArtistMusicContentViewController: ArtistMusicCellDelegate {
     func tappedThumbnail(id: String) {
-        songDetailPresenter.present(id: id)
+        guard let tappedSong = output.dataSource.value
+            .first(where: { $0.songID == id })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.songID, title: tappedSong.title, artist: tappedSong.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: tappedSong.songID)
     }
 }
 
@@ -226,8 +235,11 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .artist)
+            LogManager.analytics(log)
+
             if PreferenceManager.userInfo == nil {
-                output.showLogin.onNext(())
+                output.showLogin.onNext(.addMusics)
                 return
             }
             guard songs.count <= limit else {
@@ -242,10 +254,6 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             }
 
         case .addPlayList:
-            guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit))
-                return
-            }
             PlayState.shared.appendSongsToPlaylist(songs)
             output.showToast.onNext(LocalizationStrings.addList)
             input.allSongSelected.onNext(false)
@@ -255,9 +263,16 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
                 output.showToast.onNext(LocalizationStrings.overFlowPlayWarning(songs.count - limit))
                 return
             }
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .artist, type: .multiple)
+            )
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
 
         default: return
         }
@@ -282,13 +297,6 @@ extension ArtistMusicContentViewController: UITableViewDelegate {
 
 extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
     public func play(_ event: PlayEvent) {
-        LogManager.analytics(
-            ArtistAnalyticsLog.clickArtistPlayButton(
-                type: event == .allPlay ? "all" : "random",
-                artist: viewModel.model?.id ?? ""
-            )
-        )
-
         let songs: [SongEntity] = output.dataSource.value.map {
             return SongEntity(
                 id: $0.songID,
@@ -301,6 +309,9 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
 
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .artist, type: .all)
+            )
             var urlString: String = ""
             switch viewModel.type {
             case .new:
@@ -315,7 +326,10 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
                 return
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
-            UIApplication.shared.open(url)
+            if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+               let listID = components.queryItems?.first(where: { $0.name == "list" })?.value {
+                WakmusicYoutubePlayer(listID: listID).play()
+            }
 
         case .shufflePlay: // 미사용
             break

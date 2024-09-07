@@ -20,10 +20,18 @@ typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
 final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType,
     PlaylistDetailNavigator {
-    let listStorageView = ListStorageView()
+    private let createListButton = CreateListButtonView(
+        padding: .init(
+            top: 16,
+            left: 20,
+            bottom: 12,
+            right: 20
+        )
+    )
+    private let listStorageView = ListStorageView()
 
-    var multiPurposePopUpFactory: MultiPurposePopupFactory
-    var textPopUpFactory: TextPopUpFactory
+    var multiPurposePopupFactory: MultiPurposePopupFactory
+    var textPopupFactory: TextPopupFactory
     var playlistDetailFactory: any PlaylistDetailFactory
     var signInFactory: SignInFactory
     var fruitDrawFactory: FruitDrawFactory
@@ -32,14 +40,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     init(
         reactor: Reactor,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
+        textPopupFactory: TextPopupFactory,
         playlistDetailFactory: PlaylistDetailFactory,
         signInFactory: SignInFactory,
         fruitDrawFactory: FruitDrawFactory
     ) {
-        self.multiPurposePopUpFactory = multiPurposePopUpFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.multiPurposePopupFactory = multiPurposePopupFactory
+        self.textPopupFactory = textPopupFactory
         self.playlistDetailFactory = playlistDetailFactory
         self.signInFactory = signInFactory
         self.fruitDrawFactory = fruitDrawFactory
@@ -56,7 +64,20 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
     }
 
     override func viewDidAppear(_ animated: Bool) {
-        listStorageView.resetParticeAnimation()
+        super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .storagePlaylist))
+        listStorageView.startParticeAnimation()
+
+        // 플리 상세에서 내 리스트로 돌아오는 경우, 플로팅 버튼 올림
+        NotificationCenter.default.post(
+            name: .shouldMovePlaylistFloatingButton,
+            object: PlaylistFloatingButtonPosition.top
+        )
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        listStorageView.removeParticeAnimation()
     }
 
     override func configureUI() {
@@ -89,6 +110,11 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showDetail)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, key in
+                // 플리 상세 진입 시, 플로팅 버튼 내림
+                NotificationCenter.default.post(
+                    name: .shouldMovePlaylistFloatingButton,
+                    object: PlaylistFloatingButtonPosition.default
+                )
                 owner.navigatePlaylistDetail(key: key)
             })
             .disposed(by: disposeBag)
@@ -113,7 +139,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         reactor.pulse(\.$showDrawFruitPopup)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, message in
+            .bind(with: self, onNext: { owner, _ in
                 let vc = owner.fruitDrawFactory.makeView(delegate: owner)
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
@@ -123,7 +149,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showCreatePricePopup)
             .compactMap { $0 }
             .bind(with: self) { owner, price in
-                let text = owner.textPopUpFactory.makeView(
+                let text = owner.textPopupFactory.makeView(
                     text: "리스트를 만들기 위해서는\n음표 열매 \(price)개가 필요합니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: "\(price)개 사용",
@@ -139,7 +165,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showCreateListPopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, _ in
-                let vc = owner.multiPurposePopUpFactory.makeView(type: .creation, key: "") { title in
+                let vc = owner.multiPurposePopupFactory.makeView(type: .creation, key: "") { title in
                     owner.reactor?.action.onNext(.confirmCreateListButtonDidTap(title))
                 }
                 owner.showBottomSheet(content: vc, size: .fixed(296))
@@ -149,7 +175,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         reactor.pulse(\.$showDeletePopup)
             .compactMap { $0 }
             .bind(with: self, onNext: { owner, itemCount in
-                guard let vc = owner.textPopUpFactory.makeView(
+                guard let vc = owner.textPopupFactory.makeView(
                     text: "선택한 내 리스트 \(itemCount)개가 삭제됩니다.",
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
@@ -167,7 +193,9 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
         reactor.pulse(\.$showLoginAlert)
             .compactMap { $0 }
-            .bind(with: self, onNext: { owner, _ in
+            .bind(with: self, onNext: { owner, entry in
+                LogManager.analytics(CommonAnalyticsLog.clickLoginButton(entry: entry))
+
                 let loginVC = owner.signInFactory.makeView()
                 loginVC.modalPresentationStyle = .fullScreen
                 owner.present(loginVC, animated: true)
@@ -219,6 +247,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     override func bindAction(reactor: ListStorageReactor) {
         listStorageView.rx.loginButtonDidTap
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickLoginButton(location: .myPlaylist)) })
             .map { Reactor.Action.loginButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -229,12 +258,14 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .disposed(by: disposeBag)
 
         listStorageView.rx.drawFruitButtonDidTap
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickFruitDrawEntryButton(location: .myPlaylist)) })
             .map { Reactor.Action.drawFruitButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
-        listStorageView.rx.createListButtonDidTap
+        createListButton.button.rx.tap
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)
+            .do(onNext: { LogManager.analytics(StorageAnalyticsLog.clickCreatePlaylistButton(location: .myPlaylist)) })
             .map { Reactor.Action.createListButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -298,19 +329,29 @@ extension ListStorageViewController: SongCartViewDelegate {
 extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .listTapped(indexPath):
-            self.reactor?.action.onNext(.listDidTap(indexPath))
+        case let .listTapped(passModel):
+            LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .storage, key: passModel.key))
+            self.reactor?.action.onNext(.listDidTap(passModel.indexPath))
 
-        case let .playTapped(indexPath):
-            self.reactor?.action.onNext(.playDidTap(indexPath.row))
+        case let .playTapped(passModel):
+            LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storagePlaylist, type: .playlist))
+            self.reactor?.action.onNext(.playDidTap(passModel.indexPath.row))
 
-        case let .cellTapped(indexPath):
-            self.reactor?.action.onNext(.cellDidTap(indexPath.row))
+        case let .cellTapped(passModel):
+            self.reactor?.action.onNext(.cellDidTap(passModel.indexPath.row))
         }
     }
 }
 
 extension ListStorageViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 80 // height(52) + top inset(16) + bottom inset(12)
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return createListButton
+    }
+
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }

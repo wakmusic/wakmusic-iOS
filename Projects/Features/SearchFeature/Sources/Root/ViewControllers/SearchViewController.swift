@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import NeedleFoundation
 import ReactorKit
 import RxCocoa
@@ -33,7 +34,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
     @IBOutlet weak var searchHeaderContentView: UIView!
     private var beforeSearchComponent: BeforeSearchComponent!
     private var afterSearchComponent: AfterSearchComponent!
-    private var textPopUpFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
 
     private lazy var beforeVC = beforeSearchComponent.makeView()
 
@@ -50,13 +51,14 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .search))
     }
 
     public static func viewController(
         reactor: SearchReactor,
         beforeSearchComponent: BeforeSearchComponent,
         afterSearchComponent: AfterSearchComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) -> SearchViewController {
         let viewController = SearchViewController.viewController(storyBoardName: "Search", bundle: Bundle.module)
@@ -64,7 +66,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
         viewController.reactor = reactor
         viewController.beforeSearchComponent = beforeSearchComponent
         viewController.afterSearchComponent = afterSearchComponent
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         viewController.searchGlobalScrollState = searchGlobalScrollState
         return viewController
     }
@@ -164,7 +166,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
 
                 let (state, text) = data
 
-                owner.cancelButton.alpha = state == .typing ? 1.0 : .zero
+                owner.cancelButton.alpha = state != .before ? 1.0 : .zero
                 owner.reactSearchHeader(state)
                 owner.bindSubView(state: state, text: text)
 
@@ -173,7 +175,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                 }
 
                 if text.isWhiteSpace {
-                    guard let textPopupViewController = owner.textPopUpFactory.makeView(
+                    guard let textPopupViewController = owner.textPopupFactory.makeView(
                         text: "검색어를 입력해주세요.",
                         cancelButtonIsHidden: true,
                         confirmButtonText: nil,
@@ -185,6 +187,7 @@ final class SearchViewController: BaseStoryboardReactorViewController<SearchReac
                     }
                     owner.showBottomSheet(content: textPopupViewController)
                 } else {
+                    LogManager.setUserProperty(property: .latestSearchKeyword(keyword: text))
                     owner.searchTextFiled.rx.text.onNext(text)
                     PreferenceManager.shared.addRecentRecords(word: text)
                     owner.view.endEditing(true)

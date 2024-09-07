@@ -93,7 +93,7 @@ extension InquiryType {
         case .weeklyChart:
             return "주간차트 영상"
         case .credit:
-            return "참여정보"
+            return "참여 정보"
         case .unknown:
             return ""
         }

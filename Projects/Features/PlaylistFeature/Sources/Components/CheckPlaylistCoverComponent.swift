@@ -5,7 +5,7 @@ import PlaylistFeatureInterface
 import UIKit
 
 public protocol CheckPlaylistCoverDependency: Dependency {
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class CheckPlaylistCoverComponent: Component<CheckPlaylistCoverDependency>, CheckPlaylistCoverFactory {
@@ -14,7 +14,7 @@ public final class CheckPlaylistCoverComponent: Component<CheckPlaylistCoverDepe
 
         return CheckPlaylistCoverViewController(
             reactor: reactor,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             delegate: delegate
         )
     }

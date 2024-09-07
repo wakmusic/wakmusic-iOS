@@ -68,7 +68,7 @@ public extension UIViewController {
         )
 
         bottomSheetView.present(in: self.view)
-        NotificationCenter.default.post(name: .willShowSongCart, object: nil)
+        NotificationCenter.default.post(name: .shouldHidePlaylistFloatingButton, object: nil)
     }
 
     func hideInlineBottomSheet() {
@@ -77,6 +77,6 @@ public extension UIViewController {
             .last as? BottomSheetView else { return }
 
         bottomSheetView.dismiss()
-        NotificationCenter.default.post(name: .willHideSongCart, object: nil)
+        NotificationCenter.default.post(name: .shouldShowPlaylistFloatingButton, object: nil)
     }
 }

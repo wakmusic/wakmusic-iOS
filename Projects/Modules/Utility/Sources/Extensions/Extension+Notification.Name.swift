@@ -7,7 +7,7 @@ public extension Notification.Name {
     static let willRefreshUserInfo = Notification.Name("willRefreshUserInfo") // 유저 정보 갱신
     static let willStatusBarEnterDarkBackground = Notification.Name("willStatusBarEnterDarkBackground")
     static let willStatusBarEnterLightBackground = Notification.Name("willStatusBarEnterLightBackground")
-    static let willShowSongCart = Notification.Name("willShowSongCart")
-    static let willHideSongCart = Notification.Name("willHideSongCart")
-    static let didChangeTabInStorage = Notification.Name("didChangeTabInStorage")
+    static let shouldHidePlaylistFloatingButton = Notification.Name("shouldHidePlaylistFloatingButton")
+    static let shouldShowPlaylistFloatingButton = Notification.Name("shouldShowPlaylistFloatingButton")
+    static let shouldMovePlaylistFloatingButton = Notification.Name("shouldMovePlaylistFloatingButton")
 }

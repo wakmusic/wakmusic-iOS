@@ -26,7 +26,7 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     private let disposeBag = DisposeBag()
 
     private var containSongsFactory: ContainSongsFactory!
-    private var textPopupFactory: TextPopUpFactory!
+    private var textPopupFactory: TextPopupFactory!
     private var signInFactory: SignInFactory!
     private var songDetailPresenter: SongDetailPresentable!
 
@@ -47,7 +47,7 @@ public final class ChartContentViewController: BaseViewController, ViewControlle
     public static func viewController(
         viewModel: ChartContentViewModel,
         containSongsFactory: ContainSongsFactory,
-        textPopupFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         signInFactory: SignInFactory,
         songDetailPresenter: SongDetailPresentable
     ) -> ChartContentViewController {
@@ -141,12 +141,20 @@ private extension ChartContentViewController {
 
         output.groupPlaySongs
             .bind(with: self, onNext: { owner, source in
-                guard !source.isEmpty else {
+                guard !source.songs.isEmpty else {
                     owner.output.showToast.onNext("차트 데이터가 없습니다.")
                     return
                 }
-                PlayState.shared.loadAndAppendSongsToPlaylist(source)
-                WakmusicYoutubePlayer(ids: source.map { $0.id }).play()
+                PlayState.shared.loadAndAppendSongsToPlaylist(source.songs)
+                if source.songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                    WakmusicYoutubePlayer(
+                        ids: source.songs.map { $0.id },
+                        title: source.playlistTitle,
+                        playPlatform: .youtube
+                    ).play()
+                } else {
+                    WakmusicYoutubePlayer(ids: source.songs.map { $0.id }, title: source.playlistTitle).play()
+                }
             })
             .disposed(by: disposeBag)
 
@@ -167,6 +175,9 @@ private extension ChartContentViewController {
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = owner.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .overFullScreen
                         owner.present(loginVC, animated: true)
@@ -189,7 +200,13 @@ private extension ChartContentViewController {
 
 extension ChartContentViewController: ChartContentTableViewCellDelegate {
     func tappedThumbnail(id: String) {
-        songDetailPresenter.present(id: id)
+        guard let tappedSong = output.dataSource.value
+            .first(where: { $0.id == id })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: tappedSong.id)
     }
 }
 
@@ -218,11 +235,17 @@ extension ChartContentViewController: PlayButtonForChartViewDelegate {
         }
 
         if event == .allPlay {
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .all)
+            )
             let viewController = ChartPlayPopupViewController()
             viewController.delegate = self
             showBottomSheet(content: viewController, size: .fixed(192 + SAFEAREA_BOTTOM_HEIGHT()))
 
         } else {
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .random)
+            )
             input.shufflePlayTapped.onNext(())
         }
     }
@@ -230,6 +253,16 @@ extension ChartContentViewController: PlayButtonForChartViewDelegate {
 
 extension ChartContentViewController: ChartPlayPopupViewControllerDelegate {
     public func playTapped(type: HalfPlayType) {
+        switch type {
+        case .front: // 1-50
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .range1to50)
+            )
+        case .back: // 50-100
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .range50to100)
+            )
+        }
         input.halfPlayTapped.onNext(type)
     }
 }
@@ -244,6 +277,8 @@ extension ChartContentViewController: SongCartViewDelegate {
             input.allSongSelected.onNext(flag)
 
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .chart)
+            LogManager.analytics(log)
             if PreferenceManager.userInfo == nil {
                 output.showLogin.onNext(())
                 return
@@ -262,10 +297,6 @@ extension ChartContentViewController: SongCartViewDelegate {
             }
 
         case .addPlayList:
-            guard songs.count <= limit else {
-                output.showToast.onNext(LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit))
-                return
-            }
             PlayState.shared.appendSongsToPlaylist(songs)
             output.showToast.onNext(LocalizationStrings.addList)
             input.allSongSelected.onNext(false)
@@ -277,7 +308,14 @@ extension ChartContentViewController: SongCartViewDelegate {
             }
             PlayState.shared.loadAndAppendSongsToPlaylist(songs)
             input.allSongSelected.onNext(false)
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .chart, type: .multiple)
+            )
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
 
         case .remove:
             return

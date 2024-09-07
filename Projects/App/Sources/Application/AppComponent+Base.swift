@@ -3,12 +3,12 @@ import BaseFeatureInterface
 import Foundation
 
 public extension AppComponent {
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory {
+    var multiPurposePopupFactory: any MultiPurposePopupFactory {
         MultiPurposePopupComponent(parent: self)
     }
 
-    var textPopUpFactory: any TextPopUpFactory {
-        TextPopUpComponent(parent: self)
+    var textPopupFactory: any TextPopupFactory {
+        TextPopupComponent(parent: self)
     }
 
     var containSongsFactory: any ContainSongsFactory {

@@ -9,7 +9,7 @@ public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var signInFactory: any SignInFactory { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
@@ -26,7 +26,7 @@ public final class ArtistMusicContentComponent: Component<ArtistMusicContentDepe
             ),
             containSongsFactory: dependency.containSongsFactory,
             signInFactory: dependency.signInFactory,
-            textPopupFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             songDetailPresenter: dependency.songDetailPresenter
         )
     }

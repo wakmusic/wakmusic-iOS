@@ -36,7 +36,7 @@ public final class ArtistDetailViewModel: ViewModelType {
         let dataSource: BehaviorRelay<ArtistEntity?> = BehaviorRelay(value: nil)
         let isSubscription: BehaviorRelay<Bool> = BehaviorRelay(value: false)
         let showToast: PublishSubject<String> = PublishSubject()
-        let showLogin: PublishSubject<Void> = PublishSubject()
+        let showLogin: PublishSubject<CommonAnalyticsLog.LoginButtonEntry> = PublishSubject()
         let showWarningNotification: PublishSubject<Void> = PublishSubject()
         let occurredError: PublishSubject<String> = PublishSubject()
     }
@@ -84,7 +84,7 @@ public final class ArtistDetailViewModel: ViewModelType {
             .withLatestFrom(PreferenceManager.$userInfo)
             .filter { userInfo in
                 if userInfo == nil {
-                    output.showLogin.onNext(())
+                    output.showLogin.onNext(.artistSubscribe)
                     return false
                 }
                 return true

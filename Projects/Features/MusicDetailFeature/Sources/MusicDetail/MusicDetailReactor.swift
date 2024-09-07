@@ -12,6 +12,10 @@ import Utility
 
 final class MusicDetailReactor: Reactor {
     private typealias Log = MusicDetailAnalyticsLog
+    private struct LikeRequest {
+        let songID: String
+        let isLiked: Bool
+    }
 
     enum Action {
         case viewDidLoad
@@ -35,14 +39,15 @@ final class MusicDetailReactor: Reactor {
     }
 
     enum NavigateType {
-        case youtube(id: String)
+        case youtube(id: String, playPlatform: WakmusicYoutubePlayer.PlayPlatform)
         case credit(id: String)
         case lyricsHighlighting(model: LyricHighlightingRequiredModel)
         case musicPick(id: String)
-        case playlist
+        case playlist(id: String)
         case dismiss
         case textPopup(text: String, completion: () -> Void)
         case signin
+        case karaoke(ky: Int?, tj: Int?)
     }
 
     struct State {
@@ -67,6 +72,11 @@ final class MusicDetailReactor: Reactor {
     private let addLikeSongUseCase: any AddLikeSongUseCase
     private let cancelLikeSongUseCase: any CancelLikeSongUseCase
     private var shouldRefreshLikeList = false
+
+    private var pendingLikeRequests: [String: LikeRequest] = [:]
+    private var latestLikeRequests: [String: LikeRequest] = [:]
+    private let likeRequestSubject = PublishSubject<LikeRequest>()
+    private var currentLikeRequestSongID: String?
 
     init(
         songIDs: [String],
@@ -146,7 +156,85 @@ final class MusicDetailReactor: Reactor {
                 owner.navigateMutation(navigate: .signin)
             }
 
-        return Observable.merge(mutation, signInIsRequired)
+        let likeRequestObservable = likeRequestSubject
+            .flatMapLatest { [weak self] request -> Observable<Mutation> in
+                guard let self = self else { return .empty() }
+                return self.handleLikeRequest(request)
+            }
+
+        return Observable.merge(mutation, signInIsRequired, likeRequestObservable)
+    }
+
+    /// 좋아요 요청을 처리하고 대기 중인 요청이 있다면 연속적으로 처리해요.
+    ///
+    /// 이 함수는 주어진 좋아요 요청을 처리하고, 해당 요청의 처리가 완료된 후 대기 중인 다른 요청이 있는지 확인해요.
+    /// 대기 중인 요청이 있다면 해당 요청도 처리합니다.
+    ///
+    /// - Parameters:
+    ///   - request: 처리할 좋아요 요청
+    ///
+    /// - Returns: 처리 결과에 따른 Mutation Observable 스트림
+    ///
+    /// - Note: 이 함수는 에러 발생 시 로그를 출력하고 빈 Observable을 반환해요.
+    private func handleLikeRequest(_ request: LikeRequest) -> Observable<Mutation> {
+        let useCase: (_ id: String) -> Observable<Void> = request.isLiked
+            ? { [addLikeSongUseCase] id in
+                addLikeSongUseCase.execute(id: id)
+                    .asObservable()
+                    .map { _ in () }
+            }
+            : { [cancelLikeSongUseCase] id in
+                cancelLikeSongUseCase.execute(id: id)
+                    .asObservable()
+                    .map { _ in () }
+            }
+
+        self.latestLikeRequests[request.songID] = request
+        self.pendingLikeRequests.removeValue(forKey: request.songID)
+        return useCase(request.songID)
+            .asObservable()
+            .flatMap { [weak self] _ -> Observable<Mutation> in
+                guard let self = self else { return .empty() }
+
+                if let nextRequest = self.getNextPendingRequest() {
+                    return self.handleLikeRequest(nextRequest)
+                }
+
+                self.currentLikeRequestSongID = nil
+                return .empty()
+            }
+            .catch { [weak self] error in
+                self?.currentLikeRequestSongID = nil
+                LogManager.printError("Like request failed: \(error)")
+                return .empty()
+            }
+    }
+
+    /// 다음으로 처리할 대기 중인 좋아요 요청을 반환해요.
+    ///
+    /// 이 함수는 현재 처리 중인 곡의 ID에 해당하는 대기 중인 요청이 있는지 먼저 확인해요.
+    /// 만약 있다면, 해당 요청의 상태가 최신 상태와 다를 경우에만 반환해요.
+    /// 현재 곡의 대기 중인 요청이 없거나 상태가 같다면, 다른 곡의 대기 중인 요청 중 첫 번째 요청을 반환해요.
+    ///
+    /// - Returns: 다음으로 처리할 `LikeRequest` 객체. 처리할 마땅한 요청이 없다면 `nil`을 반환
+    ///
+    /// - Note: 이 함수는 대기 중인 요청들의 우선순위에 따라 반환됩니다.
+    private func getNextPendingRequest() -> LikeRequest? {
+        if let currentSongID = currentLikeRequestSongID,
+           let nextPendingRequest = pendingLikeRequests[currentSongID] {
+            let latestRequest = latestLikeRequests[currentSongID]
+            return if latestRequest == nil {
+                nextPendingRequest
+            } else if nextPendingRequest.isLiked != latestRequest?.isLiked {
+                nextPendingRequest
+            } else {
+                nil
+            }
+        }
+
+        guard let remainRequest = pendingLikeRequests.values.first else { return nil }
+
+        return remainRequest
     }
 }
 
@@ -163,12 +251,14 @@ private extension MusicDetailReactor {
             .map { index in
                 fetchSongUseCase.execute(id: index)
                     .map { $0.toModel() }
+                    .catchAndReturn(SongModel.notFoundModel())
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
 
         let songMutationObservable = fetchSongUseCase.execute(id: selectedSongID)
             .map { $0.toModel() }
+            .catchAndReturn(SongModel.notFoundModel())
             .map { Mutation.updateSongDictionary(key: selectedSongID, value: $0) }
             .asObservable()
 
@@ -200,15 +290,16 @@ private extension MusicDetailReactor {
     }
 
     func playButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         if let song = currentState.selectedSong {
-            let log = Log.clickPlaylistButton(
-                id: song.videoID
-            )
+            let log = CommonAnalyticsLog.clickPlayButton(location: .musicDetail, type: .single)
             LogManager.analytics(log)
         }
         PlayState.shared.append(item: PlaylistItem(id: song.videoID, title: song.title, artist: song.artistString))
-        return navigateMutation(navigate: .youtube(id: song.videoID))
+        return navigateMutation(navigate: .youtube(
+            id: song.videoID,
+            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+        ))
     }
 
     func nextButtonDidTap() -> Observable<Mutation> {
@@ -229,14 +320,14 @@ private extension MusicDetailReactor {
     }
 
     func singingRoomButtonDiTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickSingingRoomButton(id: song.videoID)
         LogManager.analytics(log)
-        return .empty()
+        return navigateMutation(navigate: .karaoke(ky: song.karaokeNumber.ky, tj: song.karaokeNumber.tj))
     }
 
     func lyricsButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickLyricsButton(id: song.videoID)
         LogManager.analytics(log)
 
@@ -249,7 +340,7 @@ private extension MusicDetailReactor {
     }
 
     func creditButtonDidTap() -> Observable<Mutation> {
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let log = Log.clickCreditButton(id: song.videoID)
         LogManager.analytics(log)
         return navigateMutation(navigate: .credit(id: song.videoID))
@@ -261,13 +352,16 @@ private extension MusicDetailReactor {
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .songLike)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )
             )
         }
 
-        guard let song = currentState.selectedSong else { return .empty() }
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         let isLike = currentState.selectedSong?.isLiked ?? false
         let log = Log.clickLikeMusicButton(
             id: song.videoID,
@@ -282,38 +376,37 @@ private extension MusicDetailReactor {
         }
         LogManager.analytics(log)
 
-        shouldRefreshLikeList = true
-        return if newLike {
-            .concat(
-                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
-                addLikeSongUseCase.execute(id: newSong.videoID)
-                    .asObservable()
-                    .flatMap { _ in Observable.empty() }
-            )
-        } else {
-            .concat(
-                .just(.updateSongDictionary(key: newSong.videoID, value: newSong)),
-                cancelLikeSongUseCase.execute(id: newSong.videoID)
-                    .asObservable()
-                    .flatMap { _ in Observable.empty() }
-            )
+        let request = LikeRequest(songID: song.videoID, isLiked: newLike)
+        pendingLikeRequests[song.videoID] = request
+
+        let currentLikeRequestSongID = currentLikeRequestSongID
+        self.currentLikeRequestSongID = song.videoID
+        if currentLikeRequestSongID == nil {
+            likeRequestSubject.onNext(request)
         }
+
+        shouldRefreshLikeList = true
+        return .just(.updateSongDictionary(key: newSong.videoID, value: newSong))
     }
 
     func musicPickButtonDidTap() -> Observable<Mutation> {
+        let log = CommonAnalyticsLog.clickAddMusicsButton(location: .songDetail)
+        LogManager.analytics(log)
+
         guard PreferenceManager.userInfo != nil else {
             return navigateMutation(
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )
             )
         }
-        guard let song = currentState.selectedSong else { return .empty() }
-        let log = Log.clickMusicPickButton(id: song.videoID)
-        LogManager.analytics(log)
+        guard let song = currentState.selectedSong, !song.videoID.isEmpty else { return .empty() }
         return navigateMutation(navigate: .musicPick(id: song.videoID))
     }
 
@@ -321,7 +414,7 @@ private extension MusicDetailReactor {
         guard let song = currentState.selectedSong else { return .empty() }
         let log = Log.clickPlaylistButton(id: song.videoID)
         LogManager.analytics(log)
-        return navigateMutation(navigate: .playlist)
+        return navigateMutation(navigate: .playlist(id: song.videoID))
     }
 }
 
@@ -354,6 +447,7 @@ private extension MusicDetailReactor {
             .map { index in
                 fetchSongUseCase.execute(id: index)
                     .map { $0.toModel() }
+                    .catchAndReturn(SongModel.notFoundModel())
                     .map { Mutation.updateSongDictionary(key: index, value: $0) }
                     .asObservable()
             }
@@ -372,11 +466,27 @@ private extension MusicDetailReactor {
 
         let currentSongMutationObservable = fetchSongUseCase.execute(id: songID)
             .map { $0.toModel() }
+            .catchAndReturn(SongModel.notFoundModel())
             .map { Mutation.updateSongDictionary(key: songID, value: $0) }
             .asObservable()
 
         return Observable.merge(
             [currentSongMutationObservable] + prefetchingSongMutationObservable
+        )
+    }
+}
+
+private extension SongModel {
+    static func notFoundModel() -> SongModel {
+        .init(
+            videoID: "",
+            title: "해당 곡을 찾을 수 없습니다",
+            artistString: "정보를 가져올 수 없습니다",
+            date: "",
+            views: 0,
+            likes: 0,
+            isLiked: false,
+            karaokeNumber: .init(tj: nil, ky: nil)
         )
     }
 }

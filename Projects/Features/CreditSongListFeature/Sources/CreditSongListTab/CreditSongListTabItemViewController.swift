@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import CreditSongListFeatureInterface
 import DesignSystem
+import LogManager
 import RxSwift
 import SignInFeatureInterface
 import Then
@@ -39,6 +40,10 @@ final class CreditSongListTabItemViewController:
     > { [reactor] cell, _, model in
         let isSelected = reactor?.currentState.selectedSongs.contains(model.id) ?? false
         cell.update(model, isSelected: isSelected)
+
+        cell.setThumbnailTapHandler { [reactor, model] in
+            reactor?.action.onNext(.songThumbnailDidTap(model: model))
+        }
     }
 
     private lazy var creditSongHeaderRegistration = UICollectionView
@@ -46,18 +51,21 @@ final class CreditSongListTabItemViewController:
             elementKind: UICollectionView.elementKindSectionHeader
         ) { [reactor] headerView, _, _ in
             headerView.setPlayButtonHandler {
+                let log = CommonAnalyticsLog.clickPlayButton(location: .creditSongList, type: .random)
+                LogManager.analytics(log)
+
                 reactor?.action.onNext(.randomPlayButtonDidTap)
             }
         }
 
     private let containSongsFactory: any ContainSongsFactory
-    private let textPopupFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let signInFactory: any SignInFactory
 
     init(
         reactor: Reactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopupFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
@@ -147,14 +155,16 @@ final class CreditSongListTabItemViewController:
             .compactMap { $0 }
             .bind(with: self) { owner, navigate in
                 switch navigate {
-                case let .playYoutube(ids):
-                    owner.playYoutube(ids: ids)
+                case let .playYoutube(ids, playPlatform):
+                    owner.playYoutube(ids: ids, playPlatform: playPlatform)
                 case let .containSongs(ids):
                     owner.presentContainSongs(ids: ids)
                 case let .textPopup(text, completion):
                     owner.presentTextPopup(text: text, completion: completion)
                 case .signIn:
                     owner.presentSignIn()
+                case let .dismiss(completion):
+                    owner.dismiss(completion: completion)
                 }
             }
             .disposed(by: disposeBag)
@@ -277,8 +287,10 @@ extension CreditSongListTabItemViewController {
         return dataSource
     }
 
-    private func playYoutube(ids: [String]) {
-        WakmusicYoutubePlayer(ids: ids).play()
+    private func playYoutube(ids: [String], playPlatform: WakmusicYoutubePlayer.PlayPlatform) {
+        let worker = reactor?.workerName ?? "작업자"
+        let title = "\(worker)님과 함께하는 랜뮤"
+        WakmusicYoutubePlayer(ids: ids, title: title, playPlatform: playPlatform).play()
     }
 
     private func presentContainSongs(ids: [String]) {
@@ -304,6 +316,10 @@ extension CreditSongListTabItemViewController {
         let viewController = signInFactory.makeView()
         viewController.modalPresentationStyle = .overFullScreen
         UIApplication.topVisibleViewController()?.present(viewController, animated: true)
+    }
+
+    private func dismiss(completion: @escaping () -> Void) {
+        UIApplication.keyRootViewController?.dismiss(animated: true, completion: completion)
     }
 }
 

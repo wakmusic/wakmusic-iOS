@@ -53,6 +53,10 @@ public final class HomeViewController: BaseViewController, ViewControllerFromSto
         $0.clipsToBounds = true
     }
 
+    private let translucentView = UIVisualEffectView(effect: UIBlurEffect(style: .light)).then {
+        $0.alpha = 0
+    }
+
     private var refreshControl = UIRefreshControl()
     private var chartFactory: ChartFactory!
     private var playlistDetailFactory: PlaylistDetailFactory!
@@ -279,6 +283,12 @@ extension HomeViewController {
                 $0.top.bottom.equalToSuperview()
             }
         }
+
+        view.addSubviews(translucentView)
+        translucentView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
     }
 
     private func configureUI() {
@@ -352,6 +362,7 @@ extension HomeViewController: UIScrollViewDelegate {
         let standard: CGFloat = offsetY / topCircleImageView.frame.height
         blurImageView.alpha = 1.0 - standard
         glassmorphismView.alpha = min(1.0, standard + 0.8)
+        translucentView.alpha = min(max(offsetY / translucentView.frame.height, 0), 1)
     }
 }
 
@@ -398,32 +409,48 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDelegate
 extension HomeViewController: HomeChartCellDelegate {
     func thumbnailDidTap(model: ChartRankingEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeTop100, id: model.id))
-        songDetailPresenter.present(id: model.id)
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
     }
 
     func playButtonDidTap(model: ChartRankingEntity) {
-        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeTop100, id: model.id))
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
+        )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-        WakmusicYoutubePlayer(id: model.id).play()
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 }
 
 extension HomeViewController: HomeNewSongCellDelegate {
     func thumbnailDidTap(model: NewSongsEntity) {
         LogManager.analytics(HomeAnalyticsLog.clickMusicItem(location: .homeRecent, id: model.id))
-        songDetailPresenter.present(id: model.id)
+        PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
     }
 
     func playButtonDidTap(model: NewSongsEntity) {
-        LogManager.analytics(HomeAnalyticsLog.clickMusicItemPlayButton(location: .homeRecent, id: model.id))
+        LogManager.analytics(
+            CommonAnalyticsLog.clickPlayButton(location: .home, type: .single)
+        )
         PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-        WakmusicYoutubePlayer(id: model.id).play()
+        WakmusicYoutubePlayer(
+            id: model.id,
+            playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
     }
 }
 
 extension HomeViewController: RecommendPlayListViewDelegate {
     public func itemSelected(model: RecommendPlaylistEntity) {
-        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home))
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .home, key: model.key))
         let viewController = playlistDetailFactory.makeWmView(key: model.key) // 왁뮤 플리
         self.navigationController?.pushViewController(viewController, animated: true)
     }
@@ -435,6 +462,7 @@ public extension HomeViewController {
         if viewControllersCount > 1 {
             self.navigationController?.popToRootViewController(animated: true)
         } else {
+            guard let scrollView = self.scrollView else { return }
             scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
         }
     }

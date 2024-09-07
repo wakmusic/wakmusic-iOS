@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
+import LogManager
 import MessageUI
 import RxSwift
 import SafariServices
@@ -41,7 +42,7 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
     let unSelectedColor: UIColor = DesignSystemAsset.BlueGrayColor.blueGray200.color
     let disposeBag = DisposeBag()
     var viewModel: QuestionViewModel!
-    var textPopUpFactory: TextPopUpFactory!
+    var textPopupFactory: TextPopupFactory!
     lazy var input = QuestionViewModel.Input()
     lazy var output = viewModel.transform(from: input)
 
@@ -57,11 +58,11 @@ public final class QuestionViewController: BaseViewController, ViewControllerFro
 
     public static func viewController(
         viewModel: QuestionViewModel,
-        textPopUpFactory: TextPopUpFactory
+        textPopupFactory: TextPopupFactory
     ) -> QuestionViewController {
         let viewController = QuestionViewController.viewController(storyBoardName: "Question", bundle: Bundle.module)
         viewController.viewModel = viewModel
-        viewController.textPopUpFactory = textPopUpFactory
+        viewController.textPopupFactory = textPopupFactory
         return viewController
     }
 }
@@ -230,6 +231,10 @@ extension QuestionViewController {
             .withLatestFrom(output.mailSource)
             .filter { $0 != .unknown }
             .subscribe(onNext: { [weak self] source in
+                let logInquiryType: InquiryAnalyticsLog.LogInquiryType = .init(mailSource: source)
+                let log = InquiryAnalyticsLog.clickInquirySubmitButton(type: logInquiryType)
+                LogManager.analytics(log)
+
                 guard let self = self else { return }
                 self.goToMail(source: source)
             })
@@ -261,7 +266,7 @@ extension QuestionViewController {
             self.present(compseVC, animated: true, completion: nil)
 
         } else {
-            guard let textPopupViewController = self.textPopUpFactory.makeView(
+            guard let textPopupViewController = self.textPopupFactory.makeView(
                 text: "메일 계정이 설정되어 있지 않습니다.\n설정 > Mail 앱 > 계정을 설정해주세요.",
                 cancelButtonIsHidden: true,
                 confirmButtonText: "확인",

@@ -63,6 +63,7 @@ public extension UILabel {
     /// - Parameter lineHeightMultiple: 줄 간격의 배수 (lineSpacing *  lineHeightMultiple)
     func getTextWithAttributes(
         lineHeight: CGFloat? = nil,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail,
         kernValue: Double? = nil,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
@@ -73,15 +74,22 @@ public extension UILabel {
         if let lineSpacing { paragraphStyle.lineSpacing = lineSpacing }
         if let lineHeightMultiple { paragraphStyle.lineHeightMultiple = lineHeightMultiple }
 
-        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.lineBreakMode = lineBreakMode
         paragraphStyle.alignment = alignment
 
         let baselineOffset: CGFloat
+        let offsetDivisor: CGFloat
+
+        if #available(iOS 16.4, *) { // 16.4 부터 잠수함 패치로 고쳐졌다고 합니다.
+            offsetDivisor = 2
+        } else {
+            offsetDivisor = 4
+        }
 
         if let lineHeight {
             paragraphStyle.maximumLineHeight = lineHeight
             paragraphStyle.minimumLineHeight = lineHeight
-            baselineOffset = (lineHeight - font.lineHeight) / 2
+            baselineOffset = (lineHeight - font.lineHeight) / offsetDivisor
         } else {
             baselineOffset = 0
         }
@@ -97,25 +105,38 @@ public extension UILabel {
 
     func setTextWithAttributes(
         lineHeight: CGFloat? = nil,
+        lineBreakMode: NSLineBreakMode = .byTruncatingTail,
         kernValue: Double? = -0.5,
         lineSpacing: CGFloat? = nil,
         lineHeightMultiple: CGFloat? = nil,
-        alignment: NSTextAlignment = .left
+        alignment: NSTextAlignment = .left,
+        hangulWordPriority: Bool = false
     ) {
         let paragraphStyle = NSMutableParagraphStyle()
 
         if let lineSpacing { paragraphStyle.lineSpacing = lineSpacing }
         if let lineHeightMultiple { paragraphStyle.lineHeightMultiple = lineHeightMultiple }
 
-        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.lineBreakMode = lineBreakMode
         paragraphStyle.alignment = alignment
 
+        if hangulWordPriority {
+            paragraphStyle.lineBreakStrategy = .hangulWordPriority
+        }
+
         let baselineOffset: CGFloat
+        let offsetDivisor: CGFloat
+
+        if #available(iOS 16.4, *) { // 16.4 부터 잠수함 패치로 고쳐졌다고 합니다.
+            offsetDivisor = 2
+        } else {
+            offsetDivisor = 4
+        }
 
         if let lineHeight {
             paragraphStyle.maximumLineHeight = lineHeight
             paragraphStyle.minimumLineHeight = lineHeight
-            baselineOffset = (lineHeight - font.lineHeight) / 2
+            baselineOffset = (lineHeight - font.lineHeight) / offsetDivisor
         } else {
             baselineOffset = 0
         }

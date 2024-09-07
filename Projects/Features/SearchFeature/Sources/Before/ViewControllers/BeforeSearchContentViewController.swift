@@ -15,7 +15,7 @@ import Utility
 
 final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
-    private let textPopUpFactory: TextPopUpFactory
+    private let textPopupFactory: TextPopupFactory
     private (set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
@@ -33,28 +33,23 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
 
     init(
         wakmusicRecommendComponent: WakmusicRecommendComponent,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         playlistDetailFactory: any PlaylistDetailFactory,
         reactor: BeforeSearchReactor
     ) {
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.wakmusicRecommendComponent = wakmusicRecommendComponent
         self.playlistDetailFactory = playlistDetailFactory
         super.init(reactor: reactor)
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self)")
+        LogManager.printDebug("❌ \(Self.self)")
     }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
-    }
-
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .search))
     }
 
     override public func addView() {
@@ -200,7 +195,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
         // 최근 검색어 전체 삭제 버튼 클릭 이벤트 받는 통로
         recentRecordHeaderView.completionHandler = { [weak self] in
 
-            guard let self = self, let textPopupViewController = self.textPopUpFactory.makeView(
+            guard let self = self, let textPopupViewController = self.textPopupFactory.makeView(
                 text: "전체 내역을 삭제하시겠습니까?",
                 cancelButtonIsHidden: false,
                 confirmButtonText: nil,
@@ -321,10 +316,13 @@ extension BeforeSearchContentViewController: UICollectionViewDelegate {
 
         switch model {
         case let .youtube(model: model):
-            WakmusicYoutubePlayer(id: model.id).play()
+            // 주간 왁뮤
+            WakmusicYoutubePlayer(id: model.id, playPlatform: .youtube).play()
             LogManager.analytics(SearchAnalyticsLog.clickLatestWakmuYoutubeVideo)
         case let .recommend(model: model):
-            navigateWmPlaylistDetail(key: model.key)
+            let log = CommonAnalyticsLog.clickPlaylistItem(location: .search, key: model.key)
+            LogManager.analytics(log)
+            navigateWMPlaylistDetail(key: model.key)
 
             #warning("추후 업데이트 시 사용")
 //        case let .popularList(model: model):
@@ -355,6 +353,6 @@ extension BeforeSearchContentViewController: BeforeSearchSectionHeaderViewDelega
 
 extension BeforeSearchContentViewController {
     func scrollToTop() {
-        tableView.setContentOffset(.zero, animated: true)
+        collectionView.scroll(to: .top)
     }
 }

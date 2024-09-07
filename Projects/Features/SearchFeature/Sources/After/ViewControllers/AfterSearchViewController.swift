@@ -56,7 +56,7 @@ public final class AfterSearchViewController: TabmanViewController, ViewControll
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self)")
+        LogManager.printDebug("❌ \(Self.self)")
     }
 
     public func bind(reactor: AfterSearchReactor) {
@@ -99,6 +99,7 @@ extension AfterSearchViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 0
 
         // 버튼 글씨 커스텀
         bar.buttons.customize { button in

@@ -60,4 +60,8 @@ public extension String {
         formatter.dateFormat = format
         return formatter.date(from: self) ?? .init()
     }
+
+    var isContainShortsTagTitle: Bool {
+        return self.lowercased().contains("#Shorts".lowercased())
+    }
 }

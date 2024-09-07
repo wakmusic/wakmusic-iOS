@@ -1,4 +1,5 @@
 import DesignSystem
+import LogManager
 import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import Pageboy
@@ -44,6 +45,25 @@ public final class FaqViewController: TabmanViewController, ViewControllerFromSt
         viewController.viewModel = viewModel
         viewController.faqContentFactory = faqContentFactory
         return viewController
+    }
+
+    override public func pageboyViewController(
+        _ pageboyViewController: PageboyViewController,
+        didScrollToPageAt index: TabmanViewController.PageIndex,
+        direction: PageboyViewController.NavigationDirection,
+        animated: Bool
+    ) {
+        super.pageboyViewController(
+            pageboyViewController,
+            didScrollToPageAt: index,
+            direction: direction,
+            animated: animated
+        )
+
+        let titles = output.dataSource.value.0
+        if let selectedTitle = titles[safe: index]?.trimmingCharacters(in: .whitespaces) {
+            LogManager.analytics(FAQAnalyticsLog.selectFaqCategory(category: selectedTitle))
+        }
     }
 }
 
@@ -120,7 +140,7 @@ extension FaqViewController {
 
 extension FaqViewController: PageboyViewControllerDataSource, TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
-        DEBUG_LOG(self.viewControllers.count)
+        LogManager.printDebug(self.viewControllers.count)
         return self.viewControllers.count
     }
 

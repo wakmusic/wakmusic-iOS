@@ -3,6 +3,7 @@ import BaseFeatureInterface
 import DesignSystem
 import LogManager
 import LyricHighlightingFeatureInterface
+import MusicDetailFeatureInterface
 import RxSwift
 import SignInFeatureInterface
 import SnapKit
@@ -17,7 +18,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     private let songCreditFactory: any SongCreditFactory
     private let signInFactory: any SignInFactory
     private let containSongsFactory: any ContainSongsFactory
-    private let textPopupFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
+    private let karaokeFactory: any KaraokeFactory
     private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
     init(
@@ -26,7 +28,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         songCreditFactory: any SongCreditFactory,
         signInFactory: any SignInFactory,
         containSongsFactory: any ContainSongsFactory,
-        textPopupFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
+        karaokeFactory: any KaraokeFactory,
         playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
@@ -34,6 +37,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         self.signInFactory = signInFactory
         self.containSongsFactory = containSongsFactory
         self.textPopupFactory = textPopupFactory
+        self.karaokeFactory = karaokeFactory
         self.playlistPresenterGlobalState = playlistPresenterGlobalState
         super.init(reactor: reactor)
     }
@@ -56,7 +60,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     override func bindState(reactor: MusicDetailReactor) {
         let sharedState = reactor.state
             .subscribe(on: MainScheduler.asyncInstance)
-            .share(replay: 2)
+            .share(replay: 8)
         let youtubeURLGenerator = YoutubeURLGenerator()
 
         sharedState.map(\.songIDs)
@@ -69,7 +73,11 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     )
                 }
             }
-            .bind(onNext: musicDetailView.updateThumbnails(thumbnailModels:))
+            .bind { [musicDetailView] thumbnailModels in
+                musicDetailView.updateThumbnails(thumbnailModels: thumbnailModels) {
+                    musicDetailView.updateInitialSelectedIndex(index: reactor.initialState.selectedIndex)
+                }
+            }
             .disposed(by: disposeBag)
 
         sharedState.map(\.isFirstSong)
@@ -90,6 +98,9 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                 owner.musicDetailView.updateArtist(artist: song.artistString)
                 owner.musicDetailView.updateViews(views: song.views)
                 owner.musicDetailView.updateIsLike(likes: song.likes, isLike: song.isLiked)
+
+                let isEnabled = song.karaokeNumber.ky != nil || song.karaokeNumber.tj != nil
+                owner.musicDetailView.updateIsDisabledSingingRoom(isDisabled: !isEnabled)
             }
             .disposed(by: disposeBag)
 
@@ -110,35 +121,30 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         sharedState
             .filter { !$0.songIDs.isEmpty }
             .map(\.selectedIndex)
-            .skip(1)
+            .skip(3)
             .distinctUntilChanged()
             .bind(onNext: musicDetailView.updateSelectedIndex(index:))
-            .disposed(by: disposeBag)
-
-        sharedState
-            .filter { !$0.songIDs.isEmpty }
-            .map(\.selectedIndex)
-            .take(1)
-            .bind(onNext: musicDetailView.updateInitialSelectedIndex(index:))
             .disposed(by: disposeBag)
 
         sharedState.compactMap(\.navigateType)
             .bind(with: self) { owner, navigate in
                 switch navigate {
-                case let .youtube(id):
-                    owner.openYoutube(id: id)
+                case let .youtube(id, playPlatform):
+                    owner.openYoutube(id: id, playPlatform: playPlatform)
                 case let .credit(id):
                     owner.navigateCredits(id: id)
                 case let .lyricsHighlighting(model):
                     owner.navigateLyricsHighlighing(model: model)
                 case let .musicPick(id):
                     owner.presentMusicPick(id: id)
-                case .playlist:
-                    owner.presentPlaylist()
+                case let .playlist(id):
+                    owner.presentPlaylist(id: id)
                 case let .textPopup(text, completion):
                     owner.presentTextPopup(text: text, completion: completion)
                 case .signin:
                     owner.presentSignIn()
+                case let .karaoke(ky, tj):
+                    owner.presentKaraokeSheet(ky: ky, tj: tj)
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -190,7 +196,6 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         musicDetailView.rx.likeButtonDidTap
-            .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.likeButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -213,8 +218,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
 }
 
 private extension MusicDetailViewController {
-    func openYoutube(id: String) {
-        WakmusicYoutubePlayer(id: id).play()
+    func openYoutube(id: String, playPlatform: WakmusicYoutubePlayer.PlayPlatform = .automatic) {
+        WakmusicYoutubePlayer(id: id, playPlatform: playPlatform).play()
     }
 
     func navigateCredits(id: String) {
@@ -235,9 +240,9 @@ private extension MusicDetailViewController {
         self.present(viewController, animated: true)
     }
 
-    func presentPlaylist() {
+    func presentPlaylist(id: String) {
         self.dismiss(animated: true) { [playlistPresenterGlobalState] in
-            playlistPresenterGlobalState.presentPlayList()
+            playlistPresenterGlobalState.presentPlayList(currentSongID: id)
         }
     }
 
@@ -250,6 +255,11 @@ private extension MusicDetailViewController {
             completion: completion,
             cancelCompletion: nil
         )
+        self.showBottomSheet(content: viewController)
+    }
+
+    func presentKaraokeSheet(ky: Int?, tj: Int?) {
+        let viewController = karaokeFactory.makeViewController(ky: ky, tj: tj)
         self.showBottomSheet(content: viewController)
     }
 

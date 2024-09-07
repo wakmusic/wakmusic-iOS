@@ -8,11 +8,13 @@ public struct PlaylistEntity: Equatable {
         image: String,
         songCount: Int,
         userId: String,
+        private: Bool,
         isSelected: Bool = false
     ) {
         self.key = key
         self.title = title
         self.image = image
+        self.private = `private`
         self.isSelected = isSelected
         self.songCount = songCount
         self.userId = userId
@@ -20,5 +22,5 @@ public struct PlaylistEntity: Equatable {
 
     public let key, title, image, userId: String
     public let songCount: Int
-    public var isSelected: Bool
+    public var `private`, isSelected: Bool
 }

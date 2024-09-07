@@ -131,7 +131,7 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
     private let viewModel: LyricDecoratingViewModel
     lazy var input = LyricDecoratingViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    let textPopUpFactory: TextPopUpFactory
+    let textPopupFactory: TextPopupFactory
     let disposeBag = DisposeBag()
 
     deinit {
@@ -140,10 +140,10 @@ public final class LyricDecoratingViewController: UIViewController, RequestPermi
 
     init(
         viewModel: LyricDecoratingViewModel,
-        textPopUpFactory: TextPopUpFactory
+        textPopupFactory: TextPopupFactory
     ) {
         self.viewModel = viewModel
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         super.init(nibName: nil, bundle: nil)
     }
 

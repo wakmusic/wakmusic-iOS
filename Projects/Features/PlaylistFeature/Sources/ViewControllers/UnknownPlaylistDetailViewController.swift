@@ -20,8 +20,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
 
     private let containSongsFactory: any ContainSongsFactory
 
-    private let textPopUpFactory: any TextPopUpFactory
-
     private let songDetailPresenter: any SongDetailPresentable
 
     private let signInFactory: any SignInFactory
@@ -52,6 +50,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     private lazy var subscriptionButton: RectangleButton = RectangleButton().then {
         $0.setBackgroundColor(.clear, for: .normal)
         $0.setColor(isHighlight: true)
+        $0.isHidden = true
         $0.setTitle("구독", for: .normal)
         $0.titleLabel?.font = .setFont(.t7(weight: .bold))
         $0.layer.borderWidth = 1
@@ -63,12 +62,10 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
     init(
         reactor: UnknownPlaylistDetailReactor,
         containSongsFactory: any ContainSongsFactory,
-        textPopUpFactory: any TextPopUpFactory,
         songDetailPresenter: any SongDetailPresentable,
         signInFactory: any SignInFactory
     ) {
         self.containSongsFactory = containSongsFactory
-        self.textPopUpFactory = textPopUpFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
         super.init(reactor: reactor)
@@ -173,12 +170,17 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .disposed(by: disposeBag)
 
         reactor.pulse(\.$showLoginPopup)
-            .filter { $0 }
-            .bind(with: self) { owner, _ in
+            .filter { $0.0 }
+            .bind(with: self) { owner, param in
                 let vc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     completion: { () in
+                        if let entry = param.1 {
+                            let log = CommonAnalyticsLog.clickLoginButton(entry: entry)
+                            LogManager.analytics(log)
+                        }
+
                         let vc = owner.signInFactory.makeView()
                         vc.modalPresentationStyle = .fullScreen
                         owner.present(vc, animated: true)
@@ -192,24 +194,6 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
             .compactMap { $0 }
             .bind { _ in
                 NotificationCenter.default.post(name: .shouldRefreshPlaylist, object: nil)
-            }
-            .disposed(by: disposeBag)
-
-        reactor.pulse(\.$detectedNotFound)
-            .compactMap { $0 }
-            .bind(with: self) { owner, _ in
-                let vc = owner.textPopUpFactory.makeView(
-                    text: "비공개된 리스트 입니다.",
-                    cancelButtonIsHidden: true,
-                    confirmButtonText: "확인",
-                    cancelButtonText: nil,
-                    completion: {
-                        owner.navigationController?.popViewController(animated: true)
-                    },
-                    cancelCompletion: nil
-                )
-
-                owner.showBottomSheet(content: vc, dismissOnOverlayTapAndPull: false) // 드래그로 닫기 불가
             }
             .disposed(by: disposeBag)
 
@@ -254,6 +238,7 @@ final class UnknownPlaylistDetailViewController: BaseReactorViewController<Unkno
                 } else {
                     owner.indicator.stopAnimating()
                     owner.tableView.isHidden = false
+                    owner.subscriptionButton.isHidden = false
                 }
             }
             .disposed(by: disposeBag)
@@ -367,7 +352,13 @@ extension UnknownPlaylistDetailViewController: UITableViewDelegate {
 
 extension UnknownPlaylistDetailViewController: PlaylistDateTableViewCellDelegate {
     func thumbnailDidTap(key: String) {
-        songDetailPresenter.present(id: key)
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: key)
     }
 }
 
@@ -380,17 +371,32 @@ extension UnknownPlaylistDetailViewController: PlayButtonGroupViewDelegate {
         let currentState = reactor.currentState
         var songs = currentState.dataSource
 
+        let playlistName = reactor.currentState.header.title
+        let title: String
+
         switch event {
         case .allPlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .all)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "all", key: reactor.key))
+            title = "\(playlistName) (전체)"
 
         case .shufflePlay:
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .random)
+            )
             LogManager.analytics(PlaylistAnalyticsLog.clickPlaylistPlayButton(type: "random", key: reactor.key))
             songs.shuffle()
+            title = "\(playlistName) (랜덤)"
         }
 
         PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-        WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+        if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: title, playPlatform: .youtube).play()
+        } else {
+            WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: title).play()
+        }
     }
 }
 
@@ -413,9 +419,11 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
                 reactor.action.onNext(.deselectAll)
             }
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
+            LogManager.analytics(log)
 
             if PreferenceManager.userInfo == nil {
-                reactor.action.onNext(.requestLoginRequiredAction)
+                reactor.action.onNext(.requestLoginRequiredAction(source: .addMusics))
                 return
             }
 
@@ -433,7 +441,14 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             )
 
         case .play:
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .playlistDetail, type: .multiple)
+            )
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
             reactor.action.onNext(.deselectAll)
 
         case .remove:

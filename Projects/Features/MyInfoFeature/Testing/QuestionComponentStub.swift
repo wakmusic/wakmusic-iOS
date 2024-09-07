@@ -8,7 +8,7 @@ public final class QuestionComponentStub: QuestionFactory {
     public func makeView() -> UIViewController {
         return QuestionViewController.viewController(
             viewModel: .init(),
-            textPopUpFactory: TextPopUpComponentStub()
+            textPopupFactory: TextPopupComponentStub()
         )
     }
 }

@@ -92,7 +92,7 @@ extension ListResultCell {
     public func update(_ model: SearchPlaylistEntity) {
         titleLabel.text = model.title
         creatorLabel.text = model.userName
-        sharedCountLabel.text = "\(model.subscribeCount)회"
+        sharedCountLabel.text = "\(model.subscribeCount.formattedWithComma())구독"
         thumbnailView.kf.setImage(with: URL(string: model.image), placeholder: nil, options: [.transition(.fade(0.2))])
     }
 }

@@ -12,7 +12,7 @@ import UIKit
 import UserDomainInterface
 
 public protocol ListStorageDependency: Dependency {
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
     var playlistDetailFactory: any PlaylistDetailFactory { get }
     var createPlaylistUseCase: any CreatePlaylistUseCase { get }
     var editPlayListOrderUseCase: any EditPlaylistOrderUseCase { get }
@@ -21,7 +21,7 @@ public protocol ListStorageDependency: Dependency {
     var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase { get }
     var fetchPlaylistCreationPriceUseCase: any FetchPlaylistCreationPriceUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
     var signInFactory: any SignInFactory { get }
     var fruitDrawFactory: any FruitDrawFactory { get }
 }
@@ -38,8 +38,8 @@ public final class ListStorageComponent: Component<ListStorageDependency> {
                 fetchPlaylistSongsUseCase: dependency.fetchPlaylistSongsUseCase,
                 fetchPlaylistCreationPriceUseCase: dependency.fetchPlaylistCreationPriceUseCase
             ),
-            multiPurposePopUpFactory: dependency.multiPurposePopUpFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
+            textPopupFactory: dependency.textPopupFactory,
             playlistDetailFactory: dependency.playlistDetailFactory,
             signInFactory: dependency.signInFactory,
             fruitDrawFactory: dependency.fruitDrawFactory

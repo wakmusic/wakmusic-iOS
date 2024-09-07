@@ -102,7 +102,7 @@ public func colorFromRGB(_ hexString: String, alpha: CGFloat = 1.0) -> UIColor {
 }
 
 public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #function, line: Int = #line) {
-    #if DEBUG
+    #if DEBUG || QA
         let fileName = file.split(separator: "/").last ?? ""
         let funcName = function.split(separator: "(").first ?? ""
         print("[\(fileName)] \(funcName)(\(line)): \(msg)")

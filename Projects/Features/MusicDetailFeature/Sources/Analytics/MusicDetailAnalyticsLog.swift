@@ -7,6 +7,5 @@ enum MusicDetailAnalyticsLog: AnalyticsLogType {
     case clickSingingRoomButton(id: String)
     case clickLyricsButton(id: String)
     case clickLikeMusicButton(id: String, like: Bool)
-    case clickMusicPickButton(id: String)
     case clickPlaylistButton(id: String)
 }

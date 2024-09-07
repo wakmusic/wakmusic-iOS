@@ -29,31 +29,36 @@ public final class BottomTabBarViewController: UIViewController, ViewControllerF
                 title: "홈",
                 offImage: DesignSystemAsset.TabBar.homeOff.image,
                 onImage: DesignSystemAsset.TabBar.homeOn.image,
-                animateImage: "Home_Tab"
+                animateImage: "Home_Tab",
+                analyticsTabbarType: .home
             ),
             TabItem(
                 title: "검색",
                 offImage: DesignSystemAsset.TabBar.searchOff.image,
                 onImage: DesignSystemAsset.TabBar.searchOn.image,
-                animateImage: "Search_Tab"
+                animateImage: "Search_Tab",
+                analyticsTabbarType: .search
             ),
             TabItem(
                 title: "아티스트",
                 offImage: DesignSystemAsset.TabBar.artistOff.image,
                 onImage: DesignSystemAsset.TabBar.artistOn.image,
-                animateImage: "Artist_Tab"
+                animateImage: "Artist_Tab",
+                analyticsTabbarType: .artist
             ),
             TabItem(
                 title: "보관함",
                 offImage: DesignSystemAsset.TabBar.storageOff.image,
                 onImage: DesignSystemAsset.TabBar.storageOn.image,
-                animateImage: "Storage_Tab"
+                animateImage: "Storage_Tab",
+                analyticsTabbarType: .storage
             ),
             TabItem(
                 title: "내정보",
                 offImage: DesignSystemAsset.TabBar.myinfoOff.image,
                 onImage: DesignSystemAsset.TabBar.myinfoOn.image,
-                animateImage: "MyInfo_Tab"
+                animateImage: "MyInfo_Tab",
+                analyticsTabbarType: .mypage
             )
         ]
     }()

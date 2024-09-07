@@ -5,14 +5,14 @@ import UIKit
 public final class WMNavigationBarView: UIView {
     private let leftStackView = UIStackView().then {
         $0.axis = .horizontal
-        $0.alignment = .leading
+        $0.alignment = .center
     }
 
     public private(set) var titleView: UIView = UIView()
     private let rightStackView = UIStackView().then {
         $0.isUserInteractionEnabled = true
         $0.axis = .horizontal
-        $0.alignment = .trailing
+        $0.alignment = .center
         $0.distribution = .fillEqually
         $0.spacing = 10
     }

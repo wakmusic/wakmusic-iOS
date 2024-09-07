@@ -11,6 +11,15 @@ public protocol ChartPlayPopupViewControllerDelegate: AnyObject {
 public enum HalfPlayType {
     case front
     case back
+
+    var playlistTitleString: String {
+        switch self {
+        case .front:
+            return "왁뮤차트 TOP100 1위 ~ 50위"
+        case .back:
+            return "왁뮤차트 TOP100 51위 ~ 100위"
+        }
+    }
 }
 
 final class ChartPlayPopupViewController: UIViewController {

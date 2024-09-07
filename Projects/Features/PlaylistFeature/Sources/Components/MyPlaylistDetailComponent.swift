@@ -13,14 +13,14 @@ public protocol MyPlaylistDetailDependency: Dependency {
     var removeSongsUseCase: any RemoveSongsUseCase { get }
     var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
-    var multiPurposePopUpFactory: any MultiPurposePopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
     var containSongsFactory: any ContainSongsFactory { get }
     var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory { get }
     var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory { get }
     var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory { get }
     var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase { get }
     var songDetailPresenter: any SongDetailPresentable { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependency>, MyPlaylistDetailFactory {
@@ -36,9 +36,9 @@ public final class MyPlaylistDetailComponent: Component<MyPlaylistDetailDependen
                 requestCustomImageURLUseCase: dependency.requestCustomImageURLUseCase,
                 logoutUseCase: dependency.logoutUseCase
             ),
-            multiPurposePopupFactory: dependency.multiPurposePopUpFactory,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
             containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
+            textPopupFactory: dependency.textPopupFactory,
             playlistCoverOptionPopupFactory: dependency.playlistCoverOptionPopupFactory,
             checkPlaylistCoverFactory: dependency.checkPlaylistCoverFactory,
             defaultPlaylistCoverFactory: dependency.defaultPlaylistCoverFactory,

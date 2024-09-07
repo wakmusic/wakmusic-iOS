@@ -13,9 +13,9 @@ public protocol ListStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum ListStorageTableViewCellDelegateConstant {
-    case cellTapped(indexPath: IndexPath)
-    case listTapped(indexPath: IndexPath)
-    case playTapped(indexPath: IndexPath)
+    case cellTapped((indexPath: IndexPath, key: String))
+    case listTapped((indexPath: IndexPath, key: String))
+    case playTapped((indexPath: IndexPath, key: String))
 }
 
 class ListStorageTableViewCell: UITableViewCell {
@@ -35,12 +35,6 @@ class ListStorageTableViewCell: UITableViewCell {
         $0.lineBreakMode = .byTruncatingTail
     }
 
-    private let countLabel = WMLabel(
-        text: "",
-        textColor: DesignSystemAsset.BlueGrayColor.blueGray300.color,
-        font: .t7(weight: .light),
-        kernValue: -0.5
-    )
     private let verticalStackView = UIStackView().then {
         $0.axis = .vertical
     }
@@ -56,6 +50,20 @@ class ListStorageTableViewCell: UITableViewCell {
             spread: 0
         )
     }
+
+    private let lockImageView: UIImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Storage.storageClose.image
+        $0.isHidden = true
+    }
+
+    private let countLabel = WMLabel(
+        text: "",
+        textColor: DesignSystemAsset.BlueGrayColor.blueGray300.color,
+        font: .t7(weight: .light),
+        kernValue: -0.5
+    )
+
+    private let countContainerView: UIView = UIView()
 
     private let cellSelectButton = UIButton()
     private let listSelectButton = UIButton()
@@ -85,10 +93,8 @@ extension ListStorageTableViewCell {
             cellSelectButton,
             listSelectButton
         )
-        verticalStackView.addArrangedSubviews(
-            nameLabel,
-            countLabel
-        )
+        verticalStackView.addArrangedSubviews(nameLabel, countContainerView)
+        countContainerView.addSubviews(countLabel, lockImageView)
     }
 
     func setLayout() {
@@ -128,6 +134,14 @@ extension ListStorageTableViewCell {
 
         countLabel.snp.makeConstraints {
             $0.height.equalTo(18)
+            $0.top.bottom.equalToSuperview()
+            $0.leading.equalToSuperview()
+        }
+
+        lockImageView.snp.makeConstraints {
+            $0.leading.equalTo(countLabel.snp.trailing)
+            $0.width.height.equalTo(16)
+            $0.bottom.equalToSuperview().offset(-1)
         }
     }
 
@@ -160,6 +174,7 @@ extension ListStorageTableViewCell {
         self.cellSelectButton.isHidden = !isEditing
         self.listSelectButton.isHidden = isEditing
         self.playButton.isHidden = isEditing
+        self.lockImageView.isHidden = !model.private
 
         self.playButton.snp.updateConstraints {
             $0.right.equalToSuperview().inset(isEditing ? -24 : 20)
@@ -184,14 +199,14 @@ extension ListStorageTableViewCell {
 
 extension ListStorageTableViewCell {
     @objc func cellSelectButtonAction() {
-        delegate?.buttonTapped(type: .cellTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .cellTapped(passToModel))
     }
 
     @objc func listSelectButtonAction() {
-        delegate?.buttonTapped(type: .listTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .listTapped(passToModel))
     }
 
     @objc func playButtonAction() {
-        delegate?.buttonTapped(type: .playTapped(indexPath: passToModel.0))
+        delegate?.buttonTapped(type: .playTapped(passToModel))
     }
 }

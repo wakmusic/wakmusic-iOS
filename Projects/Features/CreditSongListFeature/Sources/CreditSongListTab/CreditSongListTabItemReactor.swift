@@ -2,6 +2,7 @@ import BaseFeature
 import CreditDomainInterface
 import CreditSongListFeatureInterface
 import Localization
+import LogManager
 import ReactorKit
 import RxSwift
 import Utility
@@ -15,6 +16,7 @@ final class CreditSongListTabItemReactor: Reactor {
     enum Action {
         case viewDidLoad
         case songDidTap(id: String)
+        case songThumbnailDidTap(model: CreditSongModel)
         case randomPlayButtonDidTap
         case allSelectButtonDidTap
         case allDeselectButtonDidTap
@@ -33,10 +35,11 @@ final class CreditSongListTabItemReactor: Reactor {
     }
 
     enum NavigateType {
-        case playYoutube(ids: [String])
+        case playYoutube(ids: [String], playPlatform: WakmusicYoutubePlayer.PlayPlatform)
         case containSongs(ids: [String])
         case textPopup(text: String, completion: () -> Void)
         case signIn
+        case dismiss(completion: () -> Void)
     }
 
     struct State {
@@ -50,19 +53,23 @@ final class CreditSongListTabItemReactor: Reactor {
     private let signInIsRequiredSubject = PublishSubject<Void>()
 
     private var page: Int = 1
+    private var isLastPage: Bool = false
     let initialState: State
-    private let workerName: String
+    let workerName: String
     private let creditSortType: CreditSongSortType
+    private let songDetailPresenter: any SongDetailPresentable
     private let fetchCreditSongListUseCase: any FetchCreditSongListUseCase
 
     init(
         workerName: String,
         creditSortType: CreditSongSortType,
+        songDetailPresenter: any SongDetailPresentable,
         fetchCreditSongListUseCase: any FetchCreditSongListUseCase
     ) {
         self.initialState = .init()
         self.workerName = workerName
         self.creditSortType = creditSortType
+        self.songDetailPresenter = songDetailPresenter
         self.fetchCreditSongListUseCase = fetchCreditSongListUseCase
     }
 
@@ -72,6 +79,13 @@ final class CreditSongListTabItemReactor: Reactor {
             return viewDidLoad()
         case let .songDidTap(id):
             return songDidTap(id: id)
+        case let .songThumbnailDidTap(model):
+            PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+            return navigateMutation(navigateType: .dismiss(completion: { [songDetailPresenter] in
+                let playlistIDs = PlayState.shared.currentPlaylist
+                    .map(\.id)
+                songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
+            }))
         case .randomPlayButtonDidTap:
             return randomPlayButtonDidTap()
         case .allSelectButtonDidTap:
@@ -124,6 +138,11 @@ final class CreditSongListTabItemReactor: Reactor {
 private extension CreditSongListTabItemReactor {
     func viewDidLoad() -> Observable<Mutation> {
         let initialCreditSongListObservable = fetchPaginatedCreditSongList()
+            .do(onNext: { [weak self] creditModels in
+                if creditModels.isEmpty || creditModels.count < Metric.pageLimit {
+                    self?.isLastPage = true
+                }
+            })
             .map(Mutation.updateSongs)
         return withLoadingMutation(observable: initialCreditSongListObservable)
     }
@@ -143,7 +162,12 @@ private extension CreditSongListTabItemReactor {
             .shuffled()
             .prefix(50)
         let songs = Array(randomSongs)
-        return navigateMutation(navigateType: .playYoutube(ids: songs))
+        let playPlatform = if currentState.songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+            WakmusicYoutubePlayer.PlayPlatform.youtube
+        } else {
+            WakmusicYoutubePlayer.PlayPlatform.automatic
+        }
+        return navigateMutation(navigateType: .playYoutube(ids: songs, playPlatform: playPlatform))
     }
 
     func allSelectButtonDidTap() -> Observable<Mutation> {
@@ -161,6 +185,9 @@ private extension CreditSongListTabItemReactor {
                 navigateType: .textPopup(
                     text: LocalizationStrings.needLoginWarning,
                     completion: { [signInIsRequiredSubject] in
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         signInIsRequiredSubject.onNext(())
                     }
                 )
@@ -186,13 +213,6 @@ private extension CreditSongListTabItemReactor {
             .filter { currentState.selectedSongs.contains($0.id) }
             .map { PlaylistItem(id: $0.id, title: $0.title, artist: $0.artist) }
 
-        if appendingSongs.count > Metric.availableLimit {
-            return .just(.updateToastMessage(
-                Localization.LocalizationStrings
-                    .overFlowAddPlaylistWarning(appendingSongs.count - Metric.availableLimit)
-            ))
-        }
-
         PlayState.shared.append(contentsOf: appendingSongs)
         return .just(.updateToastMessage(Localization.LocalizationStrings.addList))
     }
@@ -207,11 +227,26 @@ private extension CreditSongListTabItemReactor {
             ))
         }
 
-        return navigateMutation(navigateType: .playYoutube(ids: containTargetSongIDs))
+        let isOnlyShorts = currentState.songs
+            .filter { currentState.selectedSongs.contains($0.id) }
+            .allSatisfy { $0.title.isContainShortsTagTitle }
+        let playPlatform = if isOnlyShorts {
+            WakmusicYoutubePlayer.PlayPlatform.youtube
+        } else {
+            WakmusicYoutubePlayer.PlayPlatform.automatic
+        }
+
+        return navigateMutation(navigateType: .playYoutube(ids: containTargetSongIDs, playPlatform: playPlatform))
     }
 
     func reachedBottom() -> Observable<Mutation> {
+        guard !isLastPage else { return .empty() }
         let initialCreditSongListObservable = fetchPaginatedCreditSongList()
+            .do(onNext: { [weak self] creditModels in
+                if creditModels.isEmpty || creditModels.count < Metric.pageLimit {
+                    self?.isLastPage = true
+                }
+            })
             .map { [weak self] in return $0 + (self?.currentState.songs ?? []) }
             .map(Mutation.updateSongs)
         return withLoadingMutation(observable: initialCreditSongListObservable)

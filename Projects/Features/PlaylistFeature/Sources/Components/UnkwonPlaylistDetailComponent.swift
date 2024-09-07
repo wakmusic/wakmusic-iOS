@@ -13,7 +13,6 @@ public protocol UnknownPlaylistDetailDependency: Dependency {
     var checkSubscriptionUseCase: any CheckSubscriptionUseCase { get }
     var logoutUseCase: any LogoutUseCase { get }
     var containSongsFactory: any ContainSongsFactory { get }
-    var textPopUpFactory: any TextPopUpFactory { get }
     var songDetailPresenter: any SongDetailPresentable { get }
 
     var signInFactory: any SignInFactory { get }
@@ -31,7 +30,6 @@ public final class UnknownPlaylistDetailComponent: Component<UnknownPlaylistDeta
                 logoutUseCase: dependency.logoutUseCase
             ),
             containSongsFactory: dependency.containSongsFactory,
-            textPopUpFactory: dependency.textPopUpFactory,
             songDetailPresenter: dependency.songDetailPresenter,
             signInFactory: dependency.signInFactory
         )

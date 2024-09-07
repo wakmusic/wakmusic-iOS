@@ -58,6 +58,7 @@ final class SongCreditReactor: Reactor {
             return self.navigate(to: .back)
 
         case let .creditSelected(worker):
+
             return self.navigate(to: .creditDetail(worker: worker))
         }
     }
@@ -81,7 +82,13 @@ private extension SongCreditReactor {
     func viewDidLoad() -> Observable<Mutation> {
         return fetchSongCreditsUseCase.execute(id: songID)
             .map { credits in
-                credits.map { CreditModel(creditEntity: $0) }
+                let filteredCredits = credits.map { entity in
+                    SongCreditsEntity(
+                        type: entity.type,
+                        names: entity.names.filter { !$0.name.isEmpty }
+                    )
+                }
+                return filteredCredits.map { CreditModel(creditEntity: $0) }
             }
             .map { Mutation.updateCredits($0) }
             .asObservable()

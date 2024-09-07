@@ -124,6 +124,8 @@ final class LikeStorageReactor: Reactor {
             return deleteSongs()
 
         case .loginButtonDidTap:
+            let log = CommonAnalyticsLog.clickLoginButton(entry: .storageLike)
+            LogManager.analytics(log)
             return .just(.showLoginAlert)
 
         case .presentAddToPlaylistPopup:
@@ -136,6 +138,13 @@ final class LikeStorageReactor: Reactor {
             .skip(1)
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
+                let log = if !editingState {
+                    CommonAnalyticsLog.clickEditButton(location: .playlist)
+                } else {
+                    CommonAnalyticsLog.clickEditCompleteButton(location: .playlist)
+                }
+                LogManager.analytics(log)
+
                 // 편집이 종료될 때 처리
                 if editingState == false {
                     let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.songID }
@@ -291,17 +300,9 @@ extension LikeStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        let limit = 50
-
         let appendingPlaylisItems = currentState.dataSource
             .flatMap { $0.items.filter { $0.isSelected == true } }
             .map { PlaylistItem(id: $0.songID, title: $0.title, artist: $0.artist) }
-
-        if appendingPlaylisItems.count > limit {
-            let overFlowQuantity = appendingPlaylisItems.count - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
 
         PlayState.shared.append(contentsOf: appendingPlaylisItems)
         return .just(.showToast(LocalizationStrings.addList))
@@ -310,7 +311,10 @@ extension LikeStorageReactor {
     func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
         let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
         PlayState.shared.append(item: appendingPlaylisItem)
-        WakmusicYoutubePlayer(id: song.songID).play()
+        WakmusicYoutubePlayer(
+            id: song.songID,
+            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+        ).play()
         return .empty()
     }
 

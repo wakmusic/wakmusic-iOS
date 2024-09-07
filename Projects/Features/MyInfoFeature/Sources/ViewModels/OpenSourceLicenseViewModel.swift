@@ -44,6 +44,11 @@ public final class OpenSourceLicenseViewModel {
                 link: "https://github.com/ReactiveX/RxSwift.git"
             ),
             OpenSourceLicense(
+                title: "RxGesture",
+                description: "The MIT License\nCopyright © 2016 RxSwiftCommunity.",
+                link: "https://github.com/RxSwiftCommunity/RxGesture.git"
+            ),
+            OpenSourceLicense(
                 title: "RxDataSources",
                 description: "The MIT License\nCopyright (c) 2017 RxSwift Community",
                 link: "https://github.com/RxSwiftCommunity/RxDataSources.git"

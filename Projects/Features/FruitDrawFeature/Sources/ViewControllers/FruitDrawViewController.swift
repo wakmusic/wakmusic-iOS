@@ -3,6 +3,7 @@ import DesignSystem
 import FruitDrawFeatureInterface
 import LogManager
 import Lottie
+import NVActivityIndicatorView
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -42,7 +43,6 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let drawOrConfirmButton = UIButton(type: .system).then {
-        $0.setTitle("...", for: .normal)
         $0.setTitleColor(DesignSystemAsset.BlueGrayColor.blueGray25.color, for: .normal)
         $0.titleLabel?.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         $0.titleLabel?.setTextWithAttributes(alignment: .center)
@@ -50,6 +50,11 @@ public final class FruitDrawViewController: UIViewController {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
         $0.isEnabled = false
+    }
+
+    private lazy var activityIndicator = NVActivityIndicatorView(frame: .zero).then {
+        $0.color = .white
+        $0.type = .circleStrokeSpin
     }
 
     private lazy var lottieAnimationView =
@@ -144,7 +149,7 @@ public final class FruitDrawViewController: UIViewController {
     }
 
     private let viewModel: FruitDrawViewModel
-    private let textPopUpFactory: TextPopUpFactory
+    private let textPopupFactory: TextPopupFactory
     private weak var delegate: FruitDrawViewControllerDelegate?
 
     lazy var input = FruitDrawViewModel.Input()
@@ -157,11 +162,11 @@ public final class FruitDrawViewController: UIViewController {
 
     public init(
         viewModel: FruitDrawViewModel,
-        textPopUpFactory: TextPopUpFactory,
+        textPopupFactory: TextPopupFactory,
         delegate: FruitDrawViewControllerDelegate
     ) {
         self.viewModel = viewModel
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
@@ -200,6 +205,7 @@ private extension FruitDrawViewController {
                 owner.drawOrConfirmButton.backgroundColor = canDraw ?
                     DesignSystemAsset.PrimaryColorV2.point.color :
                     DesignSystemAsset.BlueGrayColor.gray300.color
+                owner.activityIndicator.stopAnimating()
             }
             .disposed(by: disposeBag)
 
@@ -231,7 +237,7 @@ private extension FruitDrawViewController {
         output.occurredError
             .bind(with: self) { owner, message in
                 owner.showBottomSheet(
-                    content: owner.textPopUpFactory.makeView(
+                    content: owner.textPopupFactory.makeView(
                         text: message,
                         cancelButtonIsHidden: true,
                         confirmButtonText: "확인",
@@ -345,7 +351,8 @@ private extension FruitDrawViewController {
             descriptioniLabel,
             rewardFruitImageView,
             rewardDescriptioniLabel,
-            drawOrConfirmButton
+            drawOrConfirmButton,
+            activityIndicator
         )
         navigationBarView.setLeftViews([dismissButton])
     }
@@ -382,6 +389,11 @@ private extension FruitDrawViewController {
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-20)
             $0.height.equalTo(56)
+        }
+
+        activityIndicator.snp.makeConstraints {
+            $0.center.equalTo(drawOrConfirmButton.snp.center)
+            $0.size.equalTo(20)
         }
 
         rewardFruitImageView.snp.makeConstraints {
@@ -469,6 +481,13 @@ private extension FruitDrawViewController {
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         perform(#selector(startComponentAnimation), with: nil, afterDelay: 0.3)
+        rewardFruitImageView.addShadow(
+            offset: CGSize(width: 0, height: 2.5),
+            color: UIColor.black,
+            opacity: 0.1,
+            radius: 50
+        )
+        activityIndicator.startAnimating()
     }
 }
 

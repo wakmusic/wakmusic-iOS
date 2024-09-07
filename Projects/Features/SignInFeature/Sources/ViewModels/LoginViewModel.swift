@@ -1,7 +1,6 @@
 import AuthDomainInterface
 import AuthenticationServices
 import BaseFeature
-import CryptoSwift
 import Localization
 import LogManager
 import NaverThirdPartyLogin
@@ -106,6 +105,8 @@ extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
         Task {
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
+            let log = SigninAnalyticsLog.completeSocialLogin(type: .google)
+            LogManager.analytics(log)
             input.arrivedTokenFromThirdParty.accept((.google, id))
         }
     }
@@ -115,12 +116,18 @@ extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
         let shared = NaverThirdPartyLoginConnection.getSharedInstance()
         guard let accessToken = shared?.accessToken else { return }
+        let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
+        LogManager.analytics(log)
+
         input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
     }
 
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
         let shared = NaverThirdPartyLoginConnection.getSharedInstance()
         guard let accessToken = shared?.accessToken else { return }
+        let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
+        LogManager.analytics(log)
+
         input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
     }
 
@@ -145,6 +152,9 @@ extension LoginViewModel: ASAuthorizationControllerDelegate, ASAuthorizationCont
         if let credential = authorization.credential as? ASAuthorizationAppleIDCredential,
            let rawData = credential.identityToken {
             let token = String(decoding: rawData, as: UTF8.self)
+            let log = SigninAnalyticsLog.completeSocialLogin(type: .apple)
+            LogManager.analytics(log)
+
             input.arrivedTokenFromThirdParty.accept((.apple, token))
         }
     }

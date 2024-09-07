@@ -11,6 +11,7 @@ let packageSetting = PackageSettings(
     baseSettings: .settings(
         configurations: [
             .debug(name: .debug),
+            .debug(name: .qa),
             .release(name: .release)
         ]
     )

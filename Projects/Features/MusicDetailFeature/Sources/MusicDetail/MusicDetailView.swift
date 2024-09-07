@@ -12,7 +12,7 @@ private protocol MusicDetailStateProtocol {
     func updateArtist(artist: String)
     func updateSelectedIndex(index: Int)
     func updateInitialSelectedIndex(index: Int)
-    func updateThumbnails(thumbnailModels: [ThumbnailModel])
+    func updateThumbnails(thumbnailModels: [ThumbnailModel], completion: @escaping () -> Void)
     func updateBackgroundImage(thumbnailModel: ThumbnailModel)
     func updateIsDisabledSingingRoom(isDisabled: Bool)
     func updateIsDisabledPrevButton(isDisabled: Bool)
@@ -184,18 +184,23 @@ extension MusicDetailView: MusicDetailStateProtocol {
     }
 
     func updateInitialSelectedIndex(index: Int) {
-        thumbnailCollectionView.scrollToItem(
-            at: .init(row: index, section: 0),
-            at: .centeredHorizontally,
-            animated: false
-        )
+        DispatchQueue.main.async {
+            self.thumbnailCollectionView.scrollToItem(
+                at: .init(row: index, section: 0),
+                at: .centeredHorizontally,
+                animated: false
+            )
+        }
     }
 
-    func updateThumbnails(thumbnailModels: [ThumbnailModel]) {
+    func updateThumbnails(
+        thumbnailModels: [ThumbnailModel],
+        completion: @escaping () -> Void
+    ) {
         var snapshot = thumbnailDiffableDataSource.snapshot()
         snapshot.appendSections([0])
         snapshot.appendItems(thumbnailModels, toSection: 0)
-        thumbnailDiffableDataSource.apply(snapshot)
+        thumbnailDiffableDataSource.apply(snapshot, completion: completion)
     }
 
     func updateBackgroundImage(thumbnailModel: ThumbnailModel) {

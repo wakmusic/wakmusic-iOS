@@ -17,8 +17,8 @@ import Utility
 final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
     let myInfoView = MyInfoView()
     private var profilePopupFactory: ProfilePopupFactory!
-    private var textPopUpFactory: TextPopUpFactory!
-    private var multiPurposePopUpFactory: MultiPurposePopupFactory!
+    private var textPopupFactory: TextPopupFactory!
+    private var multiPurposePopupFactory: MultiPurposePopupFactory!
     private var signInFactory: SignInFactory!
     private var faqFactory: FaqFactory! // 자주 묻는 질문
     private var noticeFactory: NoticeFactory! // 공지사항
@@ -39,14 +39,15 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         view = myInfoView
     }
 
-    override public func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        navigationController?.interactivePopGestureRecognizer?.delegate = self
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         reactor?.action.onNext(.viewDidLoad)
+    }
+
+    override public func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
+        LogManager.analytics(CommonAnalyticsLog.viewPage(pageName: .myPage))
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -58,8 +59,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     public static func viewController(
         reactor: MyInfoReactor,
         profilePopupFactory: ProfilePopupFactory,
-        textPopUpFactory: TextPopUpFactory,
-        multiPurposePopUpFactory: MultiPurposePopupFactory,
+        textPopupFactory: TextPopupFactory,
+        multiPurposePopupFactory: MultiPurposePopupFactory,
         signInFactory: SignInFactory,
         faqFactory: FaqFactory,
         noticeFactory: NoticeFactory,
@@ -71,8 +72,8 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
     ) -> MyInfoViewController {
         let viewController = MyInfoViewController(reactor: reactor)
         viewController.profilePopupFactory = profilePopupFactory
-        viewController.textPopUpFactory = textPopUpFactory
-        viewController.multiPurposePopUpFactory = multiPurposePopUpFactory
+        viewController.textPopupFactory = textPopupFactory
+        viewController.multiPurposePopupFactory = multiPurposePopupFactory
         viewController.signInFactory = signInFactory
         viewController.faqFactory = faqFactory
         viewController.noticeFactory = noticeFactory
@@ -138,6 +139,9 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
         reactor.pulse(\.$loginButtonDidTap)
             .compactMap { $0 }
             .bind(with: self) { owner, _ in
+                let log = CommonAnalyticsLog.clickLoginButton(entry: .mypage)
+                LogManager.analytics(log)
+
                 let vc = owner.signInFactory.makeView()
                 vc.modalPresentationStyle = .fullScreen
                 owner.present(vc, animated: true)
@@ -169,14 +173,14 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                         viewController.modalPresentationStyle = .fullScreen
                         owner.present(viewController, animated: true)
                     } else {
-                        reactor.action.onNext(.requiredLogin)
+                        reactor.action.onNext(.requiredLogin(.fruitDraw))
                     }
                 case .fruit:
                     if reactor.currentState.isLoggedIn {
                         let viewController = owner.fruitStorageFactory.makeView()
                         owner.navigationController?.pushViewController(viewController, animated: true)
                     } else {
-                        reactor.action.onNext(.requiredLogin)
+                        reactor.action.onNext(.requiredLogin(.fruitStorage))
                     }
                 case .faq:
                     let vc = owner.faqFactory.makeView()
@@ -194,13 +198,25 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
                 case .setting:
                     let vc = owner.settingFactory.makeView()
                     owner.navigationController?.pushViewController(vc, animated: true)
-                case .login:
-                    let vc = owner.textPopUpFactory.makeView(
+                case let .login(entry):
+                    let vc = owner.textPopupFactory.makeView(
                         text: LocalizationStrings.needLoginWarning,
                         cancelButtonIsHidden: false,
                         confirmButtonText: nil,
                         cancelButtonText: nil,
                         completion: {
+                            switch entry {
+                            case .fruitDraw:
+                                let log = CommonAnalyticsLog.clickLoginButton(entry: .fruitDraw)
+                                LogManager.analytics(log)
+                            case .fruitStorage:
+                                let log = CommonAnalyticsLog.clickLoginButton(entry: .fruitStorage)
+                                LogManager.analytics(log)
+                            default:
+                                assertionFailure("예상치 못한 entry가 들어옴")
+                                LogManager.printDebug("예상치 못한 entry가 들어옴")
+                            }
+
                             let loginVC = owner.signInFactory.makeView()
                             loginVC.modalPresentationStyle = .fullScreen
                             owner.present(loginVC, animated: true)
@@ -221,41 +237,57 @@ final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, Edit
             .disposed(by: disposeBag)
 
         myInfoView.rx.profileImageDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickProfileImage) })
             .map { MyInfoReactor.Action.profileImageDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        myInfoView.rx.fruitStorageButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFruitStorageButton) })
+            .map { MyInfoReactor.Action.fruitNavigationDidTap }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+
         myInfoView.rx.drawButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFruitDrawEntryButton(location: .myPage)) })
             .map { MyInfoReactor.Action.drawButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.fruitNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFruitStorageButton) })
             .map { MyInfoReactor.Action.fruitNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        #warning("자주묻는질문 qna -> faq 로 변경하기")
         myInfoView.rx.qnaNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickFaqButton) })
             .map { MyInfoReactor.Action.faqNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.notiNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickNoticeButton) })
             .map { MyInfoReactor.Action.notiNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
+        #warning("문의하기 mail -> qna 로 변경하기")
         myInfoView.rx.mailNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickInquiryButton) })
             .map { MyInfoReactor.Action.mailNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.teamNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickTeamButton) })
             .map { MyInfoReactor.Action.teamNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
 
         myInfoView.rx.settingNavigationButtonDidTap
+            .do(onNext: { LogManager.analytics(MyInfoAnalyticsLog.clickSettingButton) })
             .map { MyInfoReactor.Action.settingNavigationDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
@@ -281,18 +313,22 @@ extension MyInfoViewController: EditSheetViewDelegate {
         case .share:
             break
         case .profile:
+            LogManager.analytics(MyInfoAnalyticsLog.clickProfileChangeButton)
             let vc = profilePopupFactory.makeView(
                 completion: { [reactor] () in
+                    LogManager.analytics(MyInfoAnalyticsLog.completeProfileChange)
                     reactor?.action.onNext(.completedSetProfile)
                 }
             )
             let height: CGFloat = (ProfilePopupViewController.rowHeight * 2) + 10
             showBottomSheet(content: vc, size: .fixed(190 + height + SAFEAREA_BOTTOM_HEIGHT()))
         case .nickname:
-            let vc = multiPurposePopUpFactory.makeView(
+            LogManager.analytics(MyInfoAnalyticsLog.clickNicknameChangeButton)
+            let vc = multiPurposePopupFactory.makeView(
                 type: .nickname,
                 key: "",
                 completion: { [reactor] text in
+                    LogManager.analytics(MyInfoAnalyticsLog.completeNicknameChange)
                     reactor?.action.onNext(.changeNicknameButtonDidTap(text))
                 }
             )

@@ -39,7 +39,7 @@ final class ListStorageReactor: Reactor {
         case switchEditingState(Bool)
         case updateIsLoggedIn(Bool)
         case updateIsShowActivityIndicator(Bool)
-        case showLoginAlert
+        case showLoginAlert(CommonAnalyticsLog.LoginButtonEntry?)
         case showToast(String)
         case showCreatePricePopup(Int)
         case showCreateListPopup
@@ -57,7 +57,7 @@ final class ListStorageReactor: Reactor {
         var backupDataSource: [MyPlayListSectionModel]
         var selectedItemCount: Int
         var isShowActivityIndicator: Bool
-        @Pulse var showLoginAlert: Void?
+        @Pulse var showLoginAlert: CommonAnalyticsLog.LoginButtonEntry?
         @Pulse var showToast: String?
         @Pulse var hideSongCart: Void?
         @Pulse var showCreatePricePopup: Int?
@@ -130,14 +130,18 @@ final class ListStorageReactor: Reactor {
             return tapAll(isSelecting)
 
         case .loginButtonDidTap:
-            return .just(.showLoginAlert)
+            let log = CommonAnalyticsLog.clickLoginButton(entry: .myPlaylist)
+            LogManager.analytics(log)
+            return .just(.showLoginAlert(.myPlaylist))
 
         case .addToCurrentPlaylistButtonDidTap:
             return addToCurrentPlaylist()
 
         case .createListButtonDidTap:
+            let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+            LogManager.analytics(log)
             let isLoggedIn = currentState.isLoggedIn
-            return isLoggedIn ? mutateFetchPlaylistCreationPrice() : .just(.showLoginAlert)
+            return isLoggedIn ? mutateFetchPlaylistCreationPrice() : .just(.showLoginAlert(.addMusics))
 
         case .confirmCreatePriceButtonDidTap:
             return .just(.showCreateListPopup)
@@ -154,7 +158,7 @@ final class ListStorageReactor: Reactor {
 
         case .drawFruitButtonDidTap:
             let isLoggedIn = currentState.isLoggedIn
-            return isLoggedIn ? .just(.showDrawFruitPopup) : .just(.showLoginAlert)
+            return isLoggedIn ? .just(.showDrawFruitPopup) : .just(.showLoginAlert(.fruitDraw))
 
         case .completedFruitDraw:
             return completedFruitDraw()
@@ -166,6 +170,13 @@ final class ListStorageReactor: Reactor {
             .skip(1)
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
+                let log = if !editingState {
+                    CommonAnalyticsLog.clickEditButton(location: .playlist)
+                } else {
+                    CommonAnalyticsLog.clickEditCompleteButton(location: .playlist)
+                }
+                LogManager.analytics(log)
+
                 // 편집이 종료될 때 처리
                 if editingState == false {
                     let new = owner.currentState.dataSource.flatMap { $0.items }.map { $0.key }
@@ -233,8 +244,8 @@ final class ListStorageReactor: Reactor {
             newState.isEditing = flag
         case let .updateIsLoggedIn(isLoggedIn):
             newState.isLoggedIn = isLoggedIn
-        case .showLoginAlert:
-            newState.showLoginAlert = ()
+        case let .showLoginAlert(entry):
+            newState.showLoginAlert = entry
         case let .updateIsShowActivityIndicator(isShow):
             newState.isShowActivityIndicator = isShow
         case let .showToast(message):
@@ -340,12 +351,6 @@ extension ListStorageReactor {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
 
-        if selectedSongCount > limit {
-            let overFlowQuantity = selectedSongCount - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
-
         let keys = selectedPlaylists.map { $0.key }
 
         let observables = keys.map { key in
@@ -388,21 +393,19 @@ extension ListStorageReactor {
         if selectedPlaylist.songCount == 0 {
             return .just(.showToast("플레이리스트가 비어있습니다."))
         }
-
-        if selectedPlaylist.songCount > limit {
-            let overFlowQuantity = selectedPlaylist.songCount - limit
-            let overFlowMessage = LocalizationStrings.overFlowAddPlaylistWarning(overFlowQuantity)
-            return .just(.showToast(overFlowMessage))
-        }
-
         return Observable.concat(
             .just(.updateIsShowActivityIndicator(true)),
             fetchPlaylistSongsUseCase.execute(key: selectedPlaylist.key)
                 .asObservable()
                 .do(onNext: { [weak self] appendingPlaylistItems in
                     PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
-                    let firstItem = appendingPlaylistItems.first!
-                    WakmusicYoutubePlayer(id: firstItem.id).play()
+                    let ids = appendingPlaylistItems.map { $0.id }
+                        .prefix(50)
+                    if appendingPlaylistItems.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직", playPlatform: .youtube).play()
+                    } else {
+                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직").play()
+                    }
                     self?.storageCommonService.isEditingState.onNext(false)
                 })
                 .flatMap { songs -> Observable<Mutation> in

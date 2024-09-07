@@ -17,7 +17,7 @@ public func config(key: String) -> String {
 
 // MARK: - BASE_URL
 public func BASE_URL() -> String {
-    #if DEBUG
+    #if DEBUG || QA
         return config(key: "BASE_DEV_URL")
     #else
         return config(key: "BASE_PROD_URL")

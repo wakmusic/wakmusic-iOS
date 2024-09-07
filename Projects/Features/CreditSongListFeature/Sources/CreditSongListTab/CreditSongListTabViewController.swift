@@ -74,6 +74,7 @@ private extension CreditSongListTabViewController {
         bar.layout.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         bar.layout.contentMode = .fit
         bar.layout.transitionStyle = .progressive
+        bar.layout.interButtonSpacing = 0
 
         bar.buttons.customize { button in
             button.tintColor = DesignSystemAsset.BlueGrayColor.blueGray400.color
@@ -82,11 +83,12 @@ private extension CreditSongListTabViewController {
             button.selectedFont = DesignSystemFontFamily.Pretendard.bold.font(size: 16)
         }
 
-        bar.indicator.weight = .custom(value: 3)
+        bar.indicator.weight = .custom(value: 2)
         bar.indicator.tintColor = DesignSystemAsset.PrimaryColorV2.point.color
         bar.indicator.overscrollBehavior = .compress
 
         addBar(bar, dataSource: self, at: .custom(view: tabContainerView, layout: nil))
+        bar.layer.zPosition = 1
     }
 }
 

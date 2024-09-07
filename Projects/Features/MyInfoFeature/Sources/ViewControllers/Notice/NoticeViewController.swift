@@ -1,5 +1,6 @@
 import BaseFeature
 import DesignSystem
+import LogManager
 import MyInfoFeatureInterface
 import NVActivityIndicatorView
 import RxCocoa
@@ -85,6 +86,9 @@ private extension NoticeViewController {
 
         output.goNoticeDetailScene
             .bind(with: self) { owner, model in
+                let log = NoticeAnalyticsLog.clickNoticeItem(id: "\(model.id)", location: "notice")
+                LogManager.analytics(log)
+
                 let viewController = owner.noticeDetailFactory.makeView(model: model)
                 viewController.modalPresentationStyle = .fullScreen
                 owner.present(viewController, animated: true)

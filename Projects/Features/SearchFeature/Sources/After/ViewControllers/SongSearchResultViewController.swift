@@ -21,7 +21,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     private let songDetailPresenter: any SongDetailPresentable
     private let containSongsFactory: any ContainSongsFactory
     private let signInFactory: any SignInFactory
-    private let textPopUpFactory: any TextPopUpFactory
+    private let textPopupFactory: any TextPopupFactory
     private let searchSortOptionComponent: SearchSortOptionComponent
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
@@ -48,14 +48,14 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
         songDetailPresenter: any SongDetailPresentable,
         containSongsFactory: any ContainSongsFactory,
         signInFactory: any SignInFactory,
-        textPopUpFactory: any TextPopUpFactory,
+        textPopupFactory: any TextPopupFactory,
         searchGlobalScrollState: any SearchGlobalScrollProtocol
     ) {
         self.searchSortOptionComponent = searchSortOptionComponent
         self.containSongsFactory = containSongsFactory
         self.songDetailPresenter = songDetailPresenter
         self.signInFactory = signInFactory
-        self.textPopUpFactory = textPopUpFactory
+        self.textPopupFactory = textPopupFactory
         self.searchGlobalScrollState = searchGlobalScrollState
         super.init(reactor: reactor)
     }
@@ -170,8 +170,8 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
             .disposed(by: disposeBag)
 
         sharedState.map { $0.dataSource }
+            .distinctUntilChanged()
             .bind(with: self) { owner, dataSource in
-
                 var snapshot = NSDiffableDataSourceSnapshot<SongSearchResultSection, SongEntity>()
 
                 snapshot.appendSections([.song])
@@ -247,7 +247,7 @@ final class SongSearchResultViewController: BaseReactorViewController<SongSearch
     }
 
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        LogManager.printDebug("❌ \(Self.self) 소멸")
     }
 }
 
@@ -318,7 +318,13 @@ extension SongSearchResultViewController: SearchSortOptionDelegate {
 
 extension SongSearchResultViewController: SongResultCellDelegate {
     func thumbnailDidTap(key: String) {
-        songDetailPresenter.present(id: key)
+        guard let tappedSong = reactor?.currentState.dataSource
+            .first(where: { $0.id == key })
+        else { return }
+        PlayState.shared.append(item: .init(id: tappedSong.id, title: tappedSong.title, artist: tappedSong.artist))
+        let playlistIDs = PlayState.shared.currentPlaylist
+            .map(\.id)
+        songDetailPresenter.present(ids: playlistIDs, selectedID: key)
     }
 }
 
@@ -336,22 +342,27 @@ extension SongSearchResultViewController: SongCartViewDelegate {
         case .allSelect(_):
             break
         case .addSong:
+            let log = CommonAnalyticsLog.clickAddMusicsButton(location: .search)
+            LogManager.analytics(log)
 
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-                    options: [.tabBar]
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
 
             if PreferenceManager.userInfo == nil {
-                let vc = self.textPopUpFactory.makeView(
+                let vc = self.textPopupFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,
                     confirmButtonText: nil,
                     cancelButtonText: nil,
                     completion: {
+                        let log = CommonAnalyticsLog.clickLoginButton(entry: .addMusics)
+                        LogManager.analytics(log)
+
                         let loginVC = self.signInFactory.makeView()
                         loginVC.modalPresentationStyle = .fullScreen
                         self.present(loginVC, animated: true)
@@ -371,8 +382,8 @@ extension SongSearchResultViewController: SongCartViewDelegate {
 
             guard songs.count <= limit else {
                 showToast(
-                    text: LocalizationStrings.overFlowContainWarning(songs.count - limit),
-                    options: [.tabBar]
+                    text: LocalizationStrings.overFlowAddPlaylistWarning(songs.count - limit),
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
@@ -384,17 +395,23 @@ extension SongSearchResultViewController: SongCartViewDelegate {
             reactor.action.onNext(.deselectAll)
 
         case .play:
-
+            LogManager.analytics(
+                CommonAnalyticsLog.clickPlayButton(location: .search, type: .multiple)
+            )
             guard songs.count <= limit else {
                 showToast(
                     text: LocalizationStrings.overFlowPlayWarning(songs.count - limit),
-                    options: [.tabBar]
+                    options: [.tabBar, .songCart]
                 )
                 return
             }
 
             PlayState.shared.append(contentsOf: songs.map { PlaylistItem(item: $0) })
-            WakmusicYoutubePlayer(ids: songs.map { $0.id }).play()
+            if songs.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직", playPlatform: .youtube).play()
+            } else {
+                WakmusicYoutubePlayer(ids: songs.map { $0.id }, title: "왁타버스 뮤직").play()
+            }
             reactor.action.onNext(.deselectAll)
 
         case .remove:

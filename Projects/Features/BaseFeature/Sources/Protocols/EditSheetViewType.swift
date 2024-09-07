@@ -51,7 +51,7 @@ public extension EditSheetViewType where Self: UIViewController {
         bottomSheetView.present(in: view)
 
         // 메인 컨테이너 뷰컨에서 해당 노티를 수신, 팝업이 올라오면 미니 플레이어를 숨깁니다.
-        NotificationCenter.default.post(name: .willShowSongCart, object: nil)
+        NotificationCenter.default.post(name: .shouldHidePlaylistFloatingButton, object: nil)
     }
 
     /// 편집하기 팝업을 제거합니다.
@@ -66,6 +66,6 @@ public extension EditSheetViewType where Self: UIViewController {
         self.bottomSheetView = nil
 
         // 메인 컨테이너 뷰컨에서 해당 노티를 수신, 팝업이 올라오면 미니 플레이어를 다시 보여줍니다.
-        NotificationCenter.default.post(name: .willHideSongCart, object: nil)
+        NotificationCenter.default.post(name: .shouldShowPlaylistFloatingButton, object: nil)
     }
 }

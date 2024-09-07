@@ -24,7 +24,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
 
     private lazy var collectionView: UICollectionView = createCollectionView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        $0.bounces = false
+        $0.isHidden = true
     }
 
     private lazy var headerView: SearchOptionHeaderView = SearchOptionHeaderView(false)
@@ -122,32 +122,36 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
             }
             .disposed(by: disposeBag)
 
-        sharedState.map { ($0.isLoading, $0.dataSource) }
-            .bind(with: self) { owner, info in
-
-                let (isLoading, dataSource) = (info.0, info.1)
+        sharedState.map(\.isLoading)
+            .bind(with: self) { owner, isLoading in
 
                 if isLoading {
                     owner.indicator.startAnimating()
                 } else {
+                    owner.collectionView.isHidden = false
                     owner.indicator.stopAnimating()
+                }
+            }
+            .disposed(by: disposeBag)
 
-                    var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
+        sharedState.map(\.dataSource)
+            .bind(with: self) { owner, dataSource in
 
-                    snapshot.appendSections([.list])
+                var snapshot = NSDiffableDataSourceSnapshot<ListSearchResultSection, SearchPlaylistEntity>()
 
-                    snapshot.appendItems(dataSource, toSection: .list)
-                    owner.dataSource.apply(snapshot, animatingDifferences: false)
+                snapshot.appendSections([.list])
 
-                    let warningView = WMWarningView(
-                        text: "검색결과가 없습니다."
-                    )
+                snapshot.appendItems(dataSource, toSection: .list)
+                owner.dataSource.apply(snapshot, animatingDifferences: false)
 
-                    if dataSource.isEmpty {
-                        owner.collectionView.setBackgroundView(warningView, 100)
-                    } else {
-                        owner.collectionView.restore()
-                    }
+                let warningView = WMWarningView(
+                    text: "검색결과가 없습니다."
+                )
+
+                if dataSource.isEmpty {
+                    owner.collectionView.setBackgroundView(warningView, 100)
+                } else {
+                    owner.collectionView.restore()
                 }
             }
             .disposed(by: disposeBag)
@@ -173,12 +177,8 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
         }
     }
 
-    override func configureUI() {
-        super.configureUI()
-    }
-
     deinit {
-        DEBUG_LOG("❌ \(Self.self) 소멸")
+        LogManager.printDebug("❌ \(Self.self) 소멸")
     }
 }
 
@@ -231,7 +231,7 @@ extension ListSearchResultViewController: UICollectionViewDelegate {
             return
         }
 
-        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .search))
+        LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .searchResult, key: model.key))
         navigatePlaylistDetail(key: model.key)
     }
 

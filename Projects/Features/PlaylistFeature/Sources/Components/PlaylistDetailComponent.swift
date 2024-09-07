@@ -1,3 +1,4 @@
+import BaseFeatureInterface
 import NeedleFoundation
 import PlaylistDomainInterface
 import PlaylistFeatureInterface
@@ -8,6 +9,7 @@ public protocol PlaylistDetailFactoryDependency: Dependency {
     var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory { get }
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
     var requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase { get }
+    var textPopupFactory: any TextPopupFactory { get }
 }
 
 public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDependency>, PlaylistDetailFactory {
@@ -21,7 +23,8 @@ public final class PlaylistDetailComponent: Component<PlaylistDetailFactoryDepen
             key: key,
             unknownPlaylistDetailFactory: dependency
                 .unknownPlaylistDetailFactory,
-            myPlaylistDetailFactory: dependency.myPlaylistDetailFactory
+            myPlaylistDetailFactory: dependency.myPlaylistDetailFactory,
+            textPopupFactory: dependency.textPopupFactory
         )
     }
 

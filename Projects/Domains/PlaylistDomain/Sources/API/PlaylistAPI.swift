@@ -8,6 +8,7 @@ import PlaylistDomainInterface
 
 public enum PlaylistAPI {
     case fetchPlaylistDetail(id: String, type: PlaylistType) // 플리 상세 불러오기
+    case fetchWMPlaylistDetail(id: String) // 왁뮤 플리 상세 불러오기
     case updateTitleAndPrivate(key: String, title: String?, isPrivate: Bool?) // title and private 업데이트
     case createPlaylist(title: String) // 플리 생성
     case fetchPlaylistSongs(key: String) // 전체 재생 시 곡 데이터만 가져오기
@@ -33,12 +34,10 @@ extension PlaylistAPI: WMAPI {
             return "/recommend/list"
 
         case let .fetchPlaylistDetail(id: id, type: type):
-            switch type {
-            case .unknown, .my:
-                return "/\(id)"
-            case .wmRecommend:
-                return "/recommend/\(id)"
-            }
+            return "/\(id)"
+
+        case let .fetchWMPlaylistDetail(id: id):
+            return "/recommend/\(id)"
 
         case let .updateTitleAndPrivate(key: key, _, _):
             return "/\(key)"
@@ -65,7 +64,8 @@ extension PlaylistAPI: WMAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .checkSubscription,
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWMPlaylistDetail, .fetchPlaylistSongs,
+             .checkSubscription,
              .requestPlaylistOwnerID:
             return .get
 
@@ -85,7 +85,8 @@ extension PlaylistAPI: WMAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchPlaylistSongs, .subscribePlaylist, .checkSubscription,
+        case .fetchRecommendPlaylist, .fetchPlaylistDetail, .fetchWMPlaylistDetail, .fetchPlaylistSongs,
+             .subscribePlaylist, .checkSubscription,
              .requestPlaylistOwnerID:
             return .requestPlain
 
@@ -124,7 +125,7 @@ extension PlaylistAPI: WMAPI {
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchRecommendPlaylist:
+        case .fetchRecommendPlaylist, .fetchWMPlaylistDetail:
             return .none
 
         case let .fetchPlaylistDetail(_, type):
