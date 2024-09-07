@@ -6,128 +6,119 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import Utility
-import RxSwift
-import RxCocoa
-import DomainModule
+import AppDomainInterface
+import AuthDomainInterface
 import BaseFeature
-import KeychainModule
 import ErrorModule
-import DataMappingModule
+import Foundation
+import LogManager
+import RxCocoa
+import RxSwift
+import UserDomainInterface
+import Utility
 
-
-final public class IntroViewModel: ViewModelType {
-    var fetchUserInfoUseCase : FetchUserInfoUseCase!
-    var fetchCheckAppUseCase: FetchCheckAppUseCase!
-    var disposeBag = DisposeBag()
+public final class IntroViewModel: ViewModelType {
+    private let fetchUserInfoUseCase: FetchUserInfoUseCase
+    private let fetchAppCheckUseCase: FetchAppCheckUseCase
+    private let logoutUseCase: any LogoutUseCase
+    private let checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
+    private let disposeBag = DisposeBag()
 
     public struct Input {
-        var fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
-        var fetchAppCheck: PublishSubject<Void> = PublishSubject()
-        var fetchUserInfoCheck: PublishSubject<Void> = PublishSubject()
-        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
+        let fetchPermissionCheck: PublishSubject<Void> = PublishSubject()
+        let fetchAppCheck: PublishSubject<Void> = PublishSubject()
+        let checkUserInfoPreference: PublishSubject<Void> = PublishSubject()
     }
 
     public struct Output {
-        var permissionResult: PublishSubject<Bool?> = PublishSubject()
-        var appInfoResult: PublishSubject<Result<AppInfoEntity, Error>> = PublishSubject()
-        var userInfoResult: PublishSubject<Result<String, Error>> = PublishSubject()
-        var endedLottieAnimation: PublishSubject<Void> = PublishSubject()
+        let confirmedPermission: PublishSubject<Bool?> = PublishSubject()
+        let confirmedAppInfo: PublishSubject<Result<AppCheckEntity, Error>> = PublishSubject()
+        let confirmedUserInfoPreference: PublishSubject<Result<Void, Error>> = PublishSubject()
+        let endedLottieAnimation: PublishSubject<Void> = PublishSubject()
     }
 
     public init(
         fetchUserInfoUseCase: FetchUserInfoUseCase,
-        fetchCheckAppUseCase: FetchCheckAppUseCase
+        fetchAppCheckUseCase: FetchAppCheckUseCase,
+        logoutUseCase: any LogoutUseCase,
+        checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase
     ) {
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
-        self.fetchCheckAppUseCase = fetchCheckAppUseCase
-        DEBUG_LOG("✅ \(Self.self) 생성")
+        self.fetchAppCheckUseCase = fetchAppCheckUseCase
+        self.logoutUseCase = logoutUseCase
+        self.checkIsExistAccessTokenUseCase = checkIsExistAccessTokenUseCase
     }
-    
+
     public func transform(from input: Input) -> Output {
         let output = Output()
-        
+
         Observable.combineLatest(
             input.fetchPermissionCheck,
             Utility.PreferenceManager.$appPermissionChecked
-        ) { (_, permission) -> Bool? in
+        ) { _, permission -> Bool? in
             return permission
         }
-        .bind(to: output.permissionResult)
+        .bind(to: output.confirmedPermission)
         .disposed(by: disposeBag)
-        
-        input.endedLottieAnimation
-            .bind(to: output.endedLottieAnimation)
-            .disposed(by: disposeBag)
-        
+
         input.fetchAppCheck
-            .flatMap{ [weak self] _ -> Observable<AppInfoEntity> in
+            .flatMap { [weak self] _ -> Observable<AppCheckEntity> in
                 guard let self else { return Observable.empty() }
-                return self.fetchCheckAppUseCase.execute()
-                    .catch({ (error) -> Single<AppInfoEntity> in
+                return self.fetchAppCheckUseCase.execute()
+                    .catch { error -> Single<AppCheckEntity> in
                         let wmError = error.asWMError
                         if wmError == .offline {
-                            return Single<AppInfoEntity>.create { single in
-                                single(.success(AppInfoEntity(
-                                        flag: .offline,
-                                        title: "",
-                                        description: wmError.errorDescription ?? "",
-                                        version: "",
-                                        specialLogo: false)
+                            return Single<AppCheckEntity>.create { single in
+                                single(
+                                    .success(
+                                        AppCheckEntity(
+                                            flag: .offline,
+                                            title: "",
+                                            description: wmError.errorDescription ?? "",
+                                            version: "",
+                                            specialLogo: false
+                                        )
                                     )
                                 )
                                 return Disposables.create()
                             }
-                        }else{
+                        } else {
                             return Single.error(error)
                         }
-                    })
+                    }
                     .asObservable()
             }
             .debug("✅ Intro > fetchCheckAppUseCase")
-            .subscribe(onNext: { (model) in
-                output.appInfoResult.onNext(.success(model))
-            }, onError: { (error) in
-                output.appInfoResult.onNext(.failure(error))
+            .subscribe(onNext: { model in
+                output.confirmedAppInfo.onNext(.success(model))
+            }, onError: { error in
+                output.confirmedAppInfo.onNext(.failure(error))
             })
             .disposed(by: disposeBag)
-        
-        input.fetchUserInfoCheck
-            .withLatestFrom(Utility.PreferenceManager.$userInfo)
-            .filter{ (userInfo) in
-                guard userInfo != nil else {
-                    ///비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
-                    let keychain = KeychainImpl()
-                    let accessToken = keychain.load(type: .accessToken)
-                    if !accessToken.isEmpty {
-                        DEBUG_LOG("💡 비로그인 상태입니다. 엑세스 토큰을 삭제합니다.")
-                        keychain.delete(type: .accessToken)
-                    }
-                    output.userInfoResult.onNext(.success(""))
-                    return false
+
+        input.checkUserInfoPreference
+            .withLatestFrom(PreferenceManager.$userInfo)
+            .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo -> Observable<Void> in
+                // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
+                guard userInfo == nil else {
+                    return Observable.just(())
                 }
-                return true
-            }
-            .flatMap { [weak self] _ -> Observable<AuthUserInfoEntity> in
-                guard let `self` = self else { return Observable.empty() }
-                return self.fetchUserInfoUseCase.execute()
+                return checkIsExistAccessTokenUseCase.execute()
                     .asObservable()
+                    .flatMap { isExist in
+                        isExist ? logoutUseCase.execute(localOnly: true)
+                            .andThen(Observable.just(())) : Observable.just(())
+                    }
             }
-            .debug("✅ Intro > fetchUserInfoUseCase")
+            .debug("✅ Intro > checkIsExistUseInfoPreference")
             .subscribe(onNext: { _ in
-                output.userInfoResult.onNext(.success(""))
-            }, onError: { (error) in
-                let asWMError = error.asWMError
-                if asWMError == .tokenExpired || asWMError == .notFound {
-                    let keychain = KeychainImpl()
-                    keychain.delete(type: .accessToken)
-                    Utility.PreferenceManager.userInfo = nil
-                    Utility.PreferenceManager.startPage = 4
-                }
-                output.userInfoResult.onNext(.failure(error))
-            }).disposed(by: disposeBag)
-        
+                output.confirmedUserInfoPreference.onNext(.success(()))
+
+            }, onError: { error in
+                output.confirmedUserInfoPreference.onNext(.failure(error))
+            })
+            .disposed(by: disposeBag)
+
         return output
     }
 }

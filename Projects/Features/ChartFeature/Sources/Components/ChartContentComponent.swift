@@ -1,25 +1,29 @@
+import BaseFeature
+import BaseFeatureInterface
+import ChartDomainInterface
 import Foundation
-import CommonFeature
 import NeedleFoundation
-import DomainModule
-import DataMappingModule
+import SignInFeatureInterface
 
 public protocol ChartContentDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase { get }
-    var containSongsComponent: ContainSongsComponent {get}
+    var containSongsFactory: any ContainSongsFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
+    var signInFactory: any SignInFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class ChartContentComponent: Component<ChartContentDependency> {
     public func makeView(type: ChartDateType) -> ChartContentViewController {
         return ChartContentViewController.viewController(
-       
             viewModel: .init(
                 type: type,
-                fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
-                fetchChartUpdateTimeUseCase: dependency.fetchChartUpdateTimeUseCase
-            )
-            ,containSongsComponent:  dependency.containSongsComponent
+                fetchChartRankingUseCase: dependency.fetchChartRankingUseCase
+            ),
+            containSongsFactory: dependency.containSongsFactory,
+            textPopupFactory: dependency.textPopupFactory,
+            signInFactory: dependency.signInFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

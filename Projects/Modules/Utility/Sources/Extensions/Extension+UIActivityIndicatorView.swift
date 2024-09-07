@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-extension UIActivityIndicatorView {
-    public func stopOnMainThread() {
+public extension UIActivityIndicatorView {
+    func stopOnMainThread() {
         DispatchQueue.main.async {
             self.stopAnimating()
         }

@@ -8,14 +8,15 @@
 
 import Foundation
 import UIKit
-import KeychainModule
 
 public func APP_WIDTH() -> CGFloat {
-    return UIScreen.main.bounds.size.width
+    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+    return windowScene?.screen.bounds.size.width ?? .zero
 }
 
 public func APP_HEIGHT() -> CGFloat {
-    return UIScreen.main.bounds.size.height
+    let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+    return windowScene?.screen.bounds.size.height ?? .zero
 }
 
 public func PLAYER_HEIGHT() -> CGFloat {
@@ -23,11 +24,23 @@ public func PLAYER_HEIGHT() -> CGFloat {
 }
 
 public func STATUS_BAR_HEGHIT() -> CGFloat {
-    return max(20, UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0)
+    return UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .filter { $0.activationState == .foregroundActive }
+        .first?
+        .keyWindow?
+        .safeAreaInsets
+        .top ?? 0
 }
 
 public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
-    return UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0
+    return UIApplication.shared.connectedScenes
+        .compactMap { $0 as? UIWindowScene }
+        .filter { $0.activationState == .foregroundActive }
+        .first?
+        .keyWindow?
+        .safeAreaInsets
+        .bottom ?? 0
 }
 
 public func APP_VERSION() -> String {
@@ -45,23 +58,23 @@ public func OS_VERSION() -> String {
 public func OS_NAME() -> String {
     let osName: String = {
         #if os(iOS)
-        #if targetEnvironment(macCatalyst)
-        return "macOS(Catalyst)"
-        #else
-        return "iOS"
-        #endif
+            #if targetEnvironment(macCatalyst)
+                return "macOS(Catalyst)"
+            #else
+                return "iOS"
+            #endif
         #elseif os(watchOS)
-        return "watchOS"
+            return "watchOS"
         #elseif os(tvOS)
-        return "tvOS"
+            return "tvOS"
         #elseif os(macOS)
-        return "macOS"
+            return "macOS"
         #elseif os(Linux)
-        return "Linux"
+            return "Linux"
         #elseif os(Windows)
-        return "Windows"
+            return "Windows"
         #else
-        return "Unknown"
+            return "Unknown"
         #endif
     }()
     return osName
@@ -69,30 +82,29 @@ public func OS_NAME() -> String {
 
 // use: colorFromRGB(0xffffff)
 public func colorFromRGB(_ rgbValue: UInt, alpha: CGFloat = 1.0) -> UIColor {
-    return UIColor(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
-                   green: CGFloat((rgbValue & 0xFF00) >> 8) / 255.0,
-                   blue: CGFloat(rgbValue & 0xFF) / 255.0, alpha: alpha)
+    return UIColor(
+        red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((rgbValue & 0xFF00) >> 8) / 255.0,
+        blue: CGFloat(rgbValue & 0xFF) / 255.0,
+        alpha: alpha
+    )
 }
 
 // use: colorFromRGB("ffffff")
 public func colorFromRGB(_ hexString: String, alpha: CGFloat = 1.0) -> UIColor {
     let hexToInt = UInt32(Float64("0x" + hexString) ?? 0)
-    return UIColor(red: CGFloat((hexToInt & 0xFF0000) >> 16) / 255.0,
-                   green: CGFloat((hexToInt & 0xFF00) >> 8) / 255.0,
-                   blue: CGFloat(hexToInt & 0xFF) / 255.0, alpha: alpha)
+    return UIColor(
+        red: CGFloat((hexToInt & 0xFF0000) >> 16) / 255.0,
+        green: CGFloat((hexToInt & 0xFF00) >> 8) / 255.0,
+        blue: CGFloat(hexToInt & 0xFF) / 255.0,
+        alpha: alpha
+    )
 }
 
 public func DEBUG_LOG(_ msg: Any, file: String = #file, function: String = #function, line: Int = #line) {
-    #if DEBUG
+    #if DEBUG || QA
         let fileName = file.split(separator: "/").last ?? ""
         let funcName = function.split(separator: "(").first ?? ""
         print("[\(fileName)] \(funcName)(\(line)): \(msg)")
     #endif
-}
-
-public func LOGOUT(){
-    let keychain = KeychainImpl()
-    keychain.delete(type: .accessToken)
-    Utility.PreferenceManager.userInfo = nil
-    NotificationCenter.default.post(name: .movedTab, object: 4)
 }

@@ -12,22 +12,50 @@ public struct UserInfo: Codable, Equatable {
     public let ID: String
     public let platform: String
     public let profile: String
-    public let displayName: String
-    public let firstLoginTime: Int
-    public let first: Bool
-    public let version: Int
-    
+    public let name: String
+    public let itemCount: Int
+
+    public var decryptedID: String {
+        return AES256.decrypt(encoded: ID)
+    }
+
+    public var decryptedName: String {
+        return AES256.decrypt(encoded: name)
+    }
+
     public static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.ID == rhs.ID
     }
 }
 
 public extension UserInfo {
-    func update(displayName: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: self.profile, displayName: displayName, firstLoginTime: self.firstLoginTime, first: self.first,version: self.version)
+    func update(name: String) -> UserInfo {
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: self.profile,
+            name: AES256.encrypt(string: name),
+            itemCount: self.itemCount
+        )
     }
-    
+
     func update(profile: String) -> UserInfo {
-        return UserInfo(ID: self.ID, platform: self.platform, profile: profile, displayName: self.displayName, firstLoginTime: self.firstLoginTime, first: self.first,version:self.version)
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: profile,
+            name: self.name,
+            itemCount: self.itemCount
+        )
+    }
+
+    func update(itemCount: Int) -> UserInfo {
+        return UserInfo(
+            ID: self.ID,
+            platform: self.platform,
+            profile: self.profile,
+            name: self.name,
+            itemCount: itemCount
+        )
     }
 }

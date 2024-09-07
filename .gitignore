@@ -65,6 +65,8 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
+.build/
+Carthage/
 
 ### Xcode Patch ###
 *.xcodeproj/*
@@ -109,3 +111,6 @@ amplifytools.xcconfig
 
 ### Google
 GoogleService-Info.plist
+
+### Needle
+Projects/App/Sources/Application/NeedleGenerated.swift

@@ -1,39 +1,55 @@
+import ArtistFeatureInterface
+import BaseFeature
 import Foundation
-import HomeFeature
-import StorageFeature
-import SearchFeature
-import ArtistFeature
-import ChartFeature
-import CommonFeature
+import HomeFeatureInterface
+import MusicDetailFeatureInterface
+import MyInfoFeatureInterface
 import NeedleFoundation
-import DomainModule
+import NoticeDomainInterface
+import NotificationDomainInterface
+import PlaylistFeatureInterface
+import SearchFeatureInterface
+import SongsDomainInterface
+import StorageFeatureInterface
 
 public protocol MainTabBarDependency: Dependency {
-    var fetchNoticeUseCase: any FetchNoticeUseCase {get}
-    var homeComponent: HomeComponent { get }
-    var chartComponent: ChartComponent { get }
-    var searchComponent: SearchComponent { get }
-    var artistComponent: ArtistComponent { get }
-    var storageComponent: StorageComponent { get }
+    var fetchNoticePopupUseCase: any FetchNoticePopupUseCase { get }
+    var fetchNoticeIDListUseCase: any FetchNoticeIDListUseCase { get }
+    var updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase { get }
+    var fetchSongUseCase: any FetchSongUseCase { get }
+    var appEntryState: any AppEntryStateHandleable { get }
+    var homeFactory: any HomeFactory { get }
+    var searchFactory: any SearchFactory { get }
+    var artistFactory: any ArtistFactory { get }
+    var storageFactory: any StorageFactory { get }
+    var myInfoFactory: any MyInfoFactory { get }
     var noticePopupComponent: NoticePopupComponent { get }
-    var noticeComponent: NoticeComponent { get }
-    var noticeDetailComponent: NoticeDetailComponent { get }
+    var noticeDetailFactory: any NoticeDetailFactory { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
+    var musicDetailFactory: any MusicDetailFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
     public func makeView() -> MainTabBarViewController {
         return MainTabBarViewController.viewController(
             viewModel: MainTabBarViewModel.init(
-                fetchNoticeUseCase: self.dependency.fetchNoticeUseCase
+                fetchNoticePopupUseCase: dependency.fetchNoticePopupUseCase,
+                fetchNoticeIDListUseCase: dependency.fetchNoticeIDListUseCase,
+                updateNotificationTokenUseCase: dependency.updateNotificationTokenUseCase,
+                fetchSongUseCase: dependency.fetchSongUseCase
             ),
-            homeComponent: self.dependency.homeComponent,
-            chartComponent: self.dependency.chartComponent,
-            searchComponent: self.dependency.searchComponent,
-            artistComponent: self.dependency.artistComponent,
-            storageCompoent: self.dependency.storageComponent,
-            noticePopupComponent: self.dependency.noticePopupComponent,
-            noticeComponent: self.dependency.noticeComponent,
-            noticeDetailComponent: self.dependency.noticeDetailComponent
+            appEntryState: dependency.appEntryState,
+            homeFactory: dependency.homeFactory,
+            searchFactory: dependency.searchFactory,
+            artistFactory: dependency.artistFactory,
+            storageFactory: dependency.storageFactory,
+            myInfoFactory: dependency.myInfoFactory,
+            noticePopupComponent: dependency.noticePopupComponent,
+            noticeDetailFactory: dependency.noticeDetailFactory,
+            playlistDetailFactory: dependency.playlistDetailFactory,
+            musicDetailFactory: dependency.musicDetailFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

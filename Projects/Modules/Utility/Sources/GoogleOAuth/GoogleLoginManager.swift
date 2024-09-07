@@ -6,12 +6,13 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import Alamofire
-import RxSwift
+import Foundation
+import LogManager
 import RxRelay
+import RxSwift
 import SafariServices
+import UIKit
 
 // MARK: - Delegate protocol
 public protocol GoogleOAuthLoginDelegate: AnyObject {
@@ -30,7 +31,6 @@ public class GoogleLoginManager {
     private let accessTokenGoogleURL = "https://oauth2.googleapis.com"
     private let getProfileURL = "https://www.googleapis.com/oauth2/v1/userinfo"
     private let googleClientID = GOOGLE_CLIENT_ID()
-    private let googleSecretKey = GOOGLE_SECRET_KEY()
     private let googleURLScheme = GOOGLE_URL_SCHEME()
     private let scope = "profile"
 
@@ -49,14 +49,13 @@ public class GoogleLoginManager {
         let clientID = URLQueryItem(name: "client_id", value: googleClientID)
         let codeChallenge = URLQueryItem(name: "code_challenge", value: pkce?.codeChallenge)
         let codeChallengeMethod = URLQueryItem(name: "code_challenge_method", value: "S256")
-        
+
         components?.queryItems = [scope, responseType, codeChallenge, redirectURI, clientID, codeChallengeMethod]
 
         if let url = components?.url, UIApplication.shared.canOpenURL(url) {
-            DEBUG_LOG(url)
-            //UIApplication.shared.open(url) // 이건 앱 외부로 나가서 사파리 앱이 실행되는거고,
-            let safari = SFSafariViewController(url: url) //이건 앱 안에서 사파리 컨트롤러를 띄울 수 있음
-            UIApplication.shared.windows.first?.rootViewController?.present(safari, animated: true)
+            LogManager.printDebug(url)
+            let safari = SFSafariViewController(url: url)
+            UIApplication.topVisibleViewController()?.present(safari, animated: true)
         }
     }
 
@@ -85,16 +84,15 @@ public class GoogleLoginManager {
             )
             .responseData { response in
                 switch response.result {
-                case .success(let data):
+                case let .success(data):
                     let accessToken = try? JSONDecoder().decode(
                         GoogleGetTokenEntity.self,
                         from: data
                     )
                     continuation.resume(returning: accessToken?.accessToken ?? "")
-                case .failure(let error):
+                case let .failure(error):
                     DEBUG_LOG(error)
                     continuation.resume(throwing: WMGoogleError.internalError)
-
                 }
             }
         }

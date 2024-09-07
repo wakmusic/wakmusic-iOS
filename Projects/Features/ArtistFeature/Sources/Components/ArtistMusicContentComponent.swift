@@ -1,27 +1,22 @@
-//
-//  ArtistMusicContentComponent.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import ArtistDomainInterface
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
-import UIKit
 import NeedleFoundation
-import DomainModule
-import DataMappingModule
-import CommonFeature
+import SignInFeatureInterface
 
 public protocol ArtistMusicContentDependency: Dependency {
     var fetchArtistSongListUseCase: any FetchArtistSongListUseCase { get }
-    var containSongsComponent: ContainSongsComponent { get }
+    var containSongsFactory: any ContainSongsFactory { get }
+    var signInFactory: any SignInFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
 public final class ArtistMusicContentComponent: Component<ArtistMusicContentDependency> {
     public func makeView(
         type: ArtistSongSortType,
-        model: ArtistListEntity?
+        model: ArtistEntity?
     ) -> ArtistMusicContentViewController {
         return ArtistMusicContentViewController.viewController(
             viewModel: .init(
@@ -29,7 +24,10 @@ public final class ArtistMusicContentComponent: Component<ArtistMusicContentDepe
                 model: model,
                 fetchArtistSongListUseCase: dependency.fetchArtistSongListUseCase
             ),
-            containSongsComponent: dependency.containSongsComponent
+            containSongsFactory: dependency.containSongsFactory,
+            signInFactory: dependency.signInFactory,
+            textPopupFactory: dependency.textPopupFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

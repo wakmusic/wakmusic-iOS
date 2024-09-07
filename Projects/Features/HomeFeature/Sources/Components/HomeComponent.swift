@@ -1,35 +1,36 @@
-//
-//  HomeComponent.swift
-//  HomeFeatureTests
-//
-//  Created by KTH on 2023/02/20.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import BaseFeature
+import ChartDomainInterface
+import ChartFeatureInterface
 import Foundation
-import UIKit
+import HomeFeatureInterface
 import NeedleFoundation
-import DomainModule
-import CommonFeature
+import PlaylistDomainInterface
+import PlaylistFeatureInterface
+import SongsDomainInterface
+import UIKit
 
 public protocol HomeDependency: Dependency {
     var fetchChartRankingUseCase: any FetchChartRankingUseCase { get }
     var fetchNewSongsUseCase: any FetchNewSongsUseCase { get }
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase { get }
-    var playListDetailComponent : PlayListDetailComponent { get }
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase { get }
+    var playlistDetailFactory: any PlaylistDetailFactory { get }
+    var chartFactory: any ChartFactory { get }
     var newSongsComponent: NewSongsComponent { get }
+    var songDetailPresenter: any SongDetailPresentable { get }
 }
 
-public final class HomeComponent: Component<HomeDependency> {
-    public func makeView() -> HomeViewController {
+public final class HomeComponent: Component<HomeDependency>, HomeFactory {
+    public func makeView() -> UIViewController {
         return HomeViewController.viewController(
             viewModel: .init(
                 fetchChartRankingUseCase: dependency.fetchChartRankingUseCase,
                 fetchNewSongsUseCase: dependency.fetchNewSongsUseCase,
-                fetchRecommendPlayListUseCase: dependency.fetchRecommendPlayListUseCase
+                fetchRecommendPlaylistUseCase: dependency.fetchRecommendPlaylistUseCase
             ),
-            playListDetailComponent: dependency.playListDetailComponent,
-            newSongsComponent: dependency.newSongsComponent
+            playlistDetailFactory: dependency.playlistDetailFactory,
+            newSongsComponent: dependency.newSongsComponent,
+            chartFactory: dependency.chartFactory,
+            songDetailPresenter: dependency.songDetailPresenter
         )
     }
 }

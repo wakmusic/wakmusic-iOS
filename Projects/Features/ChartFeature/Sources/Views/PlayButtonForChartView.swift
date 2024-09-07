@@ -1,9 +1,9 @@
-import UIKit
 import DesignSystem
 import RxRelay
 import RxSwift
 import SnapKit
 import Then
+import UIKit
 
 public enum PlayEvent {
     case allPlay
@@ -11,41 +11,56 @@ public enum PlayEvent {
 }
 
 public protocol PlayButtonForChartViewDelegate: AnyObject {
-   func pressPlay(_ event:PlayEvent)
+    func pressPlay(_ event: PlayEvent)
 }
 
 public final class PlayButtonForChartView: UIView {
-    public weak var delegate:PlayButtonForChartViewDelegate?
+    public weak var delegate: PlayButtonForChartViewDelegate?
     private let disposeBag = DisposeBag()
 
     private let allPlayButton = UIButton().then {
         $0.setImage(DesignSystemAsset.Chart.allPlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         let attributedString = NSMutableAttributedString(string: "전체재생")
-        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                                                 .kern: -0.5],
-                                                range: NSRange(location: 0, length: attributedString.string.count))
+        attributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ],
+            range: NSRange(location: 0, length: attributedString.string.count)
+        )
         $0.setAttributedTitle(attributedString, for: .normal)
     }
+
     private let shufflePlayButton = UIButton().then {
         $0.setTitle("랜덤재생", for: .normal)
         $0.setImage(DesignSystemAsset.Chart.shufflePlay.image.withRenderingMode(.alwaysOriginal), for: .normal)
         let attributedString = NSMutableAttributedString(string: "랜덤재생")
-        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
-                                                 .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                                                 .kern: -0.5],
-                                                range: NSRange(location: 0, length: attributedString.string.count))
+        attributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 14),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
+                .kern: -0.5
+            ],
+            range: NSRange(location: 0, length: attributedString.string.count)
+        )
         $0.setAttributedTitle(attributedString, for: .normal)
     }
-    private let updateTimeLabel = UILabel().then {
-        $0.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        $0.textColor = DesignSystemAsset.GrayColor.gray600.color
-    }
+
+    private let updateTimeLabel = WMLabel(
+        text: "업데이트",
+        textColor: DesignSystemAsset.GrayColor.gray600.color,
+        font: .t7(weight: .light),
+        alignment: .left,
+        lineHeight: UIFont.WMFontSystem.t7().lineHeight,
+        kernValue: -0.5
+    )
+
     private let updateTimeImageView = UIImageView().then {
         $0.image = DesignSystemAsset.Chart.check.image
     }
 
-    public override init(frame: CGRect) {
+    override public init(frame: CGRect) {
         super.init(frame: frame)
         self.setupView()
         self.bind()
@@ -58,10 +73,14 @@ public final class PlayButtonForChartView: UIView {
 
     public func setUpdateTime(updateTime: BehaviorRelay<String>) {
         let attributedString = NSMutableAttributedString(string: updateTime.value)
-        attributedString.addAttributes([.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                                        .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
-                                        .kern: -0.5],
-                                       range: NSRange(location: 0, length: attributedString.string.count))
+        attributedString.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+                .foregroundColor: DesignSystemAsset.GrayColor.gray600.color,
+                .kern: -0.5
+            ],
+            range: NSRange(location: 0, length: attributedString.string.count)
+        )
         updateTimeLabel.attributedText = attributedString
     }
 }
@@ -69,7 +88,7 @@ public final class PlayButtonForChartView: UIView {
 extension PlayButtonForChartView {
     private func setupView() {
         self.backgroundColor = DesignSystemAsset.GrayColor.gray100.color
-        
+
         [
             allPlayButton,
             shufflePlayButton
@@ -89,7 +108,7 @@ extension PlayButtonForChartView {
         ].forEach {
             self.addSubview($0)
         }
-        
+
         allPlayButton.snp.makeConstraints {
             $0.top.equalTo(16)
             $0.leading.equalTo(20)

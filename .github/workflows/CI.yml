@@ -2,130 +2,143 @@ name: CI
 
 on:
   pull_request:
+    paths:
+      - ".github/workflows/CI.yml"
+      - "**/*.swift"
+  push:
     branches:
       - develop
+      - master
 
 env:
-  CACHED_DEPENDENCY_PATHS: ${{ github.workspace }}/Tuist/Dependencies
+  CACHED_PACKAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/.build
+  CACHED_CARTHAGE_DEPENDENCY_PATHS: ${{ github.workspace }}/Carthage
+  GOOGLE_SERVICE_INFO_PLIST_PATH: Projects/App/Resources/GoogleService-Info.plist
+  SECRET_XCCONFIG_PATH: Projects/App/XCConfig/Secrets.xcconfig
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   prepare-ci:
-    name: Prepare CI
-    runs-on: macOS-latest
+    name: ⚙️ Prepare CI
+    runs-on: macos-14
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
+
+      - name: Compute package dependency cache key
+        id: compute_package_hash
+        run: echo "package_hash=${{ hashFiles('Package.swift') }}" >> $GITHUB_OUTPUT
+
+      - name: Check package dependency cache
+        uses: actions/cache@v3
+        id: cache_package_dependencies
+        with:
+          path: ${{ env.CACHED_PACKAGE_DEPENDENCY_PATHS }}
+          key: ${{ steps.compute_package_hash.outputs.package_hash }}
+
+      - name: Compute carthage dependency cache key
+        id: compute_carthage_hash
+        run: echo "carthage_hash=${{ hashFiles('Cartfile') }}" >> $GITHUB_OUTPUT
+
+      - name: Check carthage dependency cache
+        uses: actions/cache@v3
+        id: cache_carthage_dependencies
+        with:
+          path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
+          key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
+
+      - name: Echo dependency cache hit
+        run: |
+          echo "package cache hit = ${{ steps.cache_package_dependencies.outputs.cache-hit }}"
+          echo "carthage cache hit = ${{ steps.cache_carthage_dependencies.outputs.cache-hit }}"
+
+      - uses: jdx/mise-action@v2
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
+
+      - name: Install tuist
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
+        run: |
+          brew install carthage
+          mise install tuist
+
+      - name: Install dependencies needs
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
+        run: make install
     outputs:
-      NAME: ${{ steps.get_name.outputs.NAME }}
-      CI-NEEDED: ${{ steps.check_ci_needed.outputs.CI-NEEDED }}
-      WROKING-PATH: ${{ steps.get_working_directory.outputs.PATH }}
-      TESTS-EXISTENCE: ${{ steps.check_tests_existence.outputs.files_exists }}
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: Get Branch Name
-      uses: tj-actions/branch-names@v6.2
-      id: branch_name
-
-    - name: Get Type
-      id: get_type
-      run: |
-        echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 1
-        echo "TYPE=$(echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 1)" >> $GITHUB_OUTPUT
-
-    - name: Get Name
-      id: get_name
-      run: |
-        echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 2
-        echo "NAME=$(echo ${{ steps.branch_name.outputs.current_branch }} | cut -d / -f 2)" >> $GITHUB_OUTPUT
-
-    - name: Check CI Needed
-      id: check_ci_needed
-      run: |
-        echo ${{steps.get_type.outputs.TYPE == 'Application' || steps.get_type.outputs.TYPE == 'Modules' || steps.get_type.outputs.TYPE == 'Services'}}
-        echo "CI-NEEDED=${{steps.get_type.outputs.TYPE == 'Application' || steps.get_type.outputs.TYPE == 'Modules' || steps.get_type.outputs.TYPE == 'Services'}}" >> $GITHUB_OUTPUT
-
-    - name: Get Working Directory
-      id: get_working_directory
-      if: steps.check_ci_needed.outputs.CI-NEEDED == 'true'
-      run: |
-        cd ${{ steps.get_type.outputs.TYPE }}
-        if [ ${{ steps.get_type.outputs.TYPE }} != "Application" ]
-        then
-          cd ${{ steps.get_name.outputs.NAME }}
-        fi
-        echo "PATH=$(pwd)" >> $GITHUB_OUTPUT
-
-    - name: Check tests existence
-      id: check_tests_existence
-      if: steps.check_ci_needed.outputs.CI-NEEDED == 'true'
-      uses: andstor/file-existence-action@v1
-      with:
-        files: "${{ steps.get_working_directory.outputs.PATH }}/Tests"
-
-
-
-
-  build:
-    name: ⚡️ Build
-    runs-on: macOS-latest
-    needs: prepare-ci
-    if: needs.prepare-ci.outputs.CI-NEEDED == 'true'
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: install needs
-      run: |
-        bash <(curl -Ls https://install.tuist.io)
-
-    - name: Compute dependency cache key
-      id: compute_hash
-      run: echo "hash=${{ hashFiles('Tuist/Dependencies.swift') }}" >> $GITHUB_OUTPUT
-
-    - name: Check dependency cache
-      uses: actions/cache@v3
-      id: cache_dependencies
-      with:
-        path: ${{ env.CACHED_DEPENDENCY_PATHS }}
-        key: ${{ steps.compute_hash.outputs.hash }}
-
-    - name: Install dependencies
-      if: steps.cache_dependencies.outputs.cache-hit != 'true'
-      run: tuist fetch
-
-    - name: build codes
-      working-directory: ${{ needs.prepare-ci.outputs.WROKING-PATH }}
-      run: tuist build
-
-
+      package_dependency_cache_key: ${{ steps.compute_package_hash.outputs.package_hash }}
+      carthage_dependency_cache_key: ${{ steps.compute_carthage_hash.outputs.carthage_hash }}
 
   test:
     name: 🧪 Test
-    runs-on: macOS-latest
-    needs: [prepare-ci]
-    if: needs.prepare-ci.outputs.TESTS-EXISTENCE == 'true'
+    runs-on: macos-14
+    needs: prepare-ci
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-    - name: install needs
-      run: |
-        bash <(curl -Ls https://install.tuist.io)
+      - name: List Xcode installations
+        run: sudo ls -1 /Applications | grep "Xcode"
 
-    - name: Compute dependency cache key
-      id: compute_hash
-      run: echo "hash=${{ hashFiles('Tuist/Dependencies.swift') }}" >> $GITHUB_OUTPUT
+      - name: Select Xcode 15.4
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app/Contents/Developer
 
-    - name: Check dependency cache
-      uses: actions/cache@v3
-      id: cache_dependencies
-      with:
-        path: ${{ env.CACHED_DEPENDENCY_PATHS }}
-        key: ${{ steps.compute_hash.outputs.hash }}
+      - name: Show swift version
+        run: swift --version
 
-    - name: Install dependencies
-      if: steps.cache_dependencies.outputs.cache-hit != 'true'
-      run: tuist fetch
+      - uses: jdx/mise-action@v2
 
-    - name: test codes
-      working-directory: ${{ needs.prepare-ci.outputs.WROKING-PATH }}
-      run: tuist test ${{ needs.prepare-ci.outputs.NAME }}Test
+      - name: Install tuist
+        run: |
+          brew install carthage
+          mise install tuist
 
+      - name: Check package dependency cache
+        uses: actions/cache@v3
+        id: cache_package_dependencies
+        with:
+          path: ${{ env.CACHED_PACKAGE_DEPENDENCY_PATHS }}
+          key: ${{ needs.prepare-ci.outputs.package_dependency_cache_key }}
+
+      - name: Check carthage dependency cache
+        uses: actions/cache@v3
+        id: cache_carthage_dependencies
+        with:
+          path: ${{ env.CACHED_CARTHAGE_DEPENDENCY_PATHS }}
+          key: ${{ needs.prepare-ci.outputs.carthage_dependency_cache_key }}
+
+      - name: Echo dependency cache hit
+        run: |
+          echo "package cache hit = ${{ steps.cache_package_dependencies.outputs.cache-hit }}"
+          echo "carthage cache hit = ${{ steps.cache_carthage_dependencies.outputs.cache-hit }}"
+
+      - name: Install needle
+        run: brew install needle
+
+      - name: Install dependencies needs
+        if: steps.cache_package_dependencies.outputs.cache-hit == '' || steps.cache_carthage_dependencies.outputs.cache-hit == ''
+        run: make install
+
+      - name: Make `Secrets.xcconfig`
+        run: |
+          mkdir Projects/App/XCConfig
+          touch ${{ env.SECRET_XCCONFIG_PATH }}
+          echo "" > ${{ env.SECRET_XCCONFIG_PATH }}
+
+      - name: Make `GoogleService-Info.plist`
+        run: |
+          touch ${{ env.GOOGLE_SERVICE_INFO_PLIST_PATH }}
+          echo "${{ secrets.GOOGLE_INFO_PLIST }}" > ${{ env.GOOGLE_SERVICE_INFO_PLIST_PATH }}
+
+      - name: Generate NeedleGenerated.swift
+        run: |
+          sh Scripts/NeedleRunScript.sh ci
+          echo finish NeedleRunScript
+
+      - name: Test with tuist
+        run: make test

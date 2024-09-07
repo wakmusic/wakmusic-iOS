@@ -1,0 +1,28 @@
+excluded:
+  - "**/*/NeedleGenerated.swift"
+  - "Tuist"
+  - "Plugin"
+
+force_cast: # From https://realm.github.io/SwiftLint/force_cast.html
+  warning # 강제 캐스팅은 error에서 warning으로 변경
+
+identifier_name:
+  min_length:
+    warning: 1
+  allowed_symbols: ["_"]
+
+nesting:
+  type_label:
+    warning: 3
+
+type_name:
+  max_length:
+    warning: 60
+
+function_body_length:
+  warning: 100
+  error: 300
+
+function_parameter_count:
+  warning: 10
+  error: 15

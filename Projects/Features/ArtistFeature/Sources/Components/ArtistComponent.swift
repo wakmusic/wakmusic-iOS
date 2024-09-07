@@ -1,26 +1,20 @@
-//
-//  ArtistComponent.swift
-//  ArtistFeatureTests
-//
-//  Created by KTH on 2023/02/08.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import ArtistDomainInterface
+import ArtistFeatureInterface
 import Foundation
-import UIKit
 import NeedleFoundation
-import DomainModule
+import UIKit
 
 public protocol ArtistDependency: Dependency {
     var fetchArtistListUseCase: any FetchArtistListUseCase { get }
-    var artistDetailComponent: ArtistDetailComponent { get }
+    var artistDetailFactory: any ArtistDetailFactory { get }
 }
 
-public final class ArtistComponent: Component<ArtistDependency> {
-    public func makeView() -> ArtistViewController {
+public final class ArtistComponent: Component<ArtistDependency>, ArtistFactory {
+    public func makeView() -> UIViewController {
+        let reactor = ArtistReactor(fetchArtistListUseCase: dependency.fetchArtistListUseCase)
         return ArtistViewController.viewController(
-            viewModel: ArtistViewModel(fetchArtistListUseCase: dependency.fetchArtistListUseCase),
-            artistDetailComponent: dependency.artistDetailComponent
+            reactor: reactor,
+            artistDetailFactory: dependency.artistDetailFactory
         )
     }
 }

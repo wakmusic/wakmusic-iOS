@@ -1,16 +1,15 @@
+import BaseFeature
+import ChartFeatureInterface
 import Foundation
-import CommonFeature
 import NeedleFoundation
-import DomainModule
-
+import UIKit
 
 public protocol ChartDependency: Dependency {
     var chartContentComponent: ChartContentComponent { get }
-    
 }
 
-public final class ChartComponent: Component<ChartDependency> {
-    public func makeView() -> ChartViewController {
+public final class ChartComponent: Component<ChartDependency>, ChartFactory {
+    public func makeView() -> UIViewController {
         return ChartViewController.viewController(chartContentComponent: dependency.chartContentComponent)
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import RealmSwift
 
+@available(*, deprecated, message: "PlaylistLocalEntity로 전환. 해당 객체는 사용하지 말아주세요.")
 public final class PlayedLists: Object {
     @objc public dynamic var id: String = ""
     @objc public dynamic var title: String = ""
@@ -18,12 +19,13 @@ public final class PlayedLists: Object {
     @objc public dynamic var views: Int = 0
     @objc public dynamic var last: Int = 0
     @objc public dynamic var date: String = ""
+    @objc public dynamic var likes: Int = 0
     @objc public dynamic var lastPlayed: Bool = false
 
-    public override static func primaryKey() -> String? {
+    override public static func primaryKey() -> String? {
         return "id"
     }
-    
+
     public convenience init(
         id: String,
         title: String,
@@ -33,6 +35,7 @@ public final class PlayedLists: Object {
         views: Int,
         last: Int,
         date: String,
+        likes: Int = 0,
         lastPlayed: Bool
     ) {
         self.init()
@@ -44,6 +47,7 @@ public final class PlayedLists: Object {
         self.views = views
         self.last = last
         self.date = date
+        self.likes = 0
         self.lastPlayed = lastPlayed
     }
 }

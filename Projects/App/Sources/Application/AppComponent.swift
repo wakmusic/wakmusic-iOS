@@ -1,24 +1,24 @@
+import BaseFeature
 import Foundation
-import UIKit
-import NeedleFoundation
-import PlayerFeature
-import RootFeature
-import MainTabFeature
-import CommonFeature
 import KeychainModule
+import MainTabFeature
+import MyInfoFeature
+import NeedleFoundation
+import RootFeature
 import StorageFeature
+import UIKit
 
 public final class AppComponent: BootstrapComponent {
     public func makeRootView() -> IntroViewController {
         rootComponent.makeView()
     }
-    
+
     public var keychain: any Keychain {
         shared {
             KeychainImpl()
         }
     }
-    
+
     var rootComponent: RootComponent {
         shared {
             RootComponent(parent: self)
@@ -31,7 +31,7 @@ public extension AppComponent {
     var mainContainerComponent: MainContainerComponent {
         MainContainerComponent(parent: self)
     }
-    
+
     var bottomTabBarComponent: BottomTabBarComponent {
         BottomTabBarComponent(parent: self)
     }
@@ -39,29 +39,16 @@ public extension AppComponent {
     var mainTabBarComponent: MainTabBarComponent {
         MainTabBarComponent(parent: self)
     }
-}
 
-// MARK: - Player
-public extension AppComponent {
-    var playerComponent: PlayerComponent {
-        PlayerComponent(parent: self)
-    }
-    
-    var playlistComponent: PlaylistComponent {
-        PlaylistComponent(parent: self)
+    var appEntryState: any AppEntryStateHandleable {
+        shared {
+            AppEntryState()
+        }
     }
 }
 
 // MARK: - ETC
 public extension AppComponent {
-    var openSourceLicenseComponent: OpenSourceLicenseComponent {
-        OpenSourceLicenseComponent(parent: self)
-    }
-    
-    var serviceInfoComponent: ServiceInfoComponent {
-        ServiceInfoComponent(parent: self)
-    }
-    
     var permissionComponent: PermissionComponent {
         PermissionComponent(parent: self)
     }

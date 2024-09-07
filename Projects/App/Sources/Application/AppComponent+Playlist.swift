@@ -1,102 +1,148 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
-import DomainModule
-import DataModule
-import NetworkModule
-import SearchFeature
-import CommonFeature
+import BaseFeature
+import BaseFeatureInterface
+import ImageDomain
+import ImageDomainInterface
+import PlaylistDomain
+import PlaylistDomainInterface
+import PlaylistFeature
+import PlaylistFeatureInterface
 import StorageFeature
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
-// 
 
 public extension AppComponent {
-    
-    var beforeSearchComponent : BeforeSearchComponent {
-        BeforeSearchComponent(parent: self)
-    }
-    
-    var playListDetailComponent: PlayListDetailComponent {
-        PlayListDetailComponent(parent: self)
-    }
-    
-    var multiPurposePopComponent: MultiPurposePopComponent {
-        MultiPurposePopComponent(parent: self)
-    }
-    
-    var myPlayListComponent: MyPlayListComponent {
-        MyPlayListComponent(parent:self)
-    }
-    
-    var containSongsComponent: ContainSongsComponent {
-        ContainSongsComponent(parent: self)
-    }
-    
-    var remotePlayListDataSource: any RemotePlayListDataSource {
+    var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol {
         shared {
-            RemotePlayListDataSourceImpl(keychain: keychain)
+            PlayListPresenterGlobalState()
         }
     }
-    
-    var playListRepository: any PlayListRepository {
+
+    var playlistDetailFactory: any PlaylistDetailFactory {
+        PlaylistDetailComponent(parent: self)
+    }
+
+    var playlistFactory: any PlaylistFactory {
+        PlaylistComponent(parent: self)
+    }
+
+    var myPlaylistDetailFactory: any MyPlaylistDetailFactory {
+        MyPlaylistDetailComponent(parent: self)
+    }
+
+    var unknownPlaylistDetailFactory: any UnknownPlaylistDetailFactory {
+        UnknownPlaylistDetailComponent(parent: self)
+    }
+
+    var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory {
+        WakmusicPlaylistDetailComponent(parent: self)
+    }
+
+    var playlistCoverOptionPopupFactory: any PlaylistCoverOptionPopupFactory {
+        PlaylistCoverOptionPopupComponent(parent: self)
+    }
+
+    var checkPlaylistCoverFactory: any CheckPlaylistCoverFactory {
+        CheckPlaylistCoverComponent(parent: self)
+    }
+
+    var defaultPlaylistCoverFactory: any DefaultPlaylistCoverFactory {
+        DefaultPlaylistCoverComponent(parent: self)
+    }
+
+    var remotePlaylistDataSource: any RemotePlaylistDataSource {
         shared {
-            PlayListRepositoryImpl(remotePlayListDataSource:remotePlayListDataSource)
+            RemotePlaylistDataSourceImpl(keychain: keychain)
         }
     }
-    
-    var fetchRecommendPlayListUseCase: any FetchRecommendPlayListUseCase {
+
+    var playlistRepository: any PlaylistRepository {
         shared {
-          FetchRecommendPlayListUseCaseImpl(playListRepository: playListRepository)
+            PlaylistRepositoryImpl(remotePlaylistDataSource: remotePlaylistDataSource)
         }
     }
-    
-    var fetchPlayListDetailUseCase: any FetchPlayListDetailUseCase {
-        
+
+    var fetchRecommendPlaylistUseCase: any FetchRecommendPlaylistUseCase {
         shared {
-          FetchPlayListDetailUseCaseImpl(playListRepository: playListRepository)
+            FetchRecommendPlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
-    var createPlayListUseCase: any CreatePlayListUseCase {
+
+    var fetchPlaylistSongsUseCase: any FetchPlaylistSongsUseCase {
         shared {
-            CreatePlayListUseCaseImpl(playListRepository: playListRepository)
+            FetchPlaylistSongsUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
-    var editPlayListUseCase: any EditPlayListUseCase {
+
+    var fetchPlaylistDetailUseCase: any FetchPlaylistDetailUseCase {
         shared {
-            EditPlayListUseCaseImpl(playListRepository: playListRepository)
+            FetchPlaylistDetailUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
-    var editPlayListNameUseCase: any EditPlayListNameUseCase {
+
+    var fetchWMPlaylistDetailUseCase: any FetchWMPlaylistDetailUseCase {
         shared {
-            EditPlayListNameUseCaseImpl(playListRepository: playListRepository)
+            FetchWMPlaylistDetailUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
-    var loadPlayListUseCase: any LoadPlayListUseCase {
+
+    var createPlaylistUseCase: any CreatePlaylistUseCase {
         shared {
-            LoadPlayListUseCaseImpl(playListRepository: playListRepository)
+            CreatePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
-    var addSongIntoPlayListUseCase: any AddSongIntoPlayListUseCase {
+
+    var updatePlaylistUseCase: any UpdatePlaylistUseCase {
         shared {
-            AddSongIntoPlayListUseCaseImpl(playListRepository: playListRepository)
+            UpdatePlaylistUseCaseImpl(playlistRepository: playlistRepository)
         }
     }
-    
+
+    var updateTitleAndPrivateUseCase: any UpdateTitleAndPrivateUseCase {
+        shared {
+            UpdateTitleAndPrivateUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var addSongIntoPlaylistUseCase: any AddSongIntoPlaylistUseCase {
+        shared {
+            AddSongIntoPlaylistUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
     var removeSongsUseCase: any RemoveSongsUseCase {
         shared {
-            RemoveSongsUseCaseImpl(playListRepository: playListRepository)
+            RemoveSongsUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var subscribePlaylistUseCase: any SubscribePlaylistUseCase {
+        shared {
+            SubscribePlaylistUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var checkSubscriptionUseCase: any CheckSubscriptionUseCase {
+        shared {
+            CheckSubscriptionUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var uploadDefaultPlaylistImageUseCase: any UploadDefaultPlaylistImageUseCase {
+        shared {
+            UploadDefaultPlaylistImageUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var requestCustomImageURLUseCase: any RequestCustomImageURLUseCase {
+        shared {
+            RequestCustomImageURLUseCaseImpl(playlistRepository: playlistRepository)
+        }
+    }
+
+    var requestPlaylistOwnerIDUsecase: any RequestPlaylistOwnerIDUsecase {
+        shared {
+            RequestPlaylistOwnerIDUsecaseImpl(playlistRepository: playlistRepository)
         }
     }
 }

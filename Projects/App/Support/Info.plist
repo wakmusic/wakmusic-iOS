@@ -40,6 +40,14 @@
 				<string>$(GOOGLE_URL_SCHEME)</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>$(WM_URI_SCHEME)</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
@@ -47,27 +55,29 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>naversearchapp</string>
-		<string>naversearchthirdlogin</string>
+        <string>naversearchapp</string>
+        <string>naversearchthirdlogin</string>
+		<string>youtube</string>
+		<string>youtubemusic</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>[선택권한] 버그 제보 시 카메라 촬영을 하려면 권한 승인이 필요합니다.</string>
+	<string>[선택권한] 카메라 촬영을 하려면 권한 승인이 필요합니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>[선택권한] 앨범 사진을 첨부 하거나, 저장하려면 권한 승인이 필요합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>[선택권한] 버그 제보 시 앨범 사진을 첨부 하려면 권한 승인이 필요합니다.</string>
+	<string>[선택권한] 앨범 사진을 첨부 하거나, 저장하려면 권한 승인이 필요합니다.</string>
 	<key>Secrets</key>
 	<dict>
-		<key>BASE_IMAGE_URL</key>
-		<string>$(BASE_IMAGE_URL)</string>
 		<key>BASE_DEV_URL</key>
 		<string>$(BASE_DEV_URL)</string>
 		<key>BASE_PROD_URL</key>
 		<string>$(BASE_PROD_URL)</string>
+        <key>CDN_DOMAIN_URL</key>
+        <string>$(CDN_DOMAIN_URL)</string>
 		<key>GOOGLE_CLIENT_ID</key>
 		<string>$(GOOGLE_CLIENT_ID)</string>
-		<key>GOOGLE_SECRET_KEY</key>
-		<string>$(GOOGLE_SECRET_KEY)</string>
 		<key>GOOGLE_URL_SCHEME</key>
 		<string>$(GOOGLE_URL_SCHEME)</string>
 		<key>NAVER_APP_NAME</key>
@@ -78,8 +88,6 @@
 		<string>$(NAVER_CONSUMER_SECRET)</string>
 		<key>NAVER_URL_SCHEME</key>
 		<string>$(NAVER_URL_SCHEME)</string>
-		<key>WAKENTER_BASE_URL</key>
-		<string>$(WAKENTER_BASE_URL)</string>
 		<key>WMDOMAIN_APP</key>
 		<string>$(WMDOMAIN_APP)</string>
 		<key>WMDOMAIN_ARTIST</key>
@@ -88,42 +96,38 @@
 		<string>$(WMDOMAIN_AUTH)</string>
 		<key>WMDOMAIN_CHARTS</key>
 		<string>$(WMDOMAIN_CHARTS)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_ARTIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_ARTIST_SQUARE)</string>
-		<key>WMDOMAIN_IMAGE_NEWS</key>
-		<string>$(WMDOMAIN_IMAGE_NEWS)</string>
-		<key>WMDOMAIN_IMAGE_NOTICE</key>
-		<string>$(WMDOMAIN_IMAGE_NOTICE)</string>
-		<key>WMDOMAIN_IMAGE_PLAYLIST</key>
-		<string>$(WMDOMAIN_IMAGE_PLAYLIST)</string>
-		<key>WMDOMAIN_IMAGE_PROFILE</key>
-		<string>$(WMDOMAIN_IMAGE_PROFILE)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_ROUND)</string>
-		<key>WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE</key>
-		<string>$(WMDOMAIN_IMAGE_RECOMMEND_PLAYLIST_SQUARE)</string>
+		<key>WMDOMAIN_CREDIT</key>
+		<string>$(WMDOMAIN_CREDIT)</string>
+		<key>WMDOMAIN_FAQ</key>
+		<string>$(WMDOMAIN_FAQ)</string>
+		<key>WMDOMAIN_IMAGE</key>
+		<string>$(WMDOMAIN_IMAGE)</string>
 		<key>WMDOMAIN_LIKE</key>
 		<string>$(WMDOMAIN_LIKE)</string>
 		<key>WMDOMAIN_NOTICE</key>
 		<string>$(WMDOMAIN_NOTICE)</string>
-		<key>WMDOMAIN_PLAY</key>
-		<string>$(WMDOMAIN_PLAY)</string>
+		<key>WMDOMAIN_NOTIFICATION</key>
+		<string>$(WMDOMAIN_NOTIFICATION)</string>
 		<key>WMDOMAIN_PLAYLIST</key>
 		<string>$(WMDOMAIN_PLAYLIST)</string>
-		<key>WMDOMAIN_QNA</key>
-		<string>$(WMDOMAIN_QNA)</string>
+		<key>WMDOMAIN_PRICE</key>
+		<string>$(WMDOMAIN_PRICE)</string>
+		<key>WMDOMAIN_SEARCH</key>
+		<string>$(WMDOMAIN_SEARCH)</string>
 		<key>WMDOMAIN_SONGS</key>
 		<string>$(WMDOMAIN_SONGS)</string>
-		<key>WMDOMAIN_V2_SONGS</key>
-		<string>$(WMDOMAIN_V2_SONGS)</string>
-		<key>WMDOMAIN_SUGGEST</key>
-		<string>$(WMDOMAIN_SUGGEST)</string>
+		<key>WMDOMAIN_TEAM</key>
+		<string>$(WMDOMAIN_TEAM)</string>
 		<key>WMDOMAIN_USER</key>
 		<string>$(WMDOMAIN_USER)</string>
 		<key>WM_APP_ID</key>
 		<string>$(WM_APP_ID)</string>
+		<key>WM_UNIVERSALLINK_DOMAIN</key>
+		<string>$(WM_UNIVERSALLINK_DOMAIN)</string>
+		<key>WM_UNIVERSALLINK_TEST_DOMAIN</key>
+		<string>$(WM_UNIVERSALLINK_TEST_DOMAIN)</string>
+		<key>WM_URI_SCHEME</key>
+		<string>$(WM_URI_SCHEME)</string>
 	</dict>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -144,6 +148,10 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

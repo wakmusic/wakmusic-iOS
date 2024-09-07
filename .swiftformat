@@ -1,0 +1,64 @@
+
+--exclude fastlane,Tuist,Dependencies,Carthage,**/NeedleGenerated.swift
+
+# options
+--maxwidth 120
+--indent 4
+--trimwhitespace always # trailingSpace
+--lineaftermarks false # fileHeader
+--wraparguments before-first # wrapArguments
+--wrapparameters before-first # wrapArguments
+--wrapcollections before-first # wrapArguments
+
+# rules
+--rules anyObjectProtocol
+--rules blankLineAfterImports
+--rules blankLinesAroundMark
+--rules blankLinesAtEndOfScope
+--rules blankLinesAtStartOfScope
+--rules blankLinesBetweenImports
+--rules blankLinesBetweenScopes
+--rules braces
+--rules consecutiveBlankLines
+--rules consecutiveSpaces
+--rules docComments
+--rules duplicateImports
+--rules elseOnSameLine
+--rules emptyBraces
+--rules enumNamespaces
+--rules extensionAccessControl
+--rules fileHeader
+--rules hoistAwait
+--rules hoistPatternLet
+--rules hoistTry
+--rules initCoderUnavailable
+--rules indent
+--rules isEmpty
+--rules leadingDelimiters
+--rules linebreakAtEndOfFile
+--rules modifierOrder
+--rules numberFormatting
+--rules opaqueGenericParameters
+--rules redundantExtensionACL
+--rules redundantOptionalBinding
+--rules redundantParens
+--rules redundantVoidReturnType
+--rules semicolons
+--rules sortImports
+--rules spaceAroundBraces
+--rules spaceAroundBrackets
+--rules spaceAroundComments
+--rules spaceAroundGenerics
+--rules spaceAroundOperators
+--rules spaceInsideBraces
+--rules spaceInsideBrackets
+--rules spaceInsideComments
+--rules spaceInsideGenerics
+--rules spaceInsideParens
+--rules todos
+--rules trailingClosures
+--rules trailingSpace
+--rules typeSugar
+--rules void
+--rules wrap
+--rules wrapArguments

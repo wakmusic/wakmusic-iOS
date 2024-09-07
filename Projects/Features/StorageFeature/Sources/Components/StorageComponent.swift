@@ -1,22 +1,31 @@
-//
-//  SearchComponent.swift
-//  SearchFeature
-//
-//  Created by yongbeomkwak on 2023/02/10.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import BaseFeature
+import BaseFeatureInterface
 import Foundation
 import NeedleFoundation
-import SignInFeature
+import SignInFeatureInterface
+import StorageFeatureInterface
+import UIKit
+import UserDomainInterface
 
 public protocol StorageDependency: Dependency {
-    var  signInComponent : SignInComponent {get}
-    var  afterLoginComponent : AfterLoginComponent {get}
+    var signInFactory: any SignInFactory { get }
+    var textPopupFactory: any TextPopupFactory { get }
+    var multiPurposePopupFactory: any MultiPurposePopupFactory { get }
+    var listStorageComponent: ListStorageComponent { get }
+    var likeStorageComponent: LikeStorageComponent { get }
 }
 
-public final class StorageComponent: Component<StorageDependency> {
-    public func makeView() -> StorageViewController {
-        return StorageViewController.viewController(signInComponent: dependency.signInComponent,afterLoginComponent: dependency.afterLoginComponent)
+public final class StorageComponent: Component<StorageDependency>, StorageFactory {
+    public func makeView() -> UIViewController {
+        return StorageViewController.viewController(
+            reactor: StorageReactor(
+                storageCommonService: DefaultStorageCommonService.shared
+            ),
+            listStorageComponent: dependency.listStorageComponent,
+            multiPurposePopupFactory: dependency.multiPurposePopupFactory,
+            likeStorageComponent: dependency.likeStorageComponent,
+            textPopupFactory: dependency.textPopupFactory,
+            signInFactory: dependency.signInFactory
+        )
     }
 }

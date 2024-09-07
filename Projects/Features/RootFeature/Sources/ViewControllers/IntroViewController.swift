@@ -1,59 +1,67 @@
+import BaseFeatureInterface
+import DesignSystem
+import Lottie
+import MainTabFeature
+import RxSwift
+import SnapKit
+import Then
 import UIKit
 import Utility
-import DesignSystem
-import BaseFeature
-import MainTabFeature
-import CommonFeature
-import Lottie
-import RxSwift
 
-open class IntroViewController: BaseViewController, ViewControllerFromStoryBoard {
-
+open class IntroViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var logoContentView: UIView!
+    private let parableLogoImageView = UIImageView().then {
+        $0.image = DesignSystemAsset.Logo.splashParable.image
+        $0.contentMode = .scaleAspectFit
+    }
 
-    var mainContainerComponent: MainContainerComponent!
-    var permissionComponent: PermissionComponent!
+    private var mainContainerComponent: MainContainerComponent!
+    private var permissionComponent: PermissionComponent!
+    private var textPopupFactory: TextPopupFactory!
 
     private var viewModel: IntroViewModel!
     lazy var input = IntroViewModel.Input()
     lazy var output = viewModel.transform(from: input)
-    var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
-    open override func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
         outputBind()
         inputBind()
     }
-    
+
     public static func viewController(
         mainContainerComponent: MainContainerComponent,
         permissionComponent: PermissionComponent,
+        textPopupFactory: TextPopupFactory,
         viewModel: IntroViewModel
     ) -> IntroViewController {
         let viewController = IntroViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
         viewController.mainContainerComponent = mainContainerComponent
         viewController.permissionComponent = permissionComponent
+        viewController.textPopupFactory = textPopupFactory
         viewController.viewModel = viewModel
         return viewController
     }
 }
 
-extension IntroViewController {
-    private func inputBind() {
+private extension IntroViewController {
+    func inputBind() {
         input.fetchPermissionCheck.onNext(())
     }
-}
-    
-extension IntroViewController {
-    private func outputBind() {
-        permissionResult()
-        appInfoResult()
-        userInfoAndLottieEnded()
-    }
 
-    private func permissionResult() {
-        output.permissionResult
-            .do(onNext: { [weak self] (permission) in
+    func outputBind() {
+        permissionBind()
+        appInfoBind()
+        userInfoAndLottieEndedBind()
+    }
+}
+
+private extension IntroViewController {
+    func permissionBind() {
+        output.confirmedPermission
+            .do(onNext: { [weak self] permission in
                 guard let self = self else { return }
                 let show: Bool = !(permission ?? false)
                 guard show else { return }
@@ -63,118 +71,135 @@ extension IntroViewController {
                 self.present(permission, animated: true)
             })
             .filter { return ($0 ?? false) == true }
-            .map{ _ in () }
+            .map { _ in () }
             .bind(to: input.fetchAppCheck)
             .disposed(by: disposeBag)
     }
-    
-    private func appInfoResult(){
-        output.appInfoResult
+
+    func appInfoBind() {
+        output.confirmedAppInfo
             .withUnretained(self)
             .subscribe(onNext: { owner, result in
                 switch result {
                 case let .success(entity):
                     owner.lottiePlay(specialLogo: entity.specialLogo)
-                    
-                    var textPopupVc: TextPopupViewController
+
+                    var textPopupVc: UIViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
                     let updateMessage: String = "최신 버전으로 업데이트 후 이용하시기 바랍니다.\n감사합니다."
-                    
+
                     switch entity.flag {
                     case .normal:
-                        owner.input.fetchUserInfoCheck.onNext(())
+                        owner.input.checkUserInfoPreference.onNext(())
                         return
-                        
+
                     case .offline:
-                        owner.showPanModal(
-                            content: TextPopupViewController.viewController(
+                        owner.showBottomSheet(
+                            content: owner.textPopupFactory.makeView(
                                 text: entity.description,
                                 cancelButtonIsHidden: true,
-                                allowsDragAndTapToDismiss: false,
                                 confirmButtonText: "재시도",
+                                cancelButtonText: nil,
                                 completion: {
                                     owner.input.fetchAppCheck.onNext(())
-                                }
-                            )
+                                },
+                                cancelCompletion: nil
+                            ),
+                            dismissOnOverlayTapAndPull: false
                         )
                         return
-                        
+
                     case .event:
-                        textPopupVc = TextPopupViewController.viewController(
-                            text:"\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
+                        textPopupVc = owner.textPopupFactory.makeView(
+                            text: "\(entity.title)\(entity.description.isEmpty ? "" : "\n")\(entity.description)",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
+                            confirmButtonText: nil,
+                            cancelButtonText: nil,
                             completion: {
                                 exit(0)
-                            }
+                            },
+                            cancelCompletion: nil
                         )
 
                     case .update:
-                        textPopupVc = TextPopupViewController.viewController(
-                            text:"\(updateTitle)\n\(updateMessage)",
+                        textPopupVc = owner.textPopupFactory.makeView(
+                            text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: false,
-                            allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
                             cancelButtonText: "나중에",
                             completion: {
                                 owner.goAppStore()
                             },
                             cancelCompletion: {
-                                owner.input.fetchUserInfoCheck.onNext(())
+                                owner.input.checkUserInfoPreference.onNext(())
                             }
                         )
 
                     case .forceUpdate:
-                        textPopupVc = TextPopupViewController.viewController(
-                            text:"\(updateTitle)\n\(updateMessage)",
+                        textPopupVc = owner.textPopupFactory.makeView(
+                            text: "\(updateTitle)\n\(updateMessage)",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false,
                             confirmButtonText: "업데이트",
+                            cancelButtonText: nil,
                             completion: {
                                 owner.goAppStore()
-                            }
+                            },
+                            cancelCompletion: nil
                         )
                     }
-                    owner.showPanModal(content: textPopupVc)
+
+                    owner.showBottomSheet(
+                        content: textPopupVc,
+                        dismissOnOverlayTapAndPull: false
+                    )
 
                 case let .failure(error):
                     owner.lottiePlay(specialLogo: false)
-                    owner.showPanModal(
-                        content: TextPopupViewController.viewController(
+                    owner.showBottomSheet(
+                        content: owner.textPopupFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
                             cancelButtonIsHidden: true,
-                            allowsDragAndTapToDismiss: false
-                        )
+                            confirmButtonText: "재시도",
+                            cancelButtonText: nil,
+                            completion: {
+                                owner.input.fetchAppCheck.onNext(())
+                            },
+                            cancelCompletion: nil
+                        ),
+                        dismissOnOverlayTapAndPull: false
                     )
                 }
             })
             .disposed(by: disposeBag)
     }
-    
-    private func userInfoAndLottieEnded() {
+
+    func userInfoAndLottieEndedBind() {
         Observable.zip(
-            output.userInfoResult,
+            output.confirmedUserInfoPreference,
             output.endedLottieAnimation
-        ) { (result, _) -> Result<String, Error> in
+        ) { result, _ -> Result<Void, Error> in
             return result
         }
         .withUnretained(self)
-        .subscribe(onNext: { (owner, result) in
-            switch result{
+        .subscribe(onNext: { owner, result in
+            switch result {
             case let .success(suc):
                 DEBUG_LOG("success: \(suc)✅✅")
                 owner.showTabBar()
-                
-            case .failure(let error):
-                owner.showPanModal(
-                    content: TextPopupViewController.viewController(
-                        text: error.asWMError.errorDescription ?? "",
+
+            case let .failure(error):
+                owner.showBottomSheet(
+                    content: owner.textPopupFactory.makeView(
+                        text: error.asWMError.errorDescription ?? error.localizedDescription,
                         cancelButtonIsHidden: true,
-                        allowsDragAndTapToDismiss: false,
-                        completion: { () in
+                        confirmButtonText: nil,
+                        cancelButtonText: nil,
+                        completion: {
                             owner.showTabBar()
-                        }
-                    )
+                        },
+                        cancelCompletion: nil
+                    ),
+                    dismissOnOverlayTapAndPull: false
                 )
             }
         })
@@ -182,13 +207,22 @@ extension IntroViewController {
     }
 }
 
-extension IntroViewController {
-    private func showTabBar() {
-        let viewController = mainContainerComponent!.makeView()
+private extension IntroViewController {
+    func configureUI() {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        view.addSubview(parableLogoImageView)
+        parableLogoImageView.snp.makeConstraints {
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-50)
+            $0.centerX.equalToSuperview()
+        }
+    }
+
+    func showTabBar() {
+        let viewController = mainContainerComponent.makeView()
         self.navigationController?.pushViewController(viewController, animated: false)
     }
-    
-    private func lottiePlay(specialLogo: Bool) {
+
+    func lottiePlay(specialLogo: Bool) {
         let animationView = LottieAnimationView(
             name: specialLogo ? "Splash_Logo_Special" : "Splash_Logo_Main",
             bundle: DesignSystemResources.bundle
@@ -198,12 +232,13 @@ extension IntroViewController {
         animationView.contentMode = .scaleAspectFill
         animationView.loopMode = .playOnce
         animationView.clipsToBounds = false
-        
+
+        self.logoContentView.subviews.forEach { $0.removeFromSuperview() }
         self.logoContentView.addSubview(animationView)
-        
+
         let originWidth: CGFloat = 156.0
         let originHeight: CGFloat = 160.0
-        let rate: CGFloat = originHeight/max(1.0, originWidth)
+        let rate: CGFloat = originHeight / max(1.0, originWidth)
 
         let width: CGFloat = (156.0 * APP_WIDTH()) / 375.0
         let height: CGFloat = width * rate
@@ -216,7 +251,7 @@ extension IntroViewController {
         }
 
         animationView.play { _ in
-            self.input.endedLottieAnimation.onNext(())
+            self.output.endedLottieAnimation.onNext(())
         }
     }
 }

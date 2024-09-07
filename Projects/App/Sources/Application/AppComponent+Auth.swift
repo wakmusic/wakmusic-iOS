@@ -1,90 +1,63 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
-import DomainModule
-import DataModule
-import NetworkModule
-import CommonFeature
+import AuthDomain
+import AuthDomainInterface
+import BaseFeature
+import MyInfoFeature
+import MyInfoFeatureInterface
 import SignInFeature
+import SignInFeatureInterface
 import StorageFeature
+import StorageFeatureInterface
 
-//MARK: 변수명 주의
+// MARK: 변수명 주의
 // AppComponent 내 변수 == Dependency 내 변수  이름 같아야함
 
-
 public extension AppComponent {
-    
-    var signInComponent : SignInComponent {
+    var signInFactory: any SignInFactory {
         SignInComponent(parent: self)
     }
-    
 
-    var storageComponent : StorageComponent {
-        
-        StorageComponent(parent: self)
-        
+    var localAuthDataSource: any LocalAuthDataSource {
+        shared {
+            LocalAuthDataSourceImpl(keychain: keychain)
+        }
     }
-    
-    var afterLoginComponent: AfterLoginComponent {
-        
-        AfterLoginComponent(parent: self)
-    }
-    
-    var requestComponent: RequestComponent {
-        RequestComponent(parent: self)
-    }
-    
-   
-    
+
     var remoteAuthDataSource: any RemoteAuthDataSource {
         shared {
             RemoteAuthDataSourceImpl(keychain: keychain)
         }
     }
+
     var authRepository: any AuthRepository {
         shared {
-            AuthRepositoryImpl(remoteAuthDataSource: remoteAuthDataSource)
+            AuthRepositoryImpl(
+                localAuthDataSource: localAuthDataSource,
+                remoteAuthDataSource: remoteAuthDataSource
+            )
         }
     }
-    
-    
+
     var fetchTokenUseCase: any FetchTokenUseCase {
-        
         shared {
             FetchTokenUseCaseImpl(authRepository: authRepository)
         }
     }
-    
-    var fetchNaverUserInfoUseCase: any FetchNaverUserInfoUseCase {
-        
+
+    var regenerateAccessTokenUseCase: any ReGenerateAccessTokenUseCase {
         shared {
-            FetchNaverUserInfoUseCaseImpl(authRepository: authRepository)
+            ReGenerateAccessTokenUseCaseImpl(authRepository: authRepository)
         }
     }
-    
-    
-    
-    var fetchUserInfoUseCase: any FetchUserInfoUseCase {
-        
+
+    var logoutUseCase: any LogoutUseCase {
         shared {
-            FetchUserInfoUseCaseImpl(authRepository: authRepository)
+            LogoutUseCaseImpl(authRepository: authRepository)
         }
     }
-    
-    var withdrawUserInfoUseCase: any WithdrawUserInfoUseCase {
-        
+
+    var checkIsExistAccessTokenUseCase: any CheckIsExistAccessTokenUseCase {
         shared {
-            WithdrawUserInfoUseCaseImpl(authRepository: authRepository)
+            CheckIsExistAccessTokenUseCaseImpl(authRepository: authRepository)
         }
-        
     }
-    
-    
-  
-    
 }

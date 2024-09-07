@@ -1,4 +1,5 @@
 {
+  "originHash" : "838cedc1ff704f14426befc05257203bf3aaf397162004377a05b8e903ad2a57",
   "pins" : [
     {
       "identity" : "youtubeplayerkit",
@@ -10,5 +11,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

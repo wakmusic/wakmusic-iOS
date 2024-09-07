@@ -21,21 +21,19 @@ import UIKit
 
 public class HapticManager {
     public static let shared = HapticManager()
-    
+
     public func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
     }
-    
+
     public func notification(success: Bool) {
         let generator = UINotificationFeedbackGenerator()
         success ? generator.notificationOccurred(.success) : generator.notificationOccurred(.error)
     }
-    
+
     public func impact(style: UIImpactFeedbackGenerator.FeedbackStyle) {
         let generator = UIImpactFeedbackGenerator(style: style)
         generator.impactOccurred()
     }
-    
-    
 }

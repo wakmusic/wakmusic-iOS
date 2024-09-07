@@ -6,17 +6,21 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import DesignSystem
 import UIKit
 import Utility
-import DesignSystem
 
 public class PermissionViewController: UIViewController, ViewControllerFromStoryBoard {
-
     @IBOutlet weak var borderView: UIView!
     @IBOutlet weak var borderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var mainTitleLabel: UILabel!
-    @IBOutlet weak var optionalPermissionLabel: UILabel!
-    
+
+    @IBOutlet weak var deviceInfoImageView: UIImageView!
+    @IBOutlet weak var deviceInfoLabel: UILabel!
+    @IBOutlet weak var deviceInfoDescriptionLabel: UILabel!
+    @IBOutlet weak var notificationImageView: UIImageView!
+    @IBOutlet weak var notificationLabel: UILabel!
+    @IBOutlet weak var notificationDescriptionLabel: UILabel!
     @IBOutlet weak var cameraImageView: UIImageView!
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraDescriptionLabel: UILabel!
@@ -29,8 +33,8 @@ public class PermissionViewController: UIViewController, ViewControllerFromStory
     @IBOutlet weak var secondDotLabel: UILabel!
     @IBOutlet weak var secondDesciptionLabel: UILabel!
     @IBOutlet weak var confirmButton: UIButton!
-    
-    public override func viewDidLoad() {
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
@@ -39,7 +43,7 @@ public class PermissionViewController: UIViewController, ViewControllerFromStory
         let viewController = PermissionViewController.viewController(storyBoardName: "Intro", bundle: Bundle.module)
         return viewController
     }
-    
+
     @IBAction func confirmButtonAction(_ sender: Any) {
         dismiss(animated: true, completion: {
             Utility.PreferenceManager.appPermissionChecked = true
@@ -47,98 +51,171 @@ public class PermissionViewController: UIViewController, ViewControllerFromStory
     }
 }
 
-extension PermissionViewController {
-    private func configureUI() {
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        self.borderView.layer.cornerRadius = 24
-        self.borderView.clipsToBounds = true
-        
-        let mainTitleAttributedString = NSMutableAttributedString(
-            string: "앱 접근 권한 안내",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.bold.font(size: 22),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                         .kern: -0.5]
-        )
-        self.mainTitleLabel.attributedText = mainTitleAttributedString
+private extension PermissionViewController {
+    func configureUI() {
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        borderView.layer.cornerRadius = 24
+        borderView.clipsToBounds = true
 
-        let optionalAttributedString = NSMutableAttributedString(
-            string: "선택적 접근 권한",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                         .kern: -0.5]
+        setAttributedString(
+            with: mainTitleLabel,
+            text: "앱 접근 권한 안내",
+            font: DesignSystemFontFamily.Pretendard.bold.font(size: 22),
+            textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+            lineHeight: 32,
+            alignment: .center
         )
-        self.optionalPermissionLabel.attributedText = optionalAttributedString
-        
-        self.cameraImageView.image = DesignSystemAsset.Permission.permissionCamera.image
-        let cameraAttributedString = NSMutableAttributedString(
-            string: "카메라",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                         .kern: -0.5]
-        )
-        self.cameraLabel.attributedText = cameraAttributedString
 
-        let cameraDescriptionAttributedString = NSMutableAttributedString(
-            string: "버그 제보 시 사진 촬영을 위한 권한",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
-                         .kern: -0.5]
+        deviceInfoImageView.image = DesignSystemAsset.Permission.permissionDevice.image
+        setAttributedString(
+            with: deviceInfoLabel,
+            text: "기기정보 (필수)",
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+            textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+            lineHeight: 24,
+            alignment: .left
         )
-        self.cameraDescriptionLabel.attributedText = cameraDescriptionAttributedString
+        setSubAttributedString(with: deviceInfoLabel, target: "(필수)")
 
-        self.albumImageView.image = DesignSystemAsset.Permission.permissionAlbum.image
-        let albumAttributedString = NSMutableAttributedString(
-            string: "앨범",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray900.color,
-                         .kern: -0.5]
+        deviceInfoDescriptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: deviceInfoDescriptionLabel,
+            text: "사용성 개선 및 오류 확인",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 22,
+            alignment: .left
         )
-        self.albumLabel.attributedText = albumAttributedString
-        
-        let albumDescriptionAttributedString = NSMutableAttributedString(
-            string: "버그 제보 시 파일 첨부를 위한 권한",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
-                         .kern: -0.5]
-        )
-        self.albumDescriptionLabel.attributedText = albumDescriptionAttributedString
 
-        self.firstDotLabel.layer.cornerRadius = 2
-        self.firstDotLabel.clipsToBounds = true
-        
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineHeightMultiple = 1.26
-        
-        let firstDescriptionAttributedString = NSMutableAttributedString(
-            string: "선택적 접근 권한은 서비스 사용 중 필요한 시점에 동의를 받고 있습니다. 허용하지 않으셔도 서비스 이용이 가능합니다.",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
-                         .paragraphStyle: paragraphStyle,
-                         .kern: -0.5]
+        notificationImageView.image = DesignSystemAsset.Permission.permissionNotification.image
+        setAttributedString(
+            with: notificationLabel,
+            text: "알림 (선택)",
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+            textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+            lineHeight: 24,
+            alignment: .left
         )
-        self.firstDesciptionLabel.attributedText = firstDescriptionAttributedString
+        setSubAttributedString(with: notificationLabel, target: "(선택)")
 
-        self.secondDotLabel.layer.cornerRadius = 2
-        self.secondDotLabel.clipsToBounds = true
-
-        let secondDescriptionAttributedString = NSMutableAttributedString(
-            string: "접근 권한 변경 방법 : 설정 > 왁타버스 뮤직",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray500.color,
-                         .kern: -0.5]
+        notificationDescriptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: notificationDescriptionLabel,
+            text: "알림 수신",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 22,
+            alignment: .left
         )
-        self.secondDesciptionLabel.attributedText = secondDescriptionAttributedString
-        
+
+        cameraImageView.image = DesignSystemAsset.Permission.permissionCamera.image
+        setAttributedString(
+            with: cameraLabel,
+            text: "카메라 (선택)",
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+            textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+            lineHeight: 24,
+            alignment: .left
+        )
+        setSubAttributedString(with: cameraLabel, target: "(선택)")
+
+        cameraDescriptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: cameraDescriptionLabel,
+            text: "버그 제보 시 사진 촬영",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 22,
+            alignment: .left
+        )
+
+        albumImageView.image = DesignSystemAsset.Permission.permissionAlbum.image
+        setAttributedString(
+            with: albumLabel,
+            text: "앨범 (선택)",
+            font: DesignSystemFontFamily.Pretendard.medium.font(size: 16),
+            textColor: DesignSystemAsset.BlueGrayColor.gray900.color,
+            lineHeight: 24,
+            alignment: .left
+        )
+        setSubAttributedString(with: albumLabel, target: "(선택)")
+
+        albumDescriptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: albumDescriptionLabel,
+            text: "리스트 사진 변경, 가사 꾸미기, 버그 제보 시\n파일 첨부 또는 저장",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 22,
+            alignment: .left
+        )
+
+        [firstDotLabel, secondDotLabel].forEach {
+            $0.layer.cornerRadius = 2
+            $0.clipsToBounds = true
+        }
+
+        firstDesciptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: firstDesciptionLabel,
+            text: "선택적 접근 권한은 서비스 사용 중 필요한 시점에 동의를 받고 있습니다. 허용하지 않으셔도 서비스 이용이 가능합니다.",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 18,
+            alignment: .left
+        )
+
+        secondDesciptionLabel.numberOfLines = 0
+        setAttributedString(
+            with: secondDesciptionLabel,
+            text: "접근 권한 변경 방법 : 설정 > 왁타버스 뮤직",
+            font: DesignSystemFontFamily.Pretendard.light.font(size: 12),
+            textColor: DesignSystemAsset.BlueGrayColor.gray500.color,
+            lineHeight: 18,
+            alignment: .left
+        )
+
         let confirmAttributedString = NSMutableAttributedString(
             string: "확인",
-            attributes: [.font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
-                         .foregroundColor: DesignSystemAsset.GrayColor.gray25.color,
-                         .kern: -0.5]
+            attributes: [
+                .font: DesignSystemFontFamily.Pretendard.medium.font(size: 18),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray25.color,
+                .kern: -0.5
+            ]
         )
-        self.confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
-        self.confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
-        
-        self.borderViewWidthConstraint.constant = APP_WIDTH() < 375 ? (APP_WIDTH()-40.0) : 335.0
-        self.view.layoutIfNeeded()
+        confirmButton.setAttributedTitle(confirmAttributedString, for: .normal)
+        confirmButton.backgroundColor = DesignSystemAsset.PrimaryColor.point.color
+        borderViewWidthConstraint.constant = APP_WIDTH() < 375 ? (APP_WIDTH() - 40.0) : 335.0
+    }
+
+    func setAttributedString(
+        with label: UILabel,
+        text: String,
+        font: UIFont,
+        textColor: UIColor,
+        lineHeight: CGFloat,
+        alignment: NSTextAlignment = .left
+    ) {
+        label.text = text
+        label.font = font
+        label.textColor = textColor
+        label.setTextWithAttributes(lineHeight: lineHeight, kernValue: -0.5, alignment: alignment)
+    }
+
+    func setSubAttributedString(
+        with label: UILabel,
+        target text: String
+    ) {
+        guard let attributedString = label.attributedText else { return }
+        let new = NSMutableAttributedString(attributedString: attributedString)
+        let range = (attributedString.string as NSString).range(of: text)
+        new.addAttributes(
+            [
+                .font: DesignSystemFontFamily.Pretendard.light.font(size: 14),
+                .foregroundColor: DesignSystemAsset.BlueGrayColor.gray900.color
+            ],
+            range: range
+        )
+        label.attributedText = new
     }
 }

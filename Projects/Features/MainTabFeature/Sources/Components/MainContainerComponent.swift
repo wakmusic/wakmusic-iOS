@@ -1,12 +1,14 @@
+import BaseFeature
 import Foundation
-import UIKit
-import PlayerFeature
 import NeedleFoundation
+import PlaylistFeatureInterface
+import UIKit
 
 public protocol MainContainerDependency: Dependency {
     var bottomTabBarComponent: BottomTabBarComponent { get }
     var mainTabBarComponent: MainTabBarComponent { get }
-    var playerComponent: PlayerComponent { get }
+    var playlistFactory: any PlaylistFactory { get }
+    var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
 }
 
 public final class MainContainerComponent: Component<MainContainerDependency> {
@@ -15,7 +17,8 @@ public final class MainContainerComponent: Component<MainContainerDependency> {
             .viewController(
                 bottomTabBarComponent: self.dependency.bottomTabBarComponent,
                 mainTabBarComponent: self.dependency.mainTabBarComponent,
-                playerComponent: self.dependency.playerComponent
+                playlistFactory: self.dependency.playlistFactory,
+                playlistPresenterGlobalState: self.dependency.playlistPresenterGlobalState
             )
     }
 }

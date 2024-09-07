@@ -1,36 +1,32 @@
-//
-//  AppComponent+Search.swift
-//  WaktaverseMusic
-//
-//  Created by yongbeomkwak on 2023/02/07.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
-import DomainModule
-import DataModule
-import NetworkModule
-import SearchFeature
+import BaseFeature
 import HomeFeature
-import CommonFeature
+import HomeFeatureInterface
+import LyricHighlightingFeature
+import LyricHighlightingFeatureInterface
+import MusicDetailFeature
+import MusicDetailFeatureInterface
+import SongsDomain
+import SongsDomainInterface
 
 public extension AppComponent {
-    
-    var searchComponent: SearchComponent {
-        SearchComponent(parent: self)
+    var songDetailPresenter: any SongDetailPresentable {
+        shared {
+            SongDetailPresenter()
+        }
     }
-    
-    var afterSearchComponent: AfterSearchComponent {
-        AfterSearchComponent(parent: self)
-    }
-    
-    var afterSearchContentComponent: AfterSearchContentComponent {
-        AfterSearchContentComponent(parent: self)
-    }
-    
-    var homeComponent: HomeComponent {
+
+    var homeFactory: any HomeFactory {
         HomeComponent(parent: self)
     }
-    
+
+    var musicDetailFactory: any MusicDetailFactory {
+        MusicDetailComponent(parent: self)
+    }
+
+    var karaokeFactory: any KaraokeFactory {
+        KaraokeComponent(parent: self)
+    }
+
     var newSongsComponent: NewSongsComponent {
         NewSongsComponent(parent: self)
     }
@@ -39,32 +35,57 @@ public extension AppComponent {
         NewSongsContentComponent(parent: self)
     }
 
+    var lyricHighlightingFactory: any LyricHighlightingFactory {
+        LyricHighlightingComponent(parent: self)
+    }
+
+    var lyricDecoratingComponent: LyricDecoratingComponent {
+        LyricDecoratingComponent(parent: self)
+    }
+
     var remoteSongsDataSource: any RemoteSongsDataSource {
         shared {
             RemoteSongsDataSourceImpl(keychain: keychain)
         }
     }
+
     var songsRepository: any SongsRepository {
         shared {
-            SongsRepositoryImpl(remoteSongsDataSource:remoteSongsDataSource)
+            SongsRepositoryImpl(remoteSongsDataSource: remoteSongsDataSource)
         }
     }
-    
-    var fetchSearchSongUseCase: any FetchSearchSongUseCase {
+
+    var fetchSongUseCase: any FetchSongUseCase {
         shared {
-           FetchSearchSongUseCaseImpl(songsRepository: songsRepository)
+            FetchSongUseCaseImpl(
+                songsRepository: songsRepository,
+                likeRepository: likeRepository,
+                authRepository: authRepository
+            )
         }
     }
+
     var fetchLyricsUseCase: any FetchLyricsUseCase {
-        
         shared {
             FetchLyricsUseCaseImpl(songsRepository: songsRepository)
         }
     }
-    
+
     var fetchNewSongsUseCase: any FetchNewSongsUseCase {
         shared {
             FetchNewSongsUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+
+    var fetchNewSongsPlaylistUseCase: any FetchNewSongsPlaylistUseCase {
+        shared {
+            FetchNewSongsPlaylistUseCaseImpl(songsRepository: songsRepository)
+        }
+    }
+
+    var fetchSongCreditsUseCase: any FetchSongCreditsUseCase {
+        shared {
+            FetchSongCreditsUseCaseImpl(songsRepository: songsRepository)
         }
     }
 }

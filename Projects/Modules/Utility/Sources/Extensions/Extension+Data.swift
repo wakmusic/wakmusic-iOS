@@ -6,9 +6,9 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import AVFoundation
 import Foundation
 import UIKit
-import AVFoundation
 
 public extension Data {
     func extractThumbnail() -> UIImage? {

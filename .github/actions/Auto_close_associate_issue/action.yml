@@ -1,0 +1,16 @@
+name: "Auto_close_associate_issue"
+
+description: "Auto close an issue which associate with a PR."
+
+inputs:
+  prbody:
+    description: "The body of the PR to search for related issues"
+    required: true
+
+outputs:
+  issurNumber:
+    description: "The issue number"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"

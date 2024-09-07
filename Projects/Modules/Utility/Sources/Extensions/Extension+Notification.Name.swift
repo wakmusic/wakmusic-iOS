@@ -1,25 +1,13 @@
-//
-//  Extension+Notification.Name.swift
-//  Utility
-//
-//  Created by yongbeomkwak on 2023/02/21.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
 import Foundation
 
 public extension Notification.Name {
-    static let updatePlayerMode = Notification.Name("updatePlayerMode")
-    static let playListRefresh = Notification.Name("playListRefresh")
-    static let likeListRefresh = Notification.Name("likeListRefresh")
-    static let playListNameRefresh = Notification.Name("playListNameRefresh")
-    static let statusBarEnterDarkBackground = Notification.Name("statusBarEnterDarkBackground")
-    static let statusBarEnterLightBackground = Notification.Name("statusBarEnterLightBackground")
-    static let showSongCart = Notification.Name("showSongCart")
-    static let hideSongCart = Notification.Name("hideSongCart")
-    static let movedTab = Notification.Name("movedTab")
-    static let selectedSongOnSearch = Notification.Name("selectedSongOnSearch")
-    static let updateCurrentSongLikeState = Notification.Name("updateCurrentSongLikeState")
-    static let resetYouTubePlayerHostingView = Notification.Name("resetYouTubePlayerHostingView")
-    static let requestPlaybackLog = Notification.Name("requestPlaybackLog")
+    static let shouldRefreshPlaylist = Notification.Name("shouldRefreshPlaylist") // 플레이리스트 목록 갱신(보관함 같은) (노래목록 아님)
+    static let shouldRefreshLikeList = Notification.Name("shouldRefreshLikeList")
+    static let didRemovedSubscriptionPlaylist = Notification.Name("didRemovedSubscriptionPlaylist") // 보관함에서 구독플리 제거
+    static let willRefreshUserInfo = Notification.Name("willRefreshUserInfo") // 유저 정보 갱신
+    static let willStatusBarEnterDarkBackground = Notification.Name("willStatusBarEnterDarkBackground")
+    static let willStatusBarEnterLightBackground = Notification.Name("willStatusBarEnterLightBackground")
+    static let shouldHidePlaylistFloatingButton = Notification.Name("shouldHidePlaylistFloatingButton")
+    static let shouldShowPlaylistFloatingButton = Notification.Name("shouldShowPlaylistFloatingButton")
+    static let shouldMovePlaylistFloatingButton = Notification.Name("shouldMovePlaylistFloatingButton")
 }

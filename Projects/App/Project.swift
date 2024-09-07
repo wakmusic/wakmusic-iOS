@@ -1,97 +1,127 @@
-import ProjectDescriptionHelpers
-import ProjectDescription
-import UtilityPlugin
+import EnvironmentPlugin
 import Foundation
+import ProjectDescription
+import ProjectDescriptionHelpers
 
 let settinges: Settings =
-    .settings(base: Environment.baseSetting,
-              configurations: [
-                .debug(name: .debug),
-                .release(name: .release)
-              ],
-              defaultSettings: .recommended)
+    .settings(
+        base: env.baseSetting,
+        configurations: [
+            .debug(name: .debug),
+            .debug(name: .qa),
+            .release(name: .release)
+        ],
+        defaultSettings: .recommended
+    )
 
-let isForDev = (ProcessInfo.processInfo.environment["TUIST_DEV"] ?? "0") == "1" ? true : false
-
-let scripts: [TargetScript] = isForDev ? [.swiftLint, .needle] : [.firebaseCrashlytics]
+let scripts: [TargetScript] = generateEnvironment.appScripts
 
 let targets: [Target] = [
-    .init(
-        name: Environment.targetName,
-        platform: .iOS,
+    .target(
+        name: env.name,
+        destinations: [.iPhone],
         product: .app,
-        productName: Environment.appName,
-        bundleId: "\(Environment.organizationName).\(Environment.beforeName)",
-        deploymentTarget: Environment.deploymentTarget,
+        productName: env.name,
+        bundleId: "\(env.organizationName).\(env.previousName)",
+        deploymentTargets: env.deploymentTargets,
         infoPlist: .file(path: "Support/Info.plist"),
         sources: ["Sources/**"],
         resources: ["Resources/**"],
-        entitlements: "Support/\(Environment.appName).entitlements",
+        entitlements: "Support/\(env.name).entitlements",
         scripts: scripts,
         dependencies: [
-            .Project.Features.RootFeature,
-            .Project.Module.ThirdPartyLib,
-            .Project.Service.Data,
-          //  .SPM.Amplify,
-          //  .SPM.AWSCognitoAuthPlugin,
-          //  .SPM.AWSS3StoragePlugin,
+            .module(target: .ThirdPartyLib),
+            .feature(target: .RootFeature),
+            .feature(target: .PlaylistFeature),
+            .feature(target: .MusicDetailFeature),
+            .feature(target: .SongCreditFeature),
+            .feature(target: .CreditSongListFeature),
+            .domain(target: .AppDomain),
+            .domain(target: .ArtistDomain),
+            .domain(target: .AuthDomain),
+            .domain(target: .ChartDomain),
+            .domain(target: .FaqDomain),
+            .domain(target: .LikeDomain),
+            .domain(target: .NoticeDomain),
+            .domain(target: .SongsDomain),
+            .domain(target: .PlaylistDomain),
+            .domain(target: .UserDomain),
+            .domain(target: .SearchDomain),
+            .domain(target: .ImageDomain),
+            .domain(target: .NotificationDomain),
+            .domain(target: .TeamDomain),
+            .domain(target: .CreditDomain),
+            .domain(target: .PriceDomain)
         ],
-        settings: .settings(base: Environment.baseSetting,
-                            configurations: [
-                              .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
-                              .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
-                            ])
+        settings: .settings(
+            base: env.baseSetting,
+            configurations: [
+                .debug(name: .debug, xcconfig: "XCConfig/Secrets.xcconfig"),
+                .debug(name: .qa, xcconfig: "XCConfig/Secrets.xcconfig"),
+                .release(name: .release, xcconfig: "XCConfig/Secrets.xcconfig")
+            ]
+        ),
+        environmentVariables: ["NETWORK_LOG_LEVEL": "short"]
     ),
-    .init(
-        name: Environment.targetTestName,
-        platform: .iOS,
+    .target(
+        name: "\(env.name)Tests",
+        destinations: [.iPhone],
         product: .unitTests,
-        bundleId: "\(Environment.organizationName).\(Environment.beforeName)Tests",
-        deploymentTarget: Environment.deploymentTarget,
+        bundleId: "\(env.organizationName).\(env.previousName)Tests",
+        deploymentTargets: env.deploymentTargets,
         infoPlist: .default,
         sources: ["Tests/**"],
         dependencies: [
-            .target(name: Environment.targetName)
+            .target(name: env.name)
         ]
     )
 ]
 
 let schemes: [Scheme] = [
-    .init(
-      name: "\(Environment.targetName)-DEBUG",
-      shared: true,
-      buildAction: .buildAction(targets: ["\(Environment.targetName)"]),
-      testAction: TestAction.targets(
-          ["\(Environment.targetTestName)"],
-          configuration: .debug,
-          options: TestActionOptions.options(
-              coverage: true,
-              codeCoverageTargets: ["\(Environment.targetName)"]
-          )
-      ),
-      runAction: .runAction(configuration: .debug),
-      archiveAction: .archiveAction(configuration: .debug),
-      profileAction: .profileAction(configuration: .debug),
-      analyzeAction: .analyzeAction(configuration: .debug)
+    .scheme(
+        name: "\(env.name)-DEBUG",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.name)"]),
+        testAction: TestAction.targets(
+            ["\(env.name)"],
+            configuration: .debug,
+            options: TestActionOptions.options(
+                coverage: true,
+                codeCoverageTargets: ["\(env.name)"]
+            )
+        ),
+        runAction: .runAction(configuration: .debug),
+        archiveAction: .archiveAction(configuration: .debug),
+        profileAction: .profileAction(configuration: .debug),
+        analyzeAction: .analyzeAction(configuration: .debug)
     ),
-    .init(
-      name: "\(Environment.targetName)-RELEASE",
-      shared: true,
-      buildAction: BuildAction(targets: ["\(Environment.targetName)"]),
-      testAction: nil,
-      runAction: .runAction(configuration: .release),
-      archiveAction: .archiveAction(configuration: .release),
-      profileAction: .profileAction(configuration: .release),
-      analyzeAction: .analyzeAction(configuration: .release)
+    .scheme(
+        name: "\(env.name)-QA",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.name)"]),
+        testAction: nil,
+        runAction: .runAction(configuration: .qa),
+        archiveAction: .archiveAction(configuration: .qa),
+        profileAction: .profileAction(configuration: .qa),
+        analyzeAction: .analyzeAction(configuration: .qa)
+    ),
+    .scheme(
+        name: "\(env.name)-RELEASE",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.name)"]),
+        testAction: nil,
+        runAction: .runAction(configuration: .release),
+        archiveAction: .archiveAction(configuration: .release),
+        profileAction: .profileAction(configuration: .release),
+        analyzeAction: .analyzeAction(configuration: .release)
     )
 ]
 
 let project: Project =
     .init(
-        name: Environment.targetName,
-        organizationName: Environment.organizationName,
+        name: env.name,
+        organizationName: env.organizationName,
         packages: [],
-        //packages: [.Amplify],
         settings: settinges,
         targets: targets,
         schemes: schemes

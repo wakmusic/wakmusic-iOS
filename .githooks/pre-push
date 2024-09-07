@@ -1,0 +1,43 @@
+#!/bin/sh
+
+FORMAT=$(which swiftformat)
+
+if [[ -e "${FORMAT}" ]]; then
+    echo "🚀  SwiftFormat 시작..."
+    echo "🔍  SwiftFormat 적용 경로: $(pwd)/Projects"
+else
+    echo "SwiftFormat이 존재하지 않습니다. 설치해주세요 ! 'brew install swiftformat'"
+    exit 1
+fi
+
+RESULT=$($FORMAT ./Projects --config .swiftformat)
+
+if [ "$RESULT" == '' ]; then
+    git add .
+    git commit -m "🎨 :: 코드 Formatting 적용"
+    printf "\n 🎉 SwiftFormat 적용을 완료했습니다 !! \n"
+else
+    echo ""
+    printf "❌ SwiftFormat Failed 아래 내용을 확인해주세요 \n"
+    while read -r line; do
+        FILEPATH=$(echo $line | cut -d : -f 1)
+        L=$(echo $line | cut -d : -f 2)
+      	C=$(echo $line | cut -d : -f 3)
+    	TYPE=$(echo $line | cut -d : -f 4 | cut -c 2-)
+    	MESSAGE=$(echo $line | cut -d : -f 5 | cut -c 2-)
+    	DESCRIPTION=$(echo $line | cut -d : -f 6 | cut -c 2-)
+    	if [ $TYPE == 'warning' ]; then
+      	    printf "\n 🚧  $TYPE\n"
+            printf "    $FILEPATH:$L:$C\n"
+      	    printf "    📌  $MESSAGE: - $DESCRIPTION\n"
+      	    exit 0
+    	elif [ $TYPE == 'error' ]; then
+      	    printf "\n 🚨  $TYPE\n"
+    	fi
+        printf "    ✅ $FILEPATH:$L:$C\n"
+	printf "    📌 $MESSAGE: - $DESCRIPTION\n"
+    done <<< "$RESULT"
+
+    printf "\n 🚑 커밋실패!! SwiftFormat 실행이 실패하였습니다 🥺 \n"
+    exit 1
+fi

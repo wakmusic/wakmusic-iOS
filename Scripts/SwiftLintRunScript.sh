@@ -4,8 +4,10 @@ fi
 
 export PATH
 
+YML="$(dirname "$0")/.swiftlint.yml"
+
 if which swiftlint > /dev/null; then
-	swiftlint
+	swiftlint --config ${YML}
 else
 	echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
 fi

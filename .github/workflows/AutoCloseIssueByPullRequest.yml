@@ -1,0 +1,31 @@
+name: Auto close issue when PR is merged
+
+on:
+  pull_request_target:
+    branches-ignore:
+      - "develop"
+    types: [closed]
+
+jobs:
+  close-issue:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true || github.event.action != 'closed'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Run Auto issue closer
+        uses: ./.github/actions/Auto_close_associate_issue/
+        id: Closer
+        with:
+          prbody: ${{ github.event.pull_request.body }}
+
+      - name: Close Issue
+        uses: peter-evans/close-issue@v2
+        if: ${{ github.event.pull_request.merged }}
+        with:
+          issue-number: ${{ steps.Closer.outputs.issueNumber }}
+          comment: The associated PR has been merged, this issue is automatically closed, you can reopend if necessary. \#${{ github.event.pull_request.number }}
+        env:
+          Github_Token: ${{ secrets.GITHUB_TOKEN }}
+          PRNUM: ${{ github.event.pull_request.number }}

@@ -6,18 +6,16 @@
 //  Copyright © 2023 yongbeomkwak. All rights reserved.
 //
 
+import ArtistDomainInterface
 import Foundation
-import UIKit
 import NeedleFoundation
-import DomainModule
-import DataMappingModule
 
 public protocol ArtistMusicDependency: Dependency {
     var artistMusicContentComponent: ArtistMusicContentComponent { get }
 }
 
 public final class ArtistMusicComponent: Component<ArtistMusicDependency> {
-    public func makeView(model: ArtistListEntity?) -> ArtistMusicViewController {
+    public func makeView(model: ArtistEntity?) -> ArtistMusicViewController {
         return ArtistMusicViewController.viewController(
             model: model,
             artistMusicContentComponent: dependency.artistMusicContentComponent

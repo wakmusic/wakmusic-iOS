@@ -1,25 +1,32 @@
-//
-//  ArtistDetailComponent.swift
-//  ArtistFeature
-//
-//  Created by KTH on 2023/02/09.
-//  Copyright © 2023 yongbeomkwak. All rights reserved.
-//
-
+import ArtistDomainInterface
+import ArtistFeatureInterface
+import BaseFeatureInterface
 import Foundation
-import UIKit
 import NeedleFoundation
-import DomainModule
+import SignInFeatureInterface
+import UIKit
 
 public protocol ArtistDetailDependency: Dependency {
     var artistMusicComponent: ArtistMusicComponent { get }
+    var fetchArtistDetailUseCase: any FetchArtistDetailUseCase { get }
+    var fetchArtistSubscriptionStatusUseCase: any FetchArtistSubscriptionStatusUseCase { get }
+    var subscriptionArtistUseCase: any SubscriptionArtistUseCase { get }
+    var textPopupFactory: any TextPopupFactory { get }
+    var signInFactory: any SignInFactory { get }
 }
 
-public final class ArtistDetailComponent: Component<ArtistDetailDependency> {
-    public func makeView(model: ArtistListEntity) -> ArtistDetailViewController {
+public final class ArtistDetailComponent: Component<ArtistDetailDependency>, ArtistDetailFactory {
+    public func makeView(artistID: String) -> UIViewController {
         return ArtistDetailViewController.viewController(
-            model: model,
-            artistMusicComponent: dependency.artistMusicComponent
+            viewModel: .init(
+                artistID: artistID,
+                fetchArtistDetailUseCase: dependency.fetchArtistDetailUseCase,
+                fetchArtistSubscriptionStatusUseCase: dependency.fetchArtistSubscriptionStatusUseCase,
+                subscriptionArtistUseCase: dependency.subscriptionArtistUseCase
+            ),
+            artistMusicComponent: dependency.artistMusicComponent,
+            textPopupFactory: dependency.textPopupFactory,
+            signInFactory: dependency.signInFactory
         )
     }
 }

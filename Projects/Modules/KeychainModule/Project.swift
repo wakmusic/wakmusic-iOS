@@ -1,7 +1,10 @@
+import DependencyPlugin
 import ProjectDescription
 import ProjectDescriptionHelpers
 
-let project = Project.makeModule(
-    name: "KeychainModule",
-    product: .staticFramework
+let project = Project.module(
+    name: ModulePaths.Module.KeychainModule.rawValue,
+    targets: [
+        .implements(module: .module(.KeychainModule), product: .framework)
+    ]
 )

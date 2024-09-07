@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_32_play_list_400.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

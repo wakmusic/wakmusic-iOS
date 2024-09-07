@@ -1,11 +1,11 @@
-import DomainModule
-import DataModule
-import NetworkModule
+import BaseFeature
+import ChartDomain
+import ChartDomainInterface
 import ChartFeature
-import CommonFeature
+import ChartFeatureInterface
 
 public extension AppComponent {
-    var chartComponent: ChartComponent {
+    var chartFactory: any ChartFactory {
         ChartComponent(parent: self)
     }
 
@@ -31,10 +31,9 @@ public extension AppComponent {
         }
     }
 
-    var fetchChartUpdateTimeUseCase: any FetchChartUpdateTimeUseCase {
+    var fetchCurrentVideoUseCase: any FetchCurrentVideoUseCase {
         shared {
-            FetchChartUpdateTimeUseCaseImpl(chartRepository: chartRepository)
+            FetchCurrentVideoUseCaseImpl(chartRepository: chartRepository)
         }
     }
 }
- 

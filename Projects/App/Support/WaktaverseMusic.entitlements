@@ -9,6 +9,10 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:wakmusic.xyz</string>
+		<string>applinks:deeplink.wakmusic.xyz</string>
+		<string>applinks:deeplink.eatcocoa.xyz</string>
 	</array>
+	<key>aps-environment</key>
+	<string>development</string>
 </dict>
 </plist>

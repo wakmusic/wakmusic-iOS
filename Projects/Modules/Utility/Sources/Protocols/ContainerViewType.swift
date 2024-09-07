@@ -7,16 +7,18 @@
 //
 
 import Foundation
-import UIKit
 import SnapKit
+import UIKit
 
-public protocol ContainerViewType{
-    var contentView: UIView! {get set}
+public protocol ContainerViewType {
+    var contentView: UIView! { get set }
 }
 
 public extension ContainerViewType where Self: UIViewController {
-    
-    func add(asChildViewController viewController: UIViewController) {
+    func add(asChildViewController viewController: UIViewController?) {
+        guard let viewController = viewController else {
+            return
+        }
 
         addChild(viewController)
         contentView.addSubview(viewController.view)
@@ -27,7 +29,10 @@ public extension ContainerViewType where Self: UIViewController {
         }
     }
 
-    func remove(asChildViewController viewController: UIViewController) {
+    func remove(asChildViewController viewController: UIViewController?) {
+        guard let viewController = viewController else {
+            return
+        }
 
         viewController.willMove(toParent: nil)
         viewController.view.removeFromSuperview()
