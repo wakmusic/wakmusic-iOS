@@ -15,10 +15,10 @@
 
 ## iOS Developer & Designer
 
-| iOS Hamp | 구구 | 케이 | 김대희 | baegteun | 샴퓨(디자인) |
-| --- | --- | --- | --- | -- |
-| <img src="https://avatars.githubusercontent.com/u/48616183?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/37323252?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/60254939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/68860610?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/74440939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/134786201?v=4" width="200px"/> | 
-| [yongbeomkwak](https://github.com/yongbeomkwak) | [KangTaeHoon](https://github.com/KangTaeHoon) | [youn9k](https://github.com/youn9k) | [kimdaehee0824](https://github.com/kimdaehee0824) | [baekteun](https://github.com/baekteun) | [syampuuu](instagram.com/jjma._.y) |
+| iOS Hamp | 구구 | 케이 | baegteun | 샴퓨(디자인) |
+| --- | --- | --- | --- | --- |
+| <img src="https://avatars.githubusercontent.com/u/48616183?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/37323252?v=4" width="200px"/> | <img src="https://avatars.githubusercontent.com/u/60254939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/74440939?v=4" width="200px"/> | <img src= "https://avatars.githubusercontent.com/u/134786201?v=4" width="200px"/> | 
+| [yongbeomkwak](https://github.com/yongbeomkwak) | [KangTaeHoon](https://github.com/KangTaeHoon) | [youn9k](https://github.com/youn9k) | [baekteun](https://github.com/baekteun) | [syampuuu](instagram.com/jjma._.y) |
 
 ## iOS 모듈 구조도
 
