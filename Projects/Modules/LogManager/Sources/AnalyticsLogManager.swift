@@ -132,13 +132,13 @@ public extension LogManager {
     static func analytics(
         _ log: any AnalyticsLogType
     ) {
-        #if RELEASE
-            Analytics.logEvent(log.name, parameters: log.params)
-        #elseif DEBUG
+        #if DEBUG
             LogHistoryStorage.shared.appendHistory(log: log)
         #elseif QA
             Analytics.logEvent(log.name, parameters: log.params)
             LogHistoryStorage.shared.appendHistory(log: log)
+        #else
+            Analytics.logEvent(log.name, parameters: log.params)
         #endif
         let message = """
         \(log.name) logged
