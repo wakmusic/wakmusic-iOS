@@ -117,8 +117,6 @@ private extension MultiPurposePopupViewController {
 
 private extension MultiPurposePopupViewController {
     func configureUI() {
-        limitLabel.text = "/\(viewModel.type.textLimitCount)"
-
         titleLabel.text = viewModel.type.title
         titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
         titleLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
@@ -155,6 +153,7 @@ private extension MultiPurposePopupViewController {
         confirmLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         confirmLabel.isHidden = true
 
+        limitLabel.text = "/\(viewModel.type.textLimitCount)자"
         limitLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
         limitLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
 
