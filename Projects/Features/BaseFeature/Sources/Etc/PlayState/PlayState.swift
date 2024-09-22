@@ -19,7 +19,7 @@ public final class PlayState {
     private var subscription = Set<AnyCancellable>()
     public var count: Int { playlist.count }
     public var isEmpty: Bool { playlist.isEmpty }
-    public var currentPlaylist: [PlaylistItem] { playlist.list }
+    public var currentPlaylist: [PlaylistItem] { Array(playlist.list.uniqued()) }
     public var listChangedPublisher: AnyPublisher<[PlaylistItem], Never> { playlist.subscribeListChanges() }
 
     private init() {

@@ -1,7 +1,7 @@
 import Foundation
 import SongsDomainInterface
 
-public struct PlaylistItem: Equatable {
+public struct PlaylistItem: Equatable, Hashable {
     public let id: String
     public let title: String
     public let artist: String

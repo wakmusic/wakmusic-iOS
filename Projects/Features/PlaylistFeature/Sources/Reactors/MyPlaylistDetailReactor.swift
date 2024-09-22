@@ -208,6 +208,13 @@ private extension MyPlaylistDetailReactor {
             fetchPlaylistDetailUseCase.execute(id: key, type: .my)
                 .asObservable()
                 .flatMap { data -> Observable<Mutation> in
+                    let songs = data.songs.map { PlaylistItemModel(
+                        id: $0.id,
+                        title: $0.title,
+                        artist: $0.artist,
+                        isSelected: false
+                    ) }
+                    .uniqued()
                     return .concat([
                         Observable.just(Mutation.updateHeader(
                             PlaylistDetailHeaderModel(
@@ -220,28 +227,10 @@ private extension MyPlaylistDetailReactor {
                             )
                         )),
                         Observable.just(
-                            Mutation.updatePlaylist(
-                                data.songs.map {
-                                    PlaylistItemModel(
-                                        id: $0.id,
-                                        title: $0.title,
-                                        artist: $0.artist,
-                                        isSelected: false
-                                    )
-                                }
-                            )
+                            Mutation.updatePlaylist(Array(songs))
                         ),
                         Observable.just(
-                            Mutation.updateBackUpPlaylist(
-                                data.songs.map {
-                                    PlaylistItemModel(
-                                        id: $0.id,
-                                        title: $0.title,
-                                        artist: $0.artist,
-                                        isSelected: false
-                                    )
-                                }
-                            )
+                            Mutation.updateBackUpPlaylist(Array(songs))
                         )
                     ])
                 }
