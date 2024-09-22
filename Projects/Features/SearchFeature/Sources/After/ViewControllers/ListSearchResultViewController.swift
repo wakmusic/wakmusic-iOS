@@ -18,7 +18,7 @@ final class ListSearchResultViewController: BaseReactorViewController<ListSearch
     var bottomSheetView: BottomSheetView!
 
     private let searchSortOptionComponent: SearchSortOptionComponent
-    private (set) var playlistDetailFactory: any PlaylistDetailFactory
+    private(set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private let searchGlobalScrollState: any SearchGlobalScrollProtocol
 
