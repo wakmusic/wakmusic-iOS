@@ -46,7 +46,8 @@ public struct BasePlugin: PluginType {
             }
 
             for type in baseInfoTypes {
-                newJson[type.apiKey] = typeToValue(with: type)
+                guard let value = typeToValue(with: type) else { continue }
+                newJson[type.apiKey] = value
             }
 
             guard let newBodyData = try? JSONSerialization.data(withJSONObject: newJson, options: []) else {
@@ -60,7 +61,7 @@ public struct BasePlugin: PluginType {
 }
 
 private extension BasePlugin {
-    func typeToValue(with type: BaseInfoType) -> String {
+    func typeToValue(with type: BaseInfoType) -> String? {
         switch type {
         case .os:
             return "ios"
@@ -75,18 +76,17 @@ private extension BasePlugin {
 
     func fetchDeviceID() -> String {
         let deviceIDFromKeychain: String = keychain.load(type: .deviceID)
-        let uuidString: String = UIDevice.current.identifierForVendor?.uuidString ?? ""
+        let uuidString: String? = UIDevice.current.identifierForVendor?.uuidString
 
-        if deviceIDFromKeychain.isEmpty {
+        if deviceIDFromKeychain.isEmpty, let uuidString {
             keychain.save(type: .deviceID, value: uuidString)
             return uuidString
-
         } else {
             return deviceIDFromKeychain
         }
     }
 
-    func fetchPushToken() -> String {
-        return Messaging.messaging().fcmToken ?? ""
+    func fetchPushToken() -> String? {
+        return Messaging.messaging().fcmToken
     }
 }

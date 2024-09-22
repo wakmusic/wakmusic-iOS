@@ -16,7 +16,7 @@ import Utility
 final class BeforeSearchContentViewController: BaseReactorViewController<BeforeSearchReactor>, PlaylistDetailNavigator {
     private let wakmusicRecommendComponent: WakmusicRecommendComponent
     private let textPopupFactory: TextPopupFactory
-    private (set) var playlistDetailFactory: any PlaylistDetailFactory
+    private(set) var playlistDetailFactory: any PlaylistDetailFactory
 
     private let tableView: UITableView = UITableView().then {
         $0.register(RecentRecordTableViewCell.self, forCellReuseIdentifier: "RecentRecordTableViewCell")
