@@ -170,6 +170,7 @@ private extension UnknownPlaylistDetailReactor {
                 .asObservable()
                 .withUnretained(self)
                 .flatMap { owner, data -> Observable<Mutation> in
+                    let songs = data.songs.uniqued()
                     return .concat([
                         Observable.just(Mutation.updateHeader(
                             PlaylistDetailHeaderModel(
@@ -181,7 +182,9 @@ private extension UnknownPlaylistDetailReactor {
                                 songCount: data.songs.count
                             )
                         )),
-                        Observable.just(Mutation.updateDataSource(data.songs)),
+                        Observable.just(
+                            Mutation.updateDataSource(Array(songs))
+                        ),
                         PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : owner
                             .checkSubscription()
                     ])
