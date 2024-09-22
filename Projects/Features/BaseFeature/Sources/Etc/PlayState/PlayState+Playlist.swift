@@ -42,6 +42,7 @@ final class Playlist {
     }
 
     func remove(at index: Int) {
+        guard list[safe: index] != nil else { return }
         list.remove(at: index)
     }
 
