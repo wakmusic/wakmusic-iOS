@@ -222,7 +222,11 @@ private extension PlaylistViewController {
 
         playlistView.playlistTableView.rx.itemSelected
             .withLatestFrom(output.playlists) { ($0, $1) }
-            .bind(with: self) { [songDetailPresenter, isEditingSubject = output.editState, tappedCellIndex] owner, item in
+            .bind(with: self) { [
+                songDetailPresenter,
+                isEditingSubject = output.editState,
+                tappedCellIndex
+            ] owner, item in
 
                 let isEditing = isEditingSubject.value
                 let (indexPath, playlists) = item
