@@ -68,6 +68,7 @@ public final class PlaylistView: UIView {
         $0.sectionHeaderTopPadding = 0
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
         $0.showsVerticalScrollIndicator = true
+        $0.allowsSelectionDuringEditing = true
     }
 
     override init(frame: CGRect) {

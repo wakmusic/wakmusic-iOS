@@ -24,6 +24,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var isSelectedAllSongs = PublishSubject<Bool>()
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
+    var didLongPressedSongSubject = PublishSubject<Int>()
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
@@ -48,7 +49,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
         addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
         removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
-        itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
+        itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable(),
+        didLongPressedSongEvent: didLongPressedSongSubject
     )
     lazy var output = self.viewModel.transform(from: input)
 
@@ -220,18 +222,31 @@ private extension PlaylistViewController {
 
         playlistView.playlistTableView.rx.itemSelected
             .withLatestFrom(output.playlists) { ($0, $1) }
-            .map { $0.1[$0.0.row] }
-            .bind(with: self, onNext: { [songDetailPresenter] owner, item in
-                let currentSongs = output.playlists.value
-                    .map(\.id)
+            .bind(with: self) { [
+                songDetailPresenter,
+                isEditingSubject = output.editState,
+                tappedCellIndex
+            ] owner, item in
 
-                owner.dismiss(animated: true) {
-                    songDetailPresenter.present(
-                        ids: Array(currentSongs),
-                        selectedID: item.id
-                    )
+                let isEditing = isEditingSubject.value
+                let (indexPath, playlists) = item
+
+                if isEditing {
+                    tappedCellIndex.onNext(indexPath.row)
+                } else {
+                    guard let selectedSong = playlists[safe: indexPath.row] else { return }
+
+                    let currentSongs = playlists
+                        .map(\.id)
+
+                    owner.dismiss(animated: true) {
+                        songDetailPresenter.present(
+                            ids: Array(currentSongs),
+                            selectedID: selectedSong.id
+                        )
+                    }
                 }
-            })
+            }
             .disposed(by: disposeBag)
     }
 

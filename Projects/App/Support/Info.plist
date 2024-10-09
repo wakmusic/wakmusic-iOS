@@ -55,8 +55,8 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-        <string>naversearchapp</string>
-        <string>naversearchthirdlogin</string>
+		<string>naversearchapp</string>
+		<string>naversearchthirdlogin</string>
 		<string>youtube</string>
 		<string>youtubemusic</string>
 	</array>
@@ -74,8 +74,8 @@
 		<string>$(BASE_DEV_URL)</string>
 		<key>BASE_PROD_URL</key>
 		<string>$(BASE_PROD_URL)</string>
-        <key>CDN_DOMAIN_URL</key>
-        <string>$(CDN_DOMAIN_URL)</string>
+		<key>CDN_DOMAIN_URL</key>
+		<string>$(CDN_DOMAIN_URL)</string>
 		<key>GOOGLE_CLIENT_ID</key>
 		<string>$(GOOGLE_CLIENT_ID)</string>
 		<key>GOOGLE_URL_SCHEME</key>

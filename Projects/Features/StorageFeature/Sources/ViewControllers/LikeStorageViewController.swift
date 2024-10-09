@@ -211,14 +211,21 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
 
         likeStorageView.tableView.rx.itemSelected
             .withLatestFrom(reactor.state.map(\.dataSource)) { ($0, $1) }
-            .compactMap { $0.1[safe: $0.0.section]?.items[safe: $0.0.row] }
-            .bind(with: self, onNext: { owner, song in
-                LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: song.songID))
+            .bind(with: self, onNext: { owner, data in
+                let (indexPath, dataSource) = data
 
-                PlayState.shared.append(item: .init(id: song.songID, title: song.title, artist: song.artist))
-                let playlistIDs = PlayState.shared.currentPlaylist
-                    .map(\.id)
-                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: song.songID)
+                if owner.reactor?.currentState.isEditing == true {
+                    self.reactor?.action.onNext(.songDidTap(indexPath.row))
+                } else {
+                    guard let song = dataSource[safe: indexPath.section]?.items[safe: indexPath.row] else { return }
+
+                    LogManager.analytics(StorageAnalyticsLog.clickMyLikeListMusicButton(id: song.songID))
+
+                    PlayState.shared.append(item: .init(id: song.songID, title: song.title, artist: song.artist))
+                    let playlistIDs = PlayState.shared.currentPlaylist
+                        .map(\.id)
+                    owner.songDetailPresenter.present(ids: playlistIDs, selectedID: song.songID)
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -279,8 +286,6 @@ extension LikeStorageViewController: SongCartViewDelegate {
 extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
     public func buttonTapped(type: LikeStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .cellTapped(indexPath):
-            self.reactor?.action.onNext(.songDidTap(indexPath.row))
         case let .playTapped(song):
             LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storageLike, type: .single))
             self.reactor?.action.onNext(.playDidTap(song: song))
@@ -300,6 +305,21 @@ extension LikeStorageViewController: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        if reactor?.currentState.isEditing == true {
+            return nil
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
+                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+                return nil
+            })
+        }
     }
 }
 

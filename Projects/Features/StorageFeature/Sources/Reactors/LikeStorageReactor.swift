@@ -19,6 +19,7 @@ final class LikeStorageReactor: Reactor {
         case itemMoved(ItemMovedEvent)
         case songDidTap(Int)
         case tapAll(isSelecting: Bool)
+        case didLongPressedPlaylist(IndexPath)
         case playDidTap(song: FavoriteSongEntity)
         case addToPlaylistButtonDidTap // 노래담기
         case presentAddToPlaylistPopup
@@ -103,6 +104,9 @@ final class LikeStorageReactor: Reactor {
 
         case let .songDidTap(index):
             return changeSelectingState(index)
+
+        case let .didLongPressedPlaylist(indexPath):
+            return didLongPressedPlaylist(indexPath: indexPath)
 
         case let .playDidTap(song):
             return playWithAddToCurrentPlaylist(song: song)
@@ -283,6 +287,13 @@ extension LikeStorageReactor {
         let selectedItemIDs = currentState.dataSource.flatMap { $0.items.filter { $0.isSelected == true } }
             .map { $0.songID }
         return .just(.showAddToPlaylistPopup(selectedItemIDs))
+    }
+
+    func didLongPressedPlaylist(indexPath: IndexPath) -> Observable<Mutation> {
+        guard !currentState.isEditing else { return .empty() }
+        storageCommonService.isEditingState.onNext(true)
+        changeSelectingState(indexPath.row)
+        return .just(.switchEditingState(true))
     }
 
     func presentAddToPlaylistPopup() -> Observable<Mutation> {

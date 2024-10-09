@@ -12,7 +12,6 @@ public protocol LikeStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum LikeStorageTableViewCellDelegateConstant {
-    case cellTapped(indexPath: IndexPath)
     case playTapped(song: FavoriteSongEntity)
 }
 
@@ -60,8 +59,6 @@ class LikeStorageTableViewCell: UITableViewCell {
         )
     }
 
-    private let cellSelectButton = UIButton()
-
     weak var delegate: LikeStorageTableViewCellDelegate?
     var indexPath: IndexPath?
     var model: FavoriteSongEntity?
@@ -93,7 +90,6 @@ extension LikeStorageTableViewCell {
         self.artistLabel.text = model.artist
 
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
-        self.cellSelectButton.isHidden = !isEditing
         self.playButton.isHidden = isEditing
 
         self.playButton.snp.updateConstraints {
@@ -107,7 +103,6 @@ private extension LikeStorageTableViewCell {
         self.contentView.addSubviews(
             albumImageView,
             verticalStackView,
-            cellSelectButton,
             playButton
         )
         verticalStackView.addArrangedSubviews(titleLabel, artistLabel)
@@ -140,16 +135,9 @@ private extension LikeStorageTableViewCell {
         artistLabel.snp.makeConstraints {
             $0.height.equalTo(18)
         }
-
-        cellSelectButton.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.left.equalToSuperview()
-            $0.right.equalTo(verticalStackView.snp.right)
-        }
     }
 
     func setAction() {
-        self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
     }
 }
@@ -158,10 +146,5 @@ private extension LikeStorageTableViewCell {
     @objc func playButtonAction() {
         guard let model else { return }
         delegate?.buttonTapped(type: .playTapped(song: model))
-    }
-
-    @objc func cellSelectButtonAction() {
-        guard let indexPath else { return }
-        delegate?.buttonTapped(type: .cellTapped(indexPath: indexPath))
     }
 }

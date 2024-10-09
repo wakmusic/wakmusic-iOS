@@ -120,6 +120,21 @@ extension PlaylistViewController: UITableViewDelegate {
         }
         return proposedDestinationIndexPath
     }
+
+    public func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        if output.editState.value == true {
+            return nil
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [didLongPressedSongSubject] in
+                didLongPressedSongSubject.onNext(indexPath.row)
+                return nil
+            })
+        }
+    }
 }
 
 extension PlaylistViewController: PlaylistTableViewCellDelegate {
@@ -131,9 +146,5 @@ extension PlaylistViewController: PlaylistTableViewCellDelegate {
             id: model.id,
             playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
         ).play()
-    }
-
-    func superButtonTapped(index: Int) {
-        tappedCellIndex.onNext(index)
     }
 }

@@ -14,6 +14,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case editButtonDidTap
         case privateButtonDidTap
         case completionButtonDidTap
+        case didLongPressedPlaylist(IndexPath)
         case restore
         case itemDidMoved(Int, Int)
         case forceSave
@@ -119,6 +120,9 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .editButtonDidTap:
             return beginEditing()
+
+        case let .didLongPressedPlaylist(indexPath):
+            return didLongPressedPlaylist(indexPath: indexPath)
 
         case .privateButtonDidTap:
             return updatePrivate()
@@ -242,6 +246,14 @@ private extension MyPlaylistDetailReactor {
                 },
             .just(.updateLoadingState(false))
         ])
+    }
+
+    func didLongPressedPlaylist(indexPath: IndexPath) -> Observable<Mutation> {
+        guard !currentState.isEditing else { return .empty() }
+        return .concat(
+            beginEditing(),
+            updateItemSelected(indexPath.row)
+        )
     }
 
     func endEditingWithSave() -> Observable<Mutation> {

@@ -13,8 +13,6 @@ public protocol ListStorageTableViewCellDelegate: AnyObject {
 }
 
 public enum ListStorageTableViewCellDelegateConstant {
-    case cellTapped((indexPath: IndexPath, key: String))
-    case listTapped((indexPath: IndexPath, key: String))
     case playTapped((indexPath: IndexPath, key: String))
 }
 
@@ -65,9 +63,6 @@ class ListStorageTableViewCell: UITableViewCell {
 
     private let countContainerView: UIView = UIView()
 
-    private let cellSelectButton = UIButton()
-    private let listSelectButton = UIButton()
-
     weak var delegate: ListStorageTableViewCellDelegate?
     var passToModel: (IndexPath, String) = (IndexPath(row: 0, section: 0), "")
 
@@ -89,9 +84,7 @@ extension ListStorageTableViewCell {
         self.contentView.addSubviews(
             playlistImageView,
             verticalStackView,
-            playButton,
-            cellSelectButton,
-            listSelectButton
+            playButton
         )
         verticalStackView.addArrangedSubviews(nameLabel, countContainerView)
         countContainerView.addSubviews(countLabel, lockImageView)
@@ -116,18 +109,6 @@ extension ListStorageTableViewCell {
             $0.right.equalToSuperview().inset(20)
         }
 
-        cellSelectButton.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.left.equalToSuperview()
-            $0.right.equalTo(verticalStackView.snp.right)
-        }
-
-        listSelectButton.snp.makeConstraints {
-            $0.verticalEdges.equalToSuperview()
-            $0.left.equalToSuperview()
-            $0.right.equalTo(verticalStackView.snp.right)
-        }
-
         nameLabel.snp.makeConstraints {
             $0.height.equalTo(22)
         }
@@ -146,8 +127,6 @@ extension ListStorageTableViewCell {
     }
 
     func setAction() {
-        self.cellSelectButton.addTarget(self, action: #selector(cellSelectButtonAction), for: .touchUpInside)
-        self.listSelectButton.addTarget(self, action: #selector(listSelectButtonAction), for: .touchUpInside)
         self.playButton.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
     }
 
@@ -171,8 +150,6 @@ extension ListStorageTableViewCell {
         )
 
         self.backgroundColor = model.isSelected ? DesignSystemAsset.BlueGrayColor.blueGray200.color : UIColor.clear
-        self.cellSelectButton.isHidden = !isEditing
-        self.listSelectButton.isHidden = isEditing
         self.playButton.isHidden = isEditing
         self.lockImageView.isHidden = !model.private
 
@@ -198,14 +175,6 @@ extension ListStorageTableViewCell {
 }
 
 extension ListStorageTableViewCell {
-    @objc func cellSelectButtonAction() {
-        delegate?.buttonTapped(type: .cellTapped(passToModel))
-    }
-
-    @objc func listSelectButtonAction() {
-        delegate?.buttonTapped(type: .listTapped(passToModel))
-    }
-
     @objc func playButtonAction() {
         delegate?.buttonTapped(type: .playTapped(passToModel))
     }

@@ -329,16 +329,9 @@ extension ListStorageViewController: SongCartViewDelegate {
 extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .listTapped(passModel):
-            LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .storage, key: passModel.key))
-            self.reactor?.action.onNext(.listDidTap(passModel.indexPath))
-
         case let .playTapped(passModel):
             LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storagePlaylist, type: .playlist))
             self.reactor?.action.onNext(.playDidTap(passModel.indexPath.row))
-
-        case let .cellTapped(passModel):
-            self.reactor?.action.onNext(.cellDidTap(passModel.indexPath.row))
         }
     }
 }
@@ -363,6 +356,25 @@ extension ListStorageViewController: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        reactor?.action.onNext(.didSelectPlaylist(indexPath))
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        if reactor?.currentState.isEditing == true {
+            return nil
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
+                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+                return nil
+            })
+        }
     }
 }
 

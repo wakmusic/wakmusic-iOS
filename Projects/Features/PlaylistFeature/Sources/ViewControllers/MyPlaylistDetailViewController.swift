@@ -74,6 +74,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.tableHeaderView = headerView
         $0.separatorStyle = .none
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
+        $0.allowsSelectionDuringEditing = true
     }
 
     private lazy var completionButton: RectangleButton = RectangleButton().then {
@@ -157,10 +158,6 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
             $0.centerY.equalToSuperview()
             $0.size.equalTo(15)
         }
-    }
-
-    override func configureUI() {
-        super.configureUI()
     }
 
     override func bind(reactor: MyPlaylistDetailReactor) {
@@ -256,13 +253,17 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
+                if owner.reactor?.currentState.isEditing == true {
+                    owner.tableView.deselectRow(at: IndexPath(row: indexPath.row, section: 0), animated: false)
+                    owner.reactor?.action.onNext(.itemDidTap(indexPath.row))
+                } else {
+                    guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
 
-                guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
-
-                PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-                let playlistIDs = PlayState.shared.currentPlaylist
-                    .map(\.id)
-                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
+                    PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+                    let playlistIDs = PlayState.shared.currentPlaylist
+                        .map(\.id)
+                    owner.songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -533,6 +534,21 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
+
+    func tableView(
+        _ tableView: UITableView,
+        contextMenuConfigurationForRowAt indexPath: IndexPath,
+        point: CGPoint
+    ) -> UIContextMenuConfiguration? {
+        if reactor?.currentState.isEditing == true {
+            return nil
+        } else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
+                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+                return nil
+            })
+        }
+    }
 }
 
 /// 전체재생 , 랜덤 재생 델리게이트
@@ -584,11 +600,6 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
             id: model.id,
             playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
         ).play()
-    }
-
-    func superButtonTapped(index: Int) {
-        tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
-        reactor?.action.onNext(.itemDidTap(index))
     }
 }
 
