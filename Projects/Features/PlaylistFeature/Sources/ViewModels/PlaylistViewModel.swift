@@ -21,6 +21,7 @@ final class PlaylistViewModel: ViewModelType {
         let addPlaylistButtonDidTapEvent: Observable<Void>
         let removeSongsButtonDidTapEvent: Observable<Void>
         let itemMovedEvent: Observable<(sourceIndex: IndexPath, destinationIndex: IndexPath)>
+        let didLongPressedSongEvent: Observable<Int>
     }
 
     struct Output {
@@ -152,6 +153,23 @@ final class PlaylistViewModel: ViewModelType {
                 playlists.insert(movedData, at: destIndex)
                 output.playlists.accept(playlists)
             }.disposed(by: disposeBag)
+
+        input.didLongPressedSongEvent
+            .compactMap { output.playlists.value[safe: $0] }
+            .bind(with: self) { owner, item in
+                owner.isEditing.toggle()
+
+                var mutableSelectedSongIds = output.selectedSongIds.value
+                if mutableSelectedSongIds.contains(item.id) {
+                    mutableSelectedSongIds.remove(item.id)
+                } else {
+                    mutableSelectedSongIds.insert(item.id)
+                }
+
+                output.editState.send(owner.isEditing)
+                output.selectedSongIds.accept(mutableSelectedSongIds)
+            }
+            .disposed(by: disposeBag)
     }
 
     private func bindTableView(output: Output) {
