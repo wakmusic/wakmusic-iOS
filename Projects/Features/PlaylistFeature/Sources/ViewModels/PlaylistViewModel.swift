@@ -29,6 +29,7 @@ final class PlaylistViewModel: ViewModelType {
             case reloadSection
             case reloadAll
         }
+
         var shouldClosePlaylist = PassthroughSubject<Void, Never>()
         var editState = CurrentValueSubject<(Bool, EditingReloadStrategy), Never>((false, .reloadAll))
         let playlists: BehaviorRelay<[PlaylistItemModel]> = BehaviorRelay(value: [])
