@@ -164,6 +164,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        tableView.dragDelegate = self
     }
 
     override func bindAction(reactor: MyPlaylistDetailReactor) {
@@ -494,7 +495,7 @@ extension MyPlaylistDetailViewController {
 }
 
 /// 테이블 뷰 델리게이트
-extension MyPlaylistDetailViewController: UITableViewDelegate {
+extension MyPlaylistDetailViewController: UITableViewDelegate, UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(60.0)
     }
@@ -535,19 +536,14 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
-        contextMenuConfigurationForRowAt indexPath: IndexPath,
-        point: CGPoint
-    ) -> UIContextMenuConfiguration? {
-        if reactor?.currentState.isEditing == true {
-            return nil
-        } else {
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
-                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
-                return nil
-            })
-        }
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+        return [dragItem]
     }
 }
 
