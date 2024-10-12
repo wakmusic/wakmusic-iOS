@@ -64,7 +64,7 @@ extension PlaylistViewController: SongCartViewDelegate {
     }
 }
 
-extension PlaylistViewController: UITableViewDelegate {
+extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell
         .EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
@@ -123,17 +123,12 @@ extension PlaylistViewController: UITableViewDelegate {
 
     public func tableView(
         _ tableView: UITableView,
-        contextMenuConfigurationForRowAt indexPath: IndexPath,
-        point: CGPoint
-    ) -> UIContextMenuConfiguration? {
-        if output.editState.value == true {
-            return nil
-        } else {
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [didLongPressedSongSubject] in
-                didLongPressedSongSubject.onNext(indexPath.row)
-                return nil
-            })
-        }
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        didLongPressedSongSubject.onNext(indexPath.row)
+        return [dragItem]
     }
 }
 

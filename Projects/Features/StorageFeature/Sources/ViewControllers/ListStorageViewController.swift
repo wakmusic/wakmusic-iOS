@@ -372,6 +372,7 @@ extension ListStorageViewController: UITableViewDelegate {
         } else {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
                 reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+                tableView.reloadItemsAtIndexPaths([indexPath], animationStyle: .none)
                 return nil
             })
         }
