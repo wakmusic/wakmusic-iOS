@@ -35,6 +35,7 @@ final class ListStorageView: UIView {
         $0.backgroundColor = .clear
         $0.register(ListStorageTableViewCell.self, forCellReuseIdentifier: ListStorageTableViewCell.reuseIdentifer)
         $0.separatorStyle = .none
+        $0.allowsSelectionDuringEditing = true
     }
 
     fileprivate let drawFruitButton = UIButton().then {

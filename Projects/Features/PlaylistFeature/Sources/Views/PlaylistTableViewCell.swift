@@ -10,7 +10,6 @@ import UIKit
 import Utility
 
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
-    func superButtonTapped(index: Int)
     func playButtonDidTap(model: PlaylistItemModel)
 }
 
@@ -78,10 +77,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
         fatalError("")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-    }
-
     private func configureContents() {
         self.backgroundColor = .clear
         self.contentView.addSubview(self.thumbnailImageView)
@@ -109,11 +104,6 @@ internal class PlaylistTableViewCell: UITableViewCell {
             $0.width.height.equalTo(32)
             $0.centerY.equalTo(contentView.snp.centerY)
             $0.right.equalTo(contentView.snp.right).offset(-20)
-        }
-
-        superButton.snp.makeConstraints {
-            $0.left.top.bottom.equalToSuperview()
-            $0.right.equalToSuperview()
         }
     }
 }
@@ -151,10 +141,6 @@ extension PlaylistTableViewCell {
                 owner.delegate?.playButtonDidTap(model: song)
             }
             .disposed(by: disposeBag)
-
-        superButton.addAction { [weak self] in
-            self?.delegate?.superButtonTapped(index: self?.model.index ?? 0)
-        }
     }
 
     private func updateButtonHidden(isEditing: Bool) {
@@ -163,7 +149,6 @@ extension PlaylistTableViewCell {
         } else {
             playImageView.isHidden = false
         }
-        superButton.isHidden = !isEditing
     }
 
     private func updateConstraintPlayImageView(isEditing: Bool) {
