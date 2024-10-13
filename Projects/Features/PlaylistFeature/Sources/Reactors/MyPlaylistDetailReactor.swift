@@ -251,8 +251,8 @@ private extension MyPlaylistDetailReactor {
     func didLongPressedPlaylist(indexPath: IndexPath) -> Observable<Mutation> {
         guard !currentState.isEditing else { return .empty() }
         return .concat(
-            beginEditing(),
-            updateItemSelected(indexPath.row)
+            updateItemSelected(indexPath.row),
+            beginEditing()
         )
     }
 

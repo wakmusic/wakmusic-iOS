@@ -92,6 +92,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     override public func viewDidLoad() {
         super.viewDidLoad()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
+        playlistView.playlistTableView.dragDelegate = self
+//        playlistView.playlistTableView.dragInteractionEnabled = true
         bindViewModel()
         bindActions()
     }
@@ -173,13 +175,18 @@ private extension PlaylistViewController {
     }
 
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
-        output.editState.sink { [weak self] isEditing in
+        output.editState.sink { [weak self] isEditing, reloadStrategy in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
             self.playlistView.editButton.setTitle(isEditing ? "완료" : "편집", for: .normal)
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
-            self.playlistView.playlistTableView.reloadData()
+            switch reloadStrategy {
+            case .reloadAll:
+                self.playlistView.playlistTableView.reloadData()
+            case .reloadSection:
+                self.playlistView.playlistTableView.reloadSections([0], with: .none)
+            }
         }.store(in: &subscription)
 
         output.playlists
@@ -228,7 +235,7 @@ private extension PlaylistViewController {
                 tappedCellIndex
             ] owner, item in
 
-                let isEditing = isEditingSubject.value
+                let (isEditing, _) = isEditingSubject.value
                 let (indexPath, playlists) = item
 
                 if isEditing {
@@ -306,7 +313,7 @@ extension PlaylistViewController {
                 cell.selectionStyle = .none
 
                 let index = indexPath.row
-                let isEditing = output.editState.value
+                let (isEditing, _) = output.editState.value
 
                 cell.setContent(
                     model: model,

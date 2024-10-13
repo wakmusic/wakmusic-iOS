@@ -86,6 +86,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     private func setTableView() {
         listStorageView.tableView.delegate = self
+        listStorageView.tableView.dragDelegate = self
     }
 
     override func bindState(reactor: ListStorageReactor) {
@@ -219,7 +220,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
-                owner.listStorageView.tableView.isEditing = flag
+                owner.listStorageView.tableView.setEditing(flag, animated: true)
                 owner.listStorageView.tableView.reloadData()
                 owner.listStorageView.updateIsEnabledRefreshControl(isEnabled: !flag)
             }
@@ -336,7 +337,7 @@ extension ListStorageViewController: ListStorageTableViewCellDelegate {
     }
 }
 
-extension ListStorageViewController: UITableViewDelegate {
+extension ListStorageViewController: UITableViewDelegate, UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 80 // height(52) + top inset(16) + bottom inset(12)
     }
@@ -362,19 +363,14 @@ extension ListStorageViewController: UITableViewDelegate {
         reactor?.action.onNext(.didSelectPlaylist(indexPath))
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
-        contextMenuConfigurationForRowAt indexPath: IndexPath,
-        point: CGPoint
-    ) -> UIContextMenuConfiguration? {
-        if reactor?.currentState.isEditing == true {
-            return nil
-        } else {
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
-                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
-                return nil
-            })
-        }
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+        return [dragItem]
     }
 }
 

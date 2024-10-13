@@ -67,6 +67,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
 
     private func setTableView() {
         likeStorageView.tableView.rx.setDelegate(self).disposed(by: disposeBag)
+        likeStorageView.tableView.dragDelegate = self
     }
 
     override func bindState(reactor: LikeStorageReactor) {
@@ -293,7 +294,7 @@ extension LikeStorageViewController: LikeStorageTableViewCellDelegate {
     }
 }
 
-extension LikeStorageViewController: UITableViewDelegate {
+extension LikeStorageViewController: UITableViewDelegate, UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
@@ -307,19 +308,14 @@ extension LikeStorageViewController: UITableViewDelegate {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
 
-    func tableView(
+    public func tableView(
         _ tableView: UITableView,
-        contextMenuConfigurationForRowAt indexPath: IndexPath,
-        point: CGPoint
-    ) -> UIContextMenuConfiguration? {
-        if reactor?.currentState.isEditing == true {
-            return nil
-        } else {
-            return UIContextMenuConfiguration(identifier: nil, previewProvider: { [reactor] in
-                reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
-                return nil
-            })
-        }
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+        return [dragItem]
     }
 }
 

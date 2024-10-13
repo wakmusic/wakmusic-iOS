@@ -168,6 +168,9 @@ final class ListStorageReactor: Reactor {
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let switchEditingStateMutation = storageCommonService.isEditingState
             .skip(1)
+            .filter { [weak self] in
+                $0 != self?.currentState.isEditing
+            }
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
                 let log = if !editingState {
@@ -188,19 +191,24 @@ final class ListStorageReactor: Reactor {
                             owner.mutateEditPlayListOrder(),
                             .just(.updateIsShowActivityIndicator(false)),
                             .just(.updateSelectedItemCount(0)),
+                            owner.setAllSelection(isSelected: false),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
                     } else {
                         return .concat(
                             .just(.updateSelectedItemCount(0)),
+                            owner.setAllSelection(isSelected: false),
                             .just(.undoDataSource),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
                     }
                 } else {
-                    return .just(.switchEditingState(editingState))
+                    return .concat(
+                        .just(.switchEditingState(editingState)),
+                        owner.setAllSelection(isSelected: false)
+                    )
                 }
             }
 
@@ -471,15 +479,19 @@ extension ListStorageReactor {
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
+        return setAllSelection(isSelected: flag)
+    }
+
+    func setAllSelection(isSelected: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("playlist datasource is empty")
             return .empty()
         }
 
-        let count = flag ? tmp.count : 0
+        let count = isSelected ? tmp.count : 0
 
         for i in 0 ..< tmp.count {
-            tmp[i].isSelected = flag
+            tmp[i].isSelected = isSelected
         }
 
         return .concat(
