@@ -149,7 +149,7 @@ final class PlaylistViewModel: ViewModelType {
                 owner.isEditing = false
                 output.countOfSongs.send(output.playlists.value.count)
             }).disposed(by: disposeBag)
-        
+
         input.removedButtonDidTapEvent
             .withUnretained(self)
             .subscribe(onNext: { owner, index in
@@ -157,11 +157,11 @@ final class PlaylistViewModel: ViewModelType {
                 mutablePlaylist.remove(at: index)
                 output.playlists.accept(mutablePlaylist)
                 output.countOfSongs.send(mutablePlaylist.count)
-                
+
                 owner.playState.remove(indexs: [index])
             })
             .disposed(by: disposeBag)
-        
+
         input.itemMovedEvent
             .map { (sourceIndex: $0.row, destIndex: $1.row) }
             .subscribe { (sourceIndex: Int, destIndex: Int) in

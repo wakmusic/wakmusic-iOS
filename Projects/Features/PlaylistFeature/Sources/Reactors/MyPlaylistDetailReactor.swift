@@ -152,7 +152,10 @@ final class MyPlaylistDetailReactor: Reactor {
             return deselectAll()
 
         case .removeSongs:
-            return removeSongs(remainSongs: currentState.playlistModels.filter {!$0.isSelected }, targets: currentState.playlistModels.filter { $0.isSelected } )
+            return removeSongs(
+                remainSongs: currentState.playlistModels.filter { !$0.isSelected },
+                targets: currentState.playlistModels.filter { $0.isSelected }
+            )
 
         case let .changeImageData(imageData):
             return updateImageData(imageData: imageData)
@@ -160,7 +163,7 @@ final class MyPlaylistDetailReactor: Reactor {
             return updateShareLink()
         case .moreButtonDidTap:
             return updateShowEditSheet(flag: !self.currentState.showEditSheet)
-            
+
         case let .removeSwippedButtonDidTap(index):
             let row = index.row
             var prev = currentState.playlistModels
@@ -471,8 +474,7 @@ private extension MyPlaylistDetailReactor {
     }
 
     func removeSongs(remainSongs: [PlaylistItemModel], targets: [PlaylistItemModel]) -> Observable<Mutation> {
-
-        let removeSongs = targets.map  { $0.id }
+        let removeSongs = targets.map { $0.id }
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
 

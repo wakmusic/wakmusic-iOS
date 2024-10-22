@@ -127,7 +127,7 @@ private extension PlaylistViewController {
         case .changed:
             let distanceY = max(distance.y, 0)
             view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
- 
+
         case .ended:
             let velocity = gestureRecognizer.velocity(in: self.view)
 
@@ -151,7 +151,6 @@ private extension PlaylistViewController {
             break
         }
     }
-
 }
 
 private extension PlaylistViewController {
@@ -305,7 +304,7 @@ extension PlaylistViewController {
 
                 let index = indexPath.row
                 let (isEditing, _) = output.editState.value
-                
+
                 cell.setContent(
                     model: model,
                     index: index,

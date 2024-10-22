@@ -535,19 +535,21 @@ extension MyPlaylistDetailViewController: UITableViewDelegate, UITableViewDragDe
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
     }
-    
-    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
+
+    public func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] action, _, completion in
             guard let self else { return }
             self.reactor?.action.onNext(.removeSwippedButtonDidTap(indexPath))
         }
-    
+
         deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
-        
+
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         configuration.performsFirstActionWithFullSwipe = false
-        
+
         return configuration
     }
 
