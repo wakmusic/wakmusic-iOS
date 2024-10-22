@@ -113,7 +113,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] action, _, completion in
             guard let self else { return }
-            self.swippedToDeleteSongSubject.onNext(indexPath.row)
+            self.tappedRemoveCellSubject.onNext(indexPath.row)
         }
     
         deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
