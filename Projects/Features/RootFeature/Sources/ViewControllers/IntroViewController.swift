@@ -225,15 +225,19 @@ private extension IntroViewController {
     func lottiePlay(specialLogo: Bool) {
         var logoType: SplashLogoType
 
-        switch Calendar.current.component(.month, from: Date()) {
-        case 10, 11:
-            logoType = specialLogo ? .halloween : .usual
-        case 12, 1:
-            logoType = specialLogo ? .xmas : .usual
-        default:
+        if specialLogo {
+            switch Calendar.current.component(.month, from: Date()) {
+            case 10, 11:
+                logoType = .halloween
+            case 12, 1:
+                logoType = .xmas
+            default:
+                logoType = .usual
+            }
+        } else {
             logoType = .usual
         }
-        
+
         let animationView = LottieAnimationView(
             name: logoType.rawValue,
             bundle: DesignSystemResources.bundle
