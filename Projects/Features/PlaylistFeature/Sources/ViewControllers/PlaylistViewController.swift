@@ -25,6 +25,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
     var didLongPressedSongSubject = PublishSubject<Int>()
+    var swippedToDeleteSongSubject = PublishSubject<Int>()
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
@@ -50,7 +51,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
         removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
         itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable(),
-        didLongPressedSongEvent: didLongPressedSongSubject
+        didLongPressedSongEvent: didLongPressedSongSubject,
+        swipeToDeleteSongEvent: swippedToDeleteSongSubject
     )
     lazy var output = self.viewModel.transform(from: input)
 
@@ -95,7 +97,6 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         playlistView.playlistTableView.dragDelegate = self
 //        playlistView.playlistTableView.dragInteractionEnabled = true
         bindViewModel()
-        bindActions()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -285,10 +286,6 @@ private extension PlaylistViewController {
     }
 }
 
-private extension PlaylistViewController {
-    private func bindActions() {}
-}
-
 extension PlaylistViewController {
     private func createDatasources(
         output: PlaylistViewModel
@@ -308,7 +305,7 @@ extension PlaylistViewController {
 
                 let index = indexPath.row
                 let (isEditing, _) = output.editState.value
-
+                
                 cell.setContent(
                     model: model,
                     index: index,

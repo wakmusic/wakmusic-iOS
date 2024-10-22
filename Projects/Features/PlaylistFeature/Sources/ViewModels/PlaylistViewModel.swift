@@ -22,6 +22,7 @@ final class PlaylistViewModel: ViewModelType {
         let removeSongsButtonDidTapEvent: Observable<Void>
         let itemMovedEvent: Observable<(sourceIndex: IndexPath, destinationIndex: IndexPath)>
         let didLongPressedSongEvent: Observable<Int>
+        let swipeToDeleteSongEvent: Observable<Int>
     }
 
     struct Output {
@@ -148,7 +149,19 @@ final class PlaylistViewModel: ViewModelType {
                 owner.isEditing = false
                 output.countOfSongs.send(output.playlists.value.count)
             }).disposed(by: disposeBag)
-
+        
+        input.swipeToDeleteSongEvent
+            .withUnretained(self)
+            .subscribe(onNext: { owner, index in
+                var mutablePlaylist = output.playlists.value
+                mutablePlaylist.remove(at: index)
+                output.playlists.accept(mutablePlaylist)
+                output.countOfSongs.send(mutablePlaylist.count)
+                
+                owner.playState.remove(indexs: [index])
+            })
+            .disposed(by: disposeBag)
+        
         input.itemMovedEvent
             .map { (sourceIndex: $0.row, destIndex: $1.row) }
             .subscribe { (sourceIndex: Int, destIndex: Int) in

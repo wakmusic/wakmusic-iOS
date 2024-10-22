@@ -108,6 +108,21 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, canFocusRowAt indexPath: IndexPath) -> Bool {
         return true // 모든 Cell 을 이동 가능하게 설정합니다.
     }
+    
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] action, _, completion in
+            guard let self else { return }
+            self.swippedToDeleteSongSubject.onNext(indexPath.row)
+        }
+    
+        deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+        
+        return configuration
+    }
 
     public func tableView(
         _ tableView: UITableView,
