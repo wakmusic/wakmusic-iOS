@@ -82,7 +82,7 @@ private extension IntroViewController {
             .subscribe(onNext: { owner, result in
                 switch result {
                 case let .success(entity):
-                    owner.lottiePlay(specialLogo: entity.specialLogo)
+                    owner.lottiePlay(isSpecialLogo: entity.isSpecialLogo)
 
                     var textPopupVc: UIViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
@@ -154,7 +154,7 @@ private extension IntroViewController {
                     )
 
                 case let .failure(error):
-                    owner.lottiePlay(specialLogo: false)
+                    owner.lottiePlay(isSpecialLogo: false)
                     owner.showBottomSheet(
                         content: owner.textPopupFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
@@ -222,14 +222,14 @@ private extension IntroViewController {
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
-    func lottiePlay(specialLogo: Bool) {
+    func lottiePlay(isSpecialLogo: Bool) {
         var logoType: SplashLogoType
 
-        if specialLogo {
+        if isSpecialLogo {
             switch Calendar.current.component(.month, from: Date()) {
-            case 10, 11:
+            case 10:
                 logoType = .halloween
-            case 12, 1:
+            case 12:
                 logoType = .xmas
             default:
                 logoType = .usual
@@ -237,6 +237,7 @@ private extension IntroViewController {
         } else {
             logoType = .usual
         }
+        self.view.backgroundColor = logoType == .halloween ? colorFromRGB(0x191A1C) : .white
 
         let animationView = LottieAnimationView(
             name: logoType.rawValue,
