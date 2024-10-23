@@ -540,9 +540,9 @@ extension MyPlaylistDetailViewController: UITableViewDelegate, UITableViewDragDe
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] action, _, completion in
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, _ in
             guard let self else { return }
-            self.reactor?.action.onNext(.removeSwippedButtonDidTap(indexPath))
+            self.reactor?.action.onNext(.didTappedSwippedRemoveButton(indexPath))
         }
 
         deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color

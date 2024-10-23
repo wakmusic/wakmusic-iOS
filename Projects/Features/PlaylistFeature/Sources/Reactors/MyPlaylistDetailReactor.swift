@@ -26,7 +26,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case changeImageData(PlaylistImageKind)
         case shareButtonDidTap
         case moreButtonDidTap
-        case removeSwippedButtonDidTap(IndexPath)
+        case didTappedSwippedRemoveButton(IndexPath)
     }
 
     enum Mutation {
@@ -153,7 +153,6 @@ final class MyPlaylistDetailReactor: Reactor {
 
         case .removeSongs:
             return removeSongs(
-                remainSongs: currentState.playlistModels.filter { !$0.isSelected },
                 targets: currentState.playlistModels.filter { $0.isSelected }
             )
 
@@ -164,12 +163,9 @@ final class MyPlaylistDetailReactor: Reactor {
         case .moreButtonDidTap:
             return updateShowEditSheet(flag: !self.currentState.showEditSheet)
 
-        case let .removeSwippedButtonDidTap(index):
-            let row = index.row
-            var prev = currentState.playlistModels
-            let target = prev[row]
-            prev.remove(at: index.row)
-            return removeSongs(remainSongs: prev, targets: [target])
+        case let .didTappedSwippedRemoveButton(index):
+            let target = currentState.playlistModels[index.row]
+            return removeSongs(targets: [target])
         }
     }
 
@@ -473,7 +469,8 @@ private extension MyPlaylistDetailReactor {
         ])
     }
 
-    func removeSongs(remainSongs: [PlaylistItemModel], targets: [PlaylistItemModel]) -> Observable<Mutation> {
+    func removeSongs(targets: [PlaylistItemModel]) -> Observable<Mutation> {
+        let remainSongs = currentState.playlistModels.filter { !targets.contains($0) }
         let removeSongs = targets.map { $0.id }
         var prevHeader = currentState.header
         prevHeader.updateSongCount(remainSongs.count)
