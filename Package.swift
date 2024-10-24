@@ -28,7 +28,7 @@ let package = Package(
         .package(url: "https://github.com/devxoul/Then", from: "3.0.0"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.7.1"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", from: "5.2.1"),
-        .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.4.3"),
+        .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.5.0"),
         .package(url: "https://github.com/uber/needle.git", from: "0.24.0"),
         .package(url: "https://github.com/uias/Tabman.git", from: "3.2.0"),
         .package(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", from: "5.0.2"),
