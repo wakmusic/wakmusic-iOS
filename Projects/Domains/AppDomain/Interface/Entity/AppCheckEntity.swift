@@ -14,16 +14,16 @@ public struct AppCheckEntity: Equatable {
         title: String,
         description: String,
         version: String,
-        specialLogo: Bool
+        isSpecialLogo: Bool
     ) {
         self.flag = flag
         self.title = title
         self.description = description
         self.version = version
-        self.specialLogo = specialLogo
+        self.isSpecialLogo = isSpecialLogo
     }
 
     public let flag: AppCheckFlagType
     public let title, description, version: String
-    public let specialLogo: Bool
+    public let isSpecialLogo: Bool
 }
