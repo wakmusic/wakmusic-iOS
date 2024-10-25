@@ -25,6 +25,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
     var didLongPressedSongSubject = PublishSubject<Int>()
+    var didTapSwippedRemoveSongSubject = PublishSubject<Int>()
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
@@ -50,7 +51,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
         removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
         itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable(),
-        didLongPressedSongEvent: didLongPressedSongSubject
+        didLongPressedSongEvent: didLongPressedSongSubject,
+        didTapSwippedRemoveButtonEvent: didTapSwippedRemoveSongSubject
     )
     lazy var output = self.viewModel.transform(from: input)
 
@@ -95,7 +97,6 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         playlistView.playlistTableView.dragDelegate = self
 //        playlistView.playlistTableView.dragInteractionEnabled = true
         bindViewModel()
-        bindActions()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -126,8 +127,6 @@ private extension PlaylistViewController {
         case .changed:
             let distanceY = max(distance.y, 0)
             view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
-            // let opacity = 1 - (distanceY / screenHeight)
-            // updateOpacity(value: Float(opacity))
 
         case .ended:
             let velocity = gestureRecognizer.velocity(in: self.view)
@@ -144,7 +143,6 @@ private extension PlaylistViewController {
                     options: [.curveEaseInOut],
                     animations: {
                         self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: screenHeight)
-                        self.updateOpacity(value: 1)
                     }
                 )
             }
@@ -152,10 +150,6 @@ private extension PlaylistViewController {
         default:
             break
         }
-    }
-
-    func updateOpacity(value: Float) {
-        playlistView.layer.opacity = value
     }
 }
 
@@ -289,10 +283,6 @@ private extension PlaylistViewController {
             self?.dismiss(animated: true)
         }.store(in: &subscription)
     }
-}
-
-private extension PlaylistViewController {
-    private func bindActions() {}
 }
 
 extension PlaylistViewController {

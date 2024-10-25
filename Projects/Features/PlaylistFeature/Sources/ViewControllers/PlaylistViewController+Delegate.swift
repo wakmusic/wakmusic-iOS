@@ -111,6 +111,23 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
 
     public func tableView(
         _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, _ in
+            guard let self else { return }
+            self.didTapSwippedRemoveSongSubject.onNext(indexPath.row)
+        }
+
+        deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
+
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+
+        return configuration
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
         targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
