@@ -115,7 +115,7 @@ extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
     ) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, _ in
             guard let self else { return }
-            self.didTappedSwippedRemoveSongSubject.onNext(indexPath.row)
+            self.didTapSwippedRemoveSongSubject.onNext(indexPath.row)
         }
 
         deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color

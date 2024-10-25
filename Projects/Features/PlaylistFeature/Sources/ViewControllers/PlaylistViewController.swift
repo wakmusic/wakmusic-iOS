@@ -25,7 +25,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
     var didLongPressedSongSubject = PublishSubject<Int>()
-    var didTappedSwippedRemoveSongSubject = PublishSubject<Int>()
+    var didTapSwippedRemoveSongSubject = PublishSubject<Int>()
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
@@ -52,7 +52,7 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
         itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable(),
         didLongPressedSongEvent: didLongPressedSongSubject,
-        didTappedSwippedRemoveButtonEvent: didTappedSwippedRemoveSongSubject
+        didTapSwippedRemoveButtonEvent: didTapSwippedRemoveSongSubject
     )
     lazy var output = self.viewModel.transform(from: input)
 

@@ -26,7 +26,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case changeImageData(PlaylistImageKind)
         case shareButtonDidTap
         case moreButtonDidTap
-        case didTappedSwippedRemoveButton(IndexPath)
+        case didTapSwippedRemoveButton(IndexPath)
     }
 
     enum Mutation {
@@ -163,7 +163,7 @@ final class MyPlaylistDetailReactor: Reactor {
         case .moreButtonDidTap:
             return updateShowEditSheet(flag: !self.currentState.showEditSheet)
 
-        case let .didTappedSwippedRemoveButton(index):
+        case let .didTapSwippedRemoveButton(index):
             let target = currentState.playlistModels[index.row]
             return removeSongs(targets: [target])
         }
