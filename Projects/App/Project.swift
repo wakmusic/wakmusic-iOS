@@ -3,9 +3,11 @@ import Foundation
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+let alternativeAppIconNames: [String] = ["HalloweenAppIcon", " XmasAppIcon"]
+
 let settinges: Settings =
     .settings(
-        base: env.baseSetting,
+        base: env.baseSetting.merging(["ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES" : .array(alternativeAppIconNames)]),
         configurations: [
             .debug(name: .debug),
             .debug(name: .qa),
