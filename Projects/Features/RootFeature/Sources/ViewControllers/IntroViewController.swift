@@ -208,6 +208,15 @@ private extension IntroViewController {
 }
 
 private extension IntroViewController {
+    
+    func changeAppIcon(_ type: SplashLogoType) {
+        guard UIApplication.shared.alternateIconName != type.icon else {
+            return
+        }
+
+        UIApplication.shared.setAlternateIconName(type.icon)
+    }
+    
     func configureUI() {
         navigationController?.setNavigationBarHidden(true, animated: false)
         view.addSubview(parableLogoImageView)

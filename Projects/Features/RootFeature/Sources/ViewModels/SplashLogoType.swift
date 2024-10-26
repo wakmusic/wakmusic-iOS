@@ -17,10 +17,3 @@ enum SplashLogoType: String {
     }
 }
 
-func changeAppIcon(_ type: SplashLogoType) {
-    guard UIApplication.shared.alternateIconName != type.icon else {
-        return
-    }
-
-    UIApplication.shared.setAlternateIconName(type.icon)
-}
