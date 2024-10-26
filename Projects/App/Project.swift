@@ -7,7 +7,8 @@ let alternativeAppIconNames: [String] = ["HalloweenAppIcon", " XmasAppIcon"]
 
 let settinges: Settings =
     .settings(
-        base: env.baseSetting.merging(["ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES" : .array(alternativeAppIconNames)]),
+        base: env.baseSetting
+            .merging(["ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES": .array(alternativeAppIconNames)]),
         configurations: [
             .debug(name: .debug),
             .debug(name: .qa),
