@@ -237,7 +237,7 @@ private extension IntroViewController {
         } else {
             logoType = .usual
         }
-        
+
         changeAppIcon(logoType)
         self.view.backgroundColor = logoType == .halloween ? colorFromRGB(0x191A1C) : .white
 
