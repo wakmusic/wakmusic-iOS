@@ -5,7 +5,7 @@ enum SplashLogoType: String {
     case halloween = "Splash_Logo_Halloween"
     case xmas = "Splash_Logo_Xmas"
 
-    var icon: String? {
+    var toAppIcon: String? {
         switch self {
         case .usual:
             return nil
