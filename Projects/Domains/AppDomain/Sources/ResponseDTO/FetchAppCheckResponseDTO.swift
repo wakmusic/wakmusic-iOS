@@ -22,7 +22,7 @@ public extension FetchAppCheckResponseDTO {
             title: title ?? "",
             description: description ?? "",
             version: version ?? "",
-            specialLogo: specialLogo ?? false
+            isSpecialLogo: specialLogo ?? false
         )
     }
 }

@@ -76,7 +76,7 @@ public final class IntroViewModel: ViewModelType {
                                             title: "",
                                             description: wmError.errorDescription ?? "",
                                             version: "",
-                                            specialLogo: false
+                                            isSpecialLogo: false
                                         )
                                     )
                                 )

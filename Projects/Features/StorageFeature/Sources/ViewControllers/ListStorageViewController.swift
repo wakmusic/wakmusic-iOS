@@ -86,6 +86,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
 
     private func setTableView() {
         listStorageView.tableView.delegate = self
+        listStorageView.tableView.dragDelegate = self
     }
 
     override func bindState(reactor: ListStorageReactor) {
@@ -219,7 +220,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
             .distinctUntilChanged()
             .withUnretained(self)
             .bind { owner, flag in
-                owner.listStorageView.tableView.isEditing = flag
+                owner.listStorageView.tableView.setEditing(flag, animated: true)
                 owner.listStorageView.tableView.reloadData()
                 owner.listStorageView.updateIsEnabledRefreshControl(isEnabled: !flag)
             }
@@ -329,21 +330,14 @@ extension ListStorageViewController: SongCartViewDelegate {
 extension ListStorageViewController: ListStorageTableViewCellDelegate {
     public func buttonTapped(type: ListStorageTableViewCellDelegateConstant) {
         switch type {
-        case let .listTapped(passModel):
-            LogManager.analytics(CommonAnalyticsLog.clickPlaylistItem(location: .storage, key: passModel.key))
-            self.reactor?.action.onNext(.listDidTap(passModel.indexPath))
-
         case let .playTapped(passModel):
             LogManager.analytics(CommonAnalyticsLog.clickPlayButton(location: .storagePlaylist, type: .playlist))
             self.reactor?.action.onNext(.playDidTap(passModel.indexPath.row))
-
-        case let .cellTapped(passModel):
-            self.reactor?.action.onNext(.cellDidTap(passModel.indexPath.row))
         }
     }
 }
 
-extension ListStorageViewController: UITableViewDelegate {
+extension ListStorageViewController: UITableViewDelegate, UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 80 // height(52) + top inset(16) + bottom inset(12)
     }
@@ -363,6 +357,20 @@ extension ListStorageViewController: UITableViewDelegate {
 
     public func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        reactor?.action.onNext(.didSelectPlaylist(indexPath))
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+        return [dragItem]
     }
 }
 

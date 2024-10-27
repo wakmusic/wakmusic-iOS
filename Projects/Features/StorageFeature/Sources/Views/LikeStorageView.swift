@@ -32,6 +32,7 @@ final class LikeStorageView: UIView {
         $0.backgroundColor = .clear
         $0.register(LikeStorageTableViewCell.self, forCellReuseIdentifier: LikeStorageTableViewCell.reuseIdentifer)
         $0.separatorStyle = .none
+        $0.allowsSelectionDuringEditing = true
     }
 
     fileprivate let loginWarningView = LoginWarningView(text: "로그인 하고\n좋아요를 확인해보세요.") { return }

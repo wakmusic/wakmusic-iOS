@@ -74,6 +74,7 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         $0.tableHeaderView = headerView
         $0.separatorStyle = .none
         $0.contentInset = .init(top: .zero, left: .zero, bottom: 60.0, right: .zero)
+        $0.allowsSelectionDuringEditing = true
     }
 
     private lazy var completionButton: RectangleButton = RectangleButton().then {
@@ -159,14 +160,11 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
         }
     }
 
-    override func configureUI() {
-        super.configureUI()
-    }
-
     override func bind(reactor: MyPlaylistDetailReactor) {
         super.bind(reactor: reactor)
         tableView.rx.setDelegate(self)
             .disposed(by: disposeBag)
+        tableView.dragDelegate = self
     }
 
     override func bindAction(reactor: MyPlaylistDetailReactor) {
@@ -256,13 +254,17 @@ final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylist
 
         tableView.rx.itemSelected
             .bind(with: self) { owner, indexPath in
+                if owner.reactor?.currentState.isEditing == true {
+                    owner.tableView.deselectRow(at: IndexPath(row: indexPath.row, section: 0), animated: false)
+                    owner.reactor?.action.onNext(.itemDidTap(indexPath.row))
+                } else {
+                    guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
 
-                guard let model = owner.dataSource.itemIdentifier(for: indexPath) else { return }
-
-                PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
-                let playlistIDs = PlayState.shared.currentPlaylist
-                    .map(\.id)
-                owner.songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
+                    PlayState.shared.append(item: .init(id: model.id, title: model.title, artist: model.artist))
+                    let playlistIDs = PlayState.shared.currentPlaylist
+                        .map(\.id)
+                    owner.songDetailPresenter.present(ids: playlistIDs, selectedID: model.id)
+                }
             }
             .disposed(by: disposeBag)
     }
@@ -493,7 +495,7 @@ extension MyPlaylistDetailViewController {
 }
 
 /// 테이블 뷰 델리게이트
-extension MyPlaylistDetailViewController: UITableViewDelegate {
+extension MyPlaylistDetailViewController: UITableViewDelegate, UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(60.0)
     }
@@ -532,6 +534,33 @@ extension MyPlaylistDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false // 편집모드 시 셀의 들여쓰기를 없애려면 false를 리턴합니다.
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, _ in
+            guard let self else { return }
+            self.reactor?.action.onNext(.didTapSwippedRemoveButton(indexPath))
+        }
+
+        deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
+
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+
+        return configuration
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        reactor?.action.onNext(.didLongPressedPlaylist(indexPath))
+        return [dragItem]
     }
 }
 
@@ -584,11 +613,6 @@ extension MyPlaylistDetailViewController: PlaylistTableViewCellDelegate {
             id: model.id,
             playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
         ).play()
-    }
-
-    func superButtonTapped(index: Int) {
-        tableView.deselectRow(at: IndexPath(row: index, section: 0), animated: false)
-        reactor?.action.onNext(.itemDidTap(index))
     }
 }
 

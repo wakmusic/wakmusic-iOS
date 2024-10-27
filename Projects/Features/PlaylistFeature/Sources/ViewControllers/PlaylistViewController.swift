@@ -24,6 +24,8 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     var isSelectedAllSongs = PublishSubject<Bool>()
     var tappedAddPlaylist = PublishSubject<Void>()
     var tappedRemoveSongs = PublishSubject<Void>()
+    var didLongPressedSongSubject = PublishSubject<Int>()
+    var didTapSwippedRemoveSongSubject = PublishSubject<Int>()
 
     private(set) var containSongsFactory: any ContainSongsFactory
     private(set) var songDetailPresenter: any SongDetailPresentable
@@ -48,7 +50,9 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
         selectAllSongsButtonDidTapEvent: isSelectedAllSongs.asObservable(),
         addPlaylistButtonDidTapEvent: tappedAddPlaylist.asObservable(),
         removeSongsButtonDidTapEvent: tappedRemoveSongs.asObservable(),
-        itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable()
+        itemMovedEvent: playlistView.playlistTableView.rx.itemMoved.asObservable(),
+        didLongPressedSongEvent: didLongPressedSongSubject,
+        didTapSwippedRemoveButtonEvent: didTapSwippedRemoveSongSubject
     )
     lazy var output = self.viewModel.transform(from: input)
 
@@ -90,8 +94,9 @@ public final class PlaylistViewController: UIViewController, SongCartViewType {
     override public func viewDidLoad() {
         super.viewDidLoad()
         playlistView.playlistTableView.rx.setDelegate(self).disposed(by: disposeBag)
+        playlistView.playlistTableView.dragDelegate = self
+//        playlistView.playlistTableView.dragInteractionEnabled = true
         bindViewModel()
-        bindActions()
     }
 
     override public func viewDidAppear(_ animated: Bool) {
@@ -122,8 +127,6 @@ private extension PlaylistViewController {
         case .changed:
             let distanceY = max(distance.y, 0)
             view.frame = CGRect(x: 0, y: distanceY, width: view.frame.width, height: screenHeight)
-            // let opacity = 1 - (distanceY / screenHeight)
-            // updateOpacity(value: Float(opacity))
 
         case .ended:
             let velocity = gestureRecognizer.velocity(in: self.view)
@@ -140,7 +143,6 @@ private extension PlaylistViewController {
                     options: [.curveEaseInOut],
                     animations: {
                         self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: screenHeight)
-                        self.updateOpacity(value: 1)
                     }
                 )
             }
@@ -148,10 +150,6 @@ private extension PlaylistViewController {
         default:
             break
         }
-    }
-
-    func updateOpacity(value: Float) {
-        playlistView.layer.opacity = value
     }
 }
 
@@ -171,13 +169,18 @@ private extension PlaylistViewController {
     }
 
     private func bindPlaylistTableView(output: PlaylistViewModel.Output) {
-        output.editState.sink { [weak self] isEditing in
+        output.editState.sink { [weak self] isEditing, reloadStrategy in
             guard let self else { return }
             self.playlistView.titleLabel.text = isEditing ? "재생목록 편집" : "재생목록"
             self.playlistView.editButton.setTitle(isEditing ? "완료" : "편집", for: .normal)
             self.playlistView.editButton.setColor(isHighlight: isEditing)
             self.playlistView.playlistTableView.setEditing(isEditing, animated: true)
-            self.playlistView.playlistTableView.reloadData()
+            switch reloadStrategy {
+            case .reloadAll:
+                self.playlistView.playlistTableView.reloadData()
+            case .reloadSection:
+                self.playlistView.playlistTableView.reloadSections([0], with: .none)
+            }
         }.store(in: &subscription)
 
         output.playlists
@@ -220,18 +223,31 @@ private extension PlaylistViewController {
 
         playlistView.playlistTableView.rx.itemSelected
             .withLatestFrom(output.playlists) { ($0, $1) }
-            .map { $0.1[$0.0.row] }
-            .bind(with: self, onNext: { [songDetailPresenter] owner, item in
-                let currentSongs = output.playlists.value
-                    .map(\.id)
+            .bind(with: self) { [
+                songDetailPresenter,
+                isEditingSubject = output.editState,
+                tappedCellIndex
+            ] owner, item in
 
-                owner.dismiss(animated: true) {
-                    songDetailPresenter.present(
-                        ids: Array(currentSongs),
-                        selectedID: item.id
-                    )
+                let (isEditing, _) = isEditingSubject.value
+                let (indexPath, playlists) = item
+
+                if isEditing {
+                    tappedCellIndex.onNext(indexPath.row)
+                } else {
+                    guard let selectedSong = playlists[safe: indexPath.row] else { return }
+
+                    let currentSongs = playlists
+                        .map(\.id)
+
+                    owner.dismiss(animated: true) {
+                        songDetailPresenter.present(
+                            ids: Array(currentSongs),
+                            selectedID: selectedSong.id
+                        )
+                    }
                 }
-            })
+            }
             .disposed(by: disposeBag)
     }
 
@@ -269,10 +285,6 @@ private extension PlaylistViewController {
     }
 }
 
-private extension PlaylistViewController {
-    private func bindActions() {}
-}
-
 extension PlaylistViewController {
     private func createDatasources(
         output: PlaylistViewModel
@@ -291,7 +303,7 @@ extension PlaylistViewController {
                 cell.selectionStyle = .none
 
                 let index = indexPath.row
-                let isEditing = output.editState.value
+                let (isEditing, _) = output.editState.value
 
                 cell.setContent(
                     model: model,

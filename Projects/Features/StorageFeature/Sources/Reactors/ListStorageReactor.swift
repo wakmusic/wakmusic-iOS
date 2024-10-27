@@ -16,8 +16,8 @@ final class ListStorageReactor: Reactor {
         case viewDidLoad
         case refresh
         case itemMoved(ItemMovedEvent)
-        case cellDidTap(Int)
-        case listDidTap(IndexPath)
+        case didSelectPlaylist(IndexPath)
+        case didLongPressedPlaylist(IndexPath)
         case playDidTap(Int)
         case tapAll(isSelecting: Bool)
         case loginButtonDidTap
@@ -117,11 +117,11 @@ final class ListStorageReactor: Reactor {
         case let .itemMoved((sourceIndex, destinationIndex)):
             return updateOrder(src: sourceIndex.row, dest: destinationIndex.row)
 
-        case let .cellDidTap(index):
-            return changeSelectingState(index)
+        case let .didSelectPlaylist(indexPath):
+            return didSelectPlaylistCell(indexPath: indexPath)
 
-        case let .listDidTap(indexPath):
-            return showDetail(indexPath)
+        case let .didLongPressedPlaylist(indexPath):
+            return didLongPressedPlaylist(indexPath: indexPath)
 
         case let .playDidTap(index):
             return playWithAddToCurrentPlaylist(index)
@@ -168,6 +168,9 @@ final class ListStorageReactor: Reactor {
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let switchEditingStateMutation = storageCommonService.isEditingState
             .skip(1)
+            .filter { [weak self] in
+                $0 != self?.currentState.isEditing
+            }
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
                 let log = if !editingState {
@@ -188,19 +191,24 @@ final class ListStorageReactor: Reactor {
                             owner.mutateEditPlayListOrder(),
                             .just(.updateIsShowActivityIndicator(false)),
                             .just(.updateSelectedItemCount(0)),
+                            owner.setAllSelection(isSelected: false),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
                     } else {
                         return .concat(
                             .just(.updateSelectedItemCount(0)),
+                            owner.setAllSelection(isSelected: false),
                             .just(.undoDataSource),
                             .just(.hideSongCart),
                             .just(.switchEditingState(false))
                         )
                     }
                 } else {
-                    return .just(.switchEditingState(editingState))
+                    return .concat(
+                        .just(.switchEditingState(editingState)),
+                        owner.setAllSelection(isSelected: false)
+                    )
                 }
             }
 
@@ -333,6 +341,23 @@ extension ListStorageReactor {
         )
     }
 
+    func didLongPressedPlaylist(indexPath: IndexPath) -> Observable<Mutation> {
+        guard !currentState.isEditing else { return .empty() }
+        storageCommonService.isEditingState.onNext(true)
+        return .concat(
+            changeSelectingState(indexPath.row),
+            .just(.switchEditingState(true))
+        )
+    }
+
+    func didSelectPlaylistCell(indexPath: IndexPath) -> Observable<Mutation> {
+        if currentState.isEditing {
+            return changeSelectingState(indexPath.row)
+        } else {
+            return showDetail(indexPath)
+        }
+    }
+
     func showDetail(_ indexPath: IndexPath) -> Observable<Mutation> {
         let selectedList = currentState.dataSource[indexPath.section].items[indexPath.row]
         let key = selectedList.key
@@ -454,15 +479,19 @@ extension ListStorageReactor {
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
+        return setAllSelection(isSelected: flag)
+    }
+
+    func setAllSelection(isSelected: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("playlist datasource is empty")
             return .empty()
         }
 
-        let count = flag ? tmp.count : 0
+        let count = isSelected ? tmp.count : 0
 
         for i in 0 ..< tmp.count {
-            tmp[i].isSelected = flag
+            tmp[i].isSelected = isSelected
         }
 
         return .concat(

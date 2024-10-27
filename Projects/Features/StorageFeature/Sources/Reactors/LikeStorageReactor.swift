@@ -19,6 +19,7 @@ final class LikeStorageReactor: Reactor {
         case itemMoved(ItemMovedEvent)
         case songDidTap(Int)
         case tapAll(isSelecting: Bool)
+        case didLongPressedPlaylist(IndexPath)
         case playDidTap(song: FavoriteSongEntity)
         case addToPlaylistButtonDidTap // 노래담기
         case presentAddToPlaylistPopup
@@ -104,6 +105,9 @@ final class LikeStorageReactor: Reactor {
         case let .songDidTap(index):
             return changeSelectingState(index)
 
+        case let .didLongPressedPlaylist(indexPath):
+            return didLongPressedPlaylist(indexPath: indexPath)
+
         case let .playDidTap(song):
             return playWithAddToCurrentPlaylist(song: song)
 
@@ -136,6 +140,9 @@ final class LikeStorageReactor: Reactor {
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
         let switchEditingStateMutation = storageCommonService.isEditingState
             .skip(1)
+            .filter { [weak self] in
+                $0 != self?.currentState.isEditing
+            }
             .withUnretained(self)
             .flatMap { owner, editingState -> Observable<Mutation> in
                 let log = if !editingState {
@@ -157,6 +164,7 @@ final class LikeStorageReactor: Reactor {
                             .just(.updateIsShowActivityIndicator(false)),
                             .just(.updateSelectedItemCount(0)),
                             .just(.hideSongCart),
+                            owner.setAllSelection(isSelected: false),
                             .just(.switchEditingState(false))
                         )
                     } else {
@@ -164,11 +172,15 @@ final class LikeStorageReactor: Reactor {
                             .just(.updateSelectedItemCount(0)),
                             .just(.undoDataSource),
                             .just(.hideSongCart),
+                            owner.setAllSelection(isSelected: false),
                             .just(.switchEditingState(false))
                         )
                     }
                 } else {
-                    return .just(.switchEditingState(editingState))
+                    return .concat(
+                        .just(.switchEditingState(editingState)),
+                        owner.setAllSelection(isSelected: false)
+                    )
                 }
             }
 
@@ -285,6 +297,15 @@ extension LikeStorageReactor {
         return .just(.showAddToPlaylistPopup(selectedItemIDs))
     }
 
+    func didLongPressedPlaylist(indexPath: IndexPath) -> Observable<Mutation> {
+        guard !currentState.isEditing else { return .empty() }
+        storageCommonService.isEditingState.onNext(true)
+        return .concat(
+            .just(.switchEditingState(true)),
+            changeSelectingState(indexPath.row)
+        )
+    }
+
     func presentAddToPlaylistPopup() -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("favorite datasource is empty")
@@ -354,15 +375,19 @@ extension LikeStorageReactor {
 
     /// 전체 곡 선택 / 해제
     func tapAll(_ flag: Bool) -> Observable<Mutation> {
+        return setAllSelection(isSelected: flag)
+    }
+
+    func setAllSelection(isSelected: Bool) -> Observable<Mutation> {
         guard var tmp = currentState.dataSource.first?.items else {
             LogManager.printError("favorite datasource is empty")
             return .empty()
         }
 
-        let count = flag ? tmp.count : 0
+        let count = isSelected ? tmp.count : 0
 
         for i in 0 ..< tmp.count {
-            tmp[i].isSelected = flag
+            tmp[i].isSelected = isSelected
         }
 
         return .concat(

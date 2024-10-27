@@ -21,11 +21,18 @@ final class PlaylistViewModel: ViewModelType {
         let addPlaylistButtonDidTapEvent: Observable<Void>
         let removeSongsButtonDidTapEvent: Observable<Void>
         let itemMovedEvent: Observable<(sourceIndex: IndexPath, destinationIndex: IndexPath)>
+        let didLongPressedSongEvent: Observable<Int>
+        let didTapSwippedRemoveButtonEvent: Observable<Int>
     }
 
     struct Output {
+        enum EditingReloadStrategy {
+            case reloadSection
+            case reloadAll
+        }
+
         var shouldClosePlaylist = PassthroughSubject<Void, Never>()
-        var editState = CurrentValueSubject<Bool, Never>(false)
+        var editState = CurrentValueSubject<(Bool, EditingReloadStrategy), Never>((false, .reloadAll))
         let playlists: BehaviorRelay<[PlaylistItemModel]> = BehaviorRelay(value: [])
         let selectedSongIds: BehaviorRelay<Set<String>> = BehaviorRelay(value: [])
         let countOfSongs = CurrentValueSubject<Int, Never>(0)
@@ -81,11 +88,11 @@ final class PlaylistViewModel: ViewModelType {
             LogManager.analytics(log)
 
             self.isEditing.toggle()
-            output.editState.send(self.isEditing)
+            output.editState.send((self.isEditing, .reloadAll))
         }.store(in: &subscription)
 
         input.playlistTableviewCellDidTapEvent
-            .filter { _ in output.editState.value == false }
+            .filter { _ in output.editState.value.0 == false }
             .subscribe(onNext: { indexPath in
             })
             .disposed(by: disposeBag)
@@ -119,7 +126,7 @@ final class PlaylistViewModel: ViewModelType {
             .withUnretained(self)
             .subscribe(onNext: { owner, _ in
                 output.selectedSongIds.accept([])
-                output.editState.send(false)
+                output.editState.send((false, .reloadAll))
                 owner.isEditing = false
             })
             .disposed(by: disposeBag)
@@ -131,7 +138,7 @@ final class PlaylistViewModel: ViewModelType {
                 if selectedIds.count == output.playlists.value.count {
                     output.playlists.accept([])
                     output.selectedSongIds.accept([])
-                    output.editState.send(false)
+                    output.editState.send((false, .reloadAll))
                     output.shouldClosePlaylist.send()
                 } else {
                     let removedPlaylists = output.playlists.value
@@ -143,6 +150,17 @@ final class PlaylistViewModel: ViewModelType {
                 output.countOfSongs.send(output.playlists.value.count)
             }).disposed(by: disposeBag)
 
+        input.didTapSwippedRemoveButtonEvent
+            .bind(with: self, onNext: { owner, index in
+                var mutablePlaylist = output.playlists.value
+                mutablePlaylist.remove(at: index)
+                output.playlists.accept(mutablePlaylist)
+                output.countOfSongs.send(mutablePlaylist.count)
+
+                owner.playState.remove(indexs: [index])
+            })
+            .disposed(by: disposeBag)
+
         input.itemMovedEvent
             .map { (sourceIndex: $0.row, destIndex: $1.row) }
             .subscribe { (sourceIndex: Int, destIndex: Int) in
@@ -152,6 +170,25 @@ final class PlaylistViewModel: ViewModelType {
                 playlists.insert(movedData, at: destIndex)
                 output.playlists.accept(playlists)
             }.disposed(by: disposeBag)
+
+        input.didLongPressedSongEvent
+            .compactMap { output.playlists.value[safe: $0] }
+            .bind(with: self) { owner, item in
+                guard !owner.isEditing else { return }
+
+                owner.isEditing.toggle()
+
+                var mutableSelectedSongIds = output.selectedSongIds.value
+                if mutableSelectedSongIds.contains(item.id) {
+                    mutableSelectedSongIds.remove(item.id)
+                } else {
+                    mutableSelectedSongIds.insert(item.id)
+                }
+
+                output.editState.send((owner.isEditing, .reloadSection))
+                output.selectedSongIds.accept(mutableSelectedSongIds)
+            }
+            .disposed(by: disposeBag)
     }
 
     private func bindTableView(output: Output) {
@@ -168,7 +205,7 @@ final class PlaylistViewModel: ViewModelType {
         // 편집 종료 시, 셀 선택 초기화
         output.editState
             .dropFirst()
-            .filter { $0 == false }
+            .filter { $0.0 == false }
             .sink { [playState] _ in
                 output.selectedSongIds.accept([])
                 playState.update(contentsOf: output.playlists.value.toPlayStateItem())

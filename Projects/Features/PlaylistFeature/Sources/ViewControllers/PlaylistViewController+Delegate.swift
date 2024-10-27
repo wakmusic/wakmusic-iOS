@@ -64,7 +64,7 @@ extension PlaylistViewController: SongCartViewDelegate {
     }
 }
 
-extension PlaylistViewController: UITableViewDelegate {
+extension PlaylistViewController: UITableViewDelegate, UITableViewDragDelegate {
     public func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell
         .EditingStyle {
         return .none // 편집모드 시 왼쪽 버튼을 숨기려면 .none을 리턴합니다.
@@ -111,6 +111,23 @@ extension PlaylistViewController: UITableViewDelegate {
 
     public func tableView(
         _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, _ in
+            guard let self else { return }
+            self.didTapSwippedRemoveSongSubject.onNext(indexPath.row)
+        }
+
+        deleteAction.backgroundColor = DesignSystemAsset.PrimaryColorV2.increase.color
+
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = false
+
+        return configuration
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
         targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
         toProposedIndexPath proposedDestinationIndexPath: IndexPath
     ) -> IndexPath {
@@ -119,6 +136,16 @@ extension PlaylistViewController: UITableViewDelegate {
             return sourceIndexPath
         }
         return proposedDestinationIndexPath
+    }
+
+    public func tableView(
+        _ tableView: UITableView,
+        itemsForBeginning session: any UIDragSession,
+        at indexPath: IndexPath
+    ) -> [UIDragItem] {
+        let dragItem = UIDragItem(itemProvider: NSItemProvider())
+        didLongPressedSongSubject.onNext(indexPath.row)
+        return [dragItem]
     }
 }
 
@@ -131,9 +158,5 @@ extension PlaylistViewController: PlaylistTableViewCellDelegate {
             id: model.id,
             playPlatform: model.title.isContainShortsTagTitle ? .youtube : .automatic
         ).play()
-    }
-
-    func superButtonTapped(index: Int) {
-        tappedCellIndex.onNext(index)
     }
 }
