@@ -82,7 +82,10 @@ private extension IntroViewController {
             .subscribe(onNext: { owner, result in
                 switch result {
                 case let .success(entity):
-                    owner.lottiePlay(isSpecialLogo: entity.isSpecialLogo)
+                    let type: SplashLogoType = owner.fetchSplashLogoType(isSpecialLogo: entity.isSpecialLogo)
+                    owner.changeAppIcon(type: type)
+                    owner.changeBackgroundColor(type: type)
+                    owner.playLottie(type: type)
 
                     var textPopupVc: UIViewController
                     let updateTitle: String = "왁타버스 뮤직이 업데이트 되었습니다."
@@ -154,7 +157,7 @@ private extension IntroViewController {
                     )
 
                 case let .failure(error):
-                    owner.lottiePlay(isSpecialLogo: false)
+                    owner.playLottie(type: .usual)
                     owner.showBottomSheet(
                         content: owner.textPopupFactory.makeView(
                             text: error.asWMError.errorDescription ?? "",
@@ -222,7 +225,7 @@ private extension IntroViewController {
         self.navigationController?.pushViewController(viewController, animated: false)
     }
 
-    func lottiePlay(isSpecialLogo: Bool) {
+    func fetchSplashLogoType(isSpecialLogo: Bool) -> SplashLogoType {
         var logoType: SplashLogoType
 
         if isSpecialLogo {
@@ -237,10 +240,32 @@ private extension IntroViewController {
         } else {
             logoType = .usual
         }
-        self.view.backgroundColor = logoType == .halloween ? colorFromRGB(0x191A1C) : .white
 
+        return logoType
+    }
+
+    func changeAppIcon(type: SplashLogoType) {
+        guard UIApplication.shared.alternateIconName != type.toAppIcon else {
+            return
+        }
+
+        UIApplication.shared.setAlternateIconName(type.toAppIcon)
+    }
+
+    func changeBackgroundColor(type: SplashLogoType) {
+        switch type {
+        case .usual:
+            self.view.backgroundColor = .white
+        case .halloween:
+            self.view.backgroundColor = colorFromRGB(0x191A1C)
+        case .xmas:
+            self.view.backgroundColor = .white
+        }
+    }
+
+    func playLottie(type: SplashLogoType) {
         let animationView = LottieAnimationView(
-            name: logoType.rawValue,
+            name: type.rawValue,
             bundle: DesignSystemResources.bundle
         )
         animationView.frame = self.logoContentView.bounds
