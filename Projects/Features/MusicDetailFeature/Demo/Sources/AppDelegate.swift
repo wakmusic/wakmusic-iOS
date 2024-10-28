@@ -140,7 +140,7 @@ final class DummyKaraokeFactory: KaraokeFactory {
 }
 
 final class DummyArtistDetailFactory: ArtistDetailFactory {
-    func makeViewController(artistID: String) -> UIViewController {
+    func makeView(artistID: String) -> UIViewController {
         UIViewController()
     }
 }
