@@ -4,9 +4,9 @@ import BaseFeature
 import BaseFeatureInterface
 import Inject
 import LikeDomainInterface
-@testable import MusicDetailFeature
 import LikeDomainTesting
 import LyricHighlightingFeatureInterface
+@testable import MusicDetailFeature
 import MusicDetailFeatureInterface
 import RxSwift
 import SignInFeatureInterface
