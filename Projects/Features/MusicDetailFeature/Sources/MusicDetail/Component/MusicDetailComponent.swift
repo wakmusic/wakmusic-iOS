@@ -1,3 +1,5 @@
+import ArtistDomainInterface
+import ArtistFeatureInterface
 import BaseFeature
 import BaseFeatureInterface
 import LikeDomainInterface
@@ -17,9 +19,11 @@ public protocol MusicDetailDependency: Dependency {
     var containSongsFactory: any ContainSongsFactory { get }
     var karaokeFactory: any KaraokeFactory { get }
     var textPopupFactory: any TextPopupFactory { get }
+    var artistDetailFactory: any ArtistDetailFactory { get }
     var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
     var addLikeSongUseCase: any AddLikeSongUseCase { get }
     var cancelLikeSongUseCase: any CancelLikeSongUseCase { get }
+    var findArtistIDUseCase: any FindArtistIDUseCase { get }
 }
 
 public final class MusicDetailComponent: Component<MusicDetailDependency>, MusicDetailFactory {
@@ -29,7 +33,8 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
             selectedID: selectedID,
             fetchSongUseCase: dependency.fetchSongUseCase,
             addLikeSongUseCase: dependency.addLikeSongUseCase,
-            cancelLikeSongUseCase: dependency.cancelLikeSongUseCase
+            cancelLikeSongUseCase: dependency.cancelLikeSongUseCase,
+            findArtistIDUseCase: dependency.findArtistIDUseCase
         )
 
         let viewController = MusicDetailViewController(
@@ -40,6 +45,7 @@ public final class MusicDetailComponent: Component<MusicDetailDependency>, Music
             containSongsFactory: dependency.containSongsFactory,
             textPopupFactory: dependency.textPopupFactory,
             karaokeFactory: dependency.karaokeFactory,
+            artistDetailFactory: dependency.artistDetailFactory,
             playlistPresenterGlobalState: dependency.playlistPresenterGlobalState
         )
 

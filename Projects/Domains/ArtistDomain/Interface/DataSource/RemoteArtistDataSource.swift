@@ -7,4 +7,5 @@ public protocol RemoteArtistDataSource {
     func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]>
     func fetchArtistSubscriptionStatus(id: String) -> Single<ArtistSubscriptionStatusEntity>
     func subscriptionArtist(id: String, on: Bool) -> Completable
+    func findArtistID(name: String) -> Single<String>
 }

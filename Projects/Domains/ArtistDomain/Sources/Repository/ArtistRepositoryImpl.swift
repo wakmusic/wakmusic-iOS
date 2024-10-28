@@ -29,4 +29,8 @@ public final class ArtistRepositoryImpl: ArtistRepository {
     public func subscriptionArtist(id: String, on: Bool) -> Completable {
         remoteArtistDataSource.subscriptionArtist(id: id, on: on)
     }
+
+    public func findArtistID(name: String) -> Single<String> {
+        remoteArtistDataSource.findArtistID(name: name)
+    }
 }
