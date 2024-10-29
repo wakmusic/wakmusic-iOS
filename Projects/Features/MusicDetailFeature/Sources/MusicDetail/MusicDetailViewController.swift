@@ -224,7 +224,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .disposed(by: disposeBag)
 
         musicDetailView.rx.didTapArtistLabel
-            .throttle(.seconds(2), scheduler: MainScheduler.asyncInstance)
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.asyncInstance)
             .map { Reactor.Action.didTapArtistLabel }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)

@@ -3,9 +3,9 @@ import RxSwift
 
 public final class FindArtistIDUseCaseSpy: FindArtistIDUseCase {
     public private(set) var callCount = 0
-    public var handler: (() -> Single<String>) = { .never() }
+    public var handler: ((String) -> Single<String>) = { _ in .never() }
     public func execute(name: String) -> Single<String> {
         callCount += 1
-        return handler()
+        return handler(name)
     }
 }
