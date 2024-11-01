@@ -1,3 +1,4 @@
+import ArtistFeatureInterface
 import BaseFeature
 import BaseFeatureInterface
 import DesignSystem
@@ -20,6 +21,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
     private let containSongsFactory: any ContainSongsFactory
     private let textPopupFactory: any TextPopupFactory
     private let karaokeFactory: any KaraokeFactory
+    private let artistDetailFactory: any ArtistDetailFactory
     private let playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
 
     init(
@@ -30,6 +32,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         containSongsFactory: any ContainSongsFactory,
         textPopupFactory: any TextPopupFactory,
         karaokeFactory: any KaraokeFactory,
+        artistDetailFactory: any ArtistDetailFactory,
         playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol
     ) {
         self.lyricHighlightingFactory = lyricHighlightingFactory
@@ -38,6 +41,7 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
         self.containSongsFactory = containSongsFactory
         self.textPopupFactory = textPopupFactory
         self.karaokeFactory = karaokeFactory
+        self.artistDetailFactory = artistDetailFactory
         self.playlistPresenterGlobalState = playlistPresenterGlobalState
         super.init(reactor: reactor)
     }
@@ -72,6 +76,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                         alternativeImageURL: youtubeURLGenerator.generateThumbnailURL(id: $0)
                     )
                 }
+                .uniqued()
+                .toArray()
             }
             .bind { [musicDetailView] thumbnailModels in
                 musicDetailView.updateThumbnails(thumbnailModels: thumbnailModels) {
@@ -145,6 +151,8 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
                     owner.presentSignIn()
                 case let .karaoke(ky, tj):
                     owner.presentKaraokeSheet(ky: ky, tj: tj)
+                case let .artist(artistID):
+                    owner.navigateArtist(artistID: artistID)
                 case .dismiss:
                     owner.dismiss()
                 }
@@ -214,6 +222,12 @@ final class MusicDetailViewController: BaseReactorViewController<MusicDetailReac
             .map { Reactor.Action.dismissButtonDidTap }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
+
+        musicDetailView.rx.didTapArtistLabel
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.asyncInstance)
+            .map { Reactor.Action.didTapArtistLabel }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
     }
 }
 
@@ -267,6 +281,11 @@ private extension MusicDetailViewController {
         let viewController = signInFactory.makeView()
         viewController.modalPresentationStyle = .overFullScreen
         self.present(viewController, animated: true)
+    }
+
+    func navigateArtist(artistID: String) {
+        let viewController = artistDetailFactory.makeView(artistID: artistID)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 
     func dismiss() {

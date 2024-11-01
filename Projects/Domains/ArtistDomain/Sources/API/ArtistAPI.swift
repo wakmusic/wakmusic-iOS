@@ -10,6 +10,7 @@ public enum ArtistAPI {
     case fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int)
     case fetchSubscriptionStatus(id: String)
     case subscriptionArtist(id: String, on: Bool)
+    case findArtistID(name: String)
 }
 
 extension ArtistAPI: WMAPI {
@@ -29,6 +30,8 @@ extension ArtistAPI: WMAPI {
             return "/\(id)/subscription"
         case let .subscriptionArtist(id, _):
             return "/\(id)/subscription"
+        case let .findArtistID(name):
+            return "/find"
         }
     }
 
@@ -37,7 +40,8 @@ extension ArtistAPI: WMAPI {
         case .fetchArtistList,
              .fetchArtistDetail,
              .fetchArtistSongList,
-             .fetchSubscriptionStatus:
+             .fetchSubscriptionStatus,
+             .findArtistID:
             return .get
         case let .subscriptionArtist(_, on):
             return on ? .post : .delete
@@ -59,12 +63,19 @@ extension ArtistAPI: WMAPI {
                 ],
                 encoding: URLEncoding.queryString
             )
+        case let .findArtistID(name):
+            return .requestParameters(
+                parameters: [
+                    "name": name
+                ],
+                encoding: URLEncoding.queryString
+            )
         }
     }
 
     public var jwtTokenType: JwtTokenType {
         switch self {
-        case .fetchArtistList, .fetchArtistDetail, .fetchArtistSongList:
+        case .fetchArtistList, .fetchArtistDetail, .fetchArtistSongList, .findArtistID:
             return .none
         case .fetchSubscriptionStatus, .subscriptionArtist:
             return .accessToken

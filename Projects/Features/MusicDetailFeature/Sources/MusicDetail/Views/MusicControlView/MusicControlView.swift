@@ -1,5 +1,6 @@
 import DesignSystem
 import RxCocoa
+import RxGesture
 import RxSwift
 import SnapKit
 import Then
@@ -20,6 +21,7 @@ private protocol MusicControlActionProtocol {
     var nextMusicButtonDidTap: Observable<Void> { get }
     var singingRoomButtonDidTap: Observable<Void> { get }
     var lyricsButtonDidTap: Observable<Void> { get }
+    var didTapArtistLabel: Observable<Void> { get }
 }
 
 final class MusicControlView: UIView {
@@ -28,7 +30,7 @@ final class MusicControlView: UIView {
         textColor: DesignSystemAsset.BlueGrayColor.gray25.color,
         font: .t4(weight: .medium)
     )
-    private let artistLabel: WMFlowLabel = WMFlowLabel(
+    fileprivate let artistLabel: WMFlowLabel = WMFlowLabel(
         text: "",
         textColor: DesignSystemAsset.BlueGrayColor.gray100.color.withAlphaComponent(0.6),
         font: .t5(weight: .medium)
@@ -213,5 +215,12 @@ extension Reactive: MusicControlActionProtocol where Base: MusicControlView {
 
     var lyricsButtonDidTap: Observable<Void> {
         base.lyricsRoomButton.rx.tap.asObservable()
+    }
+
+    var didTapArtistLabel: Observable<Void> {
+        base.artistLabel.rx.tapGesture()
+            .when(.recognized)
+            .map { _ in () }
+            .asObservable()
     }
 }

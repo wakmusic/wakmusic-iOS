@@ -56,6 +56,12 @@ public extension AppComponent {
         }
     }
 
+    var findArtistIDUseCase: any FindArtistIDUseCase {
+        shared {
+            FindArtistIDUseCaseImpl(artistRepository: artistRepository)
+        }
+    }
+
     // MARK: Artist Detail > Artist Music
     var artistMusicComponent: ArtistMusicComponent {
         ArtistMusicComponent(parent: self)
