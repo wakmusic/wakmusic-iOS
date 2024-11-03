@@ -1,3 +1,5 @@
+@testable import ArtistDomainTesting
+import ArtistFeatureInterface
 import BaseFeature
 import BaseFeatureInterface
 import Inject
@@ -48,6 +50,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             .just(.init(status: "", likes: 0))
         }
 
+        let findArtistIDUseCase = FindArtistIDUseCaseSpy()
+        findArtistIDUseCase.handler = { _ in
+            .just("fgSXAKsq-Vo")
+        }
+
         let reactor = MusicDetailReactor(
             songIDs: [
                 "fgSXAKsq-Vo",
@@ -58,7 +65,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             selectedID: "DPEtmqvaKqY",
             fetchSongUseCase: fetchSongUseCase,
             addLikeSongUseCase: addLikeSongUseCase,
-            cancelLikeSongUseCase: cancelLikeSongUseCase
+            cancelLikeSongUseCase: cancelLikeSongUseCase,
+            findArtistIDUseCase: findArtistIDUseCase
         )
         let viewController = Inject.ViewControllerHost(
             UINavigationController(
@@ -70,6 +78,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
                     containSongsFactory: DummyContainSongsFactory(),
                     textPopupFactory: DummyTextPopupFactory(),
                     karaokeFactory: DummyKaraokeFactory(),
+                    artistDetailFactory: DummyArtistDetailFactory(),
                     playlistPresenterGlobalState: DummyPlaylistPresenterGlobalState()
                 )
             )
@@ -126,6 +135,12 @@ final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProto
 
 final class DummyKaraokeFactory: KaraokeFactory {
     func makeViewController(ky: Int?, tj: Int?) -> UIViewController {
+        UIViewController()
+    }
+}
+
+final class DummyArtistDetailFactory: ArtistDetailFactory {
+    func makeView(artistID: String) -> UIViewController {
         UIViewController()
     }
 }

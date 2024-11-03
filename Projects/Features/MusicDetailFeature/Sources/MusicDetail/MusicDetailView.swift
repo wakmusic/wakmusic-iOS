@@ -32,6 +32,7 @@ private protocol MusicDetailActionProtocol {
     var playlistButtonDidTap: Observable<Void> { get }
     var creditButtonDidTap: Observable<Void> { get }
     var dismissButtonDidTap: Observable<Void> { get }
+    var didTapArtistLabel: Observable<Void> { get }
 }
 
 final class MusicDetailView: UIView {
@@ -256,4 +257,5 @@ extension Reactive: MusicDetailActionProtocol where Base: MusicDetailView {
     var playlistButtonDidTap: Observable<Void> { base.musicToolbarView.rx.playlistButtonDidTap }
     var creditButtonDidTap: Observable<Void> { base.creditButton.rx.tap.asObservable() }
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
+    var didTapArtistLabel: Observable<Void> { base.musicControlView.rx.didTapArtistLabel }
 }

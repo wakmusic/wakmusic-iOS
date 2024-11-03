@@ -32,4 +32,10 @@ public final class RemoteArtistDataSourceImpl: BaseRemoteDataSource<ArtistAPI>, 
         request(.subscriptionArtist(id: id, on: on))
             .asCompletable()
     }
+
+    public func findArtistID(name: String) -> Single<String> {
+        request(.findArtistID(name: name))
+            .map(FindArtistIDResponseDTO.self)
+            .map { $0.id }
+    }
 }

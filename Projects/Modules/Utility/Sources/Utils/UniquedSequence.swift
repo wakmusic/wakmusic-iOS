@@ -52,3 +52,9 @@ extension UniquedSequence: Sequence {
 }
 
 extension UniquedSequence: LazySequenceProtocol where Base: LazySequenceProtocol {}
+
+public extension UniquedSequence {
+    func toArray() -> [Base.Element] {
+        Array(self)
+    }
+}

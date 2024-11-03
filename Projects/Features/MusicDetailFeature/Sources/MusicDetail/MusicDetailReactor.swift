@@ -1,3 +1,4 @@
+import ArtistDomainInterface
 import BaseFeature
 import Foundation
 import Kingfisher
@@ -30,6 +31,7 @@ final class MusicDetailReactor: Reactor {
         case musicPickButtonDidTap
         case playListButtonDidTap
         case dismissButtonDidTap
+        case didTapArtistLabel
     }
 
     enum Mutation {
@@ -48,6 +50,7 @@ final class MusicDetailReactor: Reactor {
         case textPopup(text: String, completion: () -> Void)
         case signin
         case karaoke(ky: Int?, tj: Int?)
+        case artist(artistID: String)
     }
 
     struct State {
@@ -71,6 +74,7 @@ final class MusicDetailReactor: Reactor {
     private let fetchSongUseCase: any FetchSongUseCase
     private let addLikeSongUseCase: any AddLikeSongUseCase
     private let cancelLikeSongUseCase: any CancelLikeSongUseCase
+    private let findArtistIDUseCase: any FindArtistIDUseCase
     private var shouldRefreshLikeList = false
 
     private var pendingLikeRequests: [String: LikeRequest] = [:]
@@ -83,7 +87,8 @@ final class MusicDetailReactor: Reactor {
         selectedID: String,
         fetchSongUseCase: any FetchSongUseCase,
         addLikeSongUseCase: any AddLikeSongUseCase,
-        cancelLikeSongUseCase: any CancelLikeSongUseCase
+        cancelLikeSongUseCase: any CancelLikeSongUseCase,
+        findArtistIDUseCase: any FindArtistIDUseCase
     ) {
         let selectedIndex = songIDs.firstIndex(of: selectedID) ?? 0
         self.initialState = .init(
@@ -94,6 +99,7 @@ final class MusicDetailReactor: Reactor {
         self.fetchSongUseCase = fetchSongUseCase
         self.addLikeSongUseCase = addLikeSongUseCase
         self.cancelLikeSongUseCase = cancelLikeSongUseCase
+        self.findArtistIDUseCase = findArtistIDUseCase
 
         let urls = [
             songIDs[safe: selectedIndex - 1],
@@ -133,6 +139,8 @@ final class MusicDetailReactor: Reactor {
             return playListButtonDidTap()
         case .dismissButtonDidTap:
             return navigateMutation(navigate: .dismiss)
+        case .didTapArtistLabel:
+            return didTapArtistLabel()
         }
     }
 
@@ -415,6 +423,25 @@ private extension MusicDetailReactor {
         let log = Log.clickPlaylistButton(id: song.videoID)
         LogManager.analytics(log)
         return navigateMutation(navigate: .playlist(id: song.videoID))
+    }
+
+    func didTapArtistLabel() -> Observable<Mutation> {
+        guard let selectedSong = currentState.selectedSong else { return .empty() }
+        let artists = selectedSong.artistString.components(separatedBy: ",")
+
+        if artists.count == 1, let artistName = artists.first {
+            return findArtistIDUseCase.execute(name: artistName)
+                .asObservable()
+                .flatMap {
+                    return Observable.concat(
+                        .just(Mutation.navigate(.artist(artistID: $0))),
+                        .just(.navigate(nil))
+                    )
+                }
+                .catchAndReturn(.navigate(.credit(id: selectedSong.videoID)))
+        } else {
+            return navigateMutation(navigate: .credit(id: selectedSong.videoID))
+        }
     }
 }
 
