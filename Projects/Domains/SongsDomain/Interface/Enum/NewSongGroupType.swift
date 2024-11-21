@@ -39,7 +39,7 @@ public enum NewSongGroupType: CaseIterable {
         case .isedol:
             return "이세돌"
         case .gomem:
-            return "고멤"
+            return "클래식"
         case .academy:
             return "아카데미"
         }
