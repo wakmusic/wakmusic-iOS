@@ -2,9 +2,9 @@ import CreditDomain
 import CreditDomainInterface
 import CreditSongListFeature
 import CreditSongListFeatureInterface
+@preconcurrency import NeedleFoundation
 import SongCreditFeature
 import SongCreditFeatureInterface
-@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var remoteCreditDataSource: any RemoteCreditDataSource {
