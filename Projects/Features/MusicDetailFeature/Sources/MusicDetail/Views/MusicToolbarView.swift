@@ -72,14 +72,17 @@ extension MusicToolbarView: MusicToolbarStateProtocol {
 }
 
 extension Reactive: @preconcurrency MusicToolbarActionProtocol where Base: MusicToolbarView {
+    @MainActor
     var likeButtonDidTap: Observable<Void> {
         base.heartButton.rx.tap.asObservable()
     }
 
+    @MainActor
     var musicPickButtonDidTap: Observable<Void> {
         base.musicPickButton.rx.tap.asObservable()
     }
 
+    @MainActor
     var playlistButtonDidTap: Observable<Void> {
         base.playlistButton.rx.tap.asObservable()
     }
