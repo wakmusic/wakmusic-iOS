@@ -4,6 +4,7 @@ import CreditSongListFeature
 import CreditSongListFeatureInterface
 import SongCreditFeature
 import SongCreditFeatureInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var remoteCreditDataSource: any RemoteCreditDataSource {

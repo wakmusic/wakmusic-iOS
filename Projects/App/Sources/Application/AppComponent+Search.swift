@@ -3,6 +3,7 @@ import SearchDomain
 import SearchDomainInterface
 import SearchFeature
 import SearchFeatureInterface
+@preconcurrency import NeedleFoundation
 
 extension AppComponent {
     var searchGlobalScrollState: any SearchGlobalScrollProtocol {

@@ -1,6 +1,7 @@
 import Foundation
 import FruitDrawFeature
 import FruitDrawFeatureInterface
+@preconcurrency import NeedleFoundation
 
 extension AppComponent {
     var fruitDrawFactory: any FruitDrawFactory {

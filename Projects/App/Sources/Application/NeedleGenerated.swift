@@ -38,7 +38,7 @@ import MusicDetailFeature
 import MusicDetailFeatureInterface
 import MyInfoFeature
 import MyInfoFeatureInterface
-import NeedleFoundation
+@preconcurrency import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
 import NotificationDomain

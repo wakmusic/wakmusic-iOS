@@ -2,6 +2,7 @@ import TeamDomain
 import TeamDomainInterface
 import TeamFeature
 import TeamFeatureInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var teamInfoFactory: any TeamInfoFactory {
