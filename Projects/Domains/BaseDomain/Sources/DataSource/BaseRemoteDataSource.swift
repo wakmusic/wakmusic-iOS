@@ -42,7 +42,6 @@ open class BaseRemoteDataSource<API: WMAPI>: @unchecked Sendable {
             ])
             self.refreshProvider = MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
         #endif
-
     }
 
     public func request(_ api: API) -> Single<Response> {

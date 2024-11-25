@@ -50,7 +50,7 @@ extension UITapGestureRecognizer {
 
         public nonisolated func request(_ demand: Subscribers.Demand) {}
 
-        nonisolated public func cancel() {
+        public nonisolated func cancel() {
             if Thread.isMainThread {
                 MainActor.assumeIsolated {
                     subscriber = nil

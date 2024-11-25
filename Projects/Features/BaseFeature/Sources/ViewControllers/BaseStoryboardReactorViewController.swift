@@ -7,8 +7,8 @@ import UIKit
 import Utility
 
 open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController,
-                                                            @preconcurrency StoryboardView,
-                                                            ViewControllerFromStoryBoard {
+    @preconcurrency StoryboardView,
+    ViewControllerFromStoryBoard {
     public var disposeBag = DisposeBag()
 
     override open func viewDidLoad() {

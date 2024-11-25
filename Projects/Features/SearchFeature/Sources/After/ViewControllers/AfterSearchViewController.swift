@@ -12,7 +12,8 @@ import Tabman
 import UIKit
 import Utility
 
-public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, @preconcurrency StoryboardView {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard,
+    @preconcurrency StoryboardView {
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!

@@ -19,6 +19,7 @@ public final class OpenSourceLicenseViewModel: Sendable {
     public struct Input: Sendable {
         let viewDidLoad: PublishSubject<Void> = PublishSubject()
     }
+
     public struct Output: Sendable {
         let dataSource: BehaviorRelay<[OpenSourceLicense]> = BehaviorRelay(value: [])
     }
@@ -144,7 +145,7 @@ public final class OpenSourceLicenseViewModel: Sendable {
 
             async let apacheLicenseContent = loadTextFileFromBundle(fileName: "ApacheLicense")
             async let mitLicenseContent = loadTextFileFromBundle(fileName: "MITLicense")
-            
+
             let (
                 apacheLicense,
                 mitLicense
@@ -162,7 +163,7 @@ public final class OpenSourceLicenseViewModel: Sendable {
                     link: ""
                 )
             )
-            
+
             dataSource.append(apacheLicense)
             dataSource.append(mitLicense)
             self.output.dataSource.accept(dataSource)

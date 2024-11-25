@@ -13,7 +13,7 @@ import UIKit
 import Utility
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
-                                                  @preconcurrency SongCartViewType {
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!

@@ -458,7 +458,7 @@ extension HomeViewController: RecommendPlayListViewDelegate {
 
 public extension HomeViewController {
     nonisolated func equalHandleTapped() {
-        Task { @MainActor in 
+        Task { @MainActor in
             let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
             if viewControllersCount > 1 {
                 self.navigationController?.popToRootViewController(animated: true)

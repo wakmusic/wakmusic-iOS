@@ -22,7 +22,7 @@ import RealmSwift
     - 재생목록 저장을 위한 엔티티 (리팩토링 버전)
  - 기존 PlayedList는 레거시로 판정하여 migration 과정에서 데이터 모두 제거
  */
-// Realm이 Sendable을 채택하지 않아서 @unchecked 표시
+/// Realm이 Sendable을 채택하지 않아서 @unchecked 표시
 public class RealmManager: NSObject, @unchecked Sendable {
     public static let shared = RealmManager()
     private let realm: Realm

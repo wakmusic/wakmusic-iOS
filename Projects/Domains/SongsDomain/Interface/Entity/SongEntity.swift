@@ -1,6 +1,6 @@
 import Foundation
 
-/*
+/**
  isSelected가 mutable이나 sendable하지 못함.
  */
 public struct SongEntity: Hashable, @unchecked Sendable {

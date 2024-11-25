@@ -11,7 +11,8 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, @preconcurrency SongCartViewType {
+public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard,
+    @preconcurrency SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 

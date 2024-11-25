@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 import Utility
 
-// concurrency를 위해 mutable 상태 리팩토링 필요
+/// concurrency를 위해 mutable 상태 리팩토링 필요
 public protocol PlaylistEditSheetViewType: AnyObject {
     var playlisteditSheetView: PlaylistEditSheetView! { get set }
     var bottomSheetView: BottomSheetView! { get set }

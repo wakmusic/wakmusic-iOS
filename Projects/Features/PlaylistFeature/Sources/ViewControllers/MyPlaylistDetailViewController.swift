@@ -14,8 +14,8 @@ import UIKit
 import Utility
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
-                                            @preconcurrency PlaylistEditSheetViewType,
-                                            @preconcurrency SongCartViewType {
+    @preconcurrency PlaylistEditSheetViewType,
+    @preconcurrency SongCartViewType {
     private enum Limit {
         static let imageSizeLimitPerMB: Double = 10.0
     }
@@ -699,7 +699,7 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
 }
 
 extension MyPlaylistDetailViewController: RequestPermissionable {
-    nonisolated public func showPhotoLibrary() {
+    public nonisolated func showPhotoLibrary() {
         Task { @MainActor in
             var configuration = PHPickerConfiguration()
             configuration.filter = .any(of: [.images])
@@ -737,13 +737,13 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                     } else {
                         guard let image = image as? UIImage,
                               let resizeImage = image.customizeForPlaylistCover(
-                                targetSize: CGSize(width: 500, height: 500)
+                                  targetSize: CGSize(width: 500, height: 500)
                               ),
                               var imageData = resizeImage.jpegData(compressionQuality: 1.0)
                         else { return } // 80% 압축
-                        
+
                         let sizeMB: Double = Double(imageData.count).megabytes
-                        
+
                         if sizeMB > Limit.imageSizeLimitPerMB {
                             imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
                         }

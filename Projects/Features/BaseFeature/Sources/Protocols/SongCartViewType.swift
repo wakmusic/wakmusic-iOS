@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import Utility
 
-// SongCartViewType 어떻게든 해결해야함..
+/// SongCartViewType 어떻게든 해결해야함..
 public protocol SongCartViewType: AnyObject {
     var songCartView: SongCartView! { get set }
     var bottomSheetView: BottomSheetView! { get set }

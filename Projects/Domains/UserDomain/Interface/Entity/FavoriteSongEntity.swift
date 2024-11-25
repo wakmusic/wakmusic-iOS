@@ -1,7 +1,7 @@
 import Foundation
 import SongsDomainInterface
 
-// concurrency를 위한 Model의 Mutable 제거 필요
+/// concurrency를 위한 Model의 Mutable 제거 필요
 public struct FavoriteSongEntity: Equatable, @unchecked Sendable {
     public init(songID: String, title: String, artist: String, like: Int) {
         self.songID = songID
