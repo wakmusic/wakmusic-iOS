@@ -215,7 +215,7 @@ private extension MainTabBarViewController {
             UNUserNotificationCenter.current().delegate = self
 
             let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-            let granted = try await UNUserNotificationCenter.current().requestAuthorization()
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization(options: authOptions)
             if granted {
                 UIApplication.shared.registerForRemoteNotifications()
                 LogManager.printDebug("🔔:: Notification authorized: \(Messaging.messaging().fcmToken ?? "")")
