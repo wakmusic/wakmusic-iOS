@@ -3,6 +3,7 @@ import ChartDomain
 import ChartDomainInterface
 import ChartFeature
 import ChartFeatureInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var chartFactory: any ChartFactory {

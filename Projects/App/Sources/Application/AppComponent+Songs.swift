@@ -7,6 +7,7 @@ import MusicDetailFeature
 import MusicDetailFeatureInterface
 import SongsDomain
 import SongsDomainInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var songDetailPresenter: any SongDetailPresentable {

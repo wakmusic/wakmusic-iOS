@@ -2,6 +2,7 @@ import ArtistDomain
 import ArtistDomainInterface
 import ArtistFeature
 import ArtistFeatureInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     // MARK: Artist

@@ -1,5 +1,6 @@
 import NotificationDomain
 import NotificationDomainInterface
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var remoteNotificationDataSource: any RemoteNotificationDataSource {

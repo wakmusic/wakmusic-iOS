@@ -5,6 +5,7 @@ import MyInfoFeatureInterface
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var noticePopupComponent: NoticePopupComponent {
