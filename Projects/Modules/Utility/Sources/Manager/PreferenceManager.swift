@@ -50,7 +50,7 @@ public final class PreferenceManager: @unchecked Sendable {
     public var songPlayPlatformType: YoutubePlayType?
 }
 
-// BehaviorSubject가 Sendable을 채택하지 않아 @unchecked
+/// BehaviorSubject가 Sendable을 채택하지 않아 @unchecked
 @propertyWrapper
 public final class UserDefaultWrapper<T: Codable & Sendable>: @unchecked Sendable {
     private let lock = NSLock()

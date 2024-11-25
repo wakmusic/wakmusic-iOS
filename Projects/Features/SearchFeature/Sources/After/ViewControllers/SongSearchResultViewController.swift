@@ -13,7 +13,8 @@ import Then
 import UIKit
 import Utility
 
-final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, @preconcurrency SongCartViewType {
+final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>,
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!

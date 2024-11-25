@@ -19,8 +19,8 @@ import UIKit
 import Utility
 
 public final class MainTabBarViewController: BaseViewController,
-                                             ViewControllerFromStoryBoard,
-                                             @preconcurrency ContainerViewType {
+    ViewControllerFromStoryBoard,
+    @preconcurrency ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
 
     private var previousIndex: Int?

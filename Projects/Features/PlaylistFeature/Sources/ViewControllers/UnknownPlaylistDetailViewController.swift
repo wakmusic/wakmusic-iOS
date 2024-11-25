@@ -13,7 +13,7 @@ import UIKit
 import Utility
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
-                                                 @preconcurrency SongCartViewType {
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!

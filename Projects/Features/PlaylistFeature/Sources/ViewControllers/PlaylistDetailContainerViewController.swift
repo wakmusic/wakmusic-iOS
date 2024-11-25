@@ -9,7 +9,7 @@ import UIKit
 import Utility
 
 final class PlaylistDetailContainerViewController: BaseReactorViewController<PlaylistDetailContainerReactor>,
-                                                   @preconcurrency ContainerViewType {
+    @preconcurrency ContainerViewType {
     var contentView: UIView! = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }

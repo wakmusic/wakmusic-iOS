@@ -12,7 +12,8 @@ import Then
 import UIKit
 import Utility
 
-public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, @preconcurrency SongCartViewType {
+public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,
+    @preconcurrency SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 

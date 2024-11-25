@@ -156,7 +156,8 @@ final class SettingReactor: Reactor {
                 )
             }
 
-        let updatepushNotificationAuthorizationStatusMutation = PreferenceManager.shared.$pushNotificationAuthorizationStatus
+        let updatepushNotificationAuthorizationStatusMutation = PreferenceManager.shared
+            .$pushNotificationAuthorizationStatus
             .skip(1)
             .distinctUntilChanged()
             .map { $0 ?? false }

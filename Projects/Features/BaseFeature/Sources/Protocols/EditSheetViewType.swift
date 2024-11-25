@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import Utility
 
-// 강제 mutable 타입 해결해야함... @preconcurrency
+/// 강제 mutable 타입 해결해야함... @preconcurrency
 public protocol EditSheetViewType: AnyObject {
     var editSheetView: EditSheetView! { get set }
     var bottomSheetView: BottomSheetView! { get set }

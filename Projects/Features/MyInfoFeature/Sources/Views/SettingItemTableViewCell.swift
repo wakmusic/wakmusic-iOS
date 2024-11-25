@@ -71,7 +71,8 @@ private extension SettingItemTableViewCell {
     func configureSubTitle(type: SettingItemType) {
         switch type {
         case let .navigate(category):
-            let pushNotificationAuthorizationStatus = PreferenceManager.shared.pushNotificationAuthorizationStatus ?? false
+            let pushNotificationAuthorizationStatus = PreferenceManager.shared
+                .pushNotificationAuthorizationStatus ?? false
             let playType = PreferenceManager.shared.songPlayPlatformType ?? .youtube
             switch category {
             case .appPush:
