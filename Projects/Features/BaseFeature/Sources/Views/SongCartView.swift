@@ -10,6 +10,7 @@ import DesignSystem
 import UIKit
 import Utility
 
+@MainActor
 public protocol SongCartViewDelegate: AnyObject {
     func buttonTapped(type: SongCartSelectType)
 }

@@ -8,6 +8,7 @@ import RootFeature
 import StorageFeature
 import UIKit
 
+@MainActor
 public final class AppComponent: BootstrapComponent {
     public func makeRootView() -> IntroViewController {
         rootComponent.makeView()

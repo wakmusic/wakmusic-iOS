@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol AppRepository {
+public protocol AppRepository: Sendable {
     func fetchAppCheck() -> Single<AppCheckEntity>
 }

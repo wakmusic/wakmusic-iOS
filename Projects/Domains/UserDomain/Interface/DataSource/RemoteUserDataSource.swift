@@ -2,7 +2,7 @@ import BaseDomainInterface
 import Foundation
 import RxSwift
 
-public protocol RemoteUserDataSource {
+public protocol RemoteUserDataSource: Sendable {
     func setProfile(image: String) -> Completable
     func setUserName(name: String) -> Completable
     func fetchPlaylist() -> Single<[PlaylistEntity]>

@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchNewSongsUseCase {
+public protocol FetchNewSongsUseCase: Sendable {
     func execute(type: NewSongGroupType, page: Int, limit: Int) -> Single<[NewSongsEntity]>
 }

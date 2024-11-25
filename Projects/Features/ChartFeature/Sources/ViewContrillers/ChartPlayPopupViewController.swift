@@ -4,6 +4,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 public protocol ChartPlayPopupViewControllerDelegate: AnyObject {
     func playTapped(type: HalfPlayType)
 }

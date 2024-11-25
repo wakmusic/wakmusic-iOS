@@ -13,7 +13,7 @@ import UIKit
 import Utility
 
 public final class ArtistMusicContentViewController:
-    BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+    BaseViewController, ViewControllerFromStoryBoard, @preconcurrency SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndidator: NVActivityIndicatorView!
     @IBOutlet weak var songCartOnView: UIView!
@@ -238,7 +238,7 @@ extension ArtistMusicContentViewController: SongCartViewDelegate {
             let log = CommonAnalyticsLog.clickAddMusicsButton(location: .artist)
             LogManager.analytics(log)
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 output.showLogin.onNext(.addMusics)
                 return
             }
@@ -341,14 +341,18 @@ extension ArtistMusicContentViewController: PlayButtonGroupViewDelegate {
 extension Reactive where Base: ArtistMusicContentViewController {
     var refresh: Binder<Void> {
         return Binder(base) { viewController, _ in
-            viewController.input.pageID.accept(1)
+            Task { @MainActor in
+                viewController.input.pageID.accept(1)
+            }
         }
     }
 
     var loadMore: Binder<Void> {
         return Binder(base) { viewController, _ in
-            let pageID = viewController.input.pageID.value
-            viewController.input.pageID.accept(pageID + 1)
+            Task { @MainActor in
+                let pageID = viewController.input.pageID.value
+                viewController.input.pageID.accept(pageID + 1)
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 import MyInfoFeatureInterface
 import UIKit
 
-public final class FaqContentComponentStub: FaqContentFactory {
+public final class FaqContentComponentStub: FaqContentFactory, @unchecked Sendable {
     public func makeView(dataSource: [FaqEntity]) -> UIViewController {
         return FaqContentViewController.viewController(viewModel: .init(dataSource: dataSource))
     }

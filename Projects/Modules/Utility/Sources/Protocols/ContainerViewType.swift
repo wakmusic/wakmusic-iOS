@@ -10,10 +10,12 @@ import Foundation
 import SnapKit
 import UIKit
 
+// FIXME: concurrency를 위해 mutable 프로퍼티 리팩토링 필요 ㅜㅜㅜ
 public protocol ContainerViewType {
     var contentView: UIView! { get set }
 }
 
+@MainActor
 public extension ContainerViewType where Self: UIViewController {
     func add(asChildViewController viewController: UIViewController?) {
         guard let viewController = viewController else {

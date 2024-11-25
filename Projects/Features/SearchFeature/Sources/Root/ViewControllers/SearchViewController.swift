@@ -12,7 +12,7 @@ import SnapKit
 import UIKit
 import Utility
 
-final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, ContainerViewType,
+final class SearchViewController: BaseStoryboardReactorViewController<SearchReactor>, @preconcurrency ContainerViewType,
     EqualHandleTappedType {
     private enum Font {
         static let headerFontSize: CGFloat = 16
@@ -312,15 +312,17 @@ extension SearchViewController {
 }
 
 extension SearchViewController {
-    public func equalHandleTapped() {
-        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
-        if viewControllersCount > 1 {
-            self.navigationController?.popToRootViewController(animated: true)
-        } else {
-            if let before = children.first as? BeforeSearchContentViewController {
-                before.scrollToTop()
-            } else if let after = children.first as? AfterSearchViewController {
-                after.scrollToTop()
+    public nonisolated func equalHandleTapped() {
+        Task { @MainActor in
+            let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+            if viewControllersCount > 1 {
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                if let before = children.first as? BeforeSearchContentViewController {
+                    before.scrollToTop()
+                } else if let after = children.first as? AfterSearchViewController {
+                    after.scrollToTop()
+                }
             }
         }
     }

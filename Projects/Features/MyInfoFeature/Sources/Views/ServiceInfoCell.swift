@@ -18,15 +18,17 @@ class ServiceInfoCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        arrowImageView.image = DesignSystemAsset.Navigation.serviceInfoArrowRight.image
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
-        subTitleStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        subTitleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
-        subTitleStringLabel.setTextWithAttributes(kernValue: -0.5)
+        Task { @MainActor in
+            arrowImageView.image = DesignSystemAsset.Navigation.serviceInfoArrowRight.image
+            self.backgroundColor = .clear
+            self.contentView.backgroundColor = .clear
+            titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            titleStringLabel.setTextWithAttributes(kernValue: -0.5)
+            subTitleStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            subTitleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
+            subTitleStringLabel.setTextWithAttributes(kernValue: -0.5)
+        }
     }
 }
 

@@ -248,7 +248,7 @@ final class LikeStorageReactor: Reactor {
 
 extension LikeStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        let isLoggedIn = PreferenceManager.userInfo != nil
+        let isLoggedIn = PreferenceManager.shared.userInfo != nil
         if !isLoggedIn { return .empty() }
         return .concat(
             updateIsLoggedIn(isLoggedIn),
@@ -332,10 +332,12 @@ extension LikeStorageReactor {
     func playWithAddToCurrentPlaylist(song: FavoriteSongEntity) -> Observable<Mutation> {
         let appendingPlaylisItem = PlaylistItem(id: song.songID, title: song.title, artist: song.artist)
         PlayState.shared.append(item: appendingPlaylisItem)
-        WakmusicYoutubePlayer(
-            id: song.songID,
-            playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
-        ).play()
+        Task { @MainActor in
+            WakmusicYoutubePlayer(
+                id: song.songID,
+                playPlatform: song.title.isContainShortsTagTitle ? .youtube : .automatic
+            ).play()
+        }
         return .empty()
     }
 

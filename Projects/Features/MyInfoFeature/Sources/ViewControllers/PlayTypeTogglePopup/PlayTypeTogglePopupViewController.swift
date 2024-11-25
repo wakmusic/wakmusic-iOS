@@ -232,7 +232,7 @@ private extension PlayTypeTogglePopupViewController {
         self.view.backgroundColor = .clear
         contentView.clipsToBounds = true
 
-        let playType = PreferenceManager.songPlayPlatformType ?? .youtube
+        let playType = PreferenceManager.shared.songPlayPlatformType ?? .youtube
         self.selectedItemString = playType.display
 
         firstItemButton.setTitleWithOption(title: YoutubePlayType.youtube.display)

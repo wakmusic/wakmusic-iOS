@@ -11,7 +11,7 @@ import Utility
 
 final class CreditSongListTabItemViewController:
     BaseReactorViewController<CreditSongListTabItemReactor>,
-    SongCartViewType {
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
     var bottomSheetView: BottomSheetView!
 

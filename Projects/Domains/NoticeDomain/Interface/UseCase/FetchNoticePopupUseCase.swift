@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchNoticePopupUseCase {
+public protocol FetchNoticePopupUseCase: Sendable {
     func execute() -> Single<[FetchNoticeEntity]>
 }

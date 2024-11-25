@@ -9,11 +9,7 @@
 import DesignSystem
 import UIKit
 
-protocol Likeable {
-    var isLiked: Bool { get set }
-}
-
-class LikeButton: VerticalImageButton, Likeable {
+class LikeButton: VerticalImageButton {
     var isLiked: Bool = false {
         didSet {
             setColor()

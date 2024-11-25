@@ -86,7 +86,7 @@ public final class ChartContentViewModel: ViewModelType {
             .bind(to: output.indexOfSelectedSongs)
             .disposed(by: disposeBag)
 
-        Utility.PreferenceManager.$startPage
+        Utility.PreferenceManager.shared.$startPage
             .skip(1)
             .map { _ in [] }
             .bind(to: output.indexOfSelectedSongs)

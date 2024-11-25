@@ -1,7 +1,7 @@
 #if DEBUG || QA
     import Foundation
 
-    struct LogHistorySectionItem: Hashable, Equatable {
+    struct LogHistorySectionItem: Hashable, Equatable, Sendable {
         let index: Int
         let log: any AnalyticsLogType
 

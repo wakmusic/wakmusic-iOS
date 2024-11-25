@@ -11,6 +11,7 @@ public protocol AfterSearchDependency: Dependency {
     var searchGlobalScrollState: any SearchGlobalScrollProtocol { get }
 }
 
+@MainActor
 public final class AfterSearchComponent: Component<AfterSearchDependency> {
     public func makeView(text: String) -> AfterSearchViewController {
         return AfterSearchViewController.viewController(

@@ -68,7 +68,6 @@ final class SettingReactor: Reactor {
     private let withDrawUserInfoUseCase: any WithdrawUserInfoUseCase
     private let logoutUseCase: any LogoutUseCase
     private let updateNotificationTokenUseCase: any UpdateNotificationTokenUseCase
-    private let naverLoginInstance = NaverThirdPartyLoginConnection.getSharedInstance()
 
     init(
         withDrawUserInfoUseCase: WithdrawUserInfoUseCase,
@@ -76,10 +75,10 @@ final class SettingReactor: Reactor {
         updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
     ) {
         self.initialState = .init(
-            userInfo: Utility.PreferenceManager.userInfo,
+            userInfo: Utility.PreferenceManager.shared.userInfo,
             isHiddenLogoutButton: true,
             isHiddenWithDrawButton: true,
-            notificationAuthorizationStatus: PreferenceManager.pushNotificationAuthorizationStatus ?? false,
+            notificationAuthorizationStatus: PreferenceManager.shared.pushNotificationAuthorizationStatus ?? false,
             isShowActivityIndicator: false
         )
         self.withDrawUserInfoUseCase = withDrawUserInfoUseCase
@@ -146,7 +145,7 @@ final class SettingReactor: Reactor {
     }
 
     func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-        let updateIsLoggedInMutation = PreferenceManager.$userInfo.map { $0?.ID }
+        let updateIsLoggedInMutation = PreferenceManager.shared.$userInfo.map { $0?.ID }
             .distinctUntilChanged()
             .map { $0 != nil }
             .withUnretained(self)
@@ -157,7 +156,7 @@ final class SettingReactor: Reactor {
                 )
             }
 
-        let updatepushNotificationAuthorizationStatusMutation = PreferenceManager.$pushNotificationAuthorizationStatus
+        let updatepushNotificationAuthorizationStatusMutation = PreferenceManager.shared.$pushNotificationAuthorizationStatus
             .skip(1)
             .distinctUntilChanged()
             .map { $0 ?? false }
@@ -165,7 +164,7 @@ final class SettingReactor: Reactor {
                 return .just(.changedNotificationAuthorizationStatus(granted))
             }
 
-        let updatePlayTypeMutation = PreferenceManager.$songPlayPlatformType
+        let updatePlayTypeMutation = PreferenceManager.shared.$songPlayPlatformType
             .distinctUntilChanged()
             .map { $0 ?? .youtube }
             .flatMap { playType -> Observable<Mutation> in
@@ -197,7 +196,7 @@ private extension SettingReactor {
     }
 
     func confirmLogoutButtonDidTap() -> Observable<Mutation> {
-        let notificationGranted = PreferenceManager.pushNotificationAuthorizationStatus ?? false
+        let notificationGranted = PreferenceManager.shared.pushNotificationAuthorizationStatus ?? false
         let logoutUseCase = logoutUseCase.execute(localOnly: false)
             .andThen(
                 .concat(
@@ -328,9 +327,11 @@ private extension SettingReactor {
 
 private extension SettingReactor {
     func handleThirdPartyWithDraw() -> Observable<BaseEntity> {
-        let platform = Utility.PreferenceManager.userInfo?.platform
+        let platform = Utility.PreferenceManager.shared.userInfo?.platform
         if platform == "naver" {
-            naverLoginInstance?.requestDeleteToken()
+            Task { @MainActor in
+                NaverThirdPartyLoginConnection.getSharedInstance().requestDeleteToken()
+            }
         }
         return .empty()
     }

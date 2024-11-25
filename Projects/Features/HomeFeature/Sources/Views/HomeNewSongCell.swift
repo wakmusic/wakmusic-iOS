@@ -14,6 +14,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
+@MainActor
 protocol HomeNewSongCellDelegate: AnyObject {
     func thumbnailDidTap(model: NewSongsEntity)
     func playButtonDidTap(model: NewSongsEntity)
@@ -32,14 +33,16 @@ final class HomeNewSongCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
+        Task { @MainActor in
+            self.backgroundColor = .clear
+            self.contentView.backgroundColor = .clear
 
-        albumImageView.layer.cornerRadius = 8
-        albumImageView.clipsToBounds = true
-        albumImageView.contentMode = .scaleAspectFill
-        playImageView.image = DesignSystemAsset.Home.playSmall.image
-        bind()
+            albumImageView.layer.cornerRadius = 8
+            albumImageView.clipsToBounds = true
+            albumImageView.contentMode = .scaleAspectFill
+            playImageView.image = DesignSystemAsset.Home.playSmall.image
+            bind()
+        }
     }
 }
 

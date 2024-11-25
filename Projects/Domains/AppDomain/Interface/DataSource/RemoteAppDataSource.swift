@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol RemoteAppDataSource {
+public protocol RemoteAppDataSource: Sendable {
     func fetchAppCheck() -> Single<AppCheckEntity>
 }

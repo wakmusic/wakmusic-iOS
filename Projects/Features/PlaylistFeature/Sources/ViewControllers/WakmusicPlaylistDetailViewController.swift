@@ -7,13 +7,13 @@ import PhotosUI
 import ReactorKit
 import SignInFeatureInterface
 import SnapKit
-import SongsDomainInterface
+@preconcurrency import SongsDomainInterface
 import Then
 import UIKit
 import Utility
 
 final class WakmusicPlaylistDetailViewController: BaseReactorViewController<WakmusicPlaylistDetailReactor>,
-    SongCartViewType {
+                                                  @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -367,7 +367,7 @@ extension WakmusicPlaylistDetailViewController: SongCartViewDelegate {
                 return
             }
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction)
                 return
             }

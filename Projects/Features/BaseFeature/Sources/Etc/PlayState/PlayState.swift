@@ -13,9 +13,9 @@ import SongsDomainInterface
 import Utility
 
 /// 완전히 도메인 로직으로 전환 고려
-public final class PlayState {
+public final class PlayState: @unchecked Sendable {
     public static let shared = PlayState()
-    private var playlist: Playlist
+    private let playlist: Playlist
     private var subscription = Set<AnyCancellable>()
     public var count: Int { playlist.count }
     public var isEmpty: Bool { playlist.isEmpty }

@@ -16,7 +16,7 @@ import SnapKit
 import UIKit
 import Utility
 
-public enum ContractType {
+public enum ContractType: Sendable {
     case privacy
     case service
 }
@@ -111,13 +111,17 @@ private extension ContractViewController {
 
 private extension ContractViewController {
     func loadPDF() {
-        DispatchQueue.global(qos: .default).async {
-            guard let url = URL(string: self.type.url),
+        DispatchQueue.global(qos: .default).async { [type] in
+            guard let url = URL(string: type.url),
                   let document = PDFDocument(url: url) else {
-                self.loadFailPDF()
+                Task { @MainActor in
+                    self.loadFailPDF()
+                }
                 return
             }
-            self.configurePDF(document: document)
+            Task { @MainActor in
+                self.configurePDF(document: document)
+            }
         }
     }
 

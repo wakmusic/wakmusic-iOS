@@ -92,7 +92,7 @@ private extension CreditSongListTabViewController {
     }
 }
 
-extension CreditSongListTabViewController: PageboyViewControllerDataSource {
+extension CreditSongListTabViewController: @preconcurrency PageboyViewControllerDataSource {
     func numberOfViewControllers(in pageboyViewController: PageboyViewController) -> Int {
         sortTypes.count
     }
@@ -109,7 +109,7 @@ extension CreditSongListTabViewController: PageboyViewControllerDataSource {
     }
 }
 
-extension CreditSongListTabViewController: TMBarDataSource {
+extension CreditSongListTabViewController: @preconcurrency TMBarDataSource {
     func barItem(for bar: any TMBar, at index: Int) -> any TMBarItemable {
         guard let sortItem = sortTypes[safe: index] else { return TMBarItem(title: "") }
 

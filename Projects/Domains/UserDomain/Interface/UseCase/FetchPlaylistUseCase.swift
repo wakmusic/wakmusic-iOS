@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchPlaylistUseCase {
+public protocol FetchPlaylistUseCase: Sendable {
     func execute() -> Single<[PlaylistEntity]>
 }

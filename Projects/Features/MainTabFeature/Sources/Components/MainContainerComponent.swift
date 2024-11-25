@@ -11,6 +11,7 @@ public protocol MainContainerDependency: Dependency {
     var playlistPresenterGlobalState: any PlayListPresenterGlobalStateProtocol { get }
 }
 
+@MainActor
 public final class MainContainerComponent: Component<MainContainerDependency> {
     public func makeView() -> MainContainerViewController {
         return MainContainerViewController

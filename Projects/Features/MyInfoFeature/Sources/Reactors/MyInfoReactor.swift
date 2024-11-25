@@ -199,7 +199,7 @@ final class MyInfoReactor: Reactor {
 
 private extension MyInfoReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        guard PreferenceManager.userInfo != nil else { return .empty() }
+        guard PreferenceManager.shared.userInfo != nil else { return .empty() }
         return mutateFetchUserInfo()
     }
 

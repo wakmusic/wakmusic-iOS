@@ -1,5 +1,5 @@
 import RxSwift
 
-public protocol FetchFruitDrawStatusUseCase {
+public protocol FetchFruitDrawStatusUseCase: Sendable {
     func execute() -> Single<FruitDrawStatusEntity>
 }

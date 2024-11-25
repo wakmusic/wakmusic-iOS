@@ -6,7 +6,7 @@ import SnapKit
 import Then
 import UIKit
 
-open class BaseReactorViewController<R: Reactor>: UIViewController, View {
+open class BaseReactorViewController<R: Reactor>: UIViewController, @preconcurrency View {
     public var disposeBag = DisposeBag()
     open lazy var indicator = NVActivityIndicatorView(frame: .zero).then {
         $0.color = DesignSystemAsset.PrimaryColorV2.point.color

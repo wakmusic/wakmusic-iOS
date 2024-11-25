@@ -19,14 +19,16 @@ public class RecommendPlayListCell: UICollectionViewCell {
     override public func awakeFromNib() {
         super.awakeFromNib()
 
-        self.contentView.layer.cornerRadius = 8
-        self.contentView.layer.borderColor = UIColor.white.cgColor
-        self.contentView.layer.borderWidth = 1
-        self.contentView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color
+        Task { @MainActor in
+            self.contentView.layer.cornerRadius = 8
+            self.contentView.layer.borderColor = UIColor.white.cgColor
+            self.contentView.layer.borderWidth = 1
+            self.contentView.backgroundColor = DesignSystemAsset.GrayColor.gray25.color
 
-        let itemWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
-        let itemHeight: CGFloat = (80.0 * itemWidth) / 164.0
-        self.logoImageView.layer.cornerRadius = ((48 * itemHeight) / 80.0) / 2.0
+            let itemWidth: CGFloat = (APP_WIDTH() - (20 + 8 + 20)) / 2.0
+            let itemHeight: CGFloat = (80.0 * itemWidth) / 164.0
+            self.logoImageView.layer.cornerRadius = ((48 * itemHeight) / 80.0) / 2.0
+        }
     }
 }
 

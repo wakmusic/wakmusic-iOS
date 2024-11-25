@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchProfileListUseCase {
+public protocol FetchProfileListUseCase: Sendable {
     func execute() -> Single<[ProfileListEntity]>
 }

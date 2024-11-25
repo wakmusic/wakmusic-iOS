@@ -3,13 +3,13 @@ import AuthenticationServices
 import BaseFeature
 import Localization
 import LogManager
-import NaverThirdPartyLogin
-import RxRelay
+@preconcurrency import NaverThirdPartyLogin
+@preconcurrency import RxRelay
 import RxSwift
 import UserDomainInterface
 import Utility
 
-public final class LoginViewModel: NSObject { // 네이버 델리게이트를 받기위한 NSObject 상속
+public final class LoginViewModel: NSObject, @unchecked Sendable { // 네이버 델리게이트를 받기위한 NSObject 상속
     private let fetchTokenUseCase: FetchTokenUseCase
     private let fetchUserInfoUseCase: FetchUserInfoUseCase
     let input: Input = Input()
@@ -40,7 +40,9 @@ public final class LoginViewModel: NSObject { // 네이버 델리게이트를 �
         self.fetchUserInfoUseCase = fetchUserInfoUseCase
         super.init()
         GoogleLoginManager.shared.googleOAuthLoginDelegate = self
-        NaverThirdPartyLoginConnection.getSharedInstance()?.delegate = self
+        Task { @MainActor in
+            NaverThirdPartyLoginConnection.getSharedInstance().delegate = self
+        }
         bind()
     }
 }
@@ -49,8 +51,10 @@ private extension LoginViewModel {
     func bind() {
         input.didTapNaverLoginButton
             .bind(with: self, onNext: { owner, _ in
-                NaverThirdPartyLoginConnection.getSharedInstance()?.delegate = owner
-                NaverThirdPartyLoginConnection.getSharedInstance()?.requestThirdPartyLogin()
+                Task { @MainActor in
+                    NaverThirdPartyLoginConnection.getSharedInstance()?.delegate = owner
+                    NaverThirdPartyLoginConnection.getSharedInstance()?.requestThirdPartyLogin()
+                }
             })
             .disposed(by: disposeBag)
 
@@ -103,32 +107,37 @@ private extension LoginViewModel {
 
 extension LoginViewModel: GoogleOAuthLoginDelegate {
     public func requestGoogleAccessToken(_ code: String) {
-        Task {
+        let arrivedTokenFromThirdParty = input.arrivedTokenFromThirdParty
+        Task { @MainActor in
             let id = try await GoogleLoginManager.shared.getGoogleOAuthToken(code)
             let log = SigninAnalyticsLog.completeSocialLogin(type: .google)
             LogManager.analytics(log)
-            input.arrivedTokenFromThirdParty.accept((.google, id))
+            arrivedTokenFromThirdParty.accept((.google, id))
         }
     }
 }
 
 extension LoginViewModel: NaverThirdPartyLoginConnectionDelegate {
     public func oauth20ConnectionDidFinishRequestACTokenWithAuthCode() {
-        let shared = NaverThirdPartyLoginConnection.getSharedInstance()
-        guard let accessToken = shared?.accessToken else { return }
-        let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
-        LogManager.analytics(log)
+        let arrivedTokenFromThirdParty = input.arrivedTokenFromThirdParty
+        Task { @MainActor in
+            guard let accessToken = NaverThirdPartyLoginConnection.getSharedInstance().accessToken else { return }
+            let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
+            LogManager.analytics(log)
 
-        input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
+            arrivedTokenFromThirdParty.accept((.naver, accessToken))
+        }
     }
 
     public func oauth20ConnectionDidFinishRequestACTokenWithRefreshToken() {
-        let shared = NaverThirdPartyLoginConnection.getSharedInstance()
-        guard let accessToken = shared?.accessToken else { return }
-        let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
-        LogManager.analytics(log)
+        let arrivedTokenFromThirdParty = input.arrivedTokenFromThirdParty
+        Task { @MainActor in
+            guard let accessToken = NaverThirdPartyLoginConnection.getSharedInstance().accessToken else { return }
+            let log = SigninAnalyticsLog.completeSocialLogin(type: .naver)
+            LogManager.analytics(log)
 
-        input.arrivedTokenFromThirdParty.accept((.naver, accessToken))
+            arrivedTokenFromThirdParty.accept((.naver, accessToken))
+        }
     }
 
     public func oauth20ConnectionDidFinishDeleteToken() {

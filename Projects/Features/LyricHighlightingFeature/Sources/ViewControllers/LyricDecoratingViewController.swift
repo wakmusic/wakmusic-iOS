@@ -317,19 +317,21 @@ private extension LyricDecoratingViewController {
 }
 
 public extension LyricDecoratingViewController {
-    func showPhotoLibrary() {
-        let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
-        PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: image)
-        } completionHandler: { _, error in
-            var message: String = ""
-            if let error = error {
-                message = error.localizedDescription
-            } else {
-                message = "해당 이미지가 저장되었습니다."
-            }
-            DispatchQueue.main.async {
-                self.showToast(text: message, options: [.tabBar])
+    nonisolated func showPhotoLibrary() {
+        Task { @MainActor in
+            let image = decorateShareContentView.asImage(size: .init(width: 960, height: 960))
+            PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            } completionHandler: { _, error in
+                var message: String = ""
+                if let error = error {
+                    message = error.localizedDescription
+                } else {
+                    message = "해당 이미지가 저장되었습니다."
+                }
+                DispatchQueue.main.async {
+                    self.showToast(text: message, options: [.tabBar])
+                }
             }
         }
     }

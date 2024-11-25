@@ -4,6 +4,7 @@
 
 import UIKit
 
+@MainActor
 public final class BottomSheetTransitioningDelegate: NSObject {
     public private(set) var contentHeights: [CGFloat]
     private var startTargetIndex: Int

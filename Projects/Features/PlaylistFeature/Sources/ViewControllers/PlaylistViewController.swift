@@ -13,7 +13,7 @@ import SnapKit
 import UIKit
 import Utility
 
-public final class PlaylistViewController: UIViewController, SongCartViewType {
+public final class PlaylistViewController: UIViewController, @preconcurrency SongCartViewType {
     var viewModel: PlaylistViewModel!
     var playlistView: PlaylistView!
     var playState = PlayState.shared

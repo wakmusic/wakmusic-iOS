@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct UserInfo: Codable, Equatable {
+public struct UserInfo: Codable, Equatable, Sendable {
     public let ID: String
     public let platform: String
     public let profile: String

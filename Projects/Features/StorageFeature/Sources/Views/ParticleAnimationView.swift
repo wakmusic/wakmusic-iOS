@@ -5,6 +5,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol ParticleAnimationStateProtocol {
     func startAnimation()
 }

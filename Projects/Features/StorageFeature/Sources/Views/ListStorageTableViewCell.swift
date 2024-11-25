@@ -8,6 +8,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 public protocol ListStorageTableViewCellDelegate: AnyObject {
     func buttonTapped(type: ListStorageTableViewCellDelegateConstant)
 }

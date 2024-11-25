@@ -4,7 +4,7 @@ import PlaylistDomainInterface
 
 #warning("실제 데이터 entity로 바꾸기")
 
-enum BeforeVcDataSoruce: Hashable {
+enum BeforeVcDataSoruce: Hashable, Sendable {
     case youtube(model: CurrentVideoEntity)
     case recommend(model: RecommendPlaylistEntity)
 //    case popularList(model: Model)

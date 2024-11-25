@@ -170,7 +170,7 @@ private extension TeamInfoViewController {
     }
 }
 
-extension TeamInfoViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension TeamInfoViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         return TMBarItem(title: output.teams.value[index])
     }

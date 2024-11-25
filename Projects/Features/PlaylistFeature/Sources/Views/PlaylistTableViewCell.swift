@@ -9,6 +9,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 internal protocol PlaylistTableViewCellDelegate: AnyObject {
     func playButtonDidTap(model: PlaylistItemModel)
 }

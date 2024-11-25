@@ -12,6 +12,7 @@ import UIKit
 public protocol ViewControllerFromStoryBoard {}
 public protocol ViewControllerFromStoryBoardAndNeedle {}
 
+@MainActor
 public extension ViewControllerFromStoryBoard where Self: UIViewController {
     /// 스토리 보드에 정의된 화면을 객체화 하여 반환합니다.
     /// where Self: UIViewController: UIViewController에 한정하여 사용

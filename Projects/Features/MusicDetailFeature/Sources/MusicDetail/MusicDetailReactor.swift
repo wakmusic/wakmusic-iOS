@@ -355,7 +355,7 @@ private extension MusicDetailReactor {
     }
 
     func likeButtonDidTap() -> Observable<Mutation> {
-        guard PreferenceManager.userInfo != nil else {
+        guard PreferenceManager.shared.userInfo != nil else {
             return navigateMutation(
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,
@@ -401,7 +401,7 @@ private extension MusicDetailReactor {
         let log = CommonAnalyticsLog.clickAddMusicsButton(location: .songDetail)
         LogManager.analytics(log)
 
-        guard PreferenceManager.userInfo != nil else {
+        guard PreferenceManager.shared.userInfo != nil else {
             return navigateMutation(
                 navigate: NavigateType.textPopup(
                     text: LocalizationStrings.needLoginWarning,

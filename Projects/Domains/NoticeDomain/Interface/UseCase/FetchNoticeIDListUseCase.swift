@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchNoticeIDListUseCase {
+public protocol FetchNoticeIDListUseCase: Sendable {
     func execute() -> Single<FetchNoticeIDListEntity>
 }

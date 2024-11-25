@@ -6,6 +6,7 @@ import UIKit
 import Utility
 
 extension CGFloat {
+    @MainActor
     static var safeAreaBottomInset: CGFloat {
         return SAFEAREA_BOTTOM_HEIGHT()
     }
@@ -18,6 +19,7 @@ enum BottomSheetCalculator {
     ///   - contentView: the content view of the bottom sheet
     ///   - superview: the bottom sheet container view
     ///   - height: preferred height for the content view
+    @MainActor
     static func offset(
         for contentView: UIView,
         in superview: UIView,
@@ -34,6 +36,7 @@ enum BottomSheetCalculator {
         return max(superview.frame.height - targetHeight, 0)
     }
 
+    @MainActor
     static func contentHeight(
         for contentView: UIView,
         in superview: UIView,
@@ -59,6 +62,7 @@ enum BottomSheetCalculator {
     ///   - currentTargetIndex: index of the current target offset of the BottomSheetView
     ///   - superview: the bottom sheet container view
     ///   - targetMaxHeight: flag specifying whether the last translation target should dismiss the BottomSheetView
+    @MainActor
     static func createTranslationTargets(
         for targetOffsets: [CGFloat],
         at currentTargetIndex: Int,

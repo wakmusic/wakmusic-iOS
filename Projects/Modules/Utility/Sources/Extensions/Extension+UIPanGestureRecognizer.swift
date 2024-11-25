@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 public extension UIPanGestureRecognizer {
-    struct PanGestureDirection: OptionSet {
+    struct PanGestureDirection: OptionSet, Sendable {
         public let rawValue: UInt8
 
         public init(rawValue: UInt8) {

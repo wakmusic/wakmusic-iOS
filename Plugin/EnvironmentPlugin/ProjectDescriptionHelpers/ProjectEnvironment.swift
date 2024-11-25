@@ -24,5 +24,7 @@ public let env = ProjectEnvironment(
         .debugInformationFormat(DebugInformationFormat.dwarfWithDsym)
         .otherLinkerFlags(["-ObjC"])
         .bitcodeEnabled(false)
+        .swiftVersion("6.0")
+        .merging(["SWIFT_STRICT_CONCURRENCY": .string("complete")])
 )
 

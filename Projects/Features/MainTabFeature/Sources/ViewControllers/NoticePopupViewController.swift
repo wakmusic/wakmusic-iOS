@@ -17,6 +17,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 public protocol NoticePopupViewControllerDelegate: AnyObject {
     func noticeTapped(model: FetchNoticeEntity)
 }
@@ -59,13 +60,13 @@ public class NoticePopupViewController: UIViewController, ViewControllerFromStor
     }
 
     @IBAction func ignoreButtonAction(_ sender: Any) {
-        let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.ignoredPopupIDs ?? []
+        let savedIgoredNoticeIds: [Int] = Utility.PreferenceManager.shared.ignoredPopupIDs ?? []
         let currentNoticeIds: [Int] = output.originDataSource.value.map { $0.id }
 
         if savedIgoredNoticeIds.isEmpty {
-            Utility.PreferenceManager.ignoredPopupIDs = currentNoticeIds
+            Utility.PreferenceManager.shared.ignoredPopupIDs = currentNoticeIds
         } else {
-            Utility.PreferenceManager.ignoredPopupIDs = savedIgoredNoticeIds + currentNoticeIds
+            Utility.PreferenceManager.shared.ignoredPopupIDs = savedIgoredNoticeIds + currentNoticeIds
         }
         dismiss(animated: true)
     }

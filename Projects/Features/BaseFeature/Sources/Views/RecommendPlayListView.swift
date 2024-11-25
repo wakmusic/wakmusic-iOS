@@ -11,6 +11,7 @@ import PlaylistDomainInterface
 import UIKit
 import Utility
 
+@MainActor
 public protocol RecommendPlayListViewDelegate: AnyObject {
     func itemSelected(model: RecommendPlaylistEntity)
 }

@@ -10,6 +10,7 @@ import DesignSystem
 import UIKit
 import Utility
 
+@MainActor
 public protocol EditSheetViewDelegate: AnyObject {
     func buttonTapped(type: EditSheetSelectType)
 }

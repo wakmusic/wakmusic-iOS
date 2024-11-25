@@ -180,7 +180,7 @@ private extension CreditSongListTabItemReactor {
     }
 
     func addSongButtonDidTap() -> Observable<Mutation> {
-        guard PreferenceManager.userInfo != nil else {
+        guard PreferenceManager.shared.userInfo != nil else {
             return navigateMutation(
                 navigateType: .textPopup(
                     text: LocalizationStrings.needLoginWarning,
