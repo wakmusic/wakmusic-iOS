@@ -2,10 +2,10 @@ import BaseFeature
 import MainTabFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
+@preconcurrency import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature
-@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var noticePopupComponent: NoticePopupComponent {

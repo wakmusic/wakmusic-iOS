@@ -5,9 +5,9 @@ import LyricHighlightingFeature
 import LyricHighlightingFeatureInterface
 import MusicDetailFeature
 import MusicDetailFeatureInterface
+@preconcurrency import NeedleFoundation
 import SongsDomain
 import SongsDomainInterface
-@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var songDetailPresenter: any SongDetailPresentable {

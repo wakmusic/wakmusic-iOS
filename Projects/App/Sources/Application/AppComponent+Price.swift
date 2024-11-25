@@ -1,7 +1,7 @@
 import Foundation
+@preconcurrency import NeedleFoundation
 import PriceDomain
 import PriceDomainInterface
-@preconcurrency import NeedleFoundation
 
 extension AppComponent {
     var remotePriceDataSource: any RemotePriceDataSource {
