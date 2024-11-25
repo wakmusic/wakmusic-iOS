@@ -1,5 +1,6 @@
 import UIKit
 
+@MainActor
 public protocol PlayTypeTogglePopupFactory {
     func makeView(
         completion: ((_ selectedItemString: String) -> Void)?,

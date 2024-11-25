@@ -74,6 +74,7 @@ final class WithDrawLabel: UILabel {
 }
 
 extension Reactive where Base: WithDrawLabel {
+    @MainActor
     var didTap: Observable<Void> {
         return base.didTapSubject.asObservable()
     }

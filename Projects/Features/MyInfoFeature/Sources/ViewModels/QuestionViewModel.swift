@@ -127,6 +127,7 @@ extension InquiryType {
         }
     }
 
+    @MainActor
     var suffix: String {
         switch self {
         default:
@@ -135,7 +136,7 @@ extension InquiryType {
                 * 자동으로 작성된 시스템 정보입니다. 원활한 문의를 위해서 삭제하지 말아 주세요.\n
                 \(APP_NAME()) v\(APP_VERSION())
                 \(Device().modelName) / \(OS_NAME()) \(OS_VERSION())
-                닉네임: \(Utility.PreferenceManager.userInfo?.decryptedName ?? "")
+                닉네임: \(Utility.PreferenceManager.shared.userInfo?.decryptedName ?? "")
             """
         }
     }

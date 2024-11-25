@@ -11,7 +11,7 @@ import UIKit
 import UserDomainInterface
 @testable import UserDomainTesting
 
-public final class SettingComponentStub: SettingFactory {
+public final class SettingComponentStub: SettingFactory, @unchecked Sendable {
     public func makeView() -> UIViewController {
         return SettingViewController.viewController(
             reactor: SettingReactor(
@@ -29,7 +29,7 @@ public final class SettingComponentStub: SettingFactory {
     }
 }
 
-final class PlayTypeTogglePopupComponentStub: PlayTypeTogglePopupFactory {
+final class PlayTypeTogglePopupComponentStub: PlayTypeTogglePopupFactory, @unchecked Sendable {
     public func makeView(
         completion: ((_ selectedItemString: String) -> Void)? = nil,
         cancelCompletion: (() -> Void)? = nil

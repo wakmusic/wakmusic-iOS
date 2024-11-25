@@ -14,6 +14,7 @@ public enum PlayEvent {
     case shufflePlay
 }
 
+@MainActor
 public protocol PlayButtonGroupViewDelegate: AnyObject {
     func play(_ event: PlayEvent)
 }

@@ -1,9 +1,9 @@
 import Foundation
 import RxCocoa
-import RxSwift
+@preconcurrency import RxSwift
 import UIKit
 
-final class CreditSongListScopedState {
+final class CreditSongListScopedState: Sendable {
     static let shared = CreditSongListScopedState()
 
     private init() {}

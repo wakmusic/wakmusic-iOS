@@ -11,6 +11,7 @@ import Foundation
 import UIKit
 import Utility
 
+// SongCartViewType 어떻게든 해결해야함..
 public protocol SongCartViewType: AnyObject {
     var songCartView: SongCartView! { get set }
     var bottomSheetView: BottomSheetView! { get set }
@@ -29,6 +30,7 @@ public enum SongCartType {
     case creditSong // 크레딧 작업자 노래 리스트 (백튼)
 }
 
+@MainActor
 public extension SongCartViewType where Self: UIViewController {
     /// 노래 담기 팝업을 띄웁니다.
     /// - Parameter view: 팝업을 붙일 대상이 되는 뷰 (ex: 아티스트 노래 리스트, viewController.view)

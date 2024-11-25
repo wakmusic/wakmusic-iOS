@@ -18,11 +18,13 @@ import StorageFeatureInterface
 import UIKit
 import Utility
 
-public final class MainTabBarViewController: BaseViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class MainTabBarViewController: BaseViewController,
+                                             ViewControllerFromStoryBoard,
+                                             @preconcurrency ContainerViewType {
     @IBOutlet public weak var contentView: UIView!
 
     private var previousIndex: Int?
-    private var selectedIndex: Int = Utility.PreferenceManager.startPage ?? 0
+    private var selectedIndex: Int = Utility.PreferenceManager.shared.startPage ?? 0
     private lazy var viewControllers: [UIViewController] = {
         return [
             homeFactory.makeView().wrapNavigationController,
@@ -208,35 +210,31 @@ private extension MainTabBarViewController {
 
 private extension MainTabBarViewController {
     func requestNotificationAuthorization() {
-        Messaging.messaging().delegate = self
-        UNUserNotificationCenter.current().delegate = self
+        Task { @MainActor in
+            Messaging.messaging().delegate = self
+            UNUserNotificationCenter.current().delegate = self
 
-        let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-        UNUserNotificationCenter.current().requestAuthorization(
-            options: authOptions,
-            completionHandler: { granted, _ in
-                if granted {
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                    LogManager.printDebug("🔔:: Notification authorized: \(Messaging.messaging().fcmToken ?? "")")
-                } else {
-                    LogManager.printDebug("🔔:: Notification denied")
-                }
-                PreferenceManager.pushNotificationAuthorizationStatus = granted
+            let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+            let granted = try await UNUserNotificationCenter.current().requestAuthorization()
+            if granted {
+                UIApplication.shared.registerForRemoteNotifications()
+                LogManager.printDebug("🔔:: Notification authorized: \(Messaging.messaging().fcmToken ?? "")")
+            } else {
+                LogManager.printDebug("🔔:: Notification denied")
             }
-        )
+            PreferenceManager.shared.pushNotificationAuthorizationStatus = granted
+        }
     }
 
     func configureUI() {
-        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
+        let startPage: Int = Utility.PreferenceManager.shared.startPage ?? 0
         add(asChildViewController: viewControllers[startPage])
     }
 }
 
 extension MainTabBarViewController {
     func updateContent(previous: Int, current: Int) {
-        Utility.PreferenceManager.startPage = current
+        Utility.PreferenceManager.shared.startPage = current
         remove(asChildViewController: viewControllers[previous])
         add(asChildViewController: viewControllers[current])
 
@@ -268,7 +266,7 @@ extension MainTabBarViewController: NoticePopupViewControllerDelegate {
 }
 
 extension MainTabBarViewController: UNUserNotificationCenterDelegate {
-    public func userNotificationCenter(
+    public nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
@@ -284,12 +282,12 @@ extension MainTabBarViewController: UNUserNotificationCenterDelegate {
         return [[.list, .banner, .sound]]
     }
 
-    public func userNotificationCenter(
+    public nonisolated func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
         let userInfo = response.notification.request.content.userInfo
-        appEntryState.moveScene(params: userInfo.parseNotificationInfo)
+        await appEntryState.moveScene(params: userInfo.parseNotificationInfo)
 
         // With swizzling disabled you must let Messaging know about the message, for Analytics
         Messaging.messaging().appDidReceiveMessage(userInfo)
@@ -301,10 +299,12 @@ extension MainTabBarViewController: UNUserNotificationCenterDelegate {
 
 extension MainTabBarViewController: MessagingDelegate {
     /// [START refresh_token]
-    public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
+    public nonisolated func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         LogManager.printDebug("🔔:: Firebase registration token: \(String(describing: fcmToken ?? "-"))")
         // If necessary send token to application server.
-        input.detectedRefreshPushToken.onNext(())
+        Task { @MainActor in
+            input.detectedRefreshPushToken.onNext(())
+        }
         // Note: This callback is fired at each app startup and whenever a new token is generated.
     }
     // [END refresh_token]

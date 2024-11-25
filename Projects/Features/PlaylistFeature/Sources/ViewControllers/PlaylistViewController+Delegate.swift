@@ -21,7 +21,7 @@ extension PlaylistViewController: SongCartViewDelegate {
 
             let count = songs.count
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 let textPopupvc = TextPopupViewController.viewController(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,

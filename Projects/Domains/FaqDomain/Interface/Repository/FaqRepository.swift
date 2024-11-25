@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-public protocol FaqRepository {
+public protocol FaqRepository: Sendable {
     func fetchQnaCategories() -> Single<FaqCategoryEntity>
     func fetchQna() -> Single<[FaqEntity]>
 }

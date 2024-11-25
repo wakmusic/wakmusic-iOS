@@ -16,6 +16,7 @@ public protocol RootDependency: Dependency {
     var textPopupFactory: any TextPopupFactory { get }
 }
 
+@MainActor
 public final class RootComponent: Component<RootDependency> {
     public func makeView() -> IntroViewController {
         return IntroViewController.viewController(

@@ -1,6 +1,7 @@
 import DesignSystem
 import UIKit
 
+@MainActor
 public protocol ContainPlaylistHeaderViewDelegate: AnyObject {
     func action()
 }

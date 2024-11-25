@@ -1,7 +1,7 @@
 import RxSwift
 import SongsDomainInterface
 
-public final class FetchSongUseCaseSpy: FetchSongUseCase {
+public final class FetchSongUseCaseSpy: FetchSongUseCase, @unchecked Sendable {
     public private(set) var callCount = 0
     public var handler: ((String) -> Single<SongDetailEntity>) = { _ in fatalError() }
 

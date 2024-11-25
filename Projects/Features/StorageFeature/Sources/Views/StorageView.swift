@@ -6,6 +6,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol StorageStateProtocol {
     func updateIsHiddenEditButton(isHidden: Bool)
 }
@@ -16,6 +17,7 @@ private protocol StorageActionProtocol {
 }
 
 private enum ButtonAttributed {
+    @MainActor
     static let edit = NSMutableAttributedString(
         string: "편집",
         attributes: [
@@ -23,6 +25,7 @@ private enum ButtonAttributed {
             .foregroundColor: DesignSystemAsset.BlueGrayColor.blueGray400.color
         ]
     )
+    @MainActor
     static let save = NSMutableAttributedString(
         string: "완료",
         attributes: [

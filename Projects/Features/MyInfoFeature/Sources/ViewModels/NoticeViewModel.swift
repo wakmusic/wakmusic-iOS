@@ -35,7 +35,7 @@ public final class NoticeViewModel {
                     .catchAndReturn([])
             }
             .map { notices in
-                let readIDs = Set(PreferenceManager.readNoticeIDs ?? [])
+                let readIDs = Set(PreferenceManager.shared.readNoticeIDs ?? [])
                 return notices.map { notice in
                     var notice = notice
                     notice.isRead = readIDs.contains(notice.id)

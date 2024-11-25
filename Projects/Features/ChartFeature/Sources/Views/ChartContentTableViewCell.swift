@@ -8,6 +8,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 protocol ChartContentTableViewCellDelegate: AnyObject {
     func tappedThumbnail(id: String)
 }

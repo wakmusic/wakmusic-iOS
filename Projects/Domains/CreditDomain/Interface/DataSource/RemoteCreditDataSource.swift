@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public protocol RemoteCreditDataSource {
+public protocol RemoteCreditDataSource: Sendable {
     func fetchCreditSongList(
         name: String,
         order: CreditSongOrderType,

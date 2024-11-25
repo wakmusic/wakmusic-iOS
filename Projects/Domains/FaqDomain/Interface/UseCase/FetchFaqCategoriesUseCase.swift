@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchFaqCategoriesUseCase {
+public protocol FetchFaqCategoriesUseCase: Sendable {
     func execute() -> Single<FaqCategoryEntity>
 }

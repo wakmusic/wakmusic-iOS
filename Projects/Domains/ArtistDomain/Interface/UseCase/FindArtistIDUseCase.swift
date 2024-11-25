@@ -1,5 +1,5 @@
 import RxSwift
 
-public protocol FindArtistIDUseCase {
+public protocol FindArtistIDUseCase: Sendable {
     func execute(name: String) -> Single<String>
 }

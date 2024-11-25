@@ -11,7 +11,8 @@ import Foundation
 import SongsDomainInterface
 import Utility
 
-final class Playlist {
+final class Playlist: @unchecked Sendable {
+    private let lock = NSRecursiveLock()
     @Published private(set) var list: [PlaylistItem] = []
 
     init(list: [PlaylistItem] = []) {
@@ -26,27 +27,39 @@ final class Playlist {
     }
 
     func append(_ item: PlaylistItem) {
-        list.append(item)
+        lock.withLock {
+            list.append(item)
+        }
     }
 
     func append(_ items: [PlaylistItem]) {
-        list.append(contentsOf: items)
+        lock.withLock {
+            list.append(contentsOf: items)
+        }
     }
 
     func insert(_ newElement: PlaylistItem, at: Int) {
-        list.insert(newElement, at: at)
+        lock.withLock {
+            list.insert(newElement, at: at)
+        }
     }
 
     func update(contentsOf items: [PlaylistItem]) {
-        list = items
+        lock.withLock {
+            list = items
+        }
     }
 
     func remove(at index: Int) {
+        lock.lock()
+        defer { lock.unlock() }
         guard list[safe: index] != nil else { return }
         list.remove(at: index)
     }
 
     func remove(indexs: [Int]) {
+        lock.lock()
+        defer { lock.unlock() }
         let sortedIndexs = indexs.sorted(by: >) // 앞에서부터 삭제하면 인덱스 순서가 바뀜
         sortedIndexs.forEach { index in
             remove(at: index)
@@ -54,28 +67,40 @@ final class Playlist {
     }
 
     func remove(id: String) {
+        lock.lock()
+        defer { lock.unlock() }
         if let index = list.firstIndex(where: { $0.id == id }) {
             remove(at: index)
         }
     }
 
     func removeAll() {
-        list.removeAll()
+        lock.withLock {
+            list.removeAll()
+        }
     }
 
     func removeAll(where shouldBeRemoved: (PlaylistItem) -> Bool) {
-        list.removeAll(where: shouldBeRemoved)
+        lock.withLock {
+            list.removeAll(where: shouldBeRemoved)
+        }
     }
 
     func contains(_ item: PlaylistItem) -> Bool {
-        return list.contains(item)
+        return lock.withLock {
+            list.contains(item)
+        }
     }
 
     func contains(id: String) -> Bool {
-        return list.contains { $0.id == id }
+        return lock.withLock {
+            list.contains { $0.id == id }
+        }
     }
 
     func reorderPlaylist(from: Int, to: Int) {
+        lock.lock()
+        defer { lock.unlock() }
         let movedData = list[from]
         list.remove(at: from)
         list.insert(movedData, at: to)
@@ -83,6 +108,8 @@ final class Playlist {
 
     /// 해당 곡이 이미 재생목록에 있으면 재생목록 속 해당 곡의 index, 없으면 nil 리턴
     func uniqueIndex(of item: PlaylistItem) -> Int? {
-        return list.firstIndex(of: item)
+        return lock.withLock {
+            list.firstIndex(of: item)
+        }
     }
 }

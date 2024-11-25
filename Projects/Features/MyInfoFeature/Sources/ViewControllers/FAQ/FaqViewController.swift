@@ -138,7 +138,7 @@ extension FaqViewController {
     }
 }
 
-extension FaqViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension FaqViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         LogManager.printDebug(self.viewControllers.count)
         return self.viewControllers.count

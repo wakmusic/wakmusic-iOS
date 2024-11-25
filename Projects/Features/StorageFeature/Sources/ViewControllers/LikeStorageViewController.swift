@@ -17,7 +17,7 @@ import Utility
 
 typealias LikeSectionModel = SectionModel<Int, FavoriteSongEntity>
 
-final class LikeStorageViewController: BaseReactorViewController<LikeStorageReactor>, SongCartViewType {
+final class LikeStorageViewController: BaseReactorViewController<LikeStorageReactor>, @preconcurrency SongCartViewType {
     let likeStorageView = LikeStorageView()
 
     var containSongsFactory: ContainSongsFactory!
@@ -151,7 +151,7 @@ final class LikeStorageViewController: BaseReactorViewController<LikeStorageReac
         sharedState.map(\.dataSource)
             // .skip(1)
             .withUnretained(self)
-            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
+            .withLatestFrom(Utility.PreferenceManager.shared.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, _ in
                 owner.likeStorageView.updateRefreshControlState(isPlaying: false)
                 let dataSourceIsEmpty = dataSource.flatMap { $0.items }.isEmpty

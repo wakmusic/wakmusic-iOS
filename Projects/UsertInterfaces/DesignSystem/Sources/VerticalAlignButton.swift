@@ -33,11 +33,6 @@ open class VerticalAlignButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override open func awakeFromNib() {
-        super.awakeFromNib()
-        self.contentHorizontalAlignment = .left
-    }
-
     public func setTextColor(color: UIColor) {
         self.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
             var attribute = $0

@@ -14,7 +14,7 @@ import Then
 import UIKit
 import Utility
 
-final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, EditSheetViewType {
+final class MyInfoViewController: BaseReactorViewController<MyInfoReactor>, @preconcurrency EditSheetViewType {
     let myInfoView = MyInfoView()
     private var profilePopupFactory: ProfilePopupFactory!
     private var textPopupFactory: TextPopupFactory!
@@ -339,16 +339,20 @@ extension MyInfoViewController: EditSheetViewDelegate {
 }
 
 extension MyInfoViewController: EqualHandleTappedType {
-    func equalHandleTapped() {
-        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
-        if viewControllersCount > 1 {
-            self.navigationController?.popToRootViewController(animated: true)
+    nonisolated func equalHandleTapped() {
+        Task { @MainActor in
+            let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+            if viewControllersCount > 1 {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
         }
     }
 }
 
 extension MyInfoViewController: FruitDrawViewControllerDelegate {
-    func completedFruitDraw(itemCount: Int) {
-        reactor?.action.onNext(.completedFruitDraw)
+    nonisolated func completedFruitDraw(itemCount: Int) {
+        Task { @MainActor in
+            reactor?.action.onNext(.completedFruitDraw)
+        }
     }
 }

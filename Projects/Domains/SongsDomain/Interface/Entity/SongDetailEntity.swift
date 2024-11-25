@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SongDetailEntity: Hashable {
+public struct SongDetailEntity: Hashable, Sendable {
     public init(
         id: String,
         title: String,
@@ -28,7 +28,7 @@ public struct SongDetailEntity: Hashable {
     public let isLiked: Bool
     public let karaokeNumber: SongDetailEntity.KaraokeNumber
 
-    public struct KaraokeNumber: Hashable, Equatable {
+    public struct KaraokeNumber: Hashable, Equatable, Sendable {
         public init (tj: Int?, ky: Int?) {
             self.tj = tj
             self.ky = ky

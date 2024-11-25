@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol AddLikeSongUseCase {
+public protocol AddLikeSongUseCase: Sendable {
     func execute(id: String) -> Single<LikeEntity>
 }

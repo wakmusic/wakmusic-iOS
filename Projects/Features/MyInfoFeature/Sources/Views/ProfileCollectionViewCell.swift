@@ -9,8 +9,10 @@ public class ProfileCollectionViewCell: UICollectionViewCell {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
-        clipsToBounds = false
-        contentView.clipsToBounds = false
+        Task { @MainActor in
+            clipsToBounds = false
+            contentView.clipsToBounds = false
+        }
     }
 }
 

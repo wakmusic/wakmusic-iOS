@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-public protocol ArtistRepository {
+public protocol ArtistRepository: Sendable {
     func fetchArtistList() -> Single<[ArtistEntity]>
     func fetchArtistDetail(id: String) -> Single<ArtistEntity>
     func fetchArtistSongList(id: String, sort: ArtistSongSortType, page: Int) -> Single<[ArtistSongListEntity]>

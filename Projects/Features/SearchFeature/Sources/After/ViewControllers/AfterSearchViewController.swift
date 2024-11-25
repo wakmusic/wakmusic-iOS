@@ -12,7 +12,7 @@ import Tabman
 import UIKit
 import Utility
 
-public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, StoryboardView {
+public final class AfterSearchViewController: TabmanViewController, ViewControllerFromStoryBoard, @preconcurrency StoryboardView {
     @IBOutlet weak var tabBarView: UIView!
     @IBOutlet weak var fakeView: UIView!
     @IBOutlet weak var indicator: NVActivityIndicatorView!
@@ -122,7 +122,7 @@ extension AfterSearchViewController {
     }
 }
 
-extension AfterSearchViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension AfterSearchViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         2
     }

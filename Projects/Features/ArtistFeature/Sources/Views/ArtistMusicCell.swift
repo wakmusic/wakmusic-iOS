@@ -6,6 +6,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
+@MainActor
 protocol ArtistMusicCellDelegate: AnyObject {
     func tappedThumbnail(id: String)
 }
@@ -22,16 +23,18 @@ final class ArtistMusicCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
+        Task { @MainActor in
+            backgroundColor = .clear
+            contentView.backgroundColor = .clear
 
-        albumImageButton.layer.cornerRadius = 4
-        albumImageButton.contentMode = .scaleAspectFill
-        albumImageButton.clipsToBounds = true
+            albumImageButton.layer.cornerRadius = 4
+            albumImageButton.contentMode = .scaleAspectFill
+            albumImageButton.clipsToBounds = true
 
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+            titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+            groupStringLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            releaseDateLabel.font = DesignSystemFontFamily.SCoreDream._3Light.font(size: 12)
+        }
     }
 
     @IBAction func thumbnailToPlayButtonAction(_ sender: Any) {

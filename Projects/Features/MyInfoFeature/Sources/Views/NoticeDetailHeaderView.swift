@@ -12,21 +12,23 @@ class NoticeDetailHeaderView: UICollectionReusableView {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
-        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        titleStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
+        Task { @MainActor in
+            titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 18)
+            titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            titleStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
 
-        dateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        dateLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
-        dateLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+            dateLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            dateLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
+            dateLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
 
-        timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        timeLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
-        timeLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+            timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            timeLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
+            timeLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
 
-        contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        contentStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        contentStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
+            contentStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+            contentStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            contentStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
+        }
     }
 }
 

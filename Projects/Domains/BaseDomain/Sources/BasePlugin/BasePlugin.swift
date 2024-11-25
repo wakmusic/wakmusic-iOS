@@ -76,7 +76,16 @@ private extension BasePlugin {
 
     func fetchDeviceID() -> String {
         let deviceIDFromKeychain: String = keychain.load(type: .deviceID)
-        let uuidString: String? = UIDevice.current.identifierForVendor?.uuidString
+        let uuidString: String?
+        if Thread.isMainThread {
+            uuidString = MainActor.assumeIsolated {
+                UIDevice.current.identifierForVendor?.uuidString
+            }
+        } else {
+            uuidString = DispatchQueue.main.sync {
+                UIDevice.current.identifierForVendor?.uuidString
+            }
+        }
 
         if deviceIDFromKeychain.isEmpty, let uuidString {
             keychain.save(type: .deviceID, value: uuidString)

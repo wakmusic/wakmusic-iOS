@@ -3,6 +3,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 public protocol FruitListCellDelegate: AnyObject {
     func itemSelected(item: FruitEntity)
 }

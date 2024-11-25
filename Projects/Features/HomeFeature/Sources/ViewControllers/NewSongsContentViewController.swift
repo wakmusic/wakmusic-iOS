@@ -11,7 +11,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
-public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, SongCartViewType {
+public class NewSongsContentViewController: UIViewController, ViewControllerFromStoryBoard, @preconcurrency SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 
@@ -285,7 +285,7 @@ extension NewSongsContentViewController: SongCartViewDelegate {
             let log = CommonAnalyticsLog.clickAddMusicsButton(location: .recentMusic)
             LogManager.analytics(log)
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 output.showLogin.onNext(())
                 return
             }
@@ -332,8 +332,10 @@ extension NewSongsContentViewController: SongCartViewDelegate {
 extension Reactive where Base: NewSongsContentViewController {
     var loadMore: Binder<Void> {
         return Binder(base) { viewController, _ in
-            let pageID = viewController.input.pageID.value
-            viewController.input.pageID.accept(pageID + 1)
+            Task { @MainActor in
+                let pageID = viewController.input.pageID.value
+                viewController.input.pageID.accept(pageID + 1)
+            }
         }
     }
 }

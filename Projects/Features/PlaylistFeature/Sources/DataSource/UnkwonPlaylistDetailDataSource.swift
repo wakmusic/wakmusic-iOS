@@ -1,4 +1,4 @@
-import SongsDomainInterface
+@preconcurrency import SongsDomainInterface
 import UIKit
 
 final class UnknownPlaylistDetailDataSource: UITableViewDiffableDataSource<Int, SongEntity> {

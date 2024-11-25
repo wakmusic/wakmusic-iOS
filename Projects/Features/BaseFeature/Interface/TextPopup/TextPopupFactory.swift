@@ -1,5 +1,6 @@
 import UIKit
 
+@MainActor
 public protocol TextPopupFactory {
     func makeView(
         text: String?,

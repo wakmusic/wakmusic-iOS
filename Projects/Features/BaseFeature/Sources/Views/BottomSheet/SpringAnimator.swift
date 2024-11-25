@@ -10,6 +10,7 @@ extension SpringAnimator {
     }
 }
 
+@MainActor
 class SpringAnimator: NSObject {
     var fromPosition: CGPoint = .zero {
         didSet {

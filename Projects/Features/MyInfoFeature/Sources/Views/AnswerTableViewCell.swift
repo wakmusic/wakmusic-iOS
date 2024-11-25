@@ -7,8 +7,10 @@ class AnswerTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
+        Task { @MainActor in
+            answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+            answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
+        }
     }
 }
 

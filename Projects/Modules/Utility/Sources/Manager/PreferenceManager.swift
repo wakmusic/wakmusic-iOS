@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 
 /// UserDefaults에 편리하게 접근하기 위한 클래스 정의
-public final class PreferenceManager {
+public final class PreferenceManager: @unchecked Sendable {
     public static let shared: PreferenceManager = PreferenceManager()
 
     /// UserDefaults에 저장 된 데이터에 접근하기 위한 키 값의 나열.
@@ -26,38 +26,57 @@ public final class PreferenceManager {
     }
 
     @UserDefaultWrapper(key: Constants.recentRecords.rawValue, defaultValue: nil)
-    public static var recentRecords: [String]?
+    public var recentRecords: [String]?
 
     @UserDefaultWrapper(key: Constants.startPage.rawValue, defaultValue: nil)
-    public static var startPage: Int?
+    public var startPage: Int?
 
     @UserDefaultWrapper(key: Constants.user.rawValue, defaultValue: nil)
-    public static var userInfo: UserInfo?
+    public var userInfo: UserInfo?
 
     @UserDefaultWrapper(key: Constants.appPermissionChecked.rawValue, defaultValue: nil)
-    public static var appPermissionChecked: Bool?
+    public var appPermissionChecked: Bool?
 
     @UserDefaultWrapper(key: Constants.ignoredPopupIDs.rawValue, defaultValue: nil)
-    public static var ignoredPopupIDs: [Int]?
+    public var ignoredPopupIDs: [Int]?
 
     @UserDefaultWrapper(key: Constants.readNoticeIDs.rawValue, defaultValue: nil)
-    public static var readNoticeIDs: [Int]?
+    public var readNoticeIDs: [Int]?
 
     @UserDefaultWrapper(key: Constants.pushNotificationAuthorizationStatus.rawValue, defaultValue: nil)
-    public static var pushNotificationAuthorizationStatus: Bool?
+    public var pushNotificationAuthorizationStatus: Bool?
 
     @UserDefaultWrapper(key: Constants.songPlayPlatformType.rawValue, defaultValue: YoutubePlayType.youtube)
-    public static var songPlayPlatformType: YoutubePlayType?
+    public var songPlayPlatformType: YoutubePlayType?
 }
 
+// BehaviorSubject가 Sendable을 채택하지 않아 @unchecked
 @propertyWrapper
-public final class UserDefaultWrapper<T: Codable> {
+public final class UserDefaultWrapper<T: Codable & Sendable>: @unchecked Sendable {
+    private let lock = NSLock()
     private let key: String
     private let defaultValue: T?
+    private let subject: BehaviorSubject<T?>
 
     init(key: String, defaultValue: T?) {
         self.key = key
         self.defaultValue = defaultValue
+
+        let initialValue: T?
+        if let savedData = UserDefaults.standard.object(forKey: key) as? Data {
+            let decoder = JSONDecoder()
+            if let lodedObejct = try? decoder.decode(T.self, from: savedData) {
+                initialValue = lodedObejct
+            } else {
+                initialValue = nil
+            }
+
+        } else if UserDefaults.standard.array(forKey: key) != nil {
+            initialValue = UserDefaults.standard.array(forKey: key) as? T
+        } else {
+            initialValue = defaultValue
+        }
+        self.subject = .init(value: initialValue)
     }
 
     public var wrappedValue: T? {
@@ -82,7 +101,6 @@ public final class UserDefaultWrapper<T: Codable> {
         }
     }
 
-    private lazy var subject = BehaviorSubject<T?>(value: wrappedValue)
     public var projectedValue: Observable<T?> {
         return subject.asObservable()
     }

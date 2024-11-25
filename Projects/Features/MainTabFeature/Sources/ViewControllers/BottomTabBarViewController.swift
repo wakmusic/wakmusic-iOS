@@ -4,6 +4,7 @@ import RxSwift
 import UIKit
 import Utility
 
+@MainActor
 protocol BottomTabBarViewDelegate: AnyObject {
     func handleTapped(index previous: Int, current: Int)
     func equalHandleTapped(index current: Int)
@@ -12,7 +13,7 @@ protocol BottomTabBarViewDelegate: AnyObject {
 public final class BottomTabBarViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var stackView: UIStackView!
 
-    private var currentIndex = Utility.PreferenceManager.startPage ?? 0
+    private var currentIndex = Utility.PreferenceManager.shared.startPage ?? 0
     weak var delegate: BottomTabBarViewDelegate?
 
     private lazy var tabs: [TabItemView] = {
@@ -78,7 +79,7 @@ public final class BottomTabBarViewController: UIViewController, ViewControllerF
 
 private extension BottomTabBarViewController {
     func configureUI() {
-        let startPage: Int = Utility.PreferenceManager.startPage ?? 0
+        let startPage: Int = Utility.PreferenceManager.shared.startPage ?? 0
         LogManager.printDebug("startPage: \(startPage)")
 
         for (index, model) in self.tabItems.enumerated() {

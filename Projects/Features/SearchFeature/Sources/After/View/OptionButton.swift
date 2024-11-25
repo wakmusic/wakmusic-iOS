@@ -6,6 +6,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 private protocol OptionButtonStateProtocol {
     func updateSortrState(_ filterType: SortType)
 }

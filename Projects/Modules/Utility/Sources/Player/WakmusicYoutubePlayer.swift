@@ -1,8 +1,9 @@
 import Foundation
-import LinkPresentation
+@preconcurrency import LinkPresentation
 import UIKit
 
-public struct WakmusicYoutubePlayer: WakmusicPlayer {
+@MainActor
+public struct WakmusicYoutubePlayer: WakmusicPlayer, Sendable {
     fileprivate enum OpenerPlatform {
         case youtube
         case youtubeMusic
@@ -59,6 +60,7 @@ public struct WakmusicYoutubePlayer: WakmusicPlayer {
         self.youtubeURLGenerator = youtubeURLGenerator
     }
 
+    @MainActor
     public func play() {
         switch youtubeVideoType {
         case let .videos(ids):
@@ -209,7 +211,7 @@ private extension WakmusicYoutubePlayer.PlayPlatform {
         switch self {
         case .youtube: return .youtube
         case .youtubeMusic: return .youtubeMusic
-        case .automatic: return PreferenceManager.songPlayPlatformType?.toOpnerPlatform ?? .youtube
+        case .automatic: return PreferenceManager.shared.songPlayPlatformType?.toOpnerPlatform ?? .youtube
         }
     }
 }

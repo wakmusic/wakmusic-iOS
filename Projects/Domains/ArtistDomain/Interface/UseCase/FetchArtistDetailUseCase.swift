@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchArtistDetailUseCase {
+public protocol FetchArtistDetailUseCase: Sendable {
     func execute(id: String) -> Single<ArtistEntity>
 }

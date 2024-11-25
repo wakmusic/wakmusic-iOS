@@ -81,7 +81,7 @@ final class FakeCreditSongListTabItemFactory: CreditSongListTabItemFactory {
     }
 }
 
-final class DummySongDetailPresenter: SongDetailPresentable {
+final class DummySongDetailPresenter: SongDetailPresentable, @unchecked Sendable {
     var presentSongDetailObservable: RxSwift.Observable<(ids: [String], selectedID: String)> {
         .empty()
     }
@@ -91,7 +91,7 @@ final class DummySongDetailPresenter: SongDetailPresentable {
     func present(ids: [String], selectedID: String) {}
 }
 
-final class DummyContainSongsFactory: ContainSongsFactory {
+final class DummyContainSongsFactory: ContainSongsFactory, @unchecked Sendable {
     func makeView(songs: [String]) -> UIViewController {
         let viewController = UIViewController()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -101,13 +101,13 @@ final class DummyContainSongsFactory: ContainSongsFactory {
     }
 }
 
-final class DummySignInFactory: SignInFactory {
+final class DummySignInFactory: SignInFactory, @unchecked Sendable {
     func makeView() -> UIViewController {
         return UIViewController()
     }
 }
 
-final class DummyTextPopupFactory: TextPopupFactory {
+final class DummyTextPopupFactory: TextPopupFactory, @unchecked Sendable {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,

@@ -6,7 +6,7 @@ import SignInFeatureInterface
 @testable import SignInFeatureTesting
 import UIKit
 
-public final class MyInfoComponentStub: MyInfoFactory {
+public final class MyInfoComponentStub: MyInfoFactory, @unchecked Sendable {
     public func makeView() -> UIViewController {
         return UIViewController()
     }

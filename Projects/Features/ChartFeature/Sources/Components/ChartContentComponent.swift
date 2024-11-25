@@ -13,6 +13,7 @@ public protocol ChartContentDependency: Dependency {
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
+@MainActor
 public final class ChartContentComponent: Component<ChartContentDependency> {
     public func makeView(type: ChartDateType) -> ChartContentViewController {
         return ChartContentViewController.viewController(

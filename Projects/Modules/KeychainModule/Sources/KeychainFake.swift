@@ -1,6 +1,6 @@
 import Foundation
 
-final class KeychainFake: Keychain {
+final class KeychainFake: Keychain, @unchecked Sendable {
     var store: [String: String] = [:]
 
     func save(type: KeychainType, value: String) {

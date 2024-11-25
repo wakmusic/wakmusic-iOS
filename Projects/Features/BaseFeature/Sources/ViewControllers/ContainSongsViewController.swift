@@ -153,7 +153,7 @@ extension ContainSongsViewController {
             .disposed(by: disposeBag)
 
         output.showPricePopup
-            .withLatestFrom(PreferenceManager.$userInfo) { $1 }
+            .withLatestFrom(PreferenceManager.shared.$userInfo) { $1 }
             .compactMap { $0 }
             .withLatestFrom(output.creationPrice) { ($0, $1) }
             .bind(with: self) { owner, info in

@@ -112,7 +112,7 @@ extension NewSongsViewController {
     }
 }
 
-extension NewSongsViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension NewSongsViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         switch index {
         case 0:

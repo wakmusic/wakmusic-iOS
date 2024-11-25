@@ -16,7 +16,7 @@ public extension PreferenceManager {
     /// - Parameter word: 최근 검색어
     func addRecentRecords(word: String) {
         let maxSize: Int = 10
-        var currentRecentRecords = Utility.PreferenceManager.recentRecords ?? []
+        var currentRecentRecords = Utility.PreferenceManager.shared.recentRecords ?? []
 
         if currentRecentRecords.contains(word) {
             if let i = currentRecentRecords.firstIndex(where: { $0 == word }) {
@@ -31,19 +31,19 @@ public extension PreferenceManager {
             currentRecentRecords.insert(word, at: 0)
         }
 
-        Utility.PreferenceManager.recentRecords = currentRecentRecords
+        Utility.PreferenceManager.shared.recentRecords = currentRecentRecords
     }
 
     /// 최근 검색어를 삭제
     /// - Parameter word: 최근 검색어
     func removeRecentRecords(word: String) {
-        var currentRecentRecords = Utility.PreferenceManager.recentRecords ?? []
+        var currentRecentRecords = Utility.PreferenceManager.shared.recentRecords ?? []
 
         if let i = currentRecentRecords.firstIndex(where: { $0 == word }) {
             currentRecentRecords.remove(at: i)
         }
 
-        Utility.PreferenceManager.recentRecords = currentRecentRecords
+        Utility.PreferenceManager.shared.recentRecords = currentRecentRecords
     }
 
     /// 유저 정보 저장
@@ -61,7 +61,7 @@ public extension PreferenceManager {
             name: AES256.encrypt(string: name),
             itemCount: itemCount
         )
-        Utility.PreferenceManager.userInfo = userInfo
+        Utility.PreferenceManager.shared.userInfo = userInfo
         LogManager.setUserProperty(property: .fruitTotal(count: userInfo.itemCount))
         LogManager.setUserProperty(property: .loginPlatform(platform: userInfo.platform))
     }
@@ -69,7 +69,7 @@ public extension PreferenceManager {
     static func clearUserInfo() {
         LogManager.setUserID(userID: nil)
         Crashlytics.crashlytics().setUserID(nil)
-        PreferenceManager.userInfo = nil
+        PreferenceManager.shared.userInfo = nil
         LogManager.clearUserProperty(property: .fruitTotal(count: -1))
         LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
     }

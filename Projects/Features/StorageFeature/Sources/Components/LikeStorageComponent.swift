@@ -19,6 +19,7 @@ public protocol LikeStorageDependency: Dependency {
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
+@MainActor
 public final class LikeStorageComponent: Component<LikeStorageDependency> {
     public func makeView() -> UIViewController {
         return LikeStorageViewController.viewController(

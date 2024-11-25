@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol CancelLikeSongUseCase {
+public protocol CancelLikeSongUseCase: Sendable {
     func execute(id: String) -> Single<LikeEntity>
 }

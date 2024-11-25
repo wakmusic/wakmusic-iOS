@@ -15,6 +15,7 @@ import SnapKit
 import UIKit
 import Utility
 
+@MainActor
 protocol HomeChartCellDelegate: AnyObject {
     func thumbnailDidTap(model: ChartRankingEntity)
     func playButtonDidTap(model: ChartRankingEntity)
@@ -35,10 +36,12 @@ class HomeChartCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        albumImageView.layer.cornerRadius = 4
-        albumImageView.contentMode = .scaleAspectFill
-        playImageView.image = DesignSystemAsset.Home.playSmall.image
-        bind()
+        Task { @MainActor in
+            albumImageView.layer.cornerRadius = 4
+            albumImageView.contentMode = .scaleAspectFill
+            playImageView.image = DesignSystemAsset.Home.playSmall.image
+            bind()
+        }
     }
 }
 

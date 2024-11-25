@@ -3,6 +3,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 private protocol KaraokeContentStateProtocol {
     func update(number: Int?, kind: KaraokeKind)
 }

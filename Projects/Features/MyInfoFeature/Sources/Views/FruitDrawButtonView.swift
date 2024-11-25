@@ -5,6 +5,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 private protocol FruitDrawStateProtocol {
     func updateFruitCount(count: Int)
 }

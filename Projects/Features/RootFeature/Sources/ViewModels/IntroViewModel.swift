@@ -54,7 +54,7 @@ public final class IntroViewModel: ViewModelType {
 
         Observable.combineLatest(
             input.fetchPermissionCheck,
-            Utility.PreferenceManager.$appPermissionChecked
+            Utility.PreferenceManager.shared.$appPermissionChecked
         ) { _, permission -> Bool? in
             return permission
         }
@@ -97,7 +97,7 @@ public final class IntroViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.checkUserInfoPreference
-            .withLatestFrom(PreferenceManager.$userInfo)
+            .withLatestFrom(PreferenceManager.shared.$userInfo)
             .flatMap { [logoutUseCase, checkIsExistAccessTokenUseCase] userInfo -> Observable<Void> in
                 // 비로그인 상태인데, 키체인에 저장된 엑세스 토큰이 살아있다는건 로그인 상태로 앱을 삭제한 유저임
                 guard userInfo == nil else {

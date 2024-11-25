@@ -8,6 +8,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 private protocol MyInfoStateProtocol {
     func updateIsHiddenLoginWarningView(isLoggedIn: Bool)
     func updateFruitCount(count: Int)
@@ -30,6 +31,7 @@ private protocol MyInfoActionProtocol {
 final class MyInfoView: UIView {
     let scrollView = UIScrollView()
     let contentView = UIView()
+    fileprivate let tapGestureRecognizer = UITapGestureRecognizer()
 
     let loginWarningView = LoginWarningView(text: "로그인을 해주세요.")
 
@@ -90,6 +92,8 @@ final class MyInfoView: UIView {
         super.init(frame: .zero)
         addView()
         setLayout()
+        scrollView.addGestureRecognizer(tapGestureRecognizer)
+        scrollView.isUserInteractionEnabled = true
         self.backgroundColor = DesignSystemAsset.BlueGrayColor.blueGray100.color
     }
 
@@ -195,15 +199,13 @@ extension MyInfoView: MyInfoStateProtocol {
     }
 }
 
-extension Reactive: MyInfoActionProtocol where Base: MyInfoView {
+extension Reactive: @preconcurrency MyInfoActionProtocol where Base: MyInfoView {
     var scrollViewDidTap: Observable<Void> {
-        let tapGestureRecognizer = UITapGestureRecognizer()
-        base.scrollView.addGestureRecognizer(tapGestureRecognizer)
-        base.scrollView.isUserInteractionEnabled = true
-        return tapGestureRecognizer.rx.event.map { _ in }.asObservable()
+        return base.tapGestureRecognizer.rx.event.map { _ in }.asObservable()
     }
 
     var loginButtonDidTap: Observable<Void> { base.loginWarningView.rx.loginButtonDidTap }
+    @MainActor
     var profileImageDidTap: Observable<Void> { base.profileView.rx.profileImageDidTap }
     var fruitStorageButtonDidTap: Observable<Void> { base.fruitDrawButtonView.rx.fruitStorageButtonDidTap }
     var drawButtonDidTap: Observable<Void> { base.fruitDrawButtonView.rx.drawButtonDidTap }

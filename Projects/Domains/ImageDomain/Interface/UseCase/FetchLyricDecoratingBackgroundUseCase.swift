@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchLyricDecoratingBackgroundUseCase {
+public protocol FetchLyricDecoratingBackgroundUseCase: Sendable {
     func execute() -> Single<[LyricDecoratingBackgroundEntity]>
 }

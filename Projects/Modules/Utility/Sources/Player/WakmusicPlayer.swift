@@ -1,3 +1,4 @@
-public protocol WakmusicPlayer {
+@MainActor
+public protocol WakmusicPlayer: Sendable {
     func play()
 }
