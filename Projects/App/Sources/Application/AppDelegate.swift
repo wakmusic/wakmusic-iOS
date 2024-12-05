@@ -30,7 +30,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
         // configure NaverThirdPartyLoginConnection
         let naverInstance = NaverThirdPartyLoginConnection.getSharedInstance()
-        naverInstance?.isNaverAppOauthEnable = true // 네이버앱 로그인 설정
+        naverInstance?.isNaverAppOauthEnable = false // 네이버앱 로그인 설정
         naverInstance?.isInAppOauthEnable = true // 사파리 로그인 설정
         naverInstance?.setOnlyPortraitSupportInIphone(true)
 
