@@ -55,6 +55,8 @@
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+        <string>naversearchapp</string>
+        <string>naversearchthirdlogin</string>
 		<string>youtube</string>
 		<string>youtubemusic</string>
 	</array>

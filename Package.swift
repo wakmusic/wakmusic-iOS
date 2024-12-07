@@ -34,7 +34,7 @@ let package = Package(
         .package(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", from: "5.0.2"),
         .package(url: "https://github.com/RxSwiftCommunity/RxKeyboard.git", from: "2.0.1"),
         .package(url: "https://github.com/huri000/SwiftEntryKit", from: "2.0.0"),
-        .package(url: "https://github.com/naver/naveridlogin-sdk-ios.git", branch: "master"),
+        .package(url: "https://github.com/naver/naveridlogin-sdk-ios.git", from: "4.2.3"),
         .package(url: "https://github.com/krzyzanowskim/CryptoSwift.git", from: "1.8.2"),
         .package(url: "https://github.com/cbpowell/MarqueeLabel.git", from: "4.5.0"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "10.25.0"),
