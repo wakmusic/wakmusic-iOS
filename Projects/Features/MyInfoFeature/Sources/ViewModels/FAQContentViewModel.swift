@@ -5,7 +5,12 @@ import RxRelay
 import RxSwift
 import Utility
 
-@available(*, deprecated, renamed: "FAQContentViewModel", message: "QnaContentViewModel is deprecated, use FAQContentViewModel instead.")
+@available(
+    *,
+    deprecated,
+    renamed: "FAQContentViewModel",
+    message: "QnaContentViewModel is deprecated, use FAQContentViewModel instead."
+)
 typealias QnaContentViewModel = FAQContentViewModel
 
 public final class FAQContentViewModel: ViewModelType {
