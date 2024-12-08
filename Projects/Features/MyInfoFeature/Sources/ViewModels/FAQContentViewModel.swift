@@ -5,7 +5,7 @@ import RxRelay
 import RxSwift
 import Utility
 
-public final class QnaContentViewModel: ViewModelType {
+public final class FAQContentViewModel: ViewModelType {
     var disposeBag = DisposeBag()
     var dataSource: [FaqEntity]
 
