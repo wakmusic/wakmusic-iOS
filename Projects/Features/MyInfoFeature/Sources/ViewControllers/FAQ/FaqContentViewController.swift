@@ -9,7 +9,7 @@ import Utility
 public final class FaqContentViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tableView: UITableView!
 
-  var viewModel: FAQContentViewModel!
+    var viewModel: FAQContentViewModel!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -71,12 +71,16 @@ extension FaqContentViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let questionCell = tableView
-            .dequeueReusableCell(withIdentifier: "FAQQuestionTableViewCell", for: indexPath) as? FAQQuestionTableViewCell
+            .dequeueReusableCell(
+                withIdentifier: "FAQQuestionTableViewCell",
+                for: indexPath
+            ) as? FAQQuestionTableViewCell
         else {
             return UITableViewCell()
         }
         guard let answerCell = tableView
-            .dequeueReusableCell(withIdentifier: "FAQAnswerTableViewCell", for: indexPath) as? FAQAnswerTableViewCell else {
+            .dequeueReusableCell(withIdentifier: "FAQAnswerTableViewCell", for: indexPath) as? FAQAnswerTableViewCell
+        else {
             return UITableViewCell()
         }
 

@@ -7,17 +7,17 @@ final class FAQAnswerTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-      if Thread.isMainThread {
-        MainActor.assumeIsolated {
-          answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-          answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+                answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
+            }
+        } else {
+            Task { @MainActor in
+                answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+                answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
+            }
         }
-      } else {
-        Task { @MainActor in
-          answerLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-          answerLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 6)
-        }
-      }
     }
 }
 
