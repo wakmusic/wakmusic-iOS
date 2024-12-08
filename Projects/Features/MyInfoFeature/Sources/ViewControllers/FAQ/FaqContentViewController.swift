@@ -9,7 +9,7 @@ import Utility
 public final class FaqContentViewController: UIViewController, ViewControllerFromStoryBoard {
     @IBOutlet weak var tableView: UITableView!
 
-    var viewModel: QnaContentViewModel!
+  var viewModel: FAQContentViewModel!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,7 @@ public final class FaqContentViewController: UIViewController, ViewControllerFro
         navigationController?.interactivePopGestureRecognizer?.delegate = nil // 스와이프로 뒤로가기
     }
 
-    public static func viewController(viewModel: QnaContentViewModel) -> FaqContentViewController {
+    public static func viewController(viewModel: FAQContentViewModel) -> FaqContentViewController {
         let viewController = FaqContentViewController.viewController(storyBoardName: "Faq", bundle: Bundle.module)
         viewController.viewModel = viewModel
         return viewController
@@ -71,12 +71,12 @@ extension FaqContentViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let questionCell = tableView
-            .dequeueReusableCell(withIdentifier: "QuestionTableViewCell", for: indexPath) as? QuestionTableViewCell
+            .dequeueReusableCell(withIdentifier: "FAQQuestionTableViewCell", for: indexPath) as? FAQQuestionTableViewCell
         else {
             return UITableViewCell()
         }
         guard let answerCell = tableView
-            .dequeueReusableCell(withIdentifier: "AnswerTableViewCell", for: indexPath) as? AnswerTableViewCell else {
+            .dequeueReusableCell(withIdentifier: "FAQAnswerTableViewCell", for: indexPath) as? FAQAnswerTableViewCell else {
             return UITableViewCell()
         }
 
