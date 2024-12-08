@@ -9,6 +9,7 @@
 import Foundation
 @preconcurrency import RxCocoa
 @preconcurrency import RxSwift
+import LogManager
 import Utility
 
 public final class OpenSourceLicenseViewModel: Sendable {
@@ -24,7 +25,9 @@ public final class OpenSourceLicenseViewModel: Sendable {
         let dataSource: BehaviorRelay<[OpenSourceLicense]> = BehaviorRelay(value: [])
     }
 
-    init() {}
+    init() {
+      bind()
+    }
 
     func bind() {
         input.viewDidLoad.bind { [weak self] in
