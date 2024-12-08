@@ -9,7 +9,6 @@
 import Foundation
 @preconcurrency import RxCocoa
 @preconcurrency import RxSwift
-import LogManager
 import Utility
 
 public final class OpenSourceLicenseViewModel: Sendable {
@@ -26,7 +25,7 @@ public final class OpenSourceLicenseViewModel: Sendable {
     }
 
     init() {
-      bind()
+        bind()
     }
 
     func bind() {
