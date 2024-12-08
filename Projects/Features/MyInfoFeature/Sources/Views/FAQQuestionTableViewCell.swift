@@ -2,15 +2,7 @@ import DesignSystem
 import FaqDomainInterface
 import UIKit
 
-@available(
-    *,
-    deprecated,
-    renamed: "FAQTableViewCell",
-    message: "QuestionTableViewCell is deprecated, use FAQTableViewCell instead."
-)
-typealias QuestionTableViewCell = FAQTableViewCell
-
-class FAQTableViewCell: UITableViewCell {
+final class FAQQuestionTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var expandImageView: UIImageView!
@@ -35,7 +27,7 @@ class FAQTableViewCell: UITableViewCell {
     }
 }
 
-public extension QuestionTableViewCell {
+extension FAQQuestionTableViewCell {
     func update(model: FaqEntity) {
         categoryLabel.text = model.category
         titleLabel.text = model.question
