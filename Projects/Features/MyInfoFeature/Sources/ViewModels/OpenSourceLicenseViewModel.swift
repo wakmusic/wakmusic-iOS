@@ -24,7 +24,9 @@ public final class OpenSourceLicenseViewModel: Sendable {
         let dataSource: BehaviorRelay<[OpenSourceLicense]> = BehaviorRelay(value: [])
     }
 
-    init() {}
+    init() {
+        bind()
+    }
 
     func bind() {
         input.viewDidLoad.bind { [weak self] in

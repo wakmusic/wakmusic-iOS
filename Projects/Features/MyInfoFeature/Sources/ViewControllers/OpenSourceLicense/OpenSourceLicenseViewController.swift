@@ -25,8 +25,8 @@ public class OpenSourceLicenseViewController: UIViewController, ViewControllerFr
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        inputBind()
         outputBind()
+        inputBind()
         bindBtn()
     }
 
