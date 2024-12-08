@@ -2,7 +2,10 @@ import DesignSystem
 import FaqDomainInterface
 import UIKit
 
-class QuestionTableViewCell: UITableViewCell {
+@available(*, deprecated, renamed: "FAQTableViewCell", message: "QuestionTableViewCell is deprecated, use FAQTableViewCell instead.")
+typealias QuestionTableViewCell = FAQTableViewCell
+
+class FAQTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var expandImageView: UIImageView!
