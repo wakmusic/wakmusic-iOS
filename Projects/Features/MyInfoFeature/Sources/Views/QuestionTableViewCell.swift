@@ -9,21 +9,21 @@ class QuestionTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-      if Thread.isMainThread {
-        MainActor.assumeIsolated {
-          categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-          categoryLabel.setTextWithAttributes(kernValue: -0.5)
-          titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-          titleLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 5)
+        if Thread.isMainThread {
+            MainActor.assumeIsolated {
+                categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+                categoryLabel.setTextWithAttributes(kernValue: -0.5)
+                titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+                titleLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 5)
+            }
+        } else {
+            Task { @MainActor in
+                categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+                categoryLabel.setTextWithAttributes(kernValue: -0.5)
+                titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+                titleLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 5)
+            }
         }
-      } else {
-        Task { @MainActor in
-          categoryLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-          categoryLabel.setTextWithAttributes(kernValue: -0.5)
-          titleLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-          titleLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 5)
-        }
-      }
     }
 }
 
