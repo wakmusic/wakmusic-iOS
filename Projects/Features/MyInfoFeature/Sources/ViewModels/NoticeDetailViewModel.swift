@@ -65,12 +65,12 @@ public final class NoticeDetailViewModel {
 
 private extension NoticeDetailViewModel {
     func readNotice(ID: Int) {
-        var newReadNoticeIDs = PreferenceManager.readNoticeIDs ?? []
+        var newReadNoticeIDs = PreferenceManager.shared.readNoticeIDs ?? []
         guard newReadNoticeIDs.contains(ID) == false else {
             return
         }
         newReadNoticeIDs.append(ID)
-        PreferenceManager.readNoticeIDs = newReadNoticeIDs
+        PreferenceManager.shared.readNoticeIDs = newReadNoticeIDs
     }
 
     func downloadImageSize(url: URL) -> Observable<CGSize> {

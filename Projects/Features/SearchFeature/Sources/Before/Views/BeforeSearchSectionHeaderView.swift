@@ -4,6 +4,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 protocol BeforeSearchSectionHeaderViewDelegate: AnyObject {
     func tap(_ section: Int?)
 }

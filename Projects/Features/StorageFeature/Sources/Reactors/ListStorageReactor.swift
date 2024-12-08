@@ -7,7 +7,7 @@ import PriceDomainInterface
 import ReactorKit
 import RxCocoa
 import RxSwift
-import SongsDomainInterface
+@preconcurrency import SongsDomainInterface
 import UserDomainInterface
 import Utility
 
@@ -280,7 +280,7 @@ final class ListStorageReactor: Reactor {
 
 extension ListStorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        let isLoggedIn = PreferenceManager.userInfo != nil
+        let isLoggedIn = PreferenceManager.shared.userInfo != nil
         if !isLoggedIn { return .empty() }
         return .concat(
             updateIsLoggedIn(isLoggedIn),
@@ -366,7 +366,7 @@ extension ListStorageReactor {
     }
 
     func addToCurrentPlaylist() -> Observable<Mutation> {
-        let limit = 50
+        _ = 50
         let selectedPlaylists = currentState.dataSource
             .flatMap { $0.items.filter { $0.isSelected == true } }
 
@@ -424,12 +424,15 @@ extension ListStorageReactor {
                 .asObservable()
                 .do(onNext: { [weak self] appendingPlaylistItems in
                     PlayState.shared.appendSongsToPlaylist(appendingPlaylistItems)
-                    let ids = appendingPlaylistItems.map { $0.id }
-                        .prefix(50)
-                    if appendingPlaylistItems.allSatisfy({ $0.title.isContainShortsTagTitle }) {
-                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직", playPlatform: .youtube).play()
-                    } else {
-                        WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직").play()
+                    Task { @MainActor in
+                        let ids = appendingPlaylistItems.map { $0.id }
+                            .prefix(50)
+
+                        if appendingPlaylistItems.allSatisfy({ $0.title.isContainShortsTagTitle }) {
+                            WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직", playPlatform: .youtube).play()
+                        } else {
+                            WakmusicYoutubePlayer(ids: Array(ids), title: "왁타버스 뮤직").play()
+                        }
                     }
                     self?.storageCommonService.isEditingState.onNext(false)
                 })
@@ -525,7 +528,7 @@ private extension ListStorageReactor {
 
     func mutateDeletePlaylist(_ playlists: [PlaylistEntity]) -> Observable<Mutation> {
         let noti = NotificationCenter.default
-        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.userInfo?.decryptedID }
+        let subscribedPlaylistKeys = playlists.filter { $0.userId != PreferenceManager.shared.userInfo?.decryptedID }
             .map { $0.key }
         let ids = playlists.map { $0.key }
         return deletePlayListUseCase.execute(ids: ids)
@@ -572,7 +575,7 @@ private extension ListStorageReactor {
                 .asObservable()
                 .map { $0.price }
                 .flatMap { price -> Observable<Mutation> in
-                    guard let userItemCount = PreferenceManager.userInfo?.itemCount else {
+                    guard let userItemCount = PreferenceManager.shared.userInfo?.itemCount else {
                         return .just(.showToast(LocalizationStrings.unknownErrorWarning))
                     }
                     if userItemCount < price {

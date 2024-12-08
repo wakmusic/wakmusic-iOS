@@ -9,7 +9,8 @@ import SignInFeatureInterface
 import UIKit
 import Utility
 
-public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard, ContainerViewType {
+public final class ArtistDetailViewController: UIViewController, ViewControllerFromStoryBoard,
+    @preconcurrency ContainerViewType {
     @IBOutlet weak var gradationView: UIView!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var subscriptionButton: UIButton!

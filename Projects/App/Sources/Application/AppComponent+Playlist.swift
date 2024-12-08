@@ -2,6 +2,7 @@ import BaseFeature
 import BaseFeatureInterface
 import ImageDomain
 import ImageDomainInterface
+@preconcurrency import NeedleFoundation
 import PlaylistDomain
 import PlaylistDomainInterface
 import PlaylistFeature

@@ -6,7 +6,7 @@ import NoticeDomainInterface
 @testable import NoticeDomainTesting
 import UIKit
 
-public final class NoticeComponentStub: NoticeFactory {
+public final class NoticeComponentStub: NoticeFactory, @unchecked Sendable {
     public func makeView() -> UIViewController {
         return NoticeViewController.viewController(
             viewModel: .init(

@@ -1,3 +1,4 @@
+@preconcurrency import NeedleFoundation
 import TeamDomain
 import TeamDomainInterface
 import TeamFeature

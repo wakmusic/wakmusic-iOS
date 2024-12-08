@@ -2,7 +2,7 @@ public protocol SearchOptionType {
     var title: String { get }
 }
 
-public enum FilterType: String, Encodable, SearchOptionType {
+public enum FilterType: String, Encodable, SearchOptionType, Sendable {
     case all
     case title
     case artist
@@ -22,7 +22,7 @@ public enum FilterType: String, Encodable, SearchOptionType {
     }
 }
 
-public enum SortType: String, Encodable, SearchOptionType {
+public enum SortType: String, Encodable, SearchOptionType, Sendable {
     case latest
     case oldest
     case relevance

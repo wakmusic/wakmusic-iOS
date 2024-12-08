@@ -18,7 +18,7 @@ import Utility
 
 typealias MyPlayListSectionModel = SectionModel<Int, PlaylistEntity>
 
-final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, SongCartViewType,
+final class ListStorageViewController: BaseReactorViewController<ListStorageReactor>, @preconcurrency SongCartViewType,
     PlaylistDetailNavigator {
     private let createListButton = CreateListButtonView(
         padding: .init(
@@ -206,7 +206,7 @@ final class ListStorageViewController: BaseReactorViewController<ListStorageReac
         sharedState.map(\.dataSource)
             // .skip(1)
             .withUnretained(self)
-            .withLatestFrom(Utility.PreferenceManager.$userInfo) { ($0.0, $0.1, $1) }
+            .withLatestFrom(Utility.PreferenceManager.shared.$userInfo) { ($0.0, $0.1, $1) }
             .do(onNext: { owner, dataSource, _ in
                 owner.listStorageView.updateRefreshControlState(isPlaying: false)
                 let dataSourceIsEmpty = dataSource.flatMap { $0.items }.isEmpty

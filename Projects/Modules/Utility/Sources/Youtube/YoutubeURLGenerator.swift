@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol YoutubeURLGeneratable {
+public protocol YoutubeURLGeneratable: Sendable {
     func generateThumbnailURL(id: String) -> String
     func generateHDThumbnailURL(id: String) -> String
     func generateYoutubeVideoAppURL(id: String) -> String
@@ -16,7 +16,7 @@ public protocol YoutubeURLGeneratable {
     func generateYoutubeMusicPlaylistWebURL(id: String) -> String
 }
 
-public struct YoutubeURLGenerator: YoutubeURLGeneratable {
+public struct YoutubeURLGenerator: YoutubeURLGeneratable, Sendable {
     public init() {}
 
     // MARK: Youtube

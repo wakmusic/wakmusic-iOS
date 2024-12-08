@@ -9,7 +9,7 @@ import UIKit
 import Utility
 
 final class PlaylistDetailContainerViewController: BaseReactorViewController<PlaylistDetailContainerReactor>,
-    ContainerViewType {
+    @preconcurrency ContainerViewType {
     var contentView: UIView! = UIView().then {
         $0.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
     }
@@ -74,7 +74,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
     override func bind(reactor: PlaylistDetailContainerReactor) {
         super.bind(reactor: reactor)
 
-        PreferenceManager.$userInfo
+        PreferenceManager.shared.$userInfo
             .map(\.?.ID)
             .distinctUntilChanged()
             .bind(with: self) { owner, userInfo in
@@ -121,7 +121,7 @@ final class PlaylistDetailContainerViewController: BaseReactorViewController<Pla
         sharedState.map(\.ownerID)
             .distinctUntilChanged()
             .compactMap { $0 }
-            .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
+            .withLatestFrom(PreferenceManager.shared.$userInfo) { ($0, $1) }
             .bind(with: self) { owner, info in
 
                 let (ownerID, userInfo) = info

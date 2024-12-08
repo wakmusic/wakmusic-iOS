@@ -45,14 +45,14 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-final class DummyCreditSongListFactory: CreditSongListFactory {
+final class DummyCreditSongListFactory: CreditSongListFactory, @unchecked Sendable {
     func makeViewController(workerName: String) -> UIViewController {
         let viewController = UIViewController()
         return viewController
     }
 }
 
-final class DummyArtistDetailFactory: ArtistDetailFactory {
+final class DummyArtistDetailFactory: ArtistDetailFactory, @unchecked Sendable {
     func makeView(artistID: String) -> UIViewController {
         return UIViewController()
     }

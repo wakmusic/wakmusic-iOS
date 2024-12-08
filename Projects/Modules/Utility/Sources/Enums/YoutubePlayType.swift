@@ -1,6 +1,6 @@
 import Foundation
 
-public enum YoutubePlayType: Codable {
+public enum YoutubePlayType: Codable, Sendable {
     case youtube
     case youtubeMusic
 

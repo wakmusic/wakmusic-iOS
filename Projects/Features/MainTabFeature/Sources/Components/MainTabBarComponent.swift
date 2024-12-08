@@ -30,6 +30,7 @@ public protocol MainTabBarDependency: Dependency {
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
+@MainActor
 public final class MainTabBarComponent: Component<MainTabBarDependency> {
     public func makeView() -> MainTabBarViewController {
         return MainTabBarViewController.viewController(

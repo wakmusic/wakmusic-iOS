@@ -2,6 +2,7 @@ import CreditDomain
 import CreditDomainInterface
 import CreditSongListFeature
 import CreditSongListFeatureInterface
+@preconcurrency import NeedleFoundation
 import SongCreditFeature
 import SongCreditFeatureInterface
 

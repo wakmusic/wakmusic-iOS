@@ -19,7 +19,8 @@ import UIKit
 // HapticManager.shared.impact(style: .rigid)
 // HapticManager.shared.impact(style: .soft)
 
-public class HapticManager {
+@MainActor
+public class HapticManager: Sendable {
     public static let shared = HapticManager()
 
     public func notification(type: UINotificationFeedbackGenerator.FeedbackType) {

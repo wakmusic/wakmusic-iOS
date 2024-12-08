@@ -2,7 +2,7 @@ import CreditDomainInterface
 import RxSwift
 import SongsDomainInterface
 
-public final class FetchCreditSongListUseCaseSpy: FetchCreditSongListUseCase {
+public final class FetchCreditSongListUseCaseSpy: FetchCreditSongListUseCase, @unchecked Sendable {
     public var callCount = 0
     public var handler: (String, CreditSongOrderType, Int, Int) -> Single<[SongEntity]> = { _, _, _, _ in fatalError() }
 

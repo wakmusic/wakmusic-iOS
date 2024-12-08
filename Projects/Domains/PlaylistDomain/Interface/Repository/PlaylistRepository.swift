@@ -3,7 +3,7 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public protocol PlaylistRepository {
+public protocol PlaylistRepository: Sendable {
     func fetchRecommendPlaylist() -> Single<[RecommendPlaylistEntity]>
     func fetchPlaylistDetail(id: String, type: PlaylistType) -> Single<PlaylistDetailEntity>
     func fetchWMPlaylistDetail(id: String) -> Single<WMPlaylistDetailEntity>

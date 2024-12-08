@@ -5,11 +5,12 @@ import SnapKit
 import Then
 import UIKit
 
-public enum PlayEvent {
+public enum PlayEvent: Sendable {
     case allPlay
     case shufflePlay
 }
 
+@MainActor
 public protocol PlayButtonForChartViewDelegate: AnyObject {
     func pressPlay(_ event: PlayEvent)
 }

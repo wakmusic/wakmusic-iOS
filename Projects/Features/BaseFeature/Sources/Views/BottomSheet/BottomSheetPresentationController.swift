@@ -218,7 +218,7 @@ extension BottomSheetPresentationController: UIViewControllerInteractiveTransiti
 
 // MARK: - BottomSheetViewPresenterDelegate
 
-extension BottomSheetPresentationController: BottomSheetViewDismissalDelegate {
+extension BottomSheetPresentationController: @preconcurrency BottomSheetViewDismissalDelegate {
     func bottomSheetView(_ view: BottomSheetView, willDismissBy action: BottomSheetView.DismissAction) {
         guard presentationDelegate?.bottomSheetPresentationController(self, shouldDismissBy: action) ?? true else {
             view.reset()

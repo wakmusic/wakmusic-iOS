@@ -2,6 +2,7 @@ import BaseFeature
 import MainTabFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
+@preconcurrency import NeedleFoundation
 import NoticeDomain
 import NoticeDomainInterface
 import StorageFeature

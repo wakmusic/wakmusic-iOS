@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol UpdateNotificationTokenUseCase {
+public protocol UpdateNotificationTokenUseCase: Sendable {
     func execute(type: NotificationUpdateType) -> Completable
 }

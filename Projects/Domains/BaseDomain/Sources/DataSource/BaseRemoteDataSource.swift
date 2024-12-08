@@ -8,14 +8,14 @@
 
 import Foundation
 import KeychainModule
-import Moya
-import RxMoya
+@preconcurrency import Moya
+@preconcurrency import RxMoya
 import RxSwift
 
-open class BaseRemoteDataSource<API: WMAPI> {
+open class BaseRemoteDataSource<API: WMAPI>: @unchecked Sendable {
     private let keychain: any Keychain
     private let provider: MoyaProvider<API>
-    private var refreshProvider: MoyaProvider<TokenRefreshAPI>?
+    private let refreshProvider: MoyaProvider<TokenRefreshAPI>
     private let decoder = JSONDecoder()
     private let maxRetryCount = 2
 
@@ -31,11 +31,16 @@ open class BaseRemoteDataSource<API: WMAPI> {
                 BasePlugin(keychain: keychain),
                 CustomLoggingPlugin()
             ])
+            self.refreshProvider = MoyaProvider(plugins: [
+                JwtPlugin(keychain: keychain),
+                CustomLoggingPlugin()
+            ])
         #else
             self.provider = provider ?? MoyaProvider(plugins: [
                 JwtPlugin(keychain: keychain),
                 BasePlugin(keychain: keychain)
             ])
+            self.refreshProvider = MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
         #endif
     }
 
@@ -107,20 +112,7 @@ private extension BaseRemoteDataSource {
     }
 
     func reissueToken() -> Completable {
-        #if DEBUG || QA
-            let provider = refreshProvider ?? MoyaProvider(plugins: [
-                JwtPlugin(keychain: keychain),
-                CustomLoggingPlugin()
-            ])
-        #else
-            let provider = refreshProvider ?? MoyaProvider(plugins: [JwtPlugin(keychain: keychain)])
-        #endif
-
-        if refreshProvider == nil {
-            refreshProvider = provider
-        }
-
-        return provider.rx.request(.refresh)
+        return refreshProvider.rx.request(.refresh)
             .asCompletable()
     }
 }

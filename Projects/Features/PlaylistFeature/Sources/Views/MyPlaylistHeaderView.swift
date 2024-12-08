@@ -6,6 +6,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 private protocol MyPlaylistHeaderStateProtocol {
     func updateEditState(_ isEditing: Bool)
     func updateData(_ model: PlaylistDetailHeaderModel)

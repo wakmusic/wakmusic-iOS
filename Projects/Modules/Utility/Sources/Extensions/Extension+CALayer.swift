@@ -23,6 +23,7 @@ public extension CALayer {
      UIRectEdge.right, //오른쪽
      */
 
+    @MainActor
     func addBorder(_ edges: [UIRectEdge], color: UIColor, height: CGFloat) {
         for edge in edges {
             let border = CALayer()
@@ -56,6 +57,7 @@ public extension CALayer {
     ///     - y: 그림자 위치 조정(pt단위) ex) 0
     ///     - blur: 피그마 기준 blur 값(pt단위) ex) 20
     ///     - spread: 피그마 기준 spread 값(pt단위) ex) 20
+    @MainActor
     func addShadow(
         color: UIColor,
         alpha: Float,

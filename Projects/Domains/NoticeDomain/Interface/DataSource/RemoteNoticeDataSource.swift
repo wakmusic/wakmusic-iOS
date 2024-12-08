@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-public protocol RemoteNoticeDataSource {
+public protocol RemoteNoticeDataSource: Sendable {
     func fetchNoticeCategories() -> Single<FetchNoticeCategoriesEntity>
     func fetchNoticePopup() -> Single<[FetchNoticeEntity]>
     func fetchNoticeAll() -> Single<[FetchNoticeEntity]>

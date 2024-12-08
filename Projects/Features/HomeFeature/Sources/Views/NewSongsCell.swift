@@ -4,6 +4,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
+@MainActor
 protocol NewSongsCellDelegate: AnyObject {
     func tappedThumbnail(id: String)
 }
@@ -20,10 +21,11 @@ class NewSongsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        contentView.backgroundColor = .clear
-        albumImageView.clipsToBounds = true
-        albumImageView.layer.cornerRadius = 4
-        albumImageView.contentMode = .scaleAspectFill
+        Task { @MainActor in
+            albumImageView.layer.cornerRadius = 4
+            albumImageView.clipsToBounds = true
+            albumImageView.contentMode = .scaleAspectFill
+        }
     }
 
     @IBAction func playButtonAction(_ sender: Any) {

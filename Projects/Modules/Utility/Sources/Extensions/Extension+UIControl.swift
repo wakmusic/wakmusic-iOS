@@ -10,13 +10,15 @@ import Combine
 import Foundation
 import UIKit
 
+@MainActor
 extension UIControl {
     func controlPublisher(for event: UIControl.Event) -> UIControl.EventPublisher {
         return UIControl.EventPublisher(control: self, event: event)
     }
 
     /// Publisher
-    struct EventPublisher: Publisher {
+    @MainActor
+    struct EventPublisher: @preconcurrency Publisher {
         typealias Output = UIControl
         typealias Failure = Never
 
@@ -30,7 +32,8 @@ extension UIControl {
     }
 
     /// Subscription
-    fileprivate class EventSubscription<EventSubscriber: Subscriber>: Subscription
+    @MainActor
+    fileprivate class EventSubscription<EventSubscriber: Subscriber>: Subscription, Sendable
         where EventSubscriber.Input == UIControl, EventSubscriber.Failure == Never {
         let control: UIControl
         let event: UIControl.Event
@@ -44,11 +47,20 @@ extension UIControl {
             control.addTarget(self, action: #selector(eventDidOccur), for: event)
         }
 
-        func request(_ demand: Subscribers.Demand) {}
+        nonisolated func request(_ demand: Subscribers.Demand) {}
 
-        func cancel() {
-            subscriber = nil
-            control.removeTarget(self, action: #selector(eventDidOccur), for: event)
+        nonisolated func cancel() {
+            if Thread.isMainThread {
+                MainActor.assumeIsolated {
+                    subscriber = nil
+                    control.removeTarget(self, action: #selector(eventDidOccur), for: event)
+                }
+            } else {
+                Task { @MainActor in
+                    subscriber = nil
+                    control.removeTarget(self, action: #selector(eventDidOccur), for: event)
+                }
+            }
         }
 
         @objc func eventDidOccur() {

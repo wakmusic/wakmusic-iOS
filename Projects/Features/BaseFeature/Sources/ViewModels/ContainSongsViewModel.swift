@@ -104,7 +104,7 @@ public final class ContainSongsViewModel: ViewModelType {
                 ))
             })
             .catchAndReturn([])
-            .withLatestFrom(PreferenceManager.$userInfo) { ($0, $1) }
+            .withLatestFrom(PreferenceManager.shared.$userInfo) { ($0, $1) }
             .map { playlist, userInfo in
 
                 return playlist.filter { $0.userId == userInfo?.decryptedID }

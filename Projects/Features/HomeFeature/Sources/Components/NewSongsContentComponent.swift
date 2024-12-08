@@ -15,6 +15,7 @@ public protocol NewSongsContentDependency: Dependency {
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
+@MainActor
 public final class NewSongsContentComponent: Component<NewSongsContentDependency> {
     public func makeView(type: NewSongGroupType) -> NewSongsContentViewController {
         return NewSongsContentViewController.viewController(

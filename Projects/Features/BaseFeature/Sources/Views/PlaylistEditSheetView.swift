@@ -4,6 +4,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 public protocol PlaylistEditSheetDelegate: AnyObject {
     func didTap(_ type: PlaylistEditType)
 }

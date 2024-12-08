@@ -59,8 +59,8 @@ public final class ArtistDetailViewModel: ViewModelType {
             .disposed(by: disposeBag)
 
         input.fetchArtistSubscriptionStatus
-            .withLatestFrom(PreferenceManager.$userInfo)
-            .withLatestFrom(PreferenceManager.$pushNotificationAuthorizationStatus) { ($0, $1 ?? false) }
+            .withLatestFrom(PreferenceManager.shared.$userInfo)
+            .withLatestFrom(PreferenceManager.shared.$pushNotificationAuthorizationStatus) { ($0, $1 ?? false) }
             .flatMap { [fetchArtistSubscriptionStatusUseCase] userInfo, granted
                 -> Observable<ArtistSubscriptionStatusEntity> in
                 if userInfo == nil || granted == false {
@@ -81,7 +81,7 @@ public final class ArtistDetailViewModel: ViewModelType {
                     ArtistAnalyticsLog.clickArtistSubscriptionButton(artist: id)
                 )
             })
-            .withLatestFrom(PreferenceManager.$userInfo)
+            .withLatestFrom(PreferenceManager.shared.$userInfo)
             .filter { userInfo in
                 if userInfo == nil {
                     output.showLogin.onNext(.artistSubscribe)
@@ -89,7 +89,7 @@ public final class ArtistDetailViewModel: ViewModelType {
                 }
                 return true
             }
-            .withLatestFrom(PreferenceManager.$pushNotificationAuthorizationStatus)
+            .withLatestFrom(PreferenceManager.shared.$pushNotificationAuthorizationStatus)
             .map { $0 ?? false }
             .filter { granted in
                 if granted == false {
@@ -118,8 +118,8 @@ public final class ArtistDetailViewModel: ViewModelType {
 
         // 로그인/아웃, 기기알림 끔 상태 반영
         Observable.combineLatest(
-            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
-            PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
+            PreferenceManager.shared.$userInfo.map { $0?.ID }.distinctUntilChanged(),
+            PreferenceManager.shared.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
         ) { id, granted -> (String?, Bool) in
             return (id, granted)
         }

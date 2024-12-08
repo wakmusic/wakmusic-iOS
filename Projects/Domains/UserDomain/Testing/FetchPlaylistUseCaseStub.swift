@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import UserDomainInterface
 
-public struct FetchPlaylistUseCaseStub: FetchPlaylistUseCase {
+public struct FetchPlaylistUseCaseStub: FetchPlaylistUseCase, @unchecked Sendable {
     let items: [PlaylistEntity] = [
         .init(
             key: "123",

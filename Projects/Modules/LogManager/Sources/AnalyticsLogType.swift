@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol AnalyticsLogType {
+public protocol AnalyticsLogType: Sendable {
     var name: String { get }
     var params: [String: Any] { get }
 }

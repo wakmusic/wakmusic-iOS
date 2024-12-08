@@ -1,5 +1,6 @@
 import UIKit
 
+@MainActor
 public protocol WaterfallLayoutDelegate: AnyObject {
     // MARK: - Required
     func collectionViewLayout(for section: Int) -> WaterfallLayout.Layout

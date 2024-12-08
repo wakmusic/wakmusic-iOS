@@ -185,7 +185,7 @@ private extension UnknownPlaylistDetailReactor {
                         Observable.just(
                             Mutation.updateDataSource(Array(songs))
                         ),
-                        PreferenceManager.userInfo == nil ? .just(.updateSubscribeState(false)) : owner
+                        PreferenceManager.shared.userInfo == nil ? .just(.updateSubscribeState(false)) : owner
                             .checkSubscription()
                     ])
                 }
@@ -271,7 +271,7 @@ private extension UnknownPlaylistDetailReactor {
 
         let prev = currentState.isSubscribing
 
-        if PreferenceManager.userInfo == nil {
+        if PreferenceManager.shared.userInfo == nil {
             return .just(.updateLoginPopupState((true, .playlistSubscribe)))
         } else {
             return subscribePlaylistUseCase.execute(key: key, isSubscribing: prev)

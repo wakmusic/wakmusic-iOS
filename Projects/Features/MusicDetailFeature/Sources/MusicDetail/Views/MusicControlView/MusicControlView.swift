@@ -7,6 +7,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol MusicControlStateProtool {
     func updateTitle(title: String)
     func updateArtist(artist: String)

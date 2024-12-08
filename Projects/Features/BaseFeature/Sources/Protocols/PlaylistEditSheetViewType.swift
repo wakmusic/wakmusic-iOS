@@ -3,6 +3,7 @@ import Foundation
 import UIKit
 import Utility
 
+/// concurrency를 위해 mutable 상태 리팩토링 필요
 public protocol PlaylistEditSheetViewType: AnyObject {
     var playlisteditSheetView: PlaylistEditSheetView! { get set }
     var bottomSheetView: BottomSheetView! { get set }
@@ -13,6 +14,7 @@ public enum PlaylistEditType {
     case share
 }
 
+@MainActor
 public extension PlaylistEditSheetViewType where Self: UIViewController {
     /// 편집하기 팝업을 띄웁니다.
     /// - Parameter view: 팝업을 붙일 대상이 되는 뷰 (ex: 아티스트 노래 리스트, viewController.view)

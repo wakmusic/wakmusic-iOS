@@ -15,8 +15,10 @@ public final class NoticeCollectionViewCell: UICollectionViewCell {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
-        contentImageView.contentMode = .scaleAspectFill
-        contentImageView.clipsToBounds = true
+        Task { @MainActor in
+            contentImageView.contentMode = .scaleAspectFill
+            contentImageView.clipsToBounds = true
+        }
     }
 }
 

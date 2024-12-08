@@ -4,7 +4,7 @@ import MyInfoFeatureInterface
 import NoticeDomainInterface
 import UIKit
 
-public final class NoticeDetailComponentStub: NoticeDetailFactory {
+public final class NoticeDetailComponentStub: NoticeDetailFactory, @unchecked Sendable {
     public func makeView(model: FetchNoticeEntity) -> UIViewController {
         return NoticeDetailViewController.viewController(
             viewModel: .init(

@@ -5,6 +5,7 @@ import SongsDomainInterface
 import UIKit
 import Utility
 
+@MainActor
 public protocol SongResultCellDelegate: AnyObject {
     func thumbnailDidTap(key: String)
 }

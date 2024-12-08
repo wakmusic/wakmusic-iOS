@@ -11,6 +11,7 @@ import Foundation
 import UIKit
 import Utility
 
+/// 강제 mutable 타입 해결해야함... @preconcurrency
 public protocol EditSheetViewType: AnyObject {
     var editSheetView: EditSheetView! { get set }
     var bottomSheetView: BottomSheetView! { get set }
@@ -21,6 +22,7 @@ public enum EditSheetType {
     case profile // 보관함 > 프로필 편집
 }
 
+@MainActor
 public extension EditSheetViewType where Self: UIViewController {
     /// 편집하기 팝업을 띄웁니다.
     /// - Parameter view: 팝업을 붙일 대상이 되는 뷰 (ex: 아티스트 노래 리스트, viewController.view)

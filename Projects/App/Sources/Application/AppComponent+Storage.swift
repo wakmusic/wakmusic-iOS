@@ -1,5 +1,6 @@
 import BaseFeature
 import BaseFeatureInterface
+@preconcurrency import NeedleFoundation
 import StorageFeature
 import StorageFeatureInterface
 

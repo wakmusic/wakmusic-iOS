@@ -16,17 +16,19 @@ public class OpenSourceLibraryCell: UITableViewCell {
 
     override public func awakeFromNib() {
         super.awakeFromNib()
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 15)
-        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        titleStringLabel.setTextWithAttributes(kernValue: -0.5)
-        titleStringLabel.numberOfLines = 0
-        descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 13)
-        descriptionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
-        descriptionLabel.setTextWithAttributes(kernValue: -0.5)
-        descriptionLabel.lineBreakMode = .byWordWrapping
-        descriptionLabel.numberOfLines = 0
+        Task { @MainActor in
+            self.backgroundColor = .clear
+            self.contentView.backgroundColor = .clear
+            titleStringLabel.font = DesignSystemFontFamily.Pretendard.bold.font(size: 15)
+            titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            titleStringLabel.setTextWithAttributes(kernValue: -0.5)
+            titleStringLabel.numberOfLines = 0
+            descriptionLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 13)
+            descriptionLabel.textColor = DesignSystemAsset.BlueGrayColor.gray500.color
+            descriptionLabel.setTextWithAttributes(kernValue: -0.5)
+            descriptionLabel.lineBreakMode = .byWordWrapping
+            descriptionLabel.numberOfLines = 0
+        }
     }
 }
 

@@ -110,7 +110,7 @@ public extension UIView {
     }
 
     func addSubviews(_ views: UIView...) {
-        views.forEach(self.addSubview(_:))
+        views.forEach { self.addSubview($0) }
     }
 
     var asImage: UIImage {

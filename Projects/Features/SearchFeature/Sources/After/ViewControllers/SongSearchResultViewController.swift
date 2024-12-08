@@ -8,12 +8,13 @@ import RxSwift
 import SearchDomainInterface
 import SignInFeatureInterface
 import SnapKit
-import SongsDomainInterface
+@preconcurrency import SongsDomainInterface
 import Then
 import UIKit
 import Utility
 
-final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>, SongCartViewType {
+final class SongSearchResultViewController: BaseReactorViewController<SongSearchResultReactor>,
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -308,10 +309,12 @@ extension SongSearchResultViewController: UICollectionViewDelegate {
 }
 
 extension SongSearchResultViewController: SearchSortOptionDelegate {
-    func updateSortType(_ type: SortType) {
-        LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "song"))
-        if reactor?.currentState.sortType != type {
-            reactor?.action.onNext(.changeSortType(type))
+    nonisolated func updateSortType(_ type: SortType) {
+        Task { @MainActor in
+            LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "song"))
+            if reactor?.currentState.sortType != type {
+                reactor?.action.onNext(.changeSortType(type))
+            }
         }
     }
 }
@@ -353,7 +356,7 @@ extension SongSearchResultViewController: SongCartViewDelegate {
                 return
             }
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 let vc = self.textPopupFactory.makeView(
                     text: LocalizationStrings.needLoginWarning,
                     cancelButtonIsHidden: false,

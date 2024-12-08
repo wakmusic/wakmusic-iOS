@@ -3,6 +3,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 protocol PlayTypeTogglePopupItemButtonViewDelegate: AnyObject {
     func tappedButtonAction(title: String)
 }

@@ -15,6 +15,7 @@ public protocol BeforeSearchDependency: Dependency {
     var playlistDetailFactory: any PlaylistDetailFactory { get }
 }
 
+@MainActor
 public final class BeforeSearchComponent: Component<BeforeSearchDependency> {
     public func makeView() -> UIViewController {
         return BeforeSearchContentViewController(

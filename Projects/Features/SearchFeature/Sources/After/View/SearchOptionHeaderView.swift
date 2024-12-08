@@ -6,6 +6,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol SearchOptionHeaderStateProtocol {
     func updateSortState(_ sortType: SortType)
 }
@@ -133,7 +134,8 @@ extension SearchOptionHeaderView: SearchOptionHeaderStateProtocol {
     }
 }
 
-extension Reactive: SearchOptionHeaderActionProtocol where Base: SearchOptionHeaderView {
+extension Reactive: @preconcurrency SearchOptionHeaderActionProtocol where Base: SearchOptionHeaderView {
+    @MainActor
     var selectedFilterItem: Observable<FilterType> {
         base.collectionView.rx.itemSelected
             .map { base.dataSource[$0.row] }

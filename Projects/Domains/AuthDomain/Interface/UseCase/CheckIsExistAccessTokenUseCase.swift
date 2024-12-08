@@ -1,5 +1,5 @@
 import RxSwift
 
-public protocol CheckIsExistAccessTokenUseCase {
+public protocol CheckIsExistAccessTokenUseCase: Sendable {
     func execute() -> Single<Bool>
 }

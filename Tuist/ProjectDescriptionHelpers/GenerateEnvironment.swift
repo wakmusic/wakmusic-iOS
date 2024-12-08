@@ -21,7 +21,7 @@ public extension GenerateEnvironment {
             return [.firebaseInfoByConfiguration, .firebaseCrashlytics]
 
         case .dev:
-            return [.swiftLint, .needle]
+            return [.swiftLint]
         }
     }
 }

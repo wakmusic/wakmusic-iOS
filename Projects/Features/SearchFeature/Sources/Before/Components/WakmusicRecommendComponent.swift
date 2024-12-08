@@ -9,6 +9,7 @@ public protocol WakmusicRecommendDependency: Dependency {
     var wakmusicPlaylistDetailFactory: any WakmusicPlaylistDetailFactory { get }
 }
 
+@MainActor
 public final class WakmusicRecommendComponent: Component<WakmusicRecommendDependency> {
     public func makeView() -> UIViewController {
         let reactor = WakmusicRecommendReactor(

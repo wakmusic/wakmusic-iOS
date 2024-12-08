@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import UserDomainInterface
 
-public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase {
+public struct FetchFavoriteSongsUseCaseStub: FetchFavoriteSongsUseCase, @unchecked Sendable {
     let items: [FavoriteSongEntity] = [
         .init(
             songID: "fgSXAKsq-Vo",

@@ -1,6 +1,7 @@
 import Foundation
 import MyInfoFeature
 import MyInfoFeatureInterface
+@preconcurrency import NeedleFoundation
 
 extension AppComponent {
     var myInfoFactory: any MyInfoFactory {

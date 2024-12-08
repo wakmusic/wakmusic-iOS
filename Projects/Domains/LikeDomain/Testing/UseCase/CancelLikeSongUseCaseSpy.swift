@@ -1,7 +1,7 @@
 import LikeDomainInterface
 import RxSwift
 
-public final class CancelLikeSongUseCaseSpy: CancelLikeSongUseCase {
+public final class CancelLikeSongUseCaseSpy: CancelLikeSongUseCase, @unchecked Sendable {
     public private(set) var callCount = 0
     public var handler: (String) -> Single<LikeEntity> = { _ in fatalError() }
 

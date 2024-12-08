@@ -15,7 +15,7 @@ public final class ArtistViewController:
     BaseViewController,
     ViewControllerFromStoryBoard,
     EqualHandleTappedType,
-    StoryboardView {
+    @preconcurrency StoryboardView {
     public typealias Reactor = ArtistReactor
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -201,13 +201,15 @@ extension ArtistViewController: WaterfallLayoutDelegate {
 }
 
 public extension ArtistViewController {
-    func equalHandleTapped() {
-        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
-        if viewControllersCount > 1 {
-            self.navigationController?.popToRootViewController(animated: true)
-        } else {
-            guard reactor?.currentState.artistList.isEmpty == false else { return }
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+    nonisolated func equalHandleTapped() {
+        Task { @MainActor in
+            let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+            if viewControllersCount > 1 {
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                guard reactor?.currentState.artistList.isEmpty == false else { return }
+                self.collectionView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+            }
         }
     }
 }

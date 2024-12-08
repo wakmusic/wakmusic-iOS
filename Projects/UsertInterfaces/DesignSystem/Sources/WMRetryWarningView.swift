@@ -3,6 +3,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 public protocol WMRetryWarningViewDelegate: AnyObject {
     func tappedRetryButton()
 }

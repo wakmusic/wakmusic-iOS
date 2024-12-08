@@ -13,6 +13,7 @@ import SnapKit
 import UIKit
 import Utility
 
+@MainActor
 protocol TabItemViewDelegate: AnyObject {
     func handleTap(view: TabItemView)
 }
@@ -48,7 +49,9 @@ final class TabItemView: UIView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.addTapGesture()
+        Task { @MainActor in
+            self.addTapGesture()
+        }
     }
 }
 

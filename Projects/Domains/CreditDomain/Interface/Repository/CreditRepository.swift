@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public protocol CreditRepository {
+public protocol CreditRepository: Sendable {
     func fetchCreditSongList(
         name: String,
         order: CreditSongOrderType,

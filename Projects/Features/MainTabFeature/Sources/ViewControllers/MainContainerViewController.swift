@@ -55,7 +55,7 @@ private extension MainContainerViewController {
     func setLayout() {
         view.addSubview(playlistFloatingActionButton)
 
-        let startPage: Int = PreferenceManager.startPage ?? 0
+        let startPage: Int = PreferenceManager.shared.startPage ?? 0
         let bottomOffset: CGFloat = startPage == 3 ?
             PlaylistFloatingButtonPosition.top.bottomOffset :
             PlaylistFloatingButtonPosition.default.bottomOffset
@@ -174,7 +174,7 @@ private extension MainContainerViewController {
             .disposed(by: disposeBag)
 
         Observable.combineLatest(
-            PreferenceManager.$startPage.map { $0 ?? 0 },
+            PreferenceManager.shared.$startPage.map { $0 ?? 0 },
             NotificationCenter.default.rx
                 .notification(.shouldMovePlaylistFloatingButton)
                 .map { $0.object as? PlaylistFloatingButtonPosition ?? .default }

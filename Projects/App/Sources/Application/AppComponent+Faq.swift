@@ -1,6 +1,7 @@
 import BaseFeature
 import FaqDomain
 import FaqDomainInterface
+@preconcurrency import NeedleFoundation
 import SignInFeature
 
 // MARK: 변수명 주의
