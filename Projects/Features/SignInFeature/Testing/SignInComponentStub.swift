@@ -7,7 +7,7 @@ import UIKit
 import UserDomainInterface
 @testable import UserDomainTesting
 
-public final class SignInComponentStub: SignInFactory {
+public final class SignInComponentStub: SignInFactory, @unchecked Sendable {
     public func makeView() -> UIViewController {
         return LoginViewController.viewController(
             viewModel: .init(

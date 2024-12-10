@@ -7,6 +7,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol MusicDetailStateProtocol {
     func updateTitle(title: String)
     func updateArtist(artist: String)
@@ -246,14 +247,17 @@ extension MusicDetailView: MusicDetailStateProtocol {
     }
 }
 
-extension Reactive: MusicDetailActionProtocol where Base: MusicDetailView {
+extension Reactive: @preconcurrency MusicDetailActionProtocol where Base: MusicDetailView {
     var prevMusicButtonDidTap: Observable<Void> { base.musicControlView.rx.prevMusicButtonDidTap }
     var playMusicButtonDidTap: Observable<Void> { base.musicControlView.rx.playMusicButtonDidTap }
     var nextMusicButtonDidTap: Observable<Void> { base.musicControlView.rx.nextMusicButtonDidTap }
     var singingRoomButtonDidTap: Observable<Void> { base.musicControlView.rx.singingRoomButtonDidTap }
     var lyricsButtonDidTap: Observable<Void> { base.musicControlView.rx.lyricsButtonDidTap }
+    @MainActor
     var likeButtonDidTap: Observable<Void> { base.musicToolbarView.rx.likeButtonDidTap }
+    @MainActor
     var musicPickButtonDidTap: Observable<Void> { base.musicToolbarView.rx.musicPickButtonDidTap }
+    @MainActor
     var playlistButtonDidTap: Observable<Void> { base.musicToolbarView.rx.playlistButtonDidTap }
     var creditButtonDidTap: Observable<Void> { base.creditButton.rx.tap.asObservable() }
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }

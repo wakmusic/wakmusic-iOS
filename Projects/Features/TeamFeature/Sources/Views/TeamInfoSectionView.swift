@@ -2,6 +2,7 @@ import DesignSystem
 import UIKit
 import Utility
 
+@MainActor
 protocol TeamInfoSectionViewDelegate: AnyObject {
     func toggleSection(header: TeamInfoSectionView, section: Int)
 }

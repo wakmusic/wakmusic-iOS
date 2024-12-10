@@ -110,7 +110,7 @@ private extension ChartViewController {
     }
 }
 
-extension ChartViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension ChartViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         switch index {
         case 0:

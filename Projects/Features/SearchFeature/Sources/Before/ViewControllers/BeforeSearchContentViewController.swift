@@ -131,7 +131,7 @@ final class BeforeSearchContentViewController: BaseReactorViewController<BeforeS
             .disposed(by: disposeBag)
 
         // 최근 검색어 tableView 셋팅
-        Utility.PreferenceManager.$recentRecords
+        Utility.PreferenceManager.shared.$recentRecords
             .compactMap { $0 ?? [] }
             .bind(to: tableView.rx.items) { (
                 tableView: UITableView,
@@ -179,7 +179,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             return .zero
         }
 
-        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.shared.recentRecords ?? []).isEmpty {
             return (APP_HEIGHT() * 3) / 8
         } else {
             return 68
@@ -200,7 +200,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
                 cancelButtonIsHidden: false,
                 confirmButtonText: nil,
                 cancelButtonText: nil,
-                completion: { Utility.PreferenceManager.recentRecords = nil },
+                completion: { Utility.PreferenceManager.shared.recentRecords = nil },
                 cancelCompletion: nil
             ) as? TextPopupViewController else {
                 return
@@ -209,7 +209,7 @@ extension BeforeSearchContentViewController: UITableViewDelegate {
             self.showBottomSheet(content: textPopupViewController)
         }
 
-        if (Utility.PreferenceManager.recentRecords ?? []).isEmpty {
+        if (Utility.PreferenceManager.shared.recentRecords ?? []).isEmpty {
             return warningView
 
         } else {

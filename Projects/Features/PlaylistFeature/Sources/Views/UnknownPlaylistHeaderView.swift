@@ -6,6 +6,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 private protocol UnknownPlaylistHeaderStateProtocol {
     func updateData(_ model: PlaylistDetailHeaderModel)
 }

@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchSongCreditsUseCase {
+public protocol FetchSongCreditsUseCase: Sendable {
     func execute(id: String) -> Single<[SongCreditsEntity]>
 }

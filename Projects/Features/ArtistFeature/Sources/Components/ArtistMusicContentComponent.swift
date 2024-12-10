@@ -13,6 +13,7 @@ public protocol ArtistMusicContentDependency: Dependency {
     var songDetailPresenter: any SongDetailPresentable { get }
 }
 
+@MainActor
 public final class ArtistMusicContentComponent: Component<ArtistMusicContentDependency> {
     public func makeView(
         type: ArtistSongSortType,

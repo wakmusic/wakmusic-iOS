@@ -1,6 +1,7 @@
 import BaseFeature
 import LikeDomain
 import LikeDomainInterface
+@preconcurrency import NeedleFoundation
 import SignInFeature
 import StorageFeature
 

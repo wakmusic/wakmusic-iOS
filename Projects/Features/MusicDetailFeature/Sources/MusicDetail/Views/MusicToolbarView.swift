@@ -5,6 +5,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol MusicToolbarStateProtocol {
     func updateViews(views: Int)
     func updateIsLike(likes: Int, isLike: Bool)
@@ -70,15 +71,18 @@ extension MusicToolbarView: MusicToolbarStateProtocol {
     }
 }
 
-extension Reactive: MusicToolbarActionProtocol where Base: MusicToolbarView {
+extension Reactive: @preconcurrency MusicToolbarActionProtocol where Base: MusicToolbarView {
+    @MainActor
     var likeButtonDidTap: Observable<Void> {
         base.heartButton.rx.tap.asObservable()
     }
 
+    @MainActor
     var musicPickButtonDidTap: Observable<Void> {
         base.musicPickButton.rx.tap.asObservable()
     }
 
+    @MainActor
     var playlistButtonDidTap: Observable<Void> {
         base.playlistButton.rx.tap.asObservable()
     }

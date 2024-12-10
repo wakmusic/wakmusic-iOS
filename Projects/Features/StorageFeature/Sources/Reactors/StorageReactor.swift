@@ -97,7 +97,7 @@ final class StorageReactor: Reactor {
 
 private extension StorageReactor {
     func viewDidLoad() -> Observable<Mutation> {
-        let isLoggedIn = PreferenceManager.userInfo != nil
+        let isLoggedIn = PreferenceManager.shared.userInfo != nil
         return .just(.updateIsLoggedIn(isLoggedIn))
     }
 

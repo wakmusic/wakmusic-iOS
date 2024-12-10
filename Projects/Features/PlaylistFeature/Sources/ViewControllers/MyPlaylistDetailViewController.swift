@@ -14,7 +14,8 @@ import UIKit
 import Utility
 
 final class MyPlaylistDetailViewController: BaseReactorViewController<MyPlaylistDetailReactor>,
-    PlaylistEditSheetViewType, SongCartViewType {
+    @preconcurrency PlaylistEditSheetViewType,
+    @preconcurrency SongCartViewType {
     private enum Limit {
         static let imageSizeLimitPerMB: Double = 10.0
     }
@@ -698,19 +699,21 @@ extension MyPlaylistDetailViewController: PlaylistEditSheetDelegate {
 }
 
 extension MyPlaylistDetailViewController: RequestPermissionable {
-    public func showPhotoLibrary() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .any(of: [.images])
-        configuration.selectionLimit = 1 // 갯수 제한
+    public nonisolated func showPhotoLibrary() {
+        Task { @MainActor in
+            var configuration = PHPickerConfiguration()
+            configuration.filter = .any(of: [.images])
+            configuration.selectionLimit = 1 // 갯수 제한
 
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
+            let picker = PHPickerViewController(configuration: configuration)
+            picker.delegate = self
 
-        let pickerToWrapNavigationController = picker.wrapNavigationController
-        pickerToWrapNavigationController.modalPresentationStyle = .overFullScreen
-        pickerToWrapNavigationController.setNavigationBarHidden(true, animated: false)
+            let pickerToWrapNavigationController = picker.wrapNavigationController
+            pickerToWrapNavigationController.modalPresentationStyle = .overFullScreen
+            pickerToWrapNavigationController.setNavigationBarHidden(true, animated: false)
 
-        self.present(pickerToWrapNavigationController, animated: true)
+            self.present(pickerToWrapNavigationController, animated: true)
+        }
     }
 }
 
@@ -732,19 +735,19 @@ extension MyPlaylistDetailViewController: PHPickerViewControllerDelegate {
                         DEBUG_LOG("error: \(error)")
 
                     } else {
-                        DispatchQueue.main.async {
-                            guard let image = image as? UIImage,
-                                  let resizeImage = image.customizeForPlaylistCover(
-                                      targetSize: CGSize(width: 500, height: 500)
-                                  ),
-                                  var imageData = resizeImage.jpegData(compressionQuality: 1.0)
-                            else { return } // 80% 압축
+                        guard let image = image as? UIImage,
+                              let resizeImage = image.customizeForPlaylistCover(
+                                  targetSize: CGSize(width: 500, height: 500)
+                              ),
+                              var imageData = resizeImage.jpegData(compressionQuality: 1.0)
+                        else { return } // 80% 압축
 
-                            let sizeMB: Double = Double(imageData.count).megabytes
+                        let sizeMB: Double = Double(imageData.count).megabytes
 
-                            if sizeMB > Limit.imageSizeLimitPerMB {
-                                imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
-                            }
+                        if sizeMB > Limit.imageSizeLimitPerMB {
+                            imageData = image.jpegData(compressionQuality: 0.8) ?? imageData
+                        }
+                        Task { @MainActor in
                             self.navigateToCheckPlaylistCover(imageData: imageData)
                         }
                     }
@@ -774,7 +777,7 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
                 PlaylistAnalyticsLog.clickPlaylistImageButton(type: "custom")
             )
 
-            guard let user = PreferenceManager.userInfo else {
+            guard let user = PreferenceManager.shared.userInfo else {
                 return
             }
 
@@ -790,15 +793,19 @@ extension MyPlaylistDetailViewController: PlaylistCoverOptionPopupDelegate {
 }
 
 extension MyPlaylistDetailViewController: CheckPlaylistCoverDelegate {
-    func receive(_ imageData: Data) {
-        reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
-        headerView.updateThumbnailFromGallery(imageData)
+    nonisolated func receive(_ imageData: Data) {
+        Task { @MainActor in
+            reactor?.action.onNext(.changeImageData(.custom(data: imageData)))
+            headerView.updateThumbnailFromGallery(imageData)
+        }
     }
 }
 
 extension MyPlaylistDetailViewController: DefaultPlaylistCoverDelegate {
-    func receive(url: String, imageName: String) {
-        reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
-        headerView.updateThumbnailByDefault(url)
+    nonisolated func receive(url: String, imageName: String) {
+        Task { @MainActor in
+            reactor?.action.onNext(.changeImageData(.default(imageName: imageName)))
+            headerView.updateThumbnailByDefault(url)
+        }
     }
 }

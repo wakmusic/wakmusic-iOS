@@ -10,20 +10,22 @@ class NoticeListCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.backgroundColor = .clear
-        self.contentView.backgroundColor = .clear
+        Task { @MainActor in
+            self.backgroundColor = .clear
+            self.contentView.backgroundColor = .clear
 
-        titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
-        titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
-        titleStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
+            titleStringLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 16)
+            titleStringLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray900.color
+            titleStringLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 1.26)
 
-        dayLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        dayLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
-        dayLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+            dayLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            dayLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
+            dayLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
 
-        timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        timeLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
-        timeLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+            timeLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            timeLabel.textColor = DesignSystemAsset.BlueGrayColor.blueGray500.color
+            timeLabel.setTextWithAttributes(kernValue: -0.5, lineSpacing: 0, lineHeightMultiple: 0)
+        }
     }
 }
 

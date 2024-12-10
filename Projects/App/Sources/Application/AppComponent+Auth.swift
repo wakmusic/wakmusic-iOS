@@ -3,6 +3,7 @@ import AuthDomainInterface
 import BaseFeature
 import MyInfoFeature
 import MyInfoFeatureInterface
+@preconcurrency import NeedleFoundation
 import SignInFeature
 import SignInFeatureInterface
 import StorageFeature

@@ -8,6 +8,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 private protocol ProfileStateProtocol {
     func updateProfileImage(image: String)
     func updateNickName(nickname: String)
@@ -170,7 +171,8 @@ extension ProfileView: ProfileStateProtocol {
     }
 }
 
-extension Reactive: ProfileActionProtocol where Base: ProfileView {
+extension Reactive: @preconcurrency ProfileActionProtocol where Base: ProfileView {
+    @MainActor
     var profileImageDidTap: Observable<Void> {
         return base.didTapProfileImageSubject.asObserver()
             .throttle(.milliseconds(500), latest: false, scheduler: MainScheduler.asyncInstance)

@@ -9,6 +9,7 @@ public protocol LyricDecoratingDependency: Dependency {
     var textPopupFactory: any TextPopupFactory { get }
 }
 
+@MainActor
 public final class LyricDecoratingComponent: Component<LyricDecoratingDependency> {
     public func makeView(model: LyricHighlightingRequiredModel) -> LyricDecoratingViewController {
         let viewModel = LyricDecoratingViewModel(

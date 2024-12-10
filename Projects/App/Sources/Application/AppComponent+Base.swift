@@ -1,6 +1,7 @@
 import BaseFeature
 import BaseFeatureInterface
 import Foundation
+@preconcurrency import NeedleFoundation
 
 public extension AppComponent {
     var multiPurposePopupFactory: any MultiPurposePopupFactory {

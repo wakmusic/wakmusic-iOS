@@ -12,7 +12,8 @@ import Then
 import UIKit
 import Utility
 
-public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard, SongCartViewType {
+public final class ChartContentViewController: BaseViewController, ViewControllerFromStoryBoard,
+    @preconcurrency SongCartViewType {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIncidator: NVActivityIndicatorView!
 
@@ -279,7 +280,7 @@ extension ChartContentViewController: SongCartViewDelegate {
         case .addSong:
             let log = CommonAnalyticsLog.clickAddMusicsButton(location: .chart)
             LogManager.analytics(log)
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 output.showLogin.onNext(())
                 return
             }

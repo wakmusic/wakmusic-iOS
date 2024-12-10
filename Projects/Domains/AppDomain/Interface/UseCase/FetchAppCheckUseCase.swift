@@ -9,6 +9,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchAppCheckUseCase {
+public protocol FetchAppCheckUseCase: Sendable {
     func execute() -> Single<AppCheckEntity>
 }

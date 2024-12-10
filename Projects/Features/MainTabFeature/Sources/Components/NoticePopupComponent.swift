@@ -12,6 +12,7 @@ import NoticeDomainInterface
 
 public protocol NoticePopupDependency: Dependency {}
 
+@MainActor
 public final class NoticePopupComponent: Component<NoticePopupDependency> {
     public func makeView(model: [FetchNoticeEntity]) -> NoticePopupViewController {
         return NoticePopupViewController.viewController(

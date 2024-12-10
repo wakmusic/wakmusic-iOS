@@ -457,13 +457,15 @@ extension HomeViewController: RecommendPlayListViewDelegate {
 }
 
 public extension HomeViewController {
-    func equalHandleTapped() {
-        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
-        if viewControllersCount > 1 {
-            self.navigationController?.popToRootViewController(animated: true)
-        } else {
-            guard let scrollView = self.scrollView else { return }
-            scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+    nonisolated func equalHandleTapped() {
+        Task { @MainActor in
+            let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+            if viewControllersCount > 1 {
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                guard let scrollView = self.scrollView else { return }
+                scrollView.setContentOffset(CGPoint(x: 0, y: -STATUS_BAR_HEGHIT()), animated: true)
+            }
         }
     }
 }

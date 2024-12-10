@@ -2,7 +2,7 @@ import Foundation
 import RxSwift
 import SongsDomainInterface
 
-public protocol FetchCreditSongListUseCase {
+public protocol FetchCreditSongListUseCase: Sendable {
     func execute(
         name: String,
         order: CreditSongOrderType,

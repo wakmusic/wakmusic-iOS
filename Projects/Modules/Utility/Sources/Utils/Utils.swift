@@ -9,11 +9,13 @@
 import Foundation
 import UIKit
 
+@MainActor
 public func APP_WIDTH() -> CGFloat {
     let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
     return windowScene?.screen.bounds.size.width ?? .zero
 }
 
+@MainActor
 public func APP_HEIGHT() -> CGFloat {
     let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
     return windowScene?.screen.bounds.size.height ?? .zero
@@ -23,6 +25,7 @@ public func PLAYER_HEIGHT() -> CGFloat {
     return 56.0
 }
 
+@MainActor
 public func STATUS_BAR_HEGHIT() -> CGFloat {
     return UIApplication.shared.connectedScenes
         .compactMap { $0 as? UIWindowScene }
@@ -33,6 +36,7 @@ public func STATUS_BAR_HEGHIT() -> CGFloat {
         .top ?? 0
 }
 
+@MainActor
 public func SAFEAREA_BOTTOM_HEIGHT() -> CGFloat {
     return UIApplication.shared.connectedScenes
         .compactMap { $0 as? UIWindowScene }
@@ -51,6 +55,7 @@ public func APP_NAME() -> String {
     return Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? ""
 }
 
+@MainActor
 public func OS_VERSION() -> String {
     return UIDevice.current.systemVersion
 }

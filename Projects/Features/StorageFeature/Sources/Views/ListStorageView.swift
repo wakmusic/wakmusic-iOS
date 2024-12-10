@@ -14,6 +14,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 private protocol ListStorageStateProtocol {
     func updateActivityIndicatorState(isPlaying: Bool)
     func updateRefreshControlState(isPlaying: Bool)
@@ -190,7 +191,8 @@ extension ListStorageView: ListStorageStateProtocol {
     }
 }
 
-extension Reactive: ListStorageActionProtocol where Base: ListStorageView {
+extension Reactive: @preconcurrency ListStorageActionProtocol where Base: ListStorageView {
+    @MainActor
     var loginButtonDidTap: Observable<Void> {
         base.loginWarningView.loginButtonDidTapSubject.asObservable()
     }

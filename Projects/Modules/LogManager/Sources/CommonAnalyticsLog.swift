@@ -20,7 +20,7 @@ public enum CommonAnalyticsLog: AnalyticsLogType {
 }
 
 public extension CommonAnalyticsLog {
-    enum PageName: String, AnalyticsLogEnumParametable {
+    enum PageName: String, AnalyticsLogEnumParametable, Sendable {
         case home
         case musicDetail = "music_detail"
         case musicLyrics = "music_lyrics"
@@ -48,7 +48,7 @@ public extension CommonAnalyticsLog {
         }
     }
 
-    enum PlaylistItemLocation: String, AnalyticsLogEnumParametable {
+    enum PlaylistItemLocation: String, AnalyticsLogEnumParametable, Sendable {
         case home
         case storage
         case search
@@ -59,7 +59,7 @@ public extension CommonAnalyticsLog {
         }
     }
 
-    enum PlayButtonLocation: String, AnalyticsLogEnumParametable {
+    enum PlayButtonLocation: String, AnalyticsLogEnumParametable, Sendable {
         case home
         case search
         case artist
@@ -73,7 +73,7 @@ public extension CommonAnalyticsLog {
         case creditSongList = "credit_song_list"
     }
 
-    enum PlayButtonType: String, AnalyticsLogEnumParametable {
+    enum PlayButtonType: String, AnalyticsLogEnumParametable, Sendable {
         case single
         case multiple
         case all
@@ -83,7 +83,7 @@ public extension CommonAnalyticsLog {
         case playlist
     }
 
-    enum AddMusicLocation: String, AnalyticsLogEnumParametable {
+    enum AddMusicLocation: String, AnalyticsLogEnumParametable, Sendable {
         case songDetail = "song_detail"
         case search
         case chart
@@ -94,14 +94,14 @@ public extension CommonAnalyticsLog {
         case storageLike = "storage_like"
     }
 
-    enum EditButtonLocation: String, AnalyticsLogEnumParametable {
+    enum EditButtonLocation: String, AnalyticsLogEnumParametable, Sendable {
         case playlistDetail = "playlist_detail"
         case myPlaylist = "my_playlist"
         case storageLike = "storage_like"
         case playlist
     }
 
-    enum LoginButtonEntry: String, AnalyticsLogEnumParametable {
+    enum LoginButtonEntry: String, AnalyticsLogEnumParametable, Sendable {
         case myPlaylist = "my_playlist"
         case storageLike = "storage_like"
         case mypage

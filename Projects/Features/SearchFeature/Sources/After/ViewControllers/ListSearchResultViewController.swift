@@ -217,10 +217,12 @@ extension ListSearchResultViewController {
 }
 
 extension ListSearchResultViewController: SearchSortOptionDelegate {
-    func updateSortType(_ type: SortType) {
-        LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "list"))
-        if reactor?.currentState.sortType != type {
-            reactor?.action.onNext(.changeSortType(type))
+    nonisolated func updateSortType(_ type: SortType) {
+        Task { @MainActor in
+            LogManager.analytics(SearchAnalyticsLog.selectSearchSort(option: type.rawValue, category: "list"))
+            if reactor?.currentState.sortType != type {
+                reactor?.action.onNext(.changeSortType(type))
+            }
         }
     }
 }

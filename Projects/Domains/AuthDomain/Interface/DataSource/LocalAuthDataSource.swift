@@ -1,6 +1,6 @@
 import RxSwift
 
-public protocol LocalAuthDataSource {
+public protocol LocalAuthDataSource: Sendable {
     func logout()
     func checkIsExistAccessToken() -> Bool
 }

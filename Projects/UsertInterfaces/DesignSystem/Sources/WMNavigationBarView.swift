@@ -2,6 +2,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 public final class WMNavigationBarView: UIView {
     private let leftStackView = UIStackView().then {
         $0.axis = .horizontal
@@ -65,7 +66,7 @@ public final class WMNavigationBarView: UIView {
             $0.removeFromSuperview()
             rightStackView.removeArrangedSubview($0)
         }
-        views.forEach(rightStackView.addArrangedSubview(_:))
+        views.forEach { rightStackView.addArrangedSubview($0) }
     }
 
     public func setLeftViews(_ views: [UIView]) {
@@ -73,7 +74,7 @@ public final class WMNavigationBarView: UIView {
             $0.removeFromSuperview()
             leftStackView.removeArrangedSubview($0)
         }
-        views.forEach(leftStackView.addArrangedSubview(_:))
+        views.forEach { leftStackView.addArrangedSubview($0) }
     }
 }
 

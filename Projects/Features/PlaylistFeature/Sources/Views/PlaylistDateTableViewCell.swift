@@ -7,6 +7,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 internal protocol PlaylistDateTableViewCellDelegate: AnyObject {
     func thumbnailDidTap(key: String)
 }

@@ -7,6 +7,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 public protocol LikeStorageTableViewCellDelegate: AnyObject {
     func buttonTapped(type: LikeStorageTableViewCellDelegateConstant)
 }

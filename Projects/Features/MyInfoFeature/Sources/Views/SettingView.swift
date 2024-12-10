@@ -9,6 +9,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 private protocol SettingStateProtocol {
     func updateIsHiddenWithDrawButton(isHidden: Bool)
     func updateIsHiddenLogoutButton(isHidden: Bool)
@@ -152,7 +153,8 @@ extension SettingView: SettingStateProtocol {
     }
 }
 
-extension Reactive: SettingActionProtocol where Base: SettingView {
+extension Reactive: @preconcurrency SettingActionProtocol where Base: SettingView {
+    @MainActor
     var withDrawButtonDidTap: Observable<Void> { base.withDrawLabel.rx.didTap }
     var dismissButtonDidTap: Observable<Void> { base.dismissButton.rx.tap.asObservable() }
 }

@@ -261,7 +261,7 @@ extension SettingViewController: UITableViewDelegate {
             completion: { selectedItemString in
                 switch selectedItemString {
                 case YoutubePlayType.youtube.display:
-                    PreferenceManager.songPlayPlatformType = .youtube
+                    PreferenceManager.shared.songPlayPlatformType = .youtube
                     LogManager.analytics(
                         SettingAnalyticsLog.completeSelectSongPlayPlatform(platform: YoutubePlayType.youtube.display)
                     )
@@ -269,7 +269,7 @@ extension SettingViewController: UITableViewDelegate {
                         property: .songPlayPlatform(platform: YoutubePlayType.youtube.display)
                     )
                 case YoutubePlayType.youtubeMusic.display:
-                    PreferenceManager.songPlayPlatformType = .youtubeMusic
+                    PreferenceManager.shared.songPlayPlatformType = .youtubeMusic
                     LogManager.analytics(
                         SettingAnalyticsLog.completeSelectSongPlayPlatform(
                             platform: YoutubePlayType.youtubeMusic.display

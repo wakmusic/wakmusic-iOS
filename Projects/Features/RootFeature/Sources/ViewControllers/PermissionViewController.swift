@@ -46,7 +46,7 @@ public class PermissionViewController: UIViewController, ViewControllerFromStory
 
     @IBAction func confirmButtonAction(_ sender: Any) {
         dismiss(animated: true, completion: {
-            Utility.PreferenceManager.appPermissionChecked = true
+            Utility.PreferenceManager.shared.appPermissionChecked = true
         })
     }
 }

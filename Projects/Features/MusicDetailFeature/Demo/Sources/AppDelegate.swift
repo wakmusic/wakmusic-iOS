@@ -90,31 +90,31 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-final class DummyLyricHighlightingFactory: LyricHighlightingFactory {
+final class DummyLyricHighlightingFactory: LyricHighlightingFactory, @unchecked Sendable {
     func makeView(model: LyricHighlightingRequiredModel) -> UIViewController {
         return UIViewController()
     }
 }
 
-final class DummyContainSongsFactory: ContainSongsFactory {
+final class DummyContainSongsFactory: ContainSongsFactory, @unchecked Sendable {
     func makeView(songs: [String]) -> UIViewController {
         return UIViewController()
     }
 }
 
-final class DummySongCreditFactory: SongCreditFactory {
+final class DummySongCreditFactory: SongCreditFactory, @unchecked Sendable {
     func makeViewController(songID: String) -> UIViewController {
         return UIViewController()
     }
 }
 
-final class DummySignInFactory: SignInFactory {
+final class DummySignInFactory: SignInFactory, @unchecked Sendable {
     func makeView() -> UIViewController {
         return UIViewController()
     }
 }
 
-final class DummyTextPopupFactory: TextPopupFactory {
+final class DummyTextPopupFactory: TextPopupFactory, @unchecked Sendable {
     func makeView(
         text: String?,
         cancelButtonIsHidden: Bool,
@@ -127,19 +127,19 @@ final class DummyTextPopupFactory: TextPopupFactory {
     }
 }
 
-final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol {
+final class DummyPlaylistPresenterGlobalState: PlayListPresenterGlobalStateProtocol, @unchecked Sendable {
     var presentPlayListObservable: RxSwift.Observable<String?> { .empty() }
     func presentPlayList(currentSongID: String?) {}
     func presentPlayList() {}
 }
 
-final class DummyKaraokeFactory: KaraokeFactory {
+final class DummyKaraokeFactory: KaraokeFactory, @unchecked Sendable {
     func makeViewController(ky: Int?, tj: Int?) -> UIViewController {
         UIViewController()
     }
 }
 
-final class DummyArtistDetailFactory: ArtistDetailFactory {
+final class DummyArtistDetailFactory: ArtistDetailFactory, @unchecked Sendable {
     func makeView(artistID: String) -> UIViewController {
         UIViewController()
     }

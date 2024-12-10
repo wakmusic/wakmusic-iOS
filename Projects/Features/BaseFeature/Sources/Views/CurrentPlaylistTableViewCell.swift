@@ -11,15 +11,17 @@ class CurrentPlaylistTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
-        self.playlistImageView.layer.cornerRadius = 4
-        self.playlistNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
-        self.playlistNameLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        self.playlistNameLabel.setTextWithAttributes(kernValue: -0.5)
-        self.playlistCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
-        self.playlistCountLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
-        self.playlistCountLabel.setTextWithAttributes(kernValue: -0.5)
-        self.lockImageView.image = DesignSystemAsset.Storage.storageClose.image
+        Task { @MainActor in
+            self.backgroundColor = DesignSystemAsset.BlueGrayColor.gray100.color
+            self.playlistImageView.layer.cornerRadius = 4
+            self.playlistNameLabel.font = DesignSystemFontFamily.Pretendard.medium.font(size: 14)
+            self.playlistNameLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            self.playlistNameLabel.setTextWithAttributes(kernValue: -0.5)
+            self.playlistCountLabel.font = DesignSystemFontFamily.Pretendard.light.font(size: 12)
+            self.playlistCountLabel.textColor = DesignSystemAsset.BlueGrayColor.gray900.color
+            self.playlistCountLabel.setTextWithAttributes(kernValue: -0.5)
+            self.lockImageView.image = DesignSystemAsset.Storage.storageClose.image
+        }
     }
 }
 

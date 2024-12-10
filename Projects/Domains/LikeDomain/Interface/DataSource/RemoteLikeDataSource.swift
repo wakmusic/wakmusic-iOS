@@ -9,7 +9,7 @@
 import Foundation
 import RxSwift
 
-public protocol RemoteLikeDataSource {
+public protocol RemoteLikeDataSource: Sendable {
     func addLikeSong(id: String) -> Single<LikeEntity>
     func cancelLikeSong(id: String) -> Single<LikeEntity>
     func checkIsLikedSong(id: String) -> Single<Bool>

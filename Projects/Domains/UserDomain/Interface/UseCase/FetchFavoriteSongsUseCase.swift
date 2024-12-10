@@ -1,6 +1,6 @@
 import Foundation
 import RxSwift
 
-public protocol FetchFavoriteSongsUseCase {
+public protocol FetchFavoriteSongsUseCase: Sendable {
     func execute() -> Single<[FavoriteSongEntity]>
 }

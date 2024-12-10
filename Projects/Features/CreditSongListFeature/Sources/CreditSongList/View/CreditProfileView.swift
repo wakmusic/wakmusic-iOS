@@ -5,6 +5,7 @@ import Then
 import UIKit
 import Utility
 
+@MainActor
 protocol CreditProfileViewStateProtocol {
     func updateProfile(entity: CreditProfileEntity)
 }

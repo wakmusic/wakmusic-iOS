@@ -71,8 +71,9 @@ private extension SettingItemTableViewCell {
     func configureSubTitle(type: SettingItemType) {
         switch type {
         case let .navigate(category):
-            let pushNotificationAuthorizationStatus = PreferenceManager.pushNotificationAuthorizationStatus ?? false
-            let playType = PreferenceManager.songPlayPlatformType ?? .youtube
+            let pushNotificationAuthorizationStatus = PreferenceManager.shared
+                .pushNotificationAuthorizationStatus ?? false
+            let playType = PreferenceManager.shared.songPlayPlatformType ?? .youtube
             switch category {
             case .appPush:
                 self.subTitleLabel.text = pushNotificationAuthorizationStatus ? "켜짐" : "꺼짐"

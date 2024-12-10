@@ -25,8 +25,8 @@ public class OpenSourceLicenseViewController: UIViewController, ViewControllerFr
     override public func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        inputBind()
         outputBind()
+        inputBind()
         bindBtn()
     }
 
@@ -44,6 +44,8 @@ public class OpenSourceLicenseViewController: UIViewController, ViewControllerFr
 
 extension OpenSourceLicenseViewController {
     private func inputBind() {
+        viewModel.input.viewDidLoad.onNext(())
+
         tableView.rx
             .setDelegate(self)
             .disposed(by: disposeBag)

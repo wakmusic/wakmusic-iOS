@@ -11,8 +11,8 @@ import Foundation
 import UIKit
 
 /// UIControl 을 상속받지 않는 UIView 등의 이벤트를 Combine 으로 처리하기 위한 Publisher 입니다.
-public extension UITapGestureRecognizer {
-    struct GesturePublisher<TapRecognizer: UITapGestureRecognizer>: Publisher {
+extension UITapGestureRecognizer {
+    struct GesturePublisher<TapRecognizer: UITapGestureRecognizer>: @preconcurrency Publisher {
         public typealias Output = TapRecognizer
         public typealias Failure = Never
 
@@ -24,6 +24,7 @@ public extension UITapGestureRecognizer {
             self.view = view
         }
 
+        @MainActor
         public func receive<S>(subscriber: S) where S: Subscriber, Never == S.Failure, TapRecognizer == S.Input {
             let subscription = GestureSubscription(
                 subscriber: subscriber,
@@ -34,6 +35,7 @@ public extension UITapGestureRecognizer {
         }
     }
 
+    @MainActor
     final class GestureSubscription<S: Subscriber, TapRecognizer: UITapGestureRecognizer>: Subscription
         where S.Input == TapRecognizer {
         private var subscriber: S?
@@ -46,10 +48,18 @@ public extension UITapGestureRecognizer {
             view.addGestureRecognizer(recognizer)
         }
 
-        public func request(_ demand: Subscribers.Demand) {}
+        public nonisolated func request(_ demand: Subscribers.Demand) {}
 
-        public func cancel() {
-            subscriber = nil
+        public nonisolated func cancel() {
+            if Thread.isMainThread {
+                MainActor.assumeIsolated {
+                    subscriber = nil
+                }
+            } else {
+                Task { @MainActor in
+                    subscriber = nil
+                }
+            }
         }
 
         @objc func eventHandler() {

@@ -1,5 +1,5 @@
 import Foundation
-import RxSwift
+@preconcurrency import RxSwift
 import Utility
 
 protocol StorageCommonService {
@@ -9,7 +9,7 @@ protocol StorageCommonService {
     var likeListRefreshEvent: Observable<Void> { get }
 }
 
-final class DefaultStorageCommonService: StorageCommonService {
+final class DefaultStorageCommonService: StorageCommonService, Sendable {
     static let shared = DefaultStorageCommonService()
 
     let isEditingState: BehaviorSubject<Bool>
@@ -20,7 +20,7 @@ final class DefaultStorageCommonService: StorageCommonService {
     init() {
         let notificationCenter = NotificationCenter.default
         isEditingState = .init(value: false)
-        loginStateDidChangedEvent = PreferenceManager.$userInfo.map(\.?.ID).distinctUntilChanged().skip(1)
+        loginStateDidChangedEvent = PreferenceManager.shared.$userInfo.map(\.?.ID).distinctUntilChanged().skip(1)
         playlistRefreshEvent = notificationCenter.rx.notification(.shouldRefreshPlaylist)
         likeListRefreshEvent = notificationCenter.rx.notification(.shouldRefreshLikeList).map { _ in () }
     }

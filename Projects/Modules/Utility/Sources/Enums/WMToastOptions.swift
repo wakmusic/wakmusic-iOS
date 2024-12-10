@@ -1,6 +1,6 @@
 import Foundation
 
-public struct WMToastOptions: OptionSet {
+public struct WMToastOptions: OptionSet, Sendable {
     public let rawValue: Int
     public static let empty = WMToastOptions(rawValue: 1 << 0)
     public static let tabBar = WMToastOptions(rawValue: 1 << 1)

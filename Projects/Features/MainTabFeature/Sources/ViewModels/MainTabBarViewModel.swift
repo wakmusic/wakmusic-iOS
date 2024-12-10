@@ -4,7 +4,7 @@ import LogManager
 import NoticeDomainInterface
 import NotificationDomainInterface
 import RxRelay
-import RxSwift
+@preconcurrency import RxSwift
 import SongsDomainInterface
 import Utility
 
@@ -14,7 +14,7 @@ private typealias Observer = (
     grantedNotificationAuthorization: Bool
 )
 
-public final class MainTabBarViewModel {
+public final class MainTabBarViewModel: Sendable {
     private let fetchNoticePopupUseCase: FetchNoticePopupUseCase
     private let fetchNoticeIDListUseCase: FetchNoticeIDListUseCase
     private let updateNotificationTokenUseCase: UpdateNotificationTokenUseCase
@@ -45,7 +45,7 @@ public final class MainTabBarViewModel {
 
     public func transform(from input: Input) -> Output {
         let output = Output()
-        let ignoredPopupIDs: [Int] = Utility.PreferenceManager.ignoredPopupIDs ?? []
+        let ignoredPopupIDs: [Int] = Utility.PreferenceManager.shared.ignoredPopupIDs ?? []
         DEBUG_LOG("ignoredPopupIDs: \(ignoredPopupIDs)")
 
         input.fetchNoticePopup
@@ -64,7 +64,7 @@ public final class MainTabBarViewModel {
             .disposed(by: disposeBag)
 
         input.fetchNoticeIDList
-            .withLatestFrom(PreferenceManager.$readNoticeIDs)
+            .withLatestFrom(PreferenceManager.shared.$readNoticeIDs)
             .filter { ($0 ?? []).isEmpty }
             .flatMap { [fetchNoticeIDListUseCase] _ -> Single<FetchNoticeIDListEntity> in
                 return fetchNoticeIDListUseCase.execute()
@@ -72,15 +72,15 @@ public final class MainTabBarViewModel {
             }
             .map { $0.data }
             .bind { allNoticeIDs in
-                PreferenceManager.readNoticeIDs = allNoticeIDs
+                PreferenceManager.shared.readNoticeIDs = allNoticeIDs
             }
             .disposed(by: disposeBag)
 
         // 호출 조건: 앱 실행 시 1회, 리프레쉬 토큰 감지, 기기알림 on/off
         Observable.combineLatest(
             input.detectedRefreshPushToken,
-            PreferenceManager.$userInfo.map { $0?.ID }.distinctUntilChanged(),
-            PreferenceManager.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
+            PreferenceManager.shared.$userInfo.map { $0?.ID }.distinctUntilChanged(),
+            PreferenceManager.shared.$pushNotificationAuthorizationStatus.distinctUntilChanged().map { $0 ?? false }
         ) { detected, id, granted -> Observer in
             return Observer(
                 detectedRefreshPushToken: detected,

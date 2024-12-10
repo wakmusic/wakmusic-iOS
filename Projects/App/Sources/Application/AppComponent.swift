@@ -3,16 +3,12 @@ import Foundation
 import KeychainModule
 import MainTabFeature
 import MyInfoFeature
-import NeedleFoundation
+@preconcurrency import NeedleFoundation
 import RootFeature
 import StorageFeature
 import UIKit
 
 public final class AppComponent: BootstrapComponent {
-    public func makeRootView() -> IntroViewController {
-        rootComponent.makeView()
-    }
-
     public var keychain: any Keychain {
         shared {
             KeychainImpl()

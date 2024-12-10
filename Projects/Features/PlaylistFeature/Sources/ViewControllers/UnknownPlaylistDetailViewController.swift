@@ -7,13 +7,13 @@ import PhotosUI
 import ReactorKit
 import SignInFeatureInterface
 import SnapKit
-import SongsDomainInterface
+@preconcurrency import SongsDomainInterface
 import Then
 import UIKit
 import Utility
 
 final class UnknownPlaylistDetailViewController: BaseReactorViewController<UnknownPlaylistDetailReactor>,
-    SongCartViewType {
+    @preconcurrency SongCartViewType {
     var songCartView: SongCartView!
 
     var bottomSheetView: BottomSheetView!
@@ -422,7 +422,7 @@ extension UnknownPlaylistDetailViewController: SongCartViewDelegate {
             let log = CommonAnalyticsLog.clickAddMusicsButton(location: .playlistDetail)
             LogManager.analytics(log)
 
-            if PreferenceManager.userInfo == nil {
+            if PreferenceManager.shared.userInfo == nil {
                 reactor.action.onNext(.requestLoginRequiredAction(source: .addMusics))
                 return
             }

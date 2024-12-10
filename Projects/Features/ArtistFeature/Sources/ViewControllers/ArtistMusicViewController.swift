@@ -87,7 +87,7 @@ extension ArtistMusicViewController {
     }
 }
 
-extension ArtistMusicViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension ArtistMusicViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
         switch index {
         case 0:

@@ -282,7 +282,7 @@ extension QuestionViewController {
     }
 }
 
-extension QuestionViewController: MFMailComposeViewControllerDelegate {
+extension QuestionViewController: @preconcurrency MFMailComposeViewControllerDelegate {
     public func mailComposeController(
         _ controller: MFMailComposeViewController,
         didFinishWith result: MFMailComposeResult,

@@ -19,7 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = UIWindow(windowScene: scene)
         registerProviderFactories()
         self.root = AppComponent()
-        self.window?.rootViewController = root?.makeRootView().wrapNavigationController
+        self.window?.rootViewController = root?.rootComponent.makeView().wrapNavigationController
         self.window?.makeKeyAndVisible()
 
         // Handling App Entry:: Not Running State

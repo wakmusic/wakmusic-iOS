@@ -1,3 +1,4 @@
+@preconcurrency import NeedleFoundation
 import NotificationDomain
 import NotificationDomainInterface
 

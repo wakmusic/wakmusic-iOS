@@ -1,4 +1,5 @@
 import Foundation
+@preconcurrency import NeedleFoundation
 import SearchDomain
 import SearchDomainInterface
 import SearchFeature

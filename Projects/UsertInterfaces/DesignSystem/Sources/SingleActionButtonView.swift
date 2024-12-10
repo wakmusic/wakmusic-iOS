@@ -2,6 +2,7 @@ import SnapKit
 import Then
 import UIKit
 
+@MainActor
 public protocol SingleActionButtonViewDelegate: AnyObject {
     func tappedButtonAction()
 }

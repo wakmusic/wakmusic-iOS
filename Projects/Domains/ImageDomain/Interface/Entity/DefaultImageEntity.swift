@@ -1,6 +1,6 @@
 import Foundation
 
-public struct DefaultImageEntity: Hashable, Equatable {
+public struct DefaultImageEntity: Hashable, Equatable, Sendable {
     public let name: String
     public let url: String
 

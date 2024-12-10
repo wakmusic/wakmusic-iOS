@@ -5,7 +5,7 @@ import Foundation
 import MyInfoFeatureInterface
 import UIKit
 
-public final class FaqComponentStub: FaqFactory {
+public final class FaqComponentStub: FaqFactory, @unchecked Sendable {
     public func makeView() -> UIViewController {
         return FaqViewController.viewController(
             viewModel: .init(

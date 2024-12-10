@@ -14,6 +14,7 @@ import UIKit
 import UserDomainInterface
 import Utility
 
+@MainActor
 private protocol LikeStorageStateProtocol {
     func updateActivityIndicatorState(isPlaying: Bool)
     func updateRefreshControlState(isPlaying: Bool)
@@ -134,7 +135,8 @@ extension LikeStorageView: LikeStorageStateProtocol {
     }
 }
 
-extension Reactive: LikeStorageActionProtocol where Base: LikeStorageView {
+extension Reactive: @preconcurrency LikeStorageActionProtocol where Base: LikeStorageView {
+    @MainActor
     var loginButtonDidTap: Observable<Void> {
         base.loginWarningView.loginButtonDidTapSubject.asObservable()
     }

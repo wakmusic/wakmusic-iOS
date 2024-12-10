@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SearchPlaylistEntity: Hashable, Equatable {
+public struct SearchPlaylistEntity: Hashable, Equatable, Sendable {
     public init(
         key: String,
         title: String,

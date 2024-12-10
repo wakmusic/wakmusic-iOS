@@ -19,7 +19,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         // Use Firebase library to configure APIs
         FirebaseApp.configure()
-        if let userInfo = PreferenceManager.userInfo {
+        if let userInfo = PreferenceManager.shared.userInfo {
             LogManager.setUserID(userID: userInfo.decryptedID)
         } else {
             LogManager.setUserID(userID: nil)
@@ -105,19 +105,19 @@ extension AppDelegate {
     }
 
     private func initializeUserProperty() {
-        if let loginPlatform = PreferenceManager.userInfo?.platform {
+        if let loginPlatform = PreferenceManager.shared.userInfo?.platform {
             LogManager.setUserProperty(property: .loginPlatform(platform: loginPlatform))
         } else {
             LogManager.clearUserProperty(property: .loginPlatform(platform: ""))
         }
 
-        if let fruitTotal = PreferenceManager.userInfo?.itemCount {
+        if let fruitTotal = PreferenceManager.shared.userInfo?.itemCount {
             LogManager.setUserProperty(property: .fruitTotal(count: fruitTotal))
         } else {
             LogManager.clearUserProperty(property: .fruitTotal(count: -1))
         }
 
-        if let playPlatform = PreferenceManager.songPlayPlatformType {
+        if let playPlatform = PreferenceManager.shared.songPlayPlatformType {
             LogManager.setUserProperty(property: .songPlayPlatform(platform: playPlatform.display))
         }
 

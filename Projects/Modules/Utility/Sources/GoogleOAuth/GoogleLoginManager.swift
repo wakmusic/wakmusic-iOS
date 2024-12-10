@@ -25,7 +25,7 @@ public enum WMGoogleError: Error {
     case internalError
 }
 
-public class GoogleLoginManager {
+public class GoogleLoginManager: @unchecked Sendable {
     // MARK: - 변수 선언
     private let googleURL = "https://accounts.google.com/o/oauth2/v2/auth"
     private let accessTokenGoogleURL = "https://oauth2.googleapis.com"
@@ -52,10 +52,12 @@ public class GoogleLoginManager {
 
         components?.queryItems = [scope, responseType, codeChallenge, redirectURI, clientID, codeChallengeMethod]
 
-        if let url = components?.url, UIApplication.shared.canOpenURL(url) {
-            LogManager.printDebug(url)
-            let safari = SFSafariViewController(url: url)
-            UIApplication.topVisibleViewController()?.present(safari, animated: true)
+        Task { @MainActor in
+            if let url = components?.url, UIApplication.shared.canOpenURL(url) {
+                LogManager.printDebug(url)
+                let safari = SFSafariViewController(url: url)
+                UIApplication.topVisibleViewController()?.present(safari, animated: true)
+            }
         }
     }
 

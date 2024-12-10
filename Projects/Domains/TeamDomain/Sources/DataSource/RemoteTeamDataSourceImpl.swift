@@ -3,7 +3,7 @@ import Foundation
 import RxSwift
 import TeamDomainInterface
 
-public final class RemoteTeamDataSourceImpl: BaseRemoteDataSource<TeamAPI>, RemoteTeamDataSource {
+public final class RemoteTeamDataSourceImpl: BaseRemoteDataSource<TeamAPI>, RemoteTeamDataSource, @unchecked Sendable {
     public func fetchTeamList() -> Single<[TeamListEntity]> {
         request(.fetchTeamList)
             .map([FetchTeamListResponseDTO].self)

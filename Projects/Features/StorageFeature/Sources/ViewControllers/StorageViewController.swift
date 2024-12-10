@@ -11,7 +11,7 @@ import Tabman
 import UIKit
 import Utility
 
-final class StorageViewController: TabmanViewController, View {
+final class StorageViewController: TabmanViewController, @preconcurrency View {
     typealias Reactor = StorageReactor
     var disposeBag = DisposeBag()
 
@@ -203,7 +203,7 @@ private extension StorageViewController {
     }
 }
 
-extension StorageViewController: PageboyViewControllerDataSource, TMBarDataSource {
+extension StorageViewController: @preconcurrency PageboyViewControllerDataSource, @preconcurrency TMBarDataSource {
     public func numberOfViewControllers(in pageboyViewController: Pageboy.PageboyViewController) -> Int {
         self.viewControllers.count
     }
@@ -244,12 +244,14 @@ extension StorageViewController: EqualHandleTappedType {
         }
     }
 
-    public func equalHandleTapped() {
-        let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
-        if viewControllersCount > 1 {
-            self.navigationController?.popToRootViewController(animated: true)
-        } else {
-            scrollToTop()
+    public nonisolated func equalHandleTapped() {
+        Task { @MainActor in
+            let viewControllersCount: Int = self.navigationController?.viewControllers.count ?? 0
+            if viewControllersCount > 1 {
+                self.navigationController?.popToRootViewController(animated: true)
+            } else {
+                scrollToTop()
+            }
         }
     }
 }

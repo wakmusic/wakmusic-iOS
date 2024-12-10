@@ -13,12 +13,12 @@ final class DefaultMyInfoCommonService: MyInfoCommonService {
     let didChangedUserInfoEvent: Observable<UserInfo?>
     let didChangedReadNoticeIDsEvent: Observable<[Int]?>
 
-    static let shared = DefaultMyInfoCommonService()
+    nonisolated(unsafe) static let shared = DefaultMyInfoCommonService()
 
     init() {
         let notificationCenter = NotificationCenter.default
         willRefreshUserInfoEvent = notificationCenter.rx.notification(.willRefreshUserInfo)
-        didChangedUserInfoEvent = PreferenceManager.$userInfo
-        didChangedReadNoticeIDsEvent = PreferenceManager.$readNoticeIDs
+        didChangedUserInfoEvent = PreferenceManager.shared.$userInfo
+        didChangedReadNoticeIDsEvent = PreferenceManager.shared.$readNoticeIDs
     }
 }

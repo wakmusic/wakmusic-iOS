@@ -26,6 +26,7 @@ public protocol ListStorageDependency: Dependency {
     var fruitDrawFactory: any FruitDrawFactory { get }
 }
 
+@MainActor
 public final class ListStorageComponent: Component<ListStorageDependency> {
     public func makeView() -> UIViewController {
         return ListStorageViewController(

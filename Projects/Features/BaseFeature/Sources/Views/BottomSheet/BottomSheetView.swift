@@ -17,6 +17,7 @@ public extension CGFloat {
 }
 
 public extension Array where Element == CGFloat {
+    @MainActor
     static var bottomSheetDefault: [CGFloat] {
         let screenSize = UIScreen.main.bounds.size
 
@@ -44,7 +45,8 @@ public protocol BottomSheetViewAnimationDelegate: AnyObject {
 // MARK: - View
 
 public final class BottomSheetView: UIView {
-    public enum HandleBackground {
+    @MainActor
+    public enum HandleBackground: Sendable {
         case color(UIColor)
         case visualEffect(UIVisualEffect)
 

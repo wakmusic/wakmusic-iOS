@@ -2,7 +2,7 @@ import Foundation
 import NoticeDomainInterface
 import RxSwift
 
-public struct FetchNoticeAllUseCaseStub: FetchNoticeAllUseCase {
+public struct FetchNoticeAllUseCaseStub: FetchNoticeAllUseCase, @unchecked Sendable {
     public func execute() -> Single<[FetchNoticeEntity]> {
         let title1 = "공지사항 두줄인 경우 공지사항 두줄인 경우 공지사항 두줄인 경우 공지사항 두줄인 경우"
         let title2 = "왁타버스 뮤직 2.0 업데이트"

@@ -7,6 +7,7 @@ public protocol WMBottomSheetViewType: AnyObject {
     var bottomSheetView: BottomSheetView! { get set }
 }
 
+@MainActor
 public extension WMBottomSheetViewType where Self: UIViewController {
     /// 편집하기 팝업을 띄웁니다.
     /// - Parameter view: 팝업을 붙일 대상이 되는 뷰

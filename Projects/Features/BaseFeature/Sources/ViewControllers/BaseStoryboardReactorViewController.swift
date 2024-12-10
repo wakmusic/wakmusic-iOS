@@ -6,7 +6,8 @@ import Then
 import UIKit
 import Utility
 
-open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController, StoryboardView,
+open class BaseStoryboardReactorViewController<R: Reactor>: UIViewController,
+    @preconcurrency StoryboardView,
     ViewControllerFromStoryBoard {
     public var disposeBag = DisposeBag()
 
